@@ -2,13 +2,11 @@ import { lazy } from "react";
 import Loadable from "./Loadable";
 import { GuestGuard } from "components/auth";
 
-// AUTHENTICATION RELATED PAGES
 const Login = Loadable(lazy(() => import("pages/sessions/login")));
 const Register = Loadable(lazy(() => import("pages/sessions/register")));
 const VerifyCode = Loadable(lazy(() => import("pages/sessions/verify-code")));
 const ForgetPassword = Loadable(lazy(() => import("pages/sessions/forget-password")));
 
-// DIFFERENT AUTH DEMO PAGES
 const LoginDemoWithAuth0 = Loadable(lazy(() => import("pages/auth-demo/auth0/login")));
 const LoginDemoWithJWT = Loadable(lazy(() => import("pages/auth-demo/jwt/login")));
 const RegisterDemoWithJWT = Loadable(lazy(() => import("pages/auth-demo/jwt/register")));
@@ -18,7 +16,6 @@ const LoginDemoWithAmplify = Loadable(lazy(() => import("pages/auth-demo/amplify
 const RegisterDemoWithAmplify = Loadable(lazy(() => import("pages/auth-demo/amplify/register")));
 const VerifyDemoWithAmplify = Loadable(lazy(() => import("pages/auth-demo/amplify/verify")));
 export const AuthRoutes = [
-// AUTHENTICATION PAGES ROUTES
 {
   element: <GuestGuard />,
   children: [{
@@ -35,7 +32,6 @@ export const AuthRoutes = [
     element: <VerifyCode />
   }]
 },
-// DIFFERENT AUTH DEMO PAGES ROUTES
 {
   path: "auth0/login",
   element: <LoginDemoWithAuth0 />

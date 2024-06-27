@@ -3,7 +3,6 @@ import { ThemeProvider, CssBaseline, StyledEngineProvider } from "@mui/material"
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 // AUTH CONTEXT FILE
-import { AuthProvider } from "contexts/firebaseContext";
 // RIGHT-TO-LEFT SUPPORT COMPONENT
 import { RTL } from "components/rtl";
 // ROUTES METHOD
@@ -14,6 +13,7 @@ import { createCustomTheme } from "./theme";
 import useSettings from "hooks/useSettings";
 // I18N FILE
 import "./i18n";
+import { AuthProvider } from "contexts/AuthContext";
 const App = () => {
   const {
     settings

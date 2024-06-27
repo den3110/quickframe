@@ -4,29 +4,36 @@ import { AuthRoutes } from "./auth";
 import { PublicRoutes } from "./public";
 import { DashboardRoutes } from "./dashboard";
 import { ComponentRoutes } from "./components";
+import ProtectedRoute from "hoc/ProtectedRoute";
+import ConnectAccountPage from "pages/connect-exchange";
 
-// GLOBAL ERROR PAGE
 const ErrorPage = Loadable(lazy(() => import("pages/404")));
-// LANDING / INITIAL PAGE
 const Landing = Loadable(lazy(() => import("pages/landing")));
 export const routes = () => {
   return [
-  // INITIAL / INDEX PAGE
-  {
-    path: "/",
-    element: <Landing />
-  },
-  // GLOBAL ERROR PAGE
-  {
-    path: "*",
-    element: <ErrorPage />
-  },
-  // AUTHENTICATION PAGES ROUTES & DIFFERENT AUTH DEMO PAGES ROUTES
-  ...AuthRoutes,
-  // COMPONENTS PAGES ROUTES
-  ...ComponentRoutes,
-  // INSIDE DASHBOARD PAGES ROUTES
-  ...DashboardRoutes,
-  // PAGES ROUTES
-  ...PublicRoutes];
+    {
+      path: "/",
+      element: (
+        <ProtectedRoute>
+          <Landing />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "*",
+      element: <ErrorPage />,
+    },
+    {
+      path: "/connect",
+      element: (
+        <ProtectedRoute>
+          <ConnectAccountPage />
+        </ProtectedRoute>
+      ),
+    },
+    ...AuthRoutes,
+    ...ComponentRoutes,
+    ...DashboardRoutes,
+    ...PublicRoutes,
+  ];
 };

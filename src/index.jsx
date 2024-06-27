@@ -13,15 +13,8 @@ import "simplebar-react/dist/simplebar.min.css";
 import "pure-react-carousel/dist/react-carousel.es.css";
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
-root.render(<React.StrictMode>
-    <SettingsProvider>
-      <App />
-    </SettingsProvider>
-  </React.StrictMode>);
-
-// // https://github.com/atlassian/react-beautiful-dnd/issues/2407
-// root.render(
-//   <SettingsProvider>
-//     <App />
-//   </SettingsProvider>
-// );
+root.render(
+  <SettingsProvider>
+    <App />
+  </SettingsProvider>
+);

@@ -16,8 +16,9 @@ const LoginPageView = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const initialValues = {
-    email: "jason@ui-lib.com",
-    password: "dummyPass",
+    email: "example@gmail.com",
+    password: "Your password",
+    siteId: "examplewebsite.com",
     remember: true,
   };
 
@@ -29,6 +30,7 @@ const LoginPageView = () => {
     password: Yup.string()
       .min(6, "Password should be of minimum 6 characters length")
       .required("Password is required"),
+    siteId: Yup.string().required("Site ID is required"),
   });
 
   const { errors, values, touched, handleBlur, handleChange, handleSubmit } =
@@ -42,20 +44,19 @@ const LoginPageView = () => {
           const response = await authApi.login({
             email: values.email,
             password: values.password,
+            siteId: values.siteId,
           });
-          // console.log()
           if (response?.data?.ok === true) {
-            localStorage.setItem("accessToken", response.data.accessToken);
-            localStorage.setItem("refreshToken", response.data.refreshToken);
-            localStorage.setItem("user", JSON.stringify(response.data.user));
-            window.location.href= window.location.origin
+            localStorage.setItem("accessToken", response.data?.d.access_token);
+            localStorage.setItem("refreshToken", response.data?.d.refresh_token);
+            window.location.href = window.location.origin;
           } else {
             setErrorMessage(response?.data?.m);
           }
         } catch (error) {
           console.log(error);
           setErrorMessage(
-            "Failed to login. Please check your email and password."
+            "Failed to login. Please check your email, password, and site ID."
           );
         } finally {
           setIsLoading(false);
@@ -129,7 +130,18 @@ const LoginPageView = () => {
                   ),
                 }}
               />
-
+              <Grid xs={12} paddingTop={2}>
+                <TextField
+                  fullWidth
+                  placeholder="Enter your site ID"
+                  name="siteId"
+                  onBlur={handleBlur}
+                  value={values.siteId}
+                  onChange={handleChange}
+                  helperText={touched.siteId && errors.siteId}
+                  error={Boolean(touched.siteId && errors.siteId)}
+                />
+              </Grid>
               <FlexBetween my={1}>
                 <FlexBox alignItems="center" gap={1}>
                   <Checkbox
