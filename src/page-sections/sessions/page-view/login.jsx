@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Grid,
-  // Divider,
-  TextField,
-  Box,
-  Checkbox,
-  // styled,
-  // ButtonBase,
-} from "@mui/material";
+import { Grid, TextField, Box, Checkbox } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import * as Yup from "yup";
@@ -16,21 +8,12 @@ import Layout from "../Layout";
 import { Link } from "components/link";
 import { H5, H6, Paragraph } from "components/typography";
 import { FlexBetween, FlexBox, FlexRowAlign } from "components/flexbox";
-// import Twitter from "icons/Twitter";
-// import Facebook from "icons/Facebook";
-// import GoogleIcon from "icons/GoogleIcon";
 import { authApi } from "api";
-
-// const StyledButton = styled(ButtonBase)(({ theme }) => ({
-//   padding: 12,
-//   borderRadius: 8,
-//   border: `1px solid ${theme.palette.divider}`,
-// }));
 
 const LoginPageView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const initialValues = {
     email: "jason@ui-lib.com",
@@ -48,22 +31,37 @@ const LoginPageView = () => {
       .required("Password is required"),
   });
 
-  const { errors, values, touched, handleBlur, handleChange, handleSubmit } = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: async (values) => {
-      try {
-        setIsLoading(true);
-        setErrorMessage('');
-        await authApi.login({ email: values.email, password: values.password });
-      } catch (error) {
-        console.log(error)
-        setErrorMessage('Failed to login. Please check your email and password.');
-      } finally {
-        setIsLoading(false);
-      }
-    },
-  });
+  const { errors, values, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema,
+      onSubmit: async (values) => {
+        try {
+          setIsLoading(true);
+          setErrorMessage("");
+          const response = await authApi.login({
+            email: values.email,
+            password: values.password,
+          });
+          // console.log()
+          if (response?.data?.ok === true) {
+            localStorage.setItem("accessToken", response.data.accessToken);
+            localStorage.setItem("refreshToken", response.data.refreshToken);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            window.location.href= window.location.origin
+          } else {
+            setErrorMessage(response?.data?.m);
+          }
+        } catch (error) {
+          console.log(error);
+          setErrorMessage(
+            "Failed to login. Please check your email and password."
+          );
+        } finally {
+          setIsLoading(false);
+        }
+      },
+    });
 
   return (
     <Layout login>
