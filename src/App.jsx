@@ -14,6 +14,7 @@ import useSettings from "hooks/useSettings";
 // I18N FILE
 import "./i18n";
 import { AuthProvider } from "contexts/AuthContext";
+import Toast from "components/toast/toast";
 const App = () => {
   const {
     settings
@@ -26,6 +27,7 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <AuthProvider>
             <RTL>
+              <Toast />
               <CssBaseline />
               <RouterProvider router={router} />
             </RTL>

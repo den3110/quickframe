@@ -5,7 +5,8 @@ import { PublicRoutes } from "./public";
 import { DashboardRoutes } from "./dashboard";
 import { ComponentRoutes } from "./components";
 import ProtectedRoute from "hoc/ProtectedRoute";
-import ConnectAccountPage from "pages/connect-exchange";
+import CheckConnectExchange from "hoc/CheckConnectExchange";
+import ConnectAccountPage from "pages/connect-exchange/connect-exchange";
 
 const ErrorPage = Loadable(lazy(() => import("pages/404")));
 const Landing = Loadable(lazy(() => import("pages/landing")));
@@ -15,7 +16,9 @@ export const routes = () => {
       path: "/",
       element: (
         <ProtectedRoute>
-          <Landing />
+          <CheckConnectExchange>
+            <Landing />
+          </CheckConnectExchange>
         </ProtectedRoute>
       ),
     },
