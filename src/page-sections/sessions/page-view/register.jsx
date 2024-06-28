@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid, TextField, Box, Alert, Divider } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import * as Yup from "yup";
@@ -13,11 +13,25 @@ const RegisterPageView = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [siteId, setSiteId] = useState("");
+
+  useEffect(() => {
+    const fetchSiteId = async () => {
+      try {
+        const response = await fetch("/config.json");
+        const config = await response.json();
+        setSiteId(config.siteId);
+      } catch (error) {
+        console.error("Failed to load siteId from config.json:", error);
+      }
+    };
+
+    fetchSiteId();
+  }, []);
 
   const initialValues = {
     email: "",
     password: "",
-    siteId: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -28,7 +42,6 @@ const RegisterPageView = () => {
     password: Yup.string()
       .min(6, "Password should be of minimum 6 characters length")
       .required("Password is required"),
-    siteId: Yup.string().required("Site ID is required"),
   });
 
   const { errors, values, touched, handleBlur, handleChange, handleSubmit } =
@@ -42,7 +55,7 @@ const RegisterPageView = () => {
           const response = await authApi.register({
             email: values.email,
             password: values.password,
-            siteId: values.siteId,
+            siteId: siteId,
           });
           if (response?.data?.ok === true) {
             navigate("/login");
@@ -99,19 +112,6 @@ const RegisterPageView = () => {
                 onChange={handleChange}
                 helperText={touched.password && errors.password}
                 error={Boolean(touched.password && errors.password)}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                placeholder="Enter your site ID"
-                name="siteId"
-                onBlur={handleBlur}
-                value={values.siteId}
-                onChange={handleChange}
-                helperText={touched.siteId && errors.siteId}
-                error={Boolean(touched.siteId && errors.siteId)}
               />
             </Grid>
 

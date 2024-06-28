@@ -16,6 +16,14 @@ const authApi = {
     logout() {
         const url = '/auth/logout';
         return axiosClient.post(url);
+    },
+    requestOtpCode(data) {
+        const url= "/auth/request-code"
+        return axiosClient.post(url, data)
+    },
+    forgetPassword(data) {
+        const url= "/auth/forgot-password"
+        return axiosClient.post(url, data)
     }
 };
 

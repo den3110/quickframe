@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Grid, TextField, Box, Checkbox } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -14,11 +14,24 @@ const LoginPageView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [siteId, setSiteId] = useState("");
+
+  useEffect(() => {
+    const loadConfig = async () => {
+      try {
+        const response = await fetch('/config.json');
+        const config = await response.json();
+        setSiteId(config.siteId);
+      } catch (error) {
+        console.error('Failed to load config', error);
+      }
+    };
+    loadConfig();
+  }, []);
 
   const initialValues = {
     email: "example@gmail.com",
     password: "Your password",
-    siteId: "examplewebsite.com",
     remember: true,
   };
 
@@ -30,7 +43,6 @@ const LoginPageView = () => {
     password: Yup.string()
       .min(6, "Password should be of minimum 6 characters length")
       .required("Password is required"),
-    siteId: Yup.string().required("Site ID is required"),
   });
 
   const { errors, values, touched, handleBlur, handleChange, handleSubmit } =
@@ -44,7 +56,7 @@ const LoginPageView = () => {
           const response = await authApi.login({
             email: values.email,
             password: values.password,
-            siteId: values.siteId,
+            siteId: siteId,
           });
           if (response?.data?.ok === true) {
             localStorage.setItem("accessToken", response.data?.d.access_token);
@@ -130,18 +142,9 @@ const LoginPageView = () => {
                   ),
                 }}
               />
-              <Grid xs={12} paddingTop={2}>
-                <TextField
-                  fullWidth
-                  placeholder="Enter your site ID"
-                  name="siteId"
-                  onBlur={handleBlur}
-                  value={values.siteId}
-                  onChange={handleChange}
-                  helperText={touched.siteId && errors.siteId}
-                  error={Boolean(touched.siteId && errors.siteId)}
-                />
-              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              
               <FlexBetween my={1}>
                 <FlexBox alignItems="center" gap={1}>
                   <Checkbox
@@ -157,7 +160,7 @@ const LoginPageView = () => {
                 </FlexBox>
 
                 <Box
-                  href="#"
+                  href="/forget-password"
                   fontSize={13}
                   component={Link}
                   sx={{

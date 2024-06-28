@@ -17,6 +17,8 @@ import { styled } from "@mui/system";
 import userApi from "api/user/userApi";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "components/toast/toast";
+import Dialog2Fa from "components/dialog/Dialog2Fa";
+import AppBarSection from "./AppBar";
 
 const RootContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -39,6 +41,8 @@ const ContentContainer = styled(Container)(({ theme }) => ({
 
 const ConnectAccountPage = () => {
   const navigate = useNavigate();
+  const [open2Fa, setOpen2Fa] = useState(false);
+  const [token, setToken]= useState()
   const [exchangeUrl, setExchangeUrl] = useState("");
   const [dataExchangeUrl, setDataExchangeUrl] = useState();
   const [exchangeUrls, setExchangeUrls] = useState([]);
@@ -72,7 +76,7 @@ const ConnectAccountPage = () => {
   };
 
   const connectExchangeLinkAccount = async () => {
-    setIsSubmitting(true); // Set to true when submission starts
+    setIsSubmitting(true);
     try {
       const data = {
         email: exchangeEmail,
@@ -80,14 +84,23 @@ const ConnectAccountPage = () => {
         clientId: dataExchangeUrl?.clientId,
       };
       const result = await userApi.postUserExchangeLinkAccount(data);
-      if (result.data?.ok === true) {
+      if (result.data?.ok === true && result?.data?.d?.require2Fa === false) {
         showToast(result.data?.m, "success");
         navigate("/");
+      } else if (
+        result.data?.ok === true &&
+        result?.data?.d?.require2Fa === true
+      ) {
+        setOpen2Fa(true);
+        setToken(result?.data?.d?.t)
       } else {
         showToast(result?.data?.m, "error");
       }
     } catch (error) {
-      showToast(error?.response?.data?.m || "Error connecting exchange account", "error");
+      showToast(
+        error?.response?.data?.m || "Error connecting exchange account",
+        "error"
+      );
     } finally {
       setIsSubmitting(false); // Set to false when submission ends
     }
@@ -95,34 +108,7 @@ const ConnectAccountPage = () => {
 
   return (
     <>
-      <AppBar
-        position="fixed"
-        color="transparent"
-        elevation={0}
-        style={{ backgroundColor: "#fff" }}
-      >
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            {/* <img src="/logo.png" alt="Quickinvest Logo" style={{ height: '30px', marginRight: '10px' }} /> */}
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ fontWeight: "bold" }}
-            >
-              Quickframe
-            </Typography>
-          </Box>
-          <Box>
-            <Link href="#" color="inherit" sx={{ marginRight: 2 }}>
-              English
-            </Link>
-            <Link href="#" color="inherit">
-              Logout
-            </Link>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <AppBarSection />
       {step === 1 && (
         <RootContainer>
           <ContentContainer maxWidth={"522px"}>
@@ -165,7 +151,7 @@ const ConnectAccountPage = () => {
                     key={key}
                     value={item._id}
                   >
-                    {item?.apiUrl}
+                    {item?.homeUrl}
                   </MenuItem>
                 ))}
               </Select>
@@ -219,13 +205,23 @@ const ConnectAccountPage = () => {
                 textAlign: "left",
               }}
             >
-              Enter your exchange account credentials to continue the connection.
+              Enter your exchange account credentials to continue the
+              connection.
             </Typography>
             {loading ? (
               <CircularProgress />
             ) : (
               <>
-                <InputLabel style={{textAlign: "left", color: "#000", fontWeight: 600, marginBottom: 6}}>Exchange Email</InputLabel>
+                <InputLabel
+                  style={{
+                    textAlign: "left",
+                    color: "#000",
+                    fontWeight: 600,
+                    marginBottom: 6,
+                  }}
+                >
+                  Exchange Email
+                </InputLabel>
                 <TextField
                   fullWidth
                   variant="outlined"
@@ -234,7 +230,16 @@ const ConnectAccountPage = () => {
                   onChange={(e) => setExchangeEmail(e.target.value)}
                   sx={{ marginBottom: 2 }}
                 />
-                <InputLabel style={{textAlign: "left", color: "#000", fontWeight: 600, marginBottom: 6}}>Exchange Password</InputLabel>
+                <InputLabel
+                  style={{
+                    textAlign: "left",
+                    color: "#000",
+                    fontWeight: 600,
+                    marginBottom: 6,
+                  }}
+                >
+                  Exchange Password
+                </InputLabel>
                 <TextField
                   type="password"
                   fullWidth
@@ -260,6 +265,13 @@ const ConnectAccountPage = () => {
             >
               {isSubmitting ? "Connecting..." : "Connect"}
             </Button>
+            <Dialog2Fa
+              open={open2Fa}
+              setOpen={setOpen2Fa}
+              dataExchangeUrl={dataExchangeUrl}
+              email={exchangeEmail}
+              token={token}
+            />
           </ContentContainer>
         </RootContainer>
       )}

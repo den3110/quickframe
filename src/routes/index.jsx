@@ -30,7 +30,9 @@ export const routes = () => {
       path: "/connect",
       element: (
         <ProtectedRoute>
-          <ConnectAccountPage />
+          <CheckConnectExchange>
+            <ConnectAccountPage />
+          </CheckConnectExchange>
         </ProtectedRoute>
       ),
     },
