@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, lazy } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import LoadingScreen from 'components/loading/LoadingScreen';
 import AuthContext from 'contexts/AuthContext';
