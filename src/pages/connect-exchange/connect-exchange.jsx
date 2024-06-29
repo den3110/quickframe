@@ -9,6 +9,7 @@ import {
   CircularProgress,
   TextField,
   InputLabel,
+  IconButton,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import userApi from "api/user/userApi";
@@ -17,6 +18,7 @@ import { showToast } from "components/toast/toast";
 import Dialog2Fa from "components/dialog/Dialog2Fa";
 import AppBarSection from "./AppBar";
 import { constant } from "constant/constant";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const RootContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -40,7 +42,7 @@ const ContentContainer = styled(Container)(({ theme }) => ({
 const ConnectAccountPage = () => {
   const navigate = useNavigate();
   const [open2Fa, setOpen2Fa] = useState(false);
-  const [token, setToken]= useState()
+  const [token, setToken] = useState();
   const [exchangeUrl, setExchangeUrl] = useState("");
   const [dataExchangeUrl, setDataExchangeUrl] = useState();
   const [exchangeUrls, setExchangeUrls] = useState([]);
@@ -90,7 +92,7 @@ const ConnectAccountPage = () => {
         result?.data?.d?.require2Fa === true
       ) {
         setOpen2Fa(true);
-        setToken(result?.data?.d?.t)
+        setToken(result?.data?.d?.t);
       } else {
         showToast(result?.data?.m, "error");
       }
@@ -149,7 +151,20 @@ const ConnectAccountPage = () => {
                     key={key}
                     value={item._id}
                   >
-                    {item?.homeUrl}
+                    <Box display={"flex"} alignItems={"center"} gap={1}>
+                      <img
+                        draggable={false}
+                        style={{ width: 32, height: 32 }}
+                        src={
+                          constant.API_URL +
+                          "/assets/exchange/" +
+                          item?.clientId +
+                          ".ico"
+                        }
+                        alt="Can't open"
+                      />
+                      {item?.clientId}
+                    </Box>
                   </MenuItem>
                 ))}
               </Select>
@@ -182,8 +197,28 @@ const ConnectAccountPage = () => {
               Connect your account
             </Typography>
             <Box display={"flex"} justifyContent={"center"}>
-              <Box style={{background: "linear-gradient(rgb(102, 108, 117) 0%, rgb(2, 13, 29) 100%)", width: "max-content"}} pl={4} pr={4} pt={2} pb={2} borderRadius={80}>
-                <img src={constant.API_URL + "/assets/exchange/" + dataExchangeUrl?.clientId + ".svg"} alt="Can't open" />
+              <Box
+                style={{
+                  background:
+                    "linear-gradient(rgb(102, 108, 117) 0%, rgb(2, 13, 29) 100%)",
+                  width: "max-content",
+                }}
+                pl={4}
+                pr={4}
+                pt={2}
+                pb={2}
+                borderRadius={80}
+              >
+                <img
+                  draggable={false}
+                  src={
+                    constant.API_URL +
+                    "/assets/exchange/" +
+                    dataExchangeUrl?.clientId +
+                    ".svg"
+                  }
+                  alt="Can't open"
+                />
               </Box>
             </Box>
             <Typography
@@ -267,6 +302,19 @@ const ConnectAccountPage = () => {
               onClick={connectExchangeLinkAccount}
             >
               {isSubmitting ? "Connecting..." : "Connect"}
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              fullWidth
+              sx={{
+                marginTop: 2,
+                padding: (theme) => theme.spacing(1.5, 0),
+                fontWeight: 600,
+              }}
+              onClick={() => setStep(1)}
+            >
+              Back
             </Button>
             <Dialog2Fa
               open={open2Fa}
