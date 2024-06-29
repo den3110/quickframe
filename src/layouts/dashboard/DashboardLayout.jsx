@@ -6,6 +6,7 @@ import DashboardSidebar from "./DashboardSidebar";
 import LayoutBodyWrapper from "../layout-parts/LayoutBodyWrapper";
 // DASHBOARD LAYOUT BASED CONTEXT PROVIDER
 import LayoutProvider from "./context/layoutContext";
+import BottomMenu from "./BottomMenu";
 const DashboardLayout = ({
   children
 }) => {
@@ -13,7 +14,7 @@ const DashboardLayout = ({
   return <LayoutProvider>
       {/* CONDITIONALLY RENDER THE SIDEBAR */}
       {downLg ? <MobileSidebar /> : <DashboardSidebar />}
-
+      
       <LayoutBodyWrapper>
         {/* DASHBOARD HEADER SECTION */}
         <DashboardHeader />
@@ -21,6 +22,7 @@ const DashboardLayout = ({
         {/* MAIN CONTENT RENDER SECTION */}
         {children}
       </LayoutBodyWrapper>
+      {downLg && <BottomMenu />}
     </LayoutProvider>;
 };
 export default DashboardLayout;

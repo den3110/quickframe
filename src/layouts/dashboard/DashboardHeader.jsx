@@ -10,10 +10,10 @@ import Menu from "icons/Menu";
 import MenuLeft from "icons/MenuLeft";
 import ThemeIcon from "icons/ThemeIcon";
 // import SearchIcon from "icons/SearchIcon";
-import Search from "icons/duotone/Search";
+// import Search from "icons/duotone/Search";
 import MenuLeftRight from "icons/MenuLeftRight";
 // CUSTOM COMPONENTS
-import SearchBar from "../layout-parts/SearchBar";
+// import SearchBar from "../layout-parts/SearchBar";
 import ProfilePopover from "../layout-parts/popovers/ProfilePopover";
 import ServicePopover from "../layout-parts/popovers/ServicePopover";
 import LanguagePopover from "../layout-parts/popovers/LanguagePopover";
@@ -23,11 +23,13 @@ import {
   DashboardHeaderRoot,
   StyledToolBar,
 } from "../layout-parts/styles/header";
+import WalletPopover from "layouts/layout-parts/popovers/WalletPopover";
+import { Link } from "react-router-dom";
 const DashboardHeader = () => {
   const { handleOpenMobileSidebar } = useLayout();
-  const [openSearchBar, setSearchBar] = useState(false);
+  // const [openSearchBar, setSearchBar] = useState(false);
   const { settings, saveSettings } = useContext(SettingsContext);
-  const upSm = useMediaQuery((theme) => theme.breakpoints.up("sm"));
+  // const upSm = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   const downMd = useMediaQuery((theme) => theme.breakpoints.down(1200));
   const handleChangeDirection = (value) => {
     saveSettings({
@@ -46,13 +48,18 @@ const DashboardHeader = () => {
       <StyledToolBar>
         {/* SMALL DEVICE SIDE BAR OPEN BUTTON */}
         {downMd && (
-          <IconButton onClick={handleOpenMobileSidebar}>
-            <Menu />
-          </IconButton>
+          <Link href="/">
+            <Box
+              component="img"
+              src="/static/logo/logo-svg.svg"
+              alt="logo"
+              width={30}
+            />
+          </Link>
         )}
 
         {/* SEARCH ICON BUTTON */}
-        <ClickAwayListener onClickAway={() => setSearchBar(false)}>
+        {/* <ClickAwayListener onClickAway={() => setSearchBar(false)}>
           <Box>
             {!openSearchBar ? (
               <IconButton onClick={() => setSearchBar(true)}>
@@ -70,10 +77,10 @@ const DashboardHeader = () => {
               handleClose={() => setSearchBar(false)}
             />
           </Box>
-        </ClickAwayListener>
+        </ClickAwayListener> */}
 
         <Box flexGrow={1} ml={1} />
-
+        <WalletPopover />
         {/* TEXT DIRECTION SWITCH BUTTON */}
         {settings.direction === "rtl" ? (
           <IconButton onClick={() => handleChangeDirection("ltr")}>
@@ -102,13 +109,12 @@ const DashboardHeader = () => {
           <ThemeIcon />
         </IconButton>
 
-        {upSm && (
+        <LanguagePopover />
+        <NotificationsPopover />
+        {/* {upSm && (
           <Fragment>
-            <LanguagePopover />
-            <NotificationsPopover />
-            <ServicePopover />
           </Fragment>
-        )}
+        )} */}
         <ProfilePopover />
       </StyledToolBar>
     </DashboardHeaderRoot>
