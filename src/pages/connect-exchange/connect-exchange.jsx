@@ -119,11 +119,39 @@ const ConnectAccountPage = () => {
             >
               Connect your account
             </Typography>
+            <Box display={"flex"} justifyContent={"center"}>
+              {dataExchangeUrl && (
+                <Box
+                  style={{
+                    background:
+                      "linear-gradient(rgb(102, 108, 117) 0%, rgb(2, 13, 29) 100%)",
+                    width: "max-content",
+                  }}
+                  pl={4}
+                  pr={4}
+                  pt={2}
+                  pb={2}
+                  borderRadius={80}
+                >
+                  <img
+                    draggable={false}
+                    src={
+                      constant.API_URL +
+                      "/assets/exchange/" +
+                      dataExchangeUrl?.clientId +
+                      ".svg"
+                    }
+                    alt="Can't open"
+                  />
+                </Box>
+              )}
+            </Box>
             <Typography
               variant="body1"
               sx={{ marginBottom: 4, color: "text.secondary" }}
+              mt={3}
             >
-              Step 1: Enter your Exchange URL
+              Step 1: Enter your Exchange {dataExchangeUrl?.name}
             </Typography>
             {loading ? (
               <CircularProgress />

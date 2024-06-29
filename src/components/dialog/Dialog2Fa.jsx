@@ -49,6 +49,9 @@ const Dialog2Fa = (props) => {
       if (response?.data?.ok === true) {
         navigate("/account");
       }
+      else if(response?.data?.ok=== false) {
+        showToast(response?.data?.m, "error")
+      }
       // setOpen(false);
     } catch (error) {
       console.log(error);

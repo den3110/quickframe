@@ -3,9 +3,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const AppBarSection = () => {
-  const handleLogout= ()=> {
-    localStorage.remove("accessToken")
-    localStorage.remove("refreshToken")
+  const handleLogout= (e)=> {
+    e.preventDefault()
+    localStorage.removeItem("accessToken")
+    localStorage.removeItem("refreshToken")
+    window.location.reload()
   }
   return (
     <AppBar
@@ -30,7 +32,7 @@ const AppBarSection = () => {
           <Link href="#" color="inherit" sx={{ marginRight: 2 }}>
             English
           </Link>
-          <Link href="#" color="inherit">
+          <Link onClick={handleLogout} href="#" color="inherit">
             Logout
           </Link>
         </Box>
