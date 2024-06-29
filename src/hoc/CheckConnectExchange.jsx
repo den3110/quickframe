@@ -44,6 +44,9 @@ const CheckConnectExchange = ({ children }) => {
   if (location.pathname=== "/connect" && parseInt(statusCode)=== 402) {
     return <>{children}</>;
   }
+  if (location.pathname=== "/" && parseInt(statusCode)=== 402) {
+    return <Navigate to="/connect" />;
+  }
   if(location.pathname=== "/connect" && linked?.ok=== true) {
     return <Navigate to="/" />;
   }
