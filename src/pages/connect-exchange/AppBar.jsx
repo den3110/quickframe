@@ -3,6 +3,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const AppBarSection = () => {
+  const handleLogout= ()=> {
+    localStorage.remove("accessToken")
+    localStorage.remove("refreshToken")
+  }
   return (
     <AppBar
       position="fixed"
