@@ -7,9 +7,10 @@ import { ComponentRoutes } from "./components";
 import ProtectedRoute from "hoc/ProtectedRoute";
 import CheckConnectExchange from "hoc/CheckConnectExchange";
 import ConnectAccountPage from "pages/connect-exchange/connect-exchange";
+import { Navigate } from "react-router-dom";
 
 const ErrorPage = Loadable(lazy(() => import("pages/404")));
-const Landing = Loadable(lazy(() => import("pages/landing")));
+// const Landing = Loadable(lazy(() => import("pages/landing")));
 export const routes = () => {
   return [
     {
@@ -17,7 +18,8 @@ export const routes = () => {
       element: (
         <ProtectedRoute>
           <CheckConnectExchange>
-            <Landing />
+            {/* <Landing /> */}
+            <Navigate to="/dashboard" />
           </CheckConnectExchange>
         </ProtectedRoute>
       ),

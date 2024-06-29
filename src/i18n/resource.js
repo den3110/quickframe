@@ -21,7 +21,9 @@ export const resources = {
       "Page views": "Page views",
       "Visits by Top Referral Source": "Visits by Top Referral Source",
       "Session by browser": "Session by browser",
-      "View Details": "View Details"
+      "View Details": "View Details",
+      "English": "English",
+      "Vietnamese": "Vietnamese",
     }
   },
   es: {
@@ -46,7 +48,36 @@ export const resources = {
       "Page views": "Visitas a la página",
       "Visits by Top Referral Source": "Visitas por principal fuente de referencia",
       "Session by browser": "Sesión por navegador",
-      "View Details": "Ver detalles"
+      "View Details": "Ver detalles",
+      "English": "Inglesa",
+      "Vietnamese": "Vietnamita",
+    }
+  },
+  vi: {
+    translation: {
+      Profiles: "Hồ sơ",
+      Dashboard: "Bảng điều khiển",
+      Logistics: "Hậu cần",
+      Ecommerce: "Thương mại điện tử",
+      Management: "Quản lý",
+      "Analytics 1": "Phân tích 1",
+      "Analytics 2": "Phân tích 2",
+      "Finance 1": "Tài chính 1",
+      "Finance 2": "Tài chính 2",
+      Accounts: "Tài khoản",
+      "User & Contact": "Người dùng & Liên hệ",
+      Invoice: "Hóa đơn",
+      Users: "Người dùng",
+      Sessions: "Phiên",
+      "Bounce Rate": "Tỷ lệ thoát",
+      "Session Duration": "Thời lượng phiên",
+      "Live Online User": "Người dùng trực tuyến",
+      "Page views": "Lượt xem trang",
+      "Visits by Top Referral Source": "Lượt truy cập từ nguồn giới thiệu hàng đầu",
+      "Session by browser": "Phiên theo trình duyệt",
+      "View Details": "Xem chi tiết",
+      "English": "Tiếng Anh",
+      "Vietnamese": "Tiếng Việt"
     }
   }
-};  
+};

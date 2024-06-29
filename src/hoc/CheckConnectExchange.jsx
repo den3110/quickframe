@@ -3,6 +3,9 @@ import { Navigate, useLocation } from 'react-router-dom';
 import LoadingScreen from 'components/loading/LoadingScreen';
 import AuthContext from 'contexts/AuthContext';
 import userApi from 'api/user/userApi';
+import { createContext } from 'react';
+
+export const ConnectExchangeContext= createContext()
 const CheckConnectExchange = ({ children }) => {
   const location= useLocation()
   const { user, loading: authLoading } = useContext(AuthContext);
@@ -42,7 +45,7 @@ const CheckConnectExchange = ({ children }) => {
     return <Navigate to="/login" />;
   }
   if (location.pathname=== "/connect" && parseInt(statusCode)=== 402) {
-    return <>{children}</>;
+    return <ConnectExchangeContext.Provider value={{linked}}>{children}</ConnectExchangeContext.Provider>;
   }
   if (location.pathname=== "/" && parseInt(statusCode)=== 402) {
     return <Navigate to="/connect" />;
@@ -51,9 +54,9 @@ const CheckConnectExchange = ({ children }) => {
     return <Navigate to="/" />;
   }
   else {
-    return <>
+    return <ConnectExchangeContext.Provider value={{linked}}>
         {children}
-    </>
+    </ConnectExchangeContext.Provider>
   }
 };
 

@@ -14,7 +14,9 @@ export const AuthProvider = ({ children }) => {
     if (accessToken) {
       try {
         const response = await userApi.getUserProfile(accessToken);
-        setUser(response.data);
+        if(response?.data?.ok=== true) {
+          setUser(response.data?.d);          
+        }
       } catch (error) {
         console.error('Failed to load user profile', error);
         localStorage.removeItem('accessToken');

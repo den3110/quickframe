@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { Outlet } from "react-router-dom";
 import { Box, Tab, Card, Stack, styled, IconButton } from "@mui/material";
 import CameraAlt from "@mui/icons-material/CameraAlt";
@@ -14,13 +14,14 @@ import MapMarkerIcon from "icons/MapMarkerIcon";
 // CUSTOM UTILS METHOD
 import { format } from "utils/currency";
 import { AvatarLoading } from "components/avatar-loading";
+import AuthContext from "contexts/AuthContext";
 
 // STYLED COMPONENTS
 const ContentWrapper = styled(Box)({
   zIndex: 1,
   padding: 24,
   marginTop: 55,
-  position: "relative"
+  position: "relative",
 });
 const CoverPicWrapper = styled(Box)({
   top: 0,
@@ -28,67 +29,89 @@ const CoverPicWrapper = styled(Box)({
   height: 125,
   width: "100%",
   overflow: "hidden",
-  position: "absolute"
+  position: "absolute",
 });
 const StyledFlexBetween = styled(FlexBetween)({
   margin: "auto",
-  flexWrap: "wrap"
+  flexWrap: "wrap",
 });
-const StyledTabList = styled(TabList)(({
-  theme
-}) => ({
+const StyledTabList = styled(TabList)(({ theme }) => ({
   borderBottom: 0,
   paddingLeft: 16,
   paddingRight: 16,
   [theme.breakpoints.up("sm")]: {
     "& .MuiTabs-flexContainer": {
-      justifyContent: "center"
-    }
-  }
+      justifyContent: "center",
+    },
+  },
 }));
 
 // =======================================================================
 
 // =======================================================================
 
-const Layout = ({
-  children,
-  handleTabList
-}) => {
-  return <Fragment>
-      <Card sx={{
-      position: "relative"
-    }}>
+const Layout = ({ children, handleTabList }) => {
+  const { user } = useContext(AuthContext);
+  return (
+    <Fragment>
+      <Card
+        sx={{
+          position: "relative",
+        }}
+      >
         <CoverPicWrapper>
-          <img width="100%" height="100%" alt="Team Member" src="/static/cover/user-cover-pic.png" style={{
-          objectFit: "cover"
-        }} />
+          <img
+            width="100%"
+            height="100%"
+            alt="Team Member"
+            src="/static/cover/user-cover-pic.png"
+            style={{
+              objectFit: "cover",
+            }}
+          />
         </CoverPicWrapper>
 
         <ContentWrapper>
           <FlexBox justifyContent="center">
-            <AvatarBadge badgeContent={<label htmlFor="icon-button-file">
-                  <input type="file" accept="image/*" id="icon-button-file" style={{
-              display: "none"
-            }} />
+            <AvatarBadge
+              badgeContent={
+                <label htmlFor="icon-button-file">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="icon-button-file"
+                    style={{
+                      display: "none",
+                    }}
+                  />
 
                   <IconButton aria-label="upload picture" component="span">
-                    <CameraAlt sx={{
-                fontSize: 16,
-                color: "background.paper"
-              }} />
+                    <CameraAlt
+                      sx={{
+                        fontSize: 16,
+                        color: "background.paper",
+                      }}
+                    />
                   </IconButton>
-                </label>}>
-              <AvatarLoading alt="user" borderSize={2} percentage={60} src="/static/user/user-11.png" sx={{
-              width: 100,
-              height: 100
-            }} />
+                </label>
+              }
+            >
+              <AvatarLoading
+                alt="user"
+                borderSize={2}
+                percentage={60}
+                src="/static/user/user-11.png"
+                sx={{
+                  width: 100,
+                  height: 100,
+                }}
+              />
             </AvatarBadge>
           </FlexBox>
 
           <Box mt={2}>
             <H6 fontSize={18} textAlign="center">
-              Pixy Krovasky
+              {user?.email}
             </H6>
 
             <StyledFlexBetween paddingTop={1} maxWidth={340}>
@@ -99,9 +122,21 @@ const Layout = ({
           </Box>
 
           <StyledFlexBetween paddingTop={4} maxWidth={400}>
-            <BoxItem amount={`$${format(4550, "0,00")}`} title="Earnings" color="primary.main" />
-            <BoxItem amount={format(60, "0,00")} title="Projects" color="success.600" />
-            <BoxItem amount={`$${format(2800, "0,00")}`} title="Success Rate" color="warning.600" />
+            <BoxItem
+              amount={`$${format(4550, "0,00")}`}
+              title="Earnings"
+              color="primary.main"
+            />
+            <BoxItem
+              amount={format(60, "0,00")}
+              title="Projects"
+              color="success.600"
+            />
+            <BoxItem
+              amount={`$${format(2800, "0,00")}`}
+              title="Success Rate"
+              color="warning.600"
+            />
           </StyledFlexBetween>
         </ContentWrapper>
 
@@ -116,7 +151,8 @@ const Layout = ({
       </Card>
 
       {children || <Outlet />}
-    </Fragment>;
+    </Fragment>
+  );
 };
 export default Layout;
 
@@ -124,41 +160,44 @@ export default Layout;
 
 // ============================================================================================
 
-function ListItem({
-  title,
-  Icon
-}) {
-  return <FlexBox gap={1} alignItems="center">
-      <Icon sx={{
-      fontSize: 14,
-      color: "text.secondary"
-    }} />
+function ListItem({ title, Icon }) {
+  return (
+    <FlexBox gap={1} alignItems="center">
+      <Icon
+        sx={{
+          fontSize: 14,
+          color: "text.secondary",
+        }}
+      />
       <Paragraph color="text.secondary">{title}</Paragraph>
-    </FlexBox>;
+    </FlexBox>
+  );
 }
-function BoxItem({
-  title,
-  amount,
-  color
-}) {
-  return <Stack spacing={0.5} alignItems="center" sx={{
-    borderRadius: "8px",
-    border: "1px solid",
-    padding: "1rem .5rem",
-    borderColor: "divider",
-    width: {
-      sm: 120,
-      xs: "100%"
-    },
-    marginBottom: {
-      sm: 0,
-      xs: 1
-    }
-  }}>
+function BoxItem({ title, amount, color }) {
+  return (
+    <Stack
+      spacing={0.5}
+      alignItems="center"
+      sx={{
+        borderRadius: "8px",
+        border: "1px solid",
+        padding: "1rem .5rem",
+        borderColor: "divider",
+        width: {
+          sm: 120,
+          xs: "100%",
+        },
+        marginBottom: {
+          sm: 0,
+          xs: 1,
+        },
+      }}
+    >
       <H6 fontSize={16} color={color}>
         {amount}
       </H6>
 
       <Paragraph color="text.secondary">{title}</Paragraph>
-    </Stack>;
+    </Stack>
+  );
 }

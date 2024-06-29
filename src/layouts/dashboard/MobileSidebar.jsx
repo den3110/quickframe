@@ -4,7 +4,7 @@ import useLayout from "./context/useLayout";
 // CUSTOM COMPONENTS
 import { Scrollbar } from "components/scrollbar";
 import MultiLevelMenu from "./MultiLevelMenu";
-import UserAccount from "../layout-parts/UserAccount";
+import UserAccount from "../layout-parts/InfoExchange";
 import LayoutDrawer from "../layout-parts/LayoutDrawer";
 
 // STYLED COMPONENTS

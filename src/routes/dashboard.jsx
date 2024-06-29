@@ -5,6 +5,7 @@ import Loadable from "./Loadable";
 import { AuthGuard } from "components/auth";
 import DashboardLayout from "layouts/dashboard/DashboardLayout";
 import ProtectedRoute from "hoc/ProtectedRoute";
+import CheckConnectExchange from "hoc/CheckConnectExchange";
 
 // ALL DASHBOARD PAGES
 const CRM = Loadable(lazy(() => import("pages/dashboard/crm")));
@@ -114,9 +115,11 @@ export const DashboardRoutes = [
     path: "dashboard",
     element: (
       <ProtectedRoute>
-        <DashboardLayout>
-          <Outlet />
-        </DashboardLayout>
+        <CheckConnectExchange>
+          <DashboardLayout>
+            <Outlet />
+          </DashboardLayout>
+        </CheckConnectExchange>
       </ProtectedRoute>
     ),
     children: [

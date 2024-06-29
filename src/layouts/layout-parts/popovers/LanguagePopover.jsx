@@ -6,16 +6,7 @@ import { useTranslation } from "react-i18next";
 
 // ==============================================================
 // LANGUAGE OPTIONS
-const languageOptions = {
-  en: {
-    icon: "/static/flags/usa-round.png",
-    label: "English"
-  },
-  es: {
-    icon: "/static/flags/spain-round.png",
-    label: "Spanish"
-  }
-};
+
 
 // STYLED COMPONENTS
 const IconWrapper = styled(Box)({
@@ -30,6 +21,7 @@ const IconWrapper = styled(Box)({
   }
 });
 const LanguagePopover = () => {
+  const {t }= useTranslation()
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const {
@@ -40,6 +32,20 @@ const LanguagePopover = () => {
   const handleChangeLanguage = language => {
     i18n.changeLanguage(language);
     setOpen(false);
+  };
+  const languageOptions = {
+    en: {
+      icon: "/static/flags/usa-round.png",
+      label: t("English")
+    },
+    es: {
+      icon: "/static/flags/spain-round.png",
+      label: "Spanish"
+    },
+    vi: {
+      icon: "/static/flags/vn-round.png",
+      label: t("Vietnamese")
+    }
   };
   const selectedLanguage = languageOptions[i18n.language];
   return <Fragment>
