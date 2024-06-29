@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { showToast } from "components/toast/toast";
 import Dialog2Fa from "components/dialog/Dialog2Fa";
 import AppBarSection from "./AppBar";
+import { constant } from "constant/constant";
 
 const RootContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -180,12 +181,17 @@ const ConnectAccountPage = () => {
             >
               Connect your account
             </Typography>
+            <Box display={"flex"} justifyContent={"center"}>
+              <Box style={{background: "linear-gradient(rgb(102, 108, 117) 0%, rgb(2, 13, 29) 100%)", width: "max-content"}} pl={4} pr={4} pt={2} pb={2} borderRadius={80}>
+                <img src={constant.API_URL + "/assets/exchange/" + dataExchangeUrl?.clientId + ".svg"} alt="Can't open" />
+              </Box>
+            </Box>
             <Typography
-              variant="h4"
               component="div"
-              sx={{ marginBottom: 2, color: "#28a745", fontWeight: 600 }}
+              sx={{ marginBottom: 2, color: "#555", fontWeight: 600 }}
+              mt={1}
             >
-              {dataExchangeUrl?.clientId}
+              {dataExchangeUrl?.homeUrl?.replace("https://", "")}
             </Typography>
 
             <Typography
