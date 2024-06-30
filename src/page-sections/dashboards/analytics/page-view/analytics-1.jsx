@@ -10,10 +10,14 @@ import CompleteRate from "../CompleteRate";
 import TopPerforming from "../TopPerforming";
 import SessionBrowser from "../SessionBrowser";
 import SalesByCountry from "../SalesByCountry";
+import LeaderBoard from "../LeaderBoard";
 const Analytics1PageView = () => {
   return <Box pt={2} pb={4}>
       <Grid container spacing={3}>
         {/* DIFFERENT DATA SHOW WITH CHART */}
+        <Grid item xs={12} md={12}>
+          <LeaderBoard />
+        </Grid>
         <Grid item md={8} xs={12}>
           <ChartFilters />
         </Grid>
