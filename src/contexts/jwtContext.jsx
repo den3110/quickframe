@@ -105,43 +105,6 @@ export const AuthProvider = ({
       type: "LOGOUT"
     });
   };
-  useEffect(() => {
-    (async () => {
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-        if (accessToken) {
-          setSession(accessToken);
-          const {
-            data
-          } = await axios.get(`${API_URL}/users/profile`);
-          dispatch({
-            type: "INIT",
-            payload: {
-              user: data,
-              isAuthenticated: true
-            }
-          });
-        } else {
-          dispatch({
-            type: "INIT",
-            payload: {
-              user: null,
-              isAuthenticated: false
-            }
-          });
-        }
-      } catch (err) {
-        // console.error(err);
-        dispatch({
-          type: "INIT",
-          payload: {
-            user: null,
-            isAuthenticated: false
-          }
-        });
-      }
-    })();
-  }, []);
 
   // show loading until not initialized
   if (!state.isInitialized) return <LoadingProgress />;

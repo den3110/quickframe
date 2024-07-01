@@ -84,15 +84,13 @@ const ConnectAccountPage = () => {
         clientId: dataExchangeUrl?.clientId,
       };
       const result = await userApi.postUserExchangeLinkAccount(data);
-      if (result.data?.ok === true && result?.data?.d?.require2Fa === false) {
-        showToast(result.data?.m, "success");
-        navigate("/");
-      } else if (
-        result.data?.ok === true &&
-        result?.data?.d?.require2Fa === true
-      ) {
+      if (result.data?.ok === true && result?.data?.d?.require2Fa === true) {
         setOpen2Fa(true);
         setToken(result?.data?.d?.t);
+      } else if (result.data?.ok === true) {
+        console.log(111)
+        showToast(result.data?.m, "success");
+        window.location.reload()
       } else {
         showToast(result?.data?.m, "error");
       }

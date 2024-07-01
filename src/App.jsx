@@ -1,5 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ThemeProvider, CssBaseline, StyledEngineProvider } from "@mui/material";
+import {
+  ThemeProvider,
+  CssBaseline,
+  StyledEngineProvider,
+} from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 // AUTH CONTEXT FILE
@@ -15,25 +19,28 @@ import useSettings from "hooks/useSettings";
 import "./i18n";
 import { AuthProvider } from "contexts/AuthContext";
 import Toast from "components/toast/toast";
+import { SpotBalanceProvider } from "contexts/SpotBalanceContext";
 const App = () => {
-  const {
-    settings
-  } = useSettings();
+  const { settings } = useSettings();
   const theme = createCustomTheme(settings);
   // ROUTER CREATE
   const router = createBrowserRouter(routes());
-  return <LocalizationProvider dateAdapter={AdapterDateFns}>
+  return (
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <AuthProvider>
-            <RTL>
-              <Toast />
-              <CssBaseline />
-              <RouterProvider router={router} />
-            </RTL>
+            <SpotBalanceProvider>
+              <RTL>
+                <Toast />
+                <CssBaseline />
+                <RouterProvider router={router} />
+              </RTL>
+            </SpotBalanceProvider>
           </AuthProvider>
         </ThemeProvider>
       </StyledEngineProvider>
-    </LocalizationProvider>;
+    </LocalizationProvider>
+  );
 };
 export default App;

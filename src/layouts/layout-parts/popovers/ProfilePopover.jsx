@@ -32,7 +32,6 @@ const StyledSmall = styled(Paragraph)(({ theme }) => ({
 }));
 const ProfilePopover = () => {
   const {user}= useContext(AuthContext)
-  console.log(user)
   const anchorRef = useRef(null);
   const navigate = useNavigate();
   const { logout } = useAuth();

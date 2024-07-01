@@ -1,13 +1,17 @@
-import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import { constant } from "constant/constant";
 import AuthContext from "contexts/AuthContext";
+import SpotBalanceContext from "contexts/SpotBalanceContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 import NoTransactionIcon from "icons/wallet/NoTransaction";
-import React, { useContext } from "react";
 
-const LiveWallet = () => {
+import React, { useContext, useState } from "react";
+
+const LiveWallet = (props) => {
   const { linked } = useContext(ConnectExchangeContext);
   const { user } = useContext(AuthContext);
+  const {spotBalance}= useContext(SpotBalanceContext)
+
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <Box
@@ -50,13 +54,13 @@ const LiveWallet = () => {
         </Typography>
         <Divider style={{ borderColor: " rgba(255, 255, 255, 0.2)" }} />
         <Typography variant="h6" align="left" mt={1} mb={1}>
-          $0.00
+          ${spotBalance?.usdtAvailableBalance?.toFixed(2)}
         </Typography>
         <Typography variant="body1" align="left" fontSize={12} mb={2}>
           Ví USDT
         </Typography>
         <Typography variant="h6" align="left" mt={1} mb={1}>
-          $0.00
+          ${spotBalance?.availableBalance?.toFixed(2)}
         </Typography>
         <Typography variant="body1" align="left" fontSize={12} mb={2}>
           Ví Live
@@ -66,7 +70,7 @@ const LiveWallet = () => {
         <Button variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
           Rút tiền
         </Button>
-        <Button variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
+        <Button onClick={props?.handleOpenDrawer} variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
           Nạp tiền
         </Button>
         <Button variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
@@ -85,6 +89,8 @@ const LiveWallet = () => {
         <NoTransactionIcon />
         <Typography>Không có giao dịch nào tại đây!</Typography>
       </Box>
+      <div>
+    </div>
     </Box>
   );
 };

@@ -12,39 +12,12 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Button,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import exchangeApi from "api/exchange/exchangeApi";
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  textAlign: "center",
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-}));
-
-const HeaderCard = styled(Card)(({ theme }) => ({
-  textAlign: "center",
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  backgroundColor: "#f5f5f5",
-  color: theme.palette.text.secondary,
-}));
-
-const RankingBox = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  padding: theme.spacing(2),
-  backgroundColor: "#fff",
-  borderRadius: theme.shape.borderRadius,
-}));
-
-const AvatarWrapper = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  marginBottom: theme.spacing(1),
-}));
+import { isDark } from "utils/constants";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const data = [
   {
@@ -104,7 +77,6 @@ const LeaderBoard = () => {
     (async () => {
       try {
         const result = await exchangeApi.userExchangeLinkAccountLeaderboard();
-        console.log(result);
       } catch (error) {}
     })();
   }, []);
@@ -112,25 +84,90 @@ const LeaderBoard = () => {
     (async () => {
       try {
         const result = await exchangeApi.userBotLeaderboard();
-        console.log(result);
       } catch (error) {}
     })();
   }, []);
   return (
     <Container>
+      <Swiper
+        spaceBetween={20}
+        slidesPerView={3}
+        pagination={{ clickable: true }}
+        style={{ paddingBottom: "20px", overflowY: "unset" }}
+        className="waa"
+      >
+        {data.map((item, index) => (
+          <SwiperSlide key={index}>
+            <Box
+              style={{
+                padding: "20px",
+                height: "100%",
+              }}
+            >
+            {theme=> console.log(theme)}
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                sx={{ width: "100%" }}
+                style={{
+                  borderRadius: "8px",
+                  padding: "20px",
+                  textAlign: "center",
+                  height: "100%",
+                  background: theme=> isDark(theme) ? "white" : "rgb(31, 41, 55)",
+                  boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                }}
+                position={"relative"}
+              >
+                <Box position={"absolute"} style={{width: "100%", height: "50%", background: "linear-gradient(rgba(255, 190, 63, 0.8) -38%, rgba(255, 202, 98, 0) 69.51%)", top: 0, left: 0, borderRadius: 8}}></Box>
+                <Box
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  
+                >
+                  <img
+                    style={{ position: "relative", top: -40, zIndex: 10 }}
+                    src="https://quickinvest.ai/img/icons/rank-1.png"
+                  />
+                </Box>
+                <Typography variant="subtitle1" color="textSecondary">
+                  #{item.rank}
+                </Typography>
+                <Typography variant="h6" color="textPrimary">
+                  {item.name}
+                </Typography>
+                <Typography variant="body1" color="textSecondary">
+                  PnL 24h {item.pnl}
+                </Typography>
+                <Typography
+                  variant="h5"
+                  color="textPrimary"
+                  style={{ margin: "10px 0" }}
+                >
+                  {item.amount}
+                </Typography>
+                <Button variant="outlined">Gói riêng tư</Button>
+              </Box>
+            </Box>
+          </SwiperSlide>
+        ))}
+      </Swiper>
       <Typography
         variant="h5"
         fontWeight={600}
         gutterBottom
         style={{
           background:
-            "linear-gradient(rgb(219, 245, 53) 0%, rgb(127, 211, 98) 51.04%, rgb(23, 115, 70) 100%) text",
+            "linear-gradient(rgb(221 255 0) 0%, rgb(65 255 0) 3.04%, rgb(23 73 48) 100%) text",
           "-webkit-text-fill-color": "transparent",
         }}
       >
         Gói hiệu quả hàng đầu
       </Typography>
-      <Container style={{ background: "white" }}>
+      <Container>
         <List>
           {data.map((item, index) => (
             <StyledListItem key={index} style={{ cursor: "pointer" }}>
@@ -173,7 +210,7 @@ const LeaderBoard = () => {
                   variant="body1"
                   color="textPrimary"
                   style={{
-                    background: "rgb(238, 239, 242)",
+                    background: !isDark ? "#d7d7d9" : "#7d818d",
                     padding: 4,
                     borderRadius: 10,
                   }}
@@ -184,7 +221,7 @@ const LeaderBoard = () => {
                   variant="body1"
                   color="textPrimary"
                   style={{
-                    background: "rgb(238, 239, 242)",
+                    background: !isDark ? "#d7d7d9" : "#7d818d",
                     padding: 4,
                     borderRadius: 10,
                   }}
@@ -202,13 +239,13 @@ const LeaderBoard = () => {
         fontWeight={600}
         style={{
           background:
-            "linear-gradient(rgb(219, 245, 53) 0%, rgb(127, 211, 98) 51.04%, rgb(23, 115, 70) 100%) text",
+            "linear-gradient(rgb(221 255 0) 0%, rgb(65 255 0) 3.04%, rgb(23 73 48) 100%) text",
           "-webkit-text-fill-color": "transparent",
         }}
       >
         Bảng xếp hạng nhà đầu tư hàng ngày
       </Typography>
-      <Container style={{ background: "white" }}>
+      <Container>
         <List>
           {data.map((item, index) => (
             <StyledListItem key={index} style={{ cursor: "pointer" }}>
@@ -250,7 +287,7 @@ const LeaderBoard = () => {
                 variant="body1"
                 color="textPrimary"
                 style={{
-                  background: "rgb(238, 239, 242)",
+                  background: !isDark ? "#d7d7d9" : "#7d818d",
                   padding: 4,
                   borderRadius: 10,
                 }}
