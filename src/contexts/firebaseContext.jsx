@@ -54,16 +54,15 @@ const createUserWithEmail = (email, password) => {
 };
 
 // USER LOGOUT HANDLER
-const logout = () => signOut(auth);
+const logout = () => {
+  localStorage.removeItem("accessToken")
+  localStorage.removeItem("refreshToken")
+  window.location.reload()
+};
 
 // AUTH CONTEXT INITIALIZE
 export const AuthContext = createContext({
-  ...initialAuthState,
-  method: "FIREBASE",
   logout,
-  signInWithGoogle,
-  signInWithEmail,
-  createUserWithEmail
 });
 export const AuthProvider = ({
   children

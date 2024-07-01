@@ -3,14 +3,13 @@ import { constant } from "constant/constant";
 import AuthContext from "contexts/AuthContext";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
-import NoTransactionIcon from "icons/wallet/NoTransaction";
-
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
+import TransactionWallet from "./TransactionWallet";
 
 const LiveWallet = (props) => {
   const { linked } = useContext(ConnectExchangeContext);
   const { user } = useContext(AuthContext);
-  const {spotBalance}= useContext(SpotBalanceContext)
+  const { spotBalance } = useContext(SpotBalanceContext);
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
@@ -70,27 +69,30 @@ const LiveWallet = (props) => {
         <Button variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
           Rút tiền
         </Button>
-        <Button onClick={props?.handleOpenDrawer} variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
+        <Button
+          onClick={() => {
+            props?.handleClosePopover();
+            props?.handleOpenDrawer();
+          }}
+          variant="contained"
+          color="primary"
+          sx={{ mb: 2, mr: 2 }}
+        >
           Nạp tiền
         </Button>
-        <Button variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
+        <Button
+          onClick={() => {
+            props?.handleClosePopover();
+            props?.handleOpenMoveBalanceDrawer();
+          }}
+          variant="contained"
+          color="primary"
+          sx={{ mb: 2, mr: 2 }}
+        >
           Chuyển
         </Button>
       </Box>
-      <Typography variant="h6">Giao dịch gần đây</Typography>
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        mt={2}
-        mb={2}
-        color="grey.500"
-      >
-        <NoTransactionIcon />
-        <Typography>Không có giao dịch nào tại đây!</Typography>
-      </Box>
-      <div>
-    </div>
+      <TransactionWallet handleOpenDetailTransaction={props?.handleOpenDetailTransaction} />
     </Box>
   );
 };

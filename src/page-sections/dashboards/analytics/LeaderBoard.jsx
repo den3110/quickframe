@@ -104,7 +104,6 @@ const LeaderBoard = () => {
                 height: "100%",
               }}
             >
-            {theme=> console.log(theme)}
               <Box
                 display="flex"
                 flexDirection="column"
@@ -116,17 +115,28 @@ const LeaderBoard = () => {
                   padding: "20px",
                   textAlign: "center",
                   height: "100%",
-                  background: theme=> isDark(theme) ? "white" : "rgb(31, 41, 55)",
+                  background: (theme) =>
+                    isDark(theme) ? "white" : "rgb(31, 41, 55)",
                   boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
                 }}
                 position={"relative"}
               >
-                <Box position={"absolute"} style={{width: "100%", height: "50%", background: "linear-gradient(rgba(255, 190, 63, 0.8) -38%, rgba(255, 202, 98, 0) 69.51%)", top: 0, left: 0, borderRadius: 8}}></Box>
+                <Box
+                  position={"absolute"}
+                  style={{
+                    width: "100%",
+                    height: "50%",
+                    background:
+                      "linear-gradient(rgba(255, 190, 63, 0.8) -38%, rgba(255, 202, 98, 0) 69.51%)",
+                    top: 0,
+                    left: 0,
+                    borderRadius: 8,
+                  }}
+                ></Box>
                 <Box
                   display={"flex"}
                   justifyContent={"center"}
                   alignItems={"center"}
-                  
                 >
                   <img
                     style={{ position: "relative", top: -40, zIndex: 10 }}
@@ -162,7 +172,7 @@ const LeaderBoard = () => {
         style={{
           background:
             "linear-gradient(rgb(221 255 0) 0%, rgb(65 255 0) 3.04%, rgb(23 73 48) 100%) text",
-          "-webkit-text-fill-color": "transparent",
+          WebkitTextFillColor: "transparent",
         }}
       >
         Gói hiệu quả hàng đầu
@@ -209,8 +219,11 @@ const LeaderBoard = () => {
                 <Typography
                   variant="body1"
                   color="textPrimary"
+                  sx={{
+                    background: (theme) =>
+                      isDark(theme) ? "#7d818d" : "#dbdde5",
+                  }}
                   style={{
-                    background: !isDark ? "#d7d7d9" : "#7d818d",
                     padding: 4,
                     borderRadius: 10,
                   }}
@@ -220,8 +233,11 @@ const LeaderBoard = () => {
                 <Typography
                   variant="body1"
                   color="textPrimary"
+                  sx={{
+                    background: (theme) =>
+                      isDark(theme) ? "#7d818d" : "#dbdde5",
+                  }}
                   style={{
-                    background: !isDark ? "#d7d7d9" : "#7d818d",
                     padding: 4,
                     borderRadius: 10,
                   }}
@@ -240,7 +256,7 @@ const LeaderBoard = () => {
         style={{
           background:
             "linear-gradient(rgb(221 255 0) 0%, rgb(65 255 0) 3.04%, rgb(23 73 48) 100%) text",
-          "-webkit-text-fill-color": "transparent",
+          WebkitTextFillColor: "transparent",
         }}
       >
         Bảng xếp hạng nhà đầu tư hàng ngày
@@ -286,8 +302,11 @@ const LeaderBoard = () => {
               <Typography
                 variant="body1"
                 color="textPrimary"
+                sx={{
+                  background: (theme) =>
+                    isDark(theme) ? "#7d818d" : "#dbdde5",
+                }}
                 style={{
-                  background: !isDark ? "#d7d7d9" : "#7d818d",
                   padding: 4,
                   borderRadius: 10,
                 }}

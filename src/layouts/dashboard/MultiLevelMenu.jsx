@@ -56,7 +56,7 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
       }
       if(item.type=== "divider") {
         return (
-          <Box mt={1} mb={1}>
+          <Box key={index} mt={1} mb={1}>
             <Divider />
           </Box>
         )

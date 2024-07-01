@@ -1,4 +1,4 @@
-import { Fragment, useContext, useRef, useState } from "react";
+import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Badge,
@@ -20,24 +20,46 @@ import LoopIcon from "@mui/icons-material/Loop";
 import DemoWallet from "page-sections/wallet/DemoWallet";
 import LiveWallet from "page-sections/wallet/LiveWallet";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import TemporaryDrawer from "./TestDrawe";
 import DepositDrawer from "../drawers/DepositDrawer";
+import MoveBalanceDrawer from "../drawers/MoveBalanceDrawer";
+import DetailTransactionDrawer from "../drawers/DetailTransactionDrawer";
 
 const WalletPopover = () => {
   const [mode, setMode] = useState(false);
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const handleOpen= ()=> {
+    setOpen(true)
+  }
   const handleClose = () => {
     setOpen(false);
   };
   const handleToggleMode = () => {
     setMode(!mode);
+    localStorage.setItem("walletMode", JSON.stringify(!mode));
   };
 
-  const [openDrawer, setOpenDrawer]= useState(false)
-  const handleOpenDrawer= ()=> {
-    setOpenDrawer(true)
-  }
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [openMoveBalanceDrawer, setOpenMoveBalanceDrawer] = useState(false);
+  const [openDetailTransactionDrawer, setOpenDetailTransactionDrawer] =
+    useState(false);
+  const handleOpenDrawer = () => {
+    setOpenDrawer(true);
+  };
+  const handleOpenMoveBalanceDrawer = () => {
+    setOpenMoveBalanceDrawer(true);
+  };
+  const handleDetailTransactionDrawer = () => {
+    setOpenDetailTransactionDrawer(true);
+    setOpen(false)
+  };
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("walletMode"))) {
+      setMode(JSON.parse(localStorage.getItem("walletMode")));
+    } else {
+      setMode(false);
+    }
+  }, []);
 
   return (
     <Fragment>
@@ -46,7 +68,7 @@ const WalletPopover = () => {
         alignItems={"center"}
         mr={1}
         sx={{ cursor: "pointer" }}
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
       >
         <IconButton ref={anchorRef}>
           <Badge color="error" badgeContent={0}>
@@ -60,8 +82,8 @@ const WalletPopover = () => {
         </IconButton>
         <Box>
           <Typography>$0.00</Typography>
-          {mode === false && <Typography fontSize={12}>Ví TK Live</Typography>}
-          {mode === true && <Typography fontSize={12}>Ví TK Demo</Typography>}
+          {mode === true && <Typography fontSize={12}>Ví TK Live</Typography>}
+          {mode === false && <Typography fontSize={12}>Ví TK Demo</Typography>}
         </Box>
         <IconButton>
           <Badge color="error" badgeContent={0}>
@@ -103,11 +125,34 @@ const WalletPopover = () => {
           <LoopIcon fontSize={"18px"} />
         </Typography>
         <DialogContent>
-          {mode === false && <DemoWallet />}
-          {mode === true && <LiveWallet openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer} />}
+          {mode === false && (
+            <DemoWallet
+              handleOpenDetailTransaction={handleDetailTransactionDrawer}
+            />
+          )}
+          {mode === true && (
+            <LiveWallet
+              openDrawer={openDrawer}
+              handleClosePopover={handleClose}
+              handleOpenDrawer={handleOpenDrawer}
+              openMoveDrawer={openMoveBalanceDrawer}
+              handleOpenMoveBalanceDrawer={handleOpenMoveBalanceDrawer}
+              handleOpenDetailTransaction={handleDetailTransactionDrawer}
+            />
+          )}
         </DialogContent>
       </Dialog>
-      <DepositDrawer open={openDrawer} setOpen={setOpenDrawer} />
+      <DepositDrawer open={openDrawer} setOpen={setOpenDrawer} openWalletPopup={handleOpen} />
+      <MoveBalanceDrawer
+        open={openMoveBalanceDrawer}
+        setOpen={setOpenMoveBalanceDrawer}
+        openWalletPopup={handleOpen}
+      />
+      <DetailTransactionDrawer
+        open={openDetailTransactionDrawer}
+        setOpen={setOpenDetailTransactionDrawer}
+        openWalletPopup={handleOpen}
+      />
     </Fragment>
   );
 };

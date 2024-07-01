@@ -5,10 +5,11 @@ import { constant } from "constant/constant";
 import AuthContext from "contexts/AuthContext";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
-import NoTransactionIcon from "icons/wallet/NoTransaction";
+// import NoTransactionIcon from "icons/wallet/NoTransaction";
 import React, { useContext } from "react";
+import TransactionWallet from "./TransactionWallet";
 
-const DemoWallet = () => {
+const DemoWallet = (props) => {
   const { linked } = useContext(ConnectExchangeContext);
   const {setChange }= useContext(SpotBalanceContext)
   const { user } = useContext(AuthContext);
@@ -78,18 +79,7 @@ const DemoWallet = () => {
       <Button onClick={handleResetDemoBalance} variant="contained" color="primary" sx={{ mb: 2 }}>
         Nạp lại số dư
       </Button>
-      <Typography variant="h6">Giao dịch gần đây</Typography>
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        mt={2}
-        mb={2}
-        color="grey.500"
-      >
-        <NoTransactionIcon />
-        <Typography>Không có giao dịch nào tại đây!</Typography>
-      </Box>
+      <TransactionWallet handleOpenDetailTransaction={props?.handleOpenDetailTransaction} />
     </Box>
   );
 };
