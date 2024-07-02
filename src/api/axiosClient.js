@@ -33,6 +33,9 @@ axiosClient.interceptors.response.use(
           return Promise.reject(refreshError);
         }
       }
+      if (error.response.status=== 402 && window.location.pathname=== "/dashboard") {
+        return window.location.replace("/connect")
+      }
       return Promise.reject(error);
     }
   );
