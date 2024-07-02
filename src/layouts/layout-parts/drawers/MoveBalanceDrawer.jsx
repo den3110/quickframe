@@ -69,15 +69,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MoveBalanceDrawer(props) {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const { spotBalance } = React.useContext(SpotBalanceContext);
+  const { spotBalance, setChange } = React.useContext(SpotBalanceContext);
   const { open, setOpen } = props;
   const classes = useStyles();
   const [balanceMove, setBalanceMove] = React.useState();
   const [mode, setMode] = React.useState(false);
 
   const onClose = () => {
-      setOpen(false);
-      props?.openWalletPopup()
+    setOpen(false);
+    props?.openWalletPopup();
   };
 
   const handleToggleMode = () => {
@@ -87,9 +87,7 @@ export default function MoveBalanceDrawer(props) {
   const handleMoveBalance = async () => {
     try {
       const data = {
-        data: {
-          amount: balanceMove,
-        },
+        amount: parseInt(balanceMove),
       };
       if (mode === false) {
         const response = await userApi.postUserExchangeLinkAccountMoveUsdtBo(
@@ -98,13 +96,25 @@ export default function MoveBalanceDrawer(props) {
         if (response?.data?.ok === false) {
           showToast(response?.data?.m, "error");
         }
-      }
+        if(response?.data?.ok === true) {
+          showToast("Bạn đã chuyển thành công $" + balanceMove + " đến ví TK Live", "success")
+          setChange(prev=> !prev)
+          setBalanceMove()
+          onClose()
+        }
+      }         
       if (mode === true) {
         const response = await userApi.postUserExchangeLinkAccountMoveBoUsdt(
           data
         );
         if (response?.data?.ok === false) {
           showToast(response?.data?.m, "error");
+        }
+        if(response?.data?.ok === true) {
+          showToast("Bạn đã chuyển thành công $" + balanceMove + " đến ví USDT", "success")
+          setChange(prev=> !prev)
+          setBalanceMove()
+          onClose()
         }
       }
     } catch (error) {

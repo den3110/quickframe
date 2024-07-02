@@ -7,11 +7,16 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { ArrowForward, ArrowBack, AccountBalanceWallet } from "@mui/icons-material";
+import {
+  ArrowForward,
+  ArrowBack,
+  AccountBalanceWallet,
+} from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import userApi from "api/user/userApi";
 import NoTransactionIcon from "icons/wallet/NoTransaction";
 import { isDark } from "utils/constants";
+import { showToast } from "components/toast/toast";
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -26,100 +31,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const dataBalance = {
-  ok: true,
-  d: {
-    t: 5,
-    p: 1,
-    s: 10,
-    c: [
-      {
-        ts: 1719814053787,
-        type: "Deposit",
-        amount: 10.0362,
-        txid: '{"TransactionId": "0x02acc34f3271ae67a215206e55706d01e277b8e18fba115ac1937171a5baf436"}',
-        network: "bsc",
-        status: "Succeed",
-      },
-      {
-        ts: 1719804036643,
-        type: "Withdraw",
-        amount: 10.36,
-        txid: '{"TransactionId": "0xacfa758a5f84dd917954e3bc9f6c3a73b2b8c867530cc8a433a084998165bfee","Memo":""}',
-        network: "bsc",
-        memo: "",
-        status: "Succeed",
-      },
-      {
-        ts: 1719803990123,
-        type: "InternalDeposit",
-        amount: 11.36,
-        txid: '{"TransactionId": "Natsu1","Memo":""}',
-        network: "eth",
-        memo: "",
-        status: "Succeed",
-      },
-      {
-        ts: 1719803946283,
-        type: "InternalWithdraw",
-        amount: 11.36,
-        txid: '{"ReceiverNickName": "natsu1","Memo":""}',
-        network: "eth",
-        memo: "",
-        status: "Succeed",
-      },
-      {
-        ts: 1719803861443,
-        type: "Deposit",
-        amount: 11.3603,
-        txid: '{"TransactionId": "0x6891f17992bdb85b581b0da137f96bb815e17d4c55fef9adffe8749c95dd518f"}',
-        network: "bsc",
-        status: "Succeed",
-      },
-    ],
-  },
-};
-
-const dataBalanceSpot = {
-  ok: true,
-  d: {
-    t: 2,
-    p: 1,
-    s: 10,
-    c: [
-      {
-        betAmount: 0,
-        amount: 5,
-        type: "TRANSFER_OUT",
-        desc: "TRANSFER_OUT",
-        status: "Accept",
-        transactionTime: 1719814085077,
-        totalCount: 2,
-      },
-      {
-        betAmount: 0,
-        amount: 5,
-        type: "TRANSFER_IN",
-        desc: "TRANSFER_IN",
-        status: "Accept",
-        transactionTime: 1719814079450,
-        totalCount: 2,
-      },
-    ],
-  },
-};
-
 const TransactionWallet = (props) => {
   const classes = useStyles();
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
-  const [transactionWallet, setTransactionWallet] = useState();
+  const [dataBalance, setDataBalance] = useState({ d: { c: [] } });
+  const [dataBalanceSpot, setDataBalanceSpot] = useState({ d: { c: [] } });
+  const handleOpenTransaction = () => {
+    props?.handleOpenDetailTransaction();
+  };
 
-  const handleOpenTransaction= ()=> {
-    props?.handleOpenDetailTransaction()
-  }
-  
-  const normalizeDataBalance = dataBalance.d.c.map((item) => ({
+  const normalizeDataBalance = dataBalance?.d?.c?.map((item) => ({
     ts: item.ts,
     type: item.type,
     amount: item.amount,
@@ -129,7 +51,7 @@ const TransactionWallet = (props) => {
     memo: item.memo || "",
   }));
 
-  const normalizeDataBalanceSpot = dataBalanceSpot.d.c.map((item) => ({
+  const normalizeDataBalanceSpot = dataBalanceSpot?.d?.c?.map((item) => ({
     ts: item.transactionTime,
     type: item.type,
     amount: item.amount,
@@ -162,16 +84,18 @@ const TransactionWallet = (props) => {
   useEffect(() => {
     (async () => {
       try {
-        const response1 = await userApi.getUserExchangeLinkAccountTransactionsBalance({
-          params: { page, size },
-        });
-        const response2 = await userApi.getUserExchangeLinkAccountSpotWalletTransactions({
-          params: { page, size },
-        });
-        console.log(response1?.data);
-        console.log(response2);
+        const response1 =
+          await userApi.getUserExchangeLinkAccountTransactionsBalance({
+            params: { page, size },
+          });
+        const response2 =
+          await userApi.getUserExchangeLinkAccountSpotWalletTransactions({
+            params: { page, size },
+          });
+        setDataBalance(response1?.data);
+        setDataBalanceSpot(response2?.data);
       } catch (error) {
-        console.log(error);
+        showToast(error?.response?.data?.m);
       }
     })();
   }, [page, size]);
@@ -196,7 +120,19 @@ const TransactionWallet = (props) => {
         <Box sx={{ width: "100%" }}>
           <List>
             {sortedData.map((transaction, index) => (
-              <ListItem onClick={handleOpenTransaction} key={index} className={classes.listItem} sx={{borderBottom: theme=> isDark(theme) ? "1px solid rgb(51, 50, 70)" : "1px solid rgb(239, 241, 245)", padding: '10px 6px', cursor: "pointer"}}>
+              <ListItem
+                onClick={handleOpenTransaction}
+                key={index}
+                className={classes.listItem}
+                sx={{
+                  borderBottom: (theme) =>
+                    isDark(theme)
+                      ? "1px solid rgb(51, 50, 70)"
+                      : "1px solid rgb(239, 241, 245)",
+                  padding: "10px 6px",
+                  cursor: "pointer",
+                }}
+              >
                 <ListItemIcon>{getIconByType(transaction.type)}</ListItemIcon>
                 <ListItemText
                   primary={
