@@ -18,7 +18,7 @@ export default function BottomMenu() {
   }
   return (
     <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 3 }}
       elevation={3}
     >
       <Box sx={{ width: "100%" }}>

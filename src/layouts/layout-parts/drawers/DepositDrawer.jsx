@@ -9,7 +9,8 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
 import { isDark } from "utils/constants";
-
+import QRCode from "react-qr-code";
+import { QrCode } from "@mui/icons-material";
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: "350px",
@@ -110,7 +111,7 @@ export default function DepositDrawer(props) {
      <Divider />
       {address?.a === null && (
         <Box
-          sx={{ padding: "24px 16px", height: downLg ? "70vh" : "calc(100vh - 88px)" }}
+          sx={{ padding: "24px 16px", height: downLg ? "70vh" : "calc(100vh - 89px)" }}
           display={"flex"}
           flexDirection={"column"}
           justifyContent={"space-between"}
@@ -121,22 +122,21 @@ export default function DepositDrawer(props) {
       )}
       {address?.a !== null && (
         <Box
-          sx={{ padding: "24px 16px", height: downLg ? "70vh" : "calc(100vh - 88px)" }}
+          sx={{ padding: "24px 16px", height: downLg ? "70vh" : "calc(100vh - 89px)" }}
           display={"flex"}
           flexDirection={"column"}
           justifyContent={"space-between"}
-        >
+        > 
           <Box>
             <Typography variant="h6" align="left" fontWeight={600} gutterBottom>
               Nạp USDT (BEP20)
             </Typography>
 
             <Box className={classes.qrCode}>
-              <img
-                src="your-qr-code-url" // Replace with your QR code URL
+              <QRCode
                 alt="QR Code"
-                width="200"
-                height="200"
+                size={200}
+                value={address?.a}
               />
             </Box>
 

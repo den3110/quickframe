@@ -11,6 +11,7 @@ import {
   Drawer,
   IconButton,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 // CUSTOM COMPONENTS
 // CUSTOM ICON COMPONENT
@@ -23,14 +24,18 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DepositDrawer from "../drawers/DepositDrawer";
 import MoveBalanceDrawer from "../drawers/MoveBalanceDrawer";
 import DetailTransactionDrawer from "../drawers/DetailTransactionDrawer";
+import SpotBalanceContext from "contexts/SpotBalanceContext";
+import WithdrawDrawer from "../drawers/WithdrawDrawer";
 
 const WalletPopover = () => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const { spotBalance } = useContext(SpotBalanceContext);
   const [mode, setMode] = useState(false);
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const handleOpen= ()=> {
-    setOpen(true)
-  }
+  const handleOpen = () => {
+    setOpen(true);
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -43,15 +48,20 @@ const WalletPopover = () => {
   const [openMoveBalanceDrawer, setOpenMoveBalanceDrawer] = useState(false);
   const [openDetailTransactionDrawer, setOpenDetailTransactionDrawer] =
     useState(false);
+  const [openWithdrawDrawer, setOpenWithdrawDrawer] = useState(false);
   const handleOpenDrawer = () => {
     setOpenDrawer(true);
   };
   const handleOpenMoveBalanceDrawer = () => {
     setOpenMoveBalanceDrawer(true);
   };
-  const handleDetailTransactionDrawer = () => {
+  const handleOpenDetailTransactionDrawer = () => {
     setOpenDetailTransactionDrawer(true);
-    setOpen(false)
+    setOpen(false);
+  };
+  const handleOpenWithdrawDrawer = () => {
+    setOpenWithdrawDrawer(true);
+    setOpen(false);
   };
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("walletMode"))) {
@@ -81,7 +91,12 @@ const WalletPopover = () => {
           </Badge>
         </IconButton>
         <Box>
-          <Typography>$0.00</Typography>
+          <Typography>
+            $
+            {mode === true
+              ? spotBalance?.availableBalance?.toFixed(2)
+              : spotBalance?.usdtAvailableBalance?.toFixed(2)}
+          </Typography>
           {mode === true && <Typography fontSize={12}>Ví TK Live</Typography>}
           {mode === false && <Typography fontSize={12}>Ví TK Demo</Typography>}
         </Box>
@@ -97,7 +112,13 @@ const WalletPopover = () => {
         </IconButton>
       </Box>
 
-      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+      <Drawer
+        anchor={downLg ? "bottom" : "right"}
+        open={open}
+        onClose={handleClose}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>
           Ví giao dịch
           <IconButton
@@ -109,40 +130,57 @@ const WalletPopover = () => {
           </IconButton>
         </DialogTitle>
         <Divider />
-        <Typography
-          onClick={handleToggleMode}
-          align="center"
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          gap={1}
-          fontSize={14}
-          style={{ cursor: "pointer" }}
-          mb={1}
-          mt={1}
+        <Box
+          sx={{
+            width: downLg ? "100%" : 448,
+            padding: "24px 16px",
+            height: downLg ? "70vh" : "calc(100vh - 89px)",
+          }}
         >
-          Chuyển sang chế độ {mode === true ? "DEMO" : "LIVE"}{" "}
-          <LoopIcon fontSize={"18px"} />
-        </Typography>
-        <DialogContent>
+          <Typography
+            onClick={handleToggleMode}
+            align="center"
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            gap={1}
+            fontSize={14}
+            style={{ cursor: "pointer" }}
+            mb={1}
+            mt={1}
+          >
+            Chuyển sang chế độ {mode === true ? "DEMO" : "LIVE"}{" "}
+            <LoopIcon fontSize={"18px"} />
+          </Typography>
           {mode === false && (
             <DemoWallet
-              handleOpenDetailTransaction={handleDetailTransactionDrawer}
+              handleOpenDetailTransaction={handleOpenDetailTransactionDrawer}
             />
           )}
           {mode === true && (
             <LiveWallet
-              openDrawer={openDrawer}
               handleClosePopover={handleClose}
               handleOpenDrawer={handleOpenDrawer}
+              openDrawer={openDrawer}
               openMoveDrawer={openMoveBalanceDrawer}
+              openWithdrawDrawer={openWithdrawDrawer}
+              handleOpenWithdrawDrawer={handleOpenWithdrawDrawer}
               handleOpenMoveBalanceDrawer={handleOpenMoveBalanceDrawer}
-              handleOpenDetailTransaction={handleDetailTransactionDrawer}
+              handleOpenDetailTransaction={handleOpenDetailTransactionDrawer}
             />
           )}
-        </DialogContent>
-      </Dialog>
-      <DepositDrawer open={openDrawer} setOpen={setOpenDrawer} openWalletPopup={handleOpen} />
+        </Box>
+      </Drawer>
+      <DepositDrawer
+        open={openDrawer}
+        setOpen={setOpenDrawer}
+        openWalletPopup={handleOpen}
+      />
+      <WithdrawDrawer
+        open={openWithdrawDrawer}
+        setOpen={setOpenWithdrawDrawer}
+        openWalletPopup={handleOpen}
+      />
       <MoveBalanceDrawer
         open={openMoveBalanceDrawer}
         setOpen={setOpenMoveBalanceDrawer}

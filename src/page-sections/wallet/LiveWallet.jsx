@@ -1,6 +1,5 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
 import { constant } from "constant/constant";
-import AuthContext from "contexts/AuthContext";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 import React, { useContext } from "react";
@@ -8,7 +7,6 @@ import TransactionWallet from "./TransactionWallet";
 
 const LiveWallet = (props) => {
   const { linked } = useContext(ConnectExchangeContext);
-  const { user } = useContext(AuthContext);
   const { spotBalance } = useContext(SpotBalanceContext);
 
   return (
@@ -46,7 +44,7 @@ const LiveWallet = (props) => {
           alt="Can't open"
         />
         <Typography variant="h6" align="left" mt={1} mb={1}>
-          {user?.email}
+          {linked?.d?.e}
         </Typography>
         <Typography variant="body1" align="left" fontSize={12} mb={2}>
           Tài khoản email
@@ -66,7 +64,15 @@ const LiveWallet = (props) => {
         </Typography>
       </Box>
       <Box>
-        <Button variant="contained" color="primary" sx={{ mb: 2, mr: 2 }}>
+        <Button
+          onClick={() => {
+            props?.handleClosePopover();
+            props?.handleOpenWithdrawDrawer();
+          }}
+          variant="contained"
+          color="primary"
+          sx={{ mb: 2, mr: 2 }}
+        >
           Rút tiền
         </Button>
         <Button
@@ -92,7 +98,9 @@ const LiveWallet = (props) => {
           Chuyển
         </Button>
       </Box>
-      <TransactionWallet handleOpenDetailTransaction={props?.handleOpenDetailTransaction} />
+      <TransactionWallet
+        handleOpenDetailTransaction={props?.handleOpenDetailTransaction}
+      />
     </Box>
   );
 };

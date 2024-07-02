@@ -1,8 +1,7 @@
-import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
 import { constant } from "constant/constant";
-import AuthContext from "contexts/AuthContext";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 // import NoTransactionIcon from "icons/wallet/NoTransaction";
@@ -12,7 +11,6 @@ import TransactionWallet from "./TransactionWallet";
 const DemoWallet = (props) => {
   const { linked } = useContext(ConnectExchangeContext);
   const {setChange }= useContext(SpotBalanceContext)
-  const { user } = useContext(AuthContext);
   const {spotBalance}= useContext(SpotBalanceContext)
   
   const handleResetDemoBalance= async ()=> {
@@ -20,6 +18,7 @@ const DemoWallet = (props) => {
       const response= await userApi.userExchangeLinkAccountResetDemo()
       if(response?.data?.ok=== true) {
         setChange(prev=> !prev)
+        showToast("Nạp lại số dư thành công", "success")
       }
       else {
         showToast(response?.data?.m, "error")
@@ -63,7 +62,7 @@ const DemoWallet = (props) => {
           alt="Can't open"
         />
         <Typography variant="h6" align="left" mt={1} mb={1}>
-          {user?.email}
+          {linked?.d?.e}
         </Typography>
         <Typography variant="body1" align="left" fontSize={12} mb={2}>
           Tài khoản email

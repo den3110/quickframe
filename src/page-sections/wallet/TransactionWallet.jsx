@@ -119,7 +119,7 @@ const TransactionWallet = (props) => {
       {sortedData?.length > 0 && (
         <Box sx={{ width: "100%" }}>
           <List>
-            {sortedData.map((transaction, index) => (
+            {sortedData?.slice(0, 7)?.map((transaction, index) => (
               <ListItem
                 onClick={handleOpenTransaction}
                 key={index}

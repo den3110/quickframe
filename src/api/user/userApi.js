@@ -56,6 +56,14 @@ const userApi = {
     postUserExchangeLinkAccountMoveUsdtBo(data) {
         const url= "/users/exchange/link-account/move-usdt-bo"
         return axiosClient.post(url, data)
+    },
+    userExchangeLinkAccountWithdraw(data) {
+        const url= "/users/exchange/link-account/withdraw"
+        return axiosClient.post(url, data)
+    },
+    userExchangeLinkAccountTransfer(data) {
+        const url= "/users/exchange/link-account/transfer"
+        return axiosClient.post(url, data)
     }
     
 };

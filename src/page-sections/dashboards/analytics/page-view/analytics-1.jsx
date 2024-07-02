@@ -12,7 +12,8 @@ import SessionBrowser from "../SessionBrowser";
 import SalesByCountry from "../SalesByCountry";
 import LeaderBoard from "../LeaderBoard";
 const Analytics1PageView = () => {
-  return <Box pt={2} pb={4}>
+  return (
+    <Box className="abcjak" pt={2} pb={4}>
       <Grid container spacing={3}>
         {/* DIFFERENT DATA SHOW WITH CHART */}
         <Grid item xs={12} md={12}>
@@ -39,15 +40,19 @@ const Analytics1PageView = () => {
 
         {/* COMPLETE GOAL AND RATES CHART CARD */}
         <Grid item lg={3} xs={12}>
-          <Stack spacing={3} sx={{
-          "& > div": {
-            flex: 1
-          }
-        }} direction={{
-          lg: "column",
-          sm: "row",
-          xs: "column"
-        }}>
+          <Stack
+            spacing={3}
+            sx={{
+              "& > div": {
+                flex: 1,
+              },
+            }}
+            direction={{
+              lg: "column",
+              sm: "row",
+              xs: "column",
+            }}
+          >
             <CompleteGoal />
             <CompleteRate />
           </Stack>
@@ -73,6 +78,7 @@ const Analytics1PageView = () => {
           <Footer />
         </Grid>
       </Grid>
-    </Box>;
+    </Box>
+  );
 };
 export default Analytics1PageView;

@@ -1,4 +1,4 @@
-import { Box, Container, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 // LAYOUT BASED HOOK
 import useLayout from "../dashboard/context/useLayout";
 
@@ -20,7 +20,7 @@ const LayoutBodyWrapper = ({
     sidebarCompact
   } = useLayout();
   return <RootBox compact={sidebarCompact ? 1 : 0}>
-      <Container maxWidth="lg">{children}</Container>
+      <Box sx={{width: "100%"}} className="anmasw">{children}</Box>
     </RootBox>;
 };
 export default LayoutBodyWrapper;

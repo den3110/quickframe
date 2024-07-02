@@ -87,7 +87,7 @@ export default function MoveBalanceDrawer(props) {
   const handleMoveBalance = async () => {
     try {
       const data = {
-        amount: parseInt(balanceMove),
+        amount: parseFloat(balanceMove),
       };
       if (mode === false) {
         const response = await userApi.postUserExchangeLinkAccountMoveUsdtBo(
@@ -134,7 +134,7 @@ export default function MoveBalanceDrawer(props) {
       <Box
         sx={{
           padding: "24px 16px",
-          height: downLg ? "70vh" : "calc(100vh - 88px)",
+          height: downLg ? "70vh" : "calc(100vh - 89px)",
         }}
         display={"flex"}
         flexDirection={"column"}
