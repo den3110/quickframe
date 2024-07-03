@@ -130,154 +130,421 @@ const LeaderBoard = () => {
           </Tooltip>
         </Fragment>
       </Box>
-      <Swiper
-        spaceBetween={20}
-        pagination={{ clickable: true }}
-        style={{ paddingBottom: "20px", overflowY: "unset" }}
-        className="waa"
-        breakpoints={{
-          // when window width is >= 640px
-          300: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          // when window width is >= 768px
-          768: {
-            slidesPerView: 5,
-            spaceBetween: 20,
-          },
-        }}
-      >
-        {data.map((item, index) => (
-          <SwiperSlide key={index}>
-            <Box
-              style={{
-                padding: "20px 0",
-                height: "100%",
-              }}
-            >
+      <Box sx={{padding: "0 48px"}}>
+        <Swiper
+          spaceBetween={20}
+          pagination={{ clickable: true }}
+          style={{ paddingBottom: "20px", overflowY: "unset" }}
+          className="waa"
+          breakpoints={{
+            // when window width is >= 640px
+            300: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            // when window width is >= 768px
+            768: {
+              slidesPerView: 5,
+              spaceBetween: 20,
+            },
+            2000: {
+              slidesPerView: 10,
+              spaceBetween: 20,
+            }
+          }}
+        >
+          {data.map((item, index) => (
+            <SwiperSlide key={index}>
               <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                sx={{
-                  width: "100%",
-                  background: (theme) =>
-                    isDark(theme) ? "rgb(31, 41, 55)" : "white",
-                }}
                 style={{
-                  borderRadius: "8px",
                   padding: "20px 0",
-                  textAlign: "center",
                   height: "100%",
-                  boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                  maxWidth: 300
                 }}
-                position={"relative"}
               >
                 <Box
-                  position={"absolute"}
-                  style={{
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  sx={{
                     width: "100%",
-                    height: "50%",
-                    background: renderBackgroundLeaderBoardBot(item.rank),
-                    top: 0,
-                    left: 0,
-                    borderRadius: 8,
+                    background: (theme) =>
+                      isDark(theme) ? "rgb(31, 41, 55)" : "white",
                   }}
-                ></Box>
-                <Box
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
+                  style={{
+                    borderRadius: "8px",
+                    padding: "20px 0",
+                    textAlign: "center",
+                    height: "100%",
+                    boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                  }}
+                  position={"relative"}
                 >
-                  {item.rank === 1 && (
-                    <img
-                      style={{
-                        position: "relative",
-                        top: -40,
-                        zIndex: 10,
-                        width: 45,
-                      }}
-                      src="https://quickinvest.ai/img/icons/rank-1.png"
-                      alt="Can't open"
-                    />
-                  )}
-                  {item.rank === 2 && (
-                    <img
-                      style={{
-                        position: "relative",
-                        top: -40,
-                        zIndex: 10,
-                        width: 45,
-                      }}
-                      src="https://quickinvest.ai/img/icons/rank-2.png"
-                      alt="Can't open"
-                    />
-                  )}
-                  {item.rank === 3 && (
-                    <img
-                      style={{
-                        position: "relative",
-                        top: -40,
-                        zIndex: 10,
-                        width: 45,
-                      }}
-                      src="https://quickinvest.ai/img/icons/rank-3.png"
-                      alt="Can't open"
-                    />
-                  )}
-                  {item.rank !== 1 && item.rank !== 2 && item.rank !== 3 && (
-                    <>
-                      <Box
-                        style={{ position: "relative", top: -40, zIndex: 10 }}
-                      >
+                  <Box
+                    position={"absolute"}
+                    style={{
+                      width: "100%",
+                      height: "50%",
+                      background: renderBackgroundLeaderBoardBot(item.rank),
+                      top: 0,
+                      left: 0,
+                      borderRadius: 8,
+                    }}
+                  ></Box>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    {item.rank === 1 && (
+                      <img
+                        style={{
+                          position: "relative",
+                          top: -40,
+                          zIndex: 10,
+                          width: 45,
+                        }}
+                        src="https://quickinvest.ai/img/icons/rank-1.png"
+                        alt="Can't open"
+                      />
+                    )}
+                    {item.rank === 2 && (
+                      <img
+                        style={{
+                          position: "relative",
+                          top: -40,
+                          zIndex: 10,
+                          width: 45,
+                        }}
+                        src="https://quickinvest.ai/img/icons/rank-2.png"
+                        alt="Can't open"
+                      />
+                    )}
+                    {item.rank === 3 && (
+                      <img
+                        style={{
+                          position: "relative",
+                          top: -40,
+                          zIndex: 10,
+                          width: 45,
+                        }}
+                        src="https://quickinvest.ai/img/icons/rank-3.png"
+                        alt="Can't open"
+                      />
+                    )}
+                    {item.rank !== 1 && item.rank !== 2 && item.rank !== 3 && (
+                      <>
                         <Box
-                          display={"flex"}
-                          justifyContent={"center"}
-                          alignItems={"center"}
-                          sx={{ width: 40, height: 50 }}
+                          style={{ position: "relative", top: -40, zIndex: 10 }}
                         >
                           <Box
-                            display="flex"
+                            display={"flex"}
                             justifyContent={"center"}
                             alignItems={"center"}
-                            sx={{
-                              width: 40,
-                              height: 40,
-                              borderRadius: "50%",
-                              background: "rgb(160, 174, 192)",
-                            }}
+                            sx={{ width: 40, height: 50 }}
                           >
-                            {item.rank}
+                            <Box
+                              display="flex"
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              sx={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: "50%",
+                                background: "rgb(160, 174, 192)",
+                              }}
+                            >
+                              {item.rank}
+                            </Box>
                           </Box>
                         </Box>
-                      </Box>
-                    </>
-                  )}
+                      </>
+                    )}
+                  </Box>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    #{item.rank}
+                  </Typography>
+                  <Typography variant="h6" color="textPrimary">
+                    {item.name}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    PnL 24h {item.pnl}
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    color="textPrimary"
+                    style={{ margin: "10px 0" }}
+                  >
+                    {item.amount}
+                  </Typography>
+                  <Button variant="outlined">Gói riêng tư</Button>
                 </Box>
-                <Typography variant="subtitle1" color="textSecondary">
-                  #{item.rank}
-                </Typography>
-                <Typography variant="h6" color="textPrimary">
-                  {item.name}
-                </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  PnL 24h {item.pnl}
-                </Typography>
-                <Typography
-                  variant="h5"
-                  color="textPrimary"
-                  style={{ margin: "10px 0" }}
-                >
-                  {item.amount}
-                </Typography>
-                <Button variant="outlined">Gói riêng tư</Button>
               </Box>
-            </Box>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+            </SwiperSlide>
+          ))}
+          {data.map((item, index) => (
+            <SwiperSlide key={index}>
+              <Box
+                style={{
+                  padding: "20px 0",
+                  height: "100%",
+                  maxWidth: 300
+                }}
+              >
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  sx={{
+                    width: "100%",
+                    background: (theme) =>
+                      isDark(theme) ? "rgb(31, 41, 55)" : "white",
+                  }}
+                  style={{
+                    borderRadius: "8px",
+                    padding: "20px 0",
+                    textAlign: "center",
+                    height: "100%",
+                    boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                  }}
+                  position={"relative"}
+                >
+                  <Box
+                    position={"absolute"}
+                    style={{
+                      width: "100%",
+                      height: "50%",
+                      background: renderBackgroundLeaderBoardBot(item.rank),
+                      top: 0,
+                      left: 0,
+                      borderRadius: 8,
+                    }}
+                  ></Box>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    {item.rank === 1 && (
+                      <img
+                        style={{
+                          position: "relative",
+                          top: -40,
+                          zIndex: 10,
+                          width: 45,
+                        }}
+                        src="https://quickinvest.ai/img/icons/rank-1.png"
+                        alt="Can't open"
+                      />
+                    )}
+                    {item.rank === 2 && (
+                      <img
+                        style={{
+                          position: "relative",
+                          top: -40,
+                          zIndex: 10,
+                          width: 45,
+                        }}
+                        src="https://quickinvest.ai/img/icons/rank-2.png"
+                        alt="Can't open"
+                      />
+                    )}
+                    {item.rank === 3 && (
+                      <img
+                        style={{
+                          position: "relative",
+                          top: -40,
+                          zIndex: 10,
+                          width: 45,
+                        }}
+                        src="https://quickinvest.ai/img/icons/rank-3.png"
+                        alt="Can't open"
+                      />
+                    )}
+                    {item.rank !== 1 && item.rank !== 2 && item.rank !== 3 && (
+                      <>
+                        <Box
+                          style={{ position: "relative", top: -40, zIndex: 10 }}
+                        >
+                          <Box
+                            display={"flex"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            sx={{ width: 40, height: 50 }}
+                          >
+                            <Box
+                              display="flex"
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              sx={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: "50%",
+                                background: "rgb(160, 174, 192)",
+                              }}
+                            >
+                              {item.rank}
+                            </Box>
+                          </Box>
+                        </Box>
+                      </>
+                    )}
+                  </Box>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    #{item.rank}
+                  </Typography>
+                  <Typography variant="h6" color="textPrimary">
+                    {item.name}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    PnL 24h {item.pnl}
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    color="textPrimary"
+                    style={{ margin: "10px 0" }}
+                  >
+                    {item.amount}
+                  </Typography>
+                  <Button variant="outlined">Gói riêng tư</Button>
+                </Box>
+              </Box>
+            </SwiperSlide>
+          ))}
+          {data.map((item, index) => (
+            <SwiperSlide key={index}>
+              <Box
+                style={{
+                  padding: "20px 0",
+                  height: "100%",
+                  maxWidth: 300
+                }}
+              >
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  sx={{
+                    width: "100%",
+                    background: (theme) =>
+                      isDark(theme) ? "rgb(31, 41, 55)" : "white",
+                  }}
+                  style={{
+                    borderRadius: "8px",
+                    padding: "20px 0",
+                    textAlign: "center",
+                    height: "100%",
+                    boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                  }}
+                  position={"relative"}
+                >
+                  <Box
+                    position={"absolute"}
+                    style={{
+                      width: "100%",
+                      height: "50%",
+                      background: renderBackgroundLeaderBoardBot(item.rank),
+                      top: 0,
+                      left: 0,
+                      borderRadius: 8,
+                    }}
+                  ></Box>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    {item.rank === 1 && (
+                      <img
+                        style={{
+                          position: "relative",
+                          top: -40,
+                          zIndex: 10,
+                          width: 45,
+                        }}
+                        src="https://quickinvest.ai/img/icons/rank-1.png"
+                        alt="Can't open"
+                      />
+                    )}
+                    {item.rank === 2 && (
+                      <img
+                        style={{
+                          position: "relative",
+                          top: -40,
+                          zIndex: 10,
+                          width: 45,
+                        }}
+                        src="https://quickinvest.ai/img/icons/rank-2.png"
+                        alt="Can't open"
+                      />
+                    )}
+                    {item.rank === 3 && (
+                      <img
+                        style={{
+                          position: "relative",
+                          top: -40,
+                          zIndex: 10,
+                          width: 45,
+                        }}
+                        src="https://quickinvest.ai/img/icons/rank-3.png"
+                        alt="Can't open"
+                      />
+                    )}
+                    {item.rank !== 1 && item.rank !== 2 && item.rank !== 3 && (
+                      <>
+                        <Box
+                          style={{ position: "relative", top: -40, zIndex: 10 }}
+                        >
+                          <Box
+                            display={"flex"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            sx={{ width: 40, height: 50 }}
+                          >
+                            <Box
+                              display="flex"
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              sx={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: "50%",
+                                background: "rgb(160, 174, 192)",
+                              }}
+                            >
+                              {item.rank}
+                            </Box>
+                          </Box>
+                        </Box>
+                      </>
+                    )}
+                  </Box>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    #{item.rank}
+                  </Typography>
+                  <Typography variant="h6" color="textPrimary">
+                    {item.name}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    PnL 24h {item.pnl}
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    color="textPrimary"
+                    style={{ margin: "10px 0" }}
+                  >
+                    {item.amount}
+                  </Typography>
+                  <Button variant="outlined">Gói riêng tư</Button>
+                </Box>
+              </Box>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </Box>
       <Typography
         variant="h4"
         gutterBottom

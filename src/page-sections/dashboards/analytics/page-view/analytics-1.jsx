@@ -19,27 +19,27 @@ const Analytics1PageView = () => {
         <Grid item xs={12} md={12}>
           <LeaderBoard />
         </Grid>
-        <Grid item md={8} xs={12}>
+        {/* <Grid item md={8} xs={12}>
           <ChartFilters />
-        </Grid>
+        </Grid> */}
 
         {/* LIVER ONLINE USER CHART CARD */}
-        <Grid item md={4} xs={12}>
+        {/* <Grid item md={4} xs={12}>
           <LiveUser />
-        </Grid>
+        </Grid> */}
 
         {/* VISIT BY TOP REFERRAL SOURCE CHART CARD */}
-        <Grid item md={8} xs={12}>
+        {/* <Grid item md={8} xs={12}>
           <TopReferral />
-        </Grid>
+        </Grid> */}
 
         {/* SESSION BY BROWSER CHART CARD */}
-        <Grid item md={4} xs={12}>
+        {/* <Grid item md={4} xs={12}>
           <SessionBrowser />
-        </Grid>
+        </Grid> */}
 
         {/* COMPLETE GOAL AND RATES CHART CARD */}
-        <Grid item lg={3} xs={12}>
+        {/* <Grid item lg={3} xs={12}>
           <Stack
             spacing={3}
             sx={{
@@ -56,27 +56,27 @@ const Analytics1PageView = () => {
             <CompleteGoal />
             <CompleteRate />
           </Stack>
-        </Grid>
+        </Grid> */}
 
         {/* SALES BY COUNTRY CHART CARD */}
-        <Grid item lg={9} xs={12}>
+        {/* <Grid item lg={9} xs={12}>
           <SalesByCountry />
-        </Grid>
+        </Grid> */}
 
         {/* TOP PERFORMING PAGES CHART CARD */}
-        <Grid item md={6} xs={12}>
+        {/* <Grid item md={6} xs={12}>
           <TopPerforming />
-        </Grid>
+        </Grid> */}
 
         {/* TOP QUERIES CHART CARD */}
-        <Grid item md={6} xs={12}>
+        {/* <Grid item md={6} xs={12}>
           <TopQueries />
-        </Grid>
+        </Grid> */}
 
         {/* FOOTER CARD */}
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Footer />
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );
