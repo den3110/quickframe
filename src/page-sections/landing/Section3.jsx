@@ -6,8 +6,8 @@ import { H2, Paragraph } from "components/typography";
 // CUSTOM DEFINED HOOK
 import useNavigate from "hooks/useNavigate";
 // CUSTOM PAGE SECTION COMPONENTS
-import ReturnRate from "page-sections/dashboards/ecommerce/ReturnRate";
-import DailyVisitors from "page-sections/dashboards/ecommerce/DailyVisitors";
+import ReturnRate from "page-sections/dashboards/budget-strategy/ReturnRate";
+import DailyVisitors from "page-sections/dashboards/budget-strategy/DailyVisitors";
 import LiveUser from "page-sections/dashboards/analytics/LiveUser";
 import CompleteGoal from "page-sections/dashboards/analytics/CompleteGoal";
 import SessionBrowser from "page-sections/dashboards/analytics/SessionBrowser";

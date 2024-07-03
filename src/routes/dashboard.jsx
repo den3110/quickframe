@@ -2,7 +2,7 @@ import { lazy } from "react";
 import { Outlet } from "react-router-dom";
 // CUSTOM COMPONENTS
 import Loadable from "./Loadable";
-import { AuthGuard } from "components/auth";
+// import { AuthGuard } from "components/auth";
 import DashboardLayout from "layouts/dashboard/DashboardLayout";
 import ProtectedRoute from "hoc/ProtectedRoute";
 import CheckConnectExchange from "hoc/CheckConnectExchange";
@@ -12,7 +12,7 @@ const CRM = Loadable(lazy(() => import("pages/dashboard/crm")));
 const Finance = Loadable(lazy(() => import("pages/dashboard/finance")));
 const Analytics = Loadable(lazy(() => import("pages/dashboard/analytics")));
 const FinanceV2 = Loadable(lazy(() => import("pages/dashboard/finance-2")));
-const Ecommerce = Loadable(lazy(() => import("pages/dashboard/ecommerce")));
+const BudgetStrategy = Loadable(lazy(() => import("pages/dashboard/budget-strategy")));
 const Logistics = Loadable(lazy(() => import("pages/dashboard/logistics")));
 const Marketing = Loadable(lazy(() => import("pages/dashboard/marketing")));
 const AnalyticsV2 = Loadable(lazy(() => import("pages/dashboard/analytics-2")));
@@ -140,8 +140,8 @@ export const DashboardRoutes = [
         element: <FinanceV2 />,
       },
       {
-        path: "ecommerce",
-        element: <Ecommerce />,
+        path: "budget-strategy",
+        element: <BudgetStrategy />,
       },
       {
         path: "logistics",

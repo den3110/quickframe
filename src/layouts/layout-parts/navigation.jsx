@@ -25,7 +25,7 @@ export const navigations = [
   },
   {
     name: "Budget Strategy",
-    path: "/dashboard/ecommerce",
+    path: "/dashboard/budget-strategy",
     icon: duotone.RectangleCirclePlus,
   },
   {
