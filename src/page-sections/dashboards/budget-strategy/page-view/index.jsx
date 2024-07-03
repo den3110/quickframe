@@ -30,6 +30,7 @@ import DeleteBudgetStrategy from "icons/budget-strategy/DeleteBudgetStrategy";
 import CopyBudgteStrategy from "page-sections/budget-strategy/CopyBudgetStrategy";
 import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import { showToast } from "components/toast/toast";
+import NewBudgetStrategy from "page-sections/budget-strategy/NewBudgetStrategy";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -100,7 +101,11 @@ const EcommercePageView = () => {
   const [page, setPage] = useState(1);
   const [anchorEl, setAnchorEl] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [openNewBudgetStrategy, setOpenNewBudgetStrategy] = useState(false);
 
+  const handleOpenNewBudgetStrategy= ()=> {
+    setOpenNewBudgetStrategy(true)
+  }
   const handleDialogOpen = () => {
     setDialogOpen(true);
   };
@@ -190,6 +195,7 @@ const EcommercePageView = () => {
                 fullWidth={downLg ? true : false}
                 size={downLg ? "large" : "medium"}
                 color="success"
+                onClick={handleOpenNewBudgetStrategy}
               >
                 New Strategy
               </Button>
@@ -288,6 +294,9 @@ const EcommercePageView = () => {
         </Box>
       </Box>
       <CopyBudgteStrategy open={dialogOpen} onClose={handleDialogClose} />
+      <NewBudgetStrategy open={openNewBudgetStrategy} onClose={()=> {
+        setOpenNewBudgetStrategy(false)
+      }} />
     </Box>
   );
 };
