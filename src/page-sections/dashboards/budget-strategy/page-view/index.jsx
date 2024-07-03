@@ -18,6 +18,7 @@ import {
   TextField,
   Typography,
   styled,
+  useMediaQuery,
 } from "@mui/material";
 import SearchIcon from "icons/SearchIcon";
 import { useEffect, useState } from "react";
@@ -33,6 +34,7 @@ import { showToast } from "components/toast/toast";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
+  width: theme.breakpoints.down("lg") ? "50%": "auto",
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({}));
@@ -45,14 +47,17 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-const StyledMenuItem= styled(MenuItem)(({theme})=> ({
-  display: "flex", alignItems: "center",
-  paddingLeft: 4, 
+const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  paddingLeft: 4,
   paddingRight: 4,
-  gap: 10
-}))
+  gap: 10,
+}));
 
 const EcommercePageView = () => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+
   const data = [
     {
       name: "Xlosse 1 Copy_BT_286675_BT_286788 Copy Copy Copy Copy",
@@ -120,21 +125,19 @@ const EcommercePageView = () => {
     setPage(value);
   };
 
-  useEffect(()=> {
-    (async ()=> {
+  useEffect(() => {
+    (async () => {
       try {
-        const response= await budgetStrategyApi.userBudgetStrategyList()
-        if(response?.data?.ok=== true) {
-
-        }
-        else if(response?.data?.ok=== false) {
-          showToast(response?.data?.m, "error")
+        const response = await budgetStrategyApi.userBudgetStrategyList();
+        if (response?.data?.ok === true) {
+        } else if (response?.data?.ok === false) {
+          showToast(response?.data?.m, "error");
         }
       } catch (error) {
-        showToast(error?.response?.data?.message)
+        showToast(error?.response?.data?.message);
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
   return (
     <Box
@@ -155,7 +158,14 @@ const EcommercePageView = () => {
             background: (theme) => (isDark(theme) ? "#1f2937" : "white"),
           }}
         >
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 2,
+              flexDirection: downLg ? "column" : "row",
+            }}
+          >
             <TextField
               variant="outlined"
               placeholder="Search Strategy..."
@@ -165,29 +175,45 @@ const EcommercePageView = () => {
                 ),
               }}
             />
-            <Box>
-              <Button variant="outlined" sx={{ mr: 2 }} onClick={handleDialogOpen}>
+            <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "block"}>
+              <Button
+                variant="outlined"
+                sx={{ mr: 2 }}
+                size={downLg ? "large" : "medium"}
+                fullWidth={downLg ? true : false}
+                onClick={handleDialogOpen}
+              >
                 Copy
               </Button>
-              <Button variant="contained" color="success">
+              <Button
+                variant="contained"
+                fullWidth={downLg ? true : false}
+                size={downLg ? "large" : "medium"}
+                color="success"
+              >
                 New Strategy
               </Button>
             </Box>
           </Box>
           <TableContainer component={Paper}>
             <Table>
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>Strategy name</StyledTableCell>
-                  <StyledTableCell>Method Using</StyledTableCell>
-                  <StyledTableCell>Safe Mode</StyledTableCell>
-                  <StyledTableCell>Actions</StyledTableCell>
-                </TableRow>
-              </TableHead>
+              {!downLg && (
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Strategy name</StyledTableCell>
+                    <StyledTableCell>Method Using</StyledTableCell>
+                    <StyledTableCell>Safe Mode</StyledTableCell>
+                    <StyledTableCell>Actions</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+              )}
               <TableBody>
                 {data.map((row, index) => (
-                  <StyledTableRow sx={{}} key={index}>
-                    <StyledTableCell>
+                  <StyledTableRow
+                    sx={{ display: downLg ? "flex" : "", flexWrap: "wrap" }}
+                    key={index}
+                  >
+                    <StyledTableCell sx={{order: downLg ? 1 : 1}}>
                       <Typography variant="body1" fontWeight={"600"}>
                         {row.name}
                       </Typography>
@@ -195,11 +221,11 @@ const EcommercePageView = () => {
                         Created: {row.date}
                       </Typography>
                     </StyledTableCell>
-                    <StyledTableCell>{row.method}</StyledTableCell>
-                    <StyledTableCell>
+                    <StyledTableCell sx={{order: downLg ? 3 : 2}}>{row.method}</StyledTableCell>
+                    <StyledTableCell sx={{order: downLg ? 4 : 3, display: downLg ? "flex": "", flexDirection: "row-reverse"}}>
                       <Switch checked={row.safeMode} />
                     </StyledTableCell>
-                    <StyledTableCell>
+                    <StyledTableCell sx={{order: downLg ? 2 : 4, display: downLg ? "flex": "", flexDirection: "row-reverse"}}>
                       <IconButton onClick={handleClick}>
                         <MoreVert />
                       </IconButton>
@@ -217,9 +243,18 @@ const EcommercePageView = () => {
                           horizontal: "right",
                         }}
                       >
-                        <StyledMenuItem onClick={handleClose}><EditBudgetStrategy />Edit Strategy</StyledMenuItem>
-                        <StyledMenuItem onClick={handleClose}><ShareBudgetStrategy />Share Strategy</StyledMenuItem>
-                        <StyledMenuItem onClick={handleClose}><DeleteBudgetStrategy />Delete Strategy</StyledMenuItem>
+                        <StyledMenuItem onClick={handleClose}>
+                          <EditBudgetStrategy />
+                          Edit Strategy
+                        </StyledMenuItem>
+                        <StyledMenuItem onClick={handleClose}>
+                          <ShareBudgetStrategy />
+                          Share Strategy
+                        </StyledMenuItem>
+                        <StyledMenuItem onClick={handleClose}>
+                          <DeleteBudgetStrategy />
+                          Delete Strategy
+                        </StyledMenuItem>
                       </Menu>
                     </StyledTableCell>
                   </StyledTableRow>

@@ -95,7 +95,7 @@ const WalletPopover = () => {
             $
             {mode === true
               ? spotBalance?.availableBalance?.toFixed(2)
-              : spotBalance?.usdtAvailableBalance?.toFixed(2)}
+              : spotBalance?.demoBalance?.toFixed(2)}
           </Typography>
           {mode === true && <Typography fontSize={12}>Ví TK Live</Typography>}
           {mode === false && <Typography fontSize={12}>Ví TK Demo</Typography>}
