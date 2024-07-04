@@ -1,6 +1,6 @@
 import React from "react";
 
-const DeleteBudgetStrategy = () => {
+const DeleteBudgetStrategyIcon = () => {
   return (
     <svg
       className="me-2"
@@ -41,4 +41,4 @@ const DeleteBudgetStrategy = () => {
   );
 };
 
-export default DeleteBudgetStrategy;
+export default DeleteBudgetStrategyIcon;

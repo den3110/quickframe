@@ -8,7 +8,6 @@ import {
   Pagination,
   Paper,
   Select,
-  Switch,
   Table,
   TableBody,
   TableCell,
@@ -26,19 +25,25 @@ import { MoreVert } from "@mui/icons-material";
 import { isDark } from "utils/constants";
 import EditBudgetStrategy from "icons/budget-strategy/EditBudgetStrategy";
 import ShareBudgetStrategy from "icons/budget-strategy/ShareBudgetStrategy";
-import DeleteBudgetStrategy from "icons/budget-strategy/DeleteBudgetStrategy";
 import CopyBudgteStrategy from "page-sections/budget-strategy/CopyBudgetStrategy";
 import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import { showToast } from "components/toast/toast";
 import NewBudgetStrategy from "page-sections/budget-strategy/NewBudgetStrategy";
+// import { IncreaseValueTypeTitle } from "type/IncreaseValueType";
+import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
+import moment from "moment";
+import DeleteBudgetStrategy from "page-sections/budget-strategy/DeleteBudgetStrategy";
+import DeleteBudgetStrategyIcon from "icons/budget-strategy/DeleteBudgetStrategy";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
-  width: theme.breakpoints.down("lg") ? "50%": "auto",
+  width: theme.breakpoints.down("lg") ? "50%" : "auto",
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({}));
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
+}));
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -56,56 +61,28 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   gap: 10,
 }));
 
-const EcommercePageView = () => {
+const BudgetStrategyPage = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
-  const data = [
-    {
-      name: "Xlosse 1 Copy_BT_286675_BT_286788 Copy Copy Copy Copy",
-      date: "01/07/2024, 09:31:05",
-      method: "Martingale",
-      safeMode: true,
-    },
-    {
-      name: "hehe",
-      date: "30/06/2024, 12:52:29",
-      method: "Fibo",
-      safeMode: true,
-    },
-    {
-      name: "hehe",
-      date: "30/06/2024, 12:51:51",
-      method: "Fibo",
-      safeMode: true,
-    },
-    {
-      name: "XZCXZC",
-      date: "15/06/2024, 12:59:02",
-      method: "Martingale",
-      safeMode: true,
-    },
-    {
-      name: "hehe",
-      date: "02/12/2023, 15:15:57",
-      method: "Victor 3",
-      safeMode: true,
-    },
-    {
-      name: "hehe",
-      date: "02/12/2023, 15:15:01",
-      method: "Fibo",
-      safeMode: true,
-    },
-  ];
+  const [data, setData] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEls, setAnchorEls] = useState({}); // Dùng để lưu trữ trạng thái anchorEl cho mỗi hàng
   const [dialogOpen, setDialogOpen] = useState(false);
   const [openNewBudgetStrategy, setOpenNewBudgetStrategy] = useState(false);
-
-  const handleOpenNewBudgetStrategy= ()=> {
-    setOpenNewBudgetStrategy(true)
-  }
+  const [isEditStrategy, setIsEditStrategy] = useState(false);
+  const [isDeleteStrategy, setIsDeleteStrategy] = useState(false);
+  const [selectedStrategy, setSelectedStrategy] = useState();
+  const [change, setChange]= useState(false)
+  const handleOpenDeleteStrategy = () => {
+    setIsDeleteStrategy(true);
+  };
+  const handleCloseDeleteStrategy = () => {
+    setIsDeleteStrategy(false);
+  };
+  const handleOpenNewBudgetStrategy = () => {
+    setOpenNewBudgetStrategy(true);
+  };
   const handleDialogOpen = () => {
     setDialogOpen(true);
   };
@@ -114,12 +91,12 @@ const EcommercePageView = () => {
     setDialogOpen(false);
   };
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (event, index) => {
+    setAnchorEls((prev) => ({ ...prev, [index]: event.currentTarget }));
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose = (index) => {
+    setAnchorEls((prev) => ({ ...prev, [index]: null }));
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -135,6 +112,7 @@ const EcommercePageView = () => {
       try {
         const response = await budgetStrategyApi.userBudgetStrategyList();
         if (response?.data?.ok === true) {
+          setData(response?.data?.d);
         } else if (response?.data?.ok === false) {
           showToast(response?.data?.m, "error");
         }
@@ -142,7 +120,7 @@ const EcommercePageView = () => {
         showToast(error?.response?.data?.message);
       }
     })();
-  }, []);
+  }, [change]);
 
   return (
     <Box
@@ -155,7 +133,7 @@ const EcommercePageView = () => {
     >
       <Box sx={{ padding: "10px" }}>
         <Typography variant="h6" fontWeight={600} gutterBottom>
-          Budget Management (13)
+          Budget Management ({data?.length})
         </Typography>
         <Box
           sx={{
@@ -208,63 +186,101 @@ const EcommercePageView = () => {
                   <TableRow>
                     <StyledTableCell>Strategy name</StyledTableCell>
                     <StyledTableCell>Method Using</StyledTableCell>
-                    <StyledTableCell>Safe Mode</StyledTableCell>
                     <StyledTableCell>Actions</StyledTableCell>
                   </TableRow>
                 </TableHead>
               )}
               <TableBody>
-                {data.map((row, index) => (
-                  <StyledTableRow
-                    sx={{ display: downLg ? "flex" : "", flexWrap: "wrap" }}
-                    key={index}
-                  >
-                    <StyledTableCell sx={{order: downLg ? 1 : 1}}>
-                      <Typography variant="body1" fontWeight={"600"}>
-                        {row.name}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Created: {row.date}
-                      </Typography>
-                    </StyledTableCell>
-                    <StyledTableCell sx={{order: downLg ? 3 : 2}}>{row.method}</StyledTableCell>
-                    <StyledTableCell sx={{order: downLg ? 4 : 3, display: downLg ? "flex": "", flexDirection: "row-reverse"}}>
-                      <Switch checked={row.safeMode} />
-                    </StyledTableCell>
-                    <StyledTableCell sx={{order: downLg ? 2 : 4, display: downLg ? "flex": "", flexDirection: "row-reverse"}}>
-                      <IconButton onClick={handleClick}>
-                        <MoreVert />
-                      </IconButton>
-                      <Menu
-                        disableScrollLock
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "right",
+                {data
+                  .slice(
+                    rowsPerPage * (page - 1),
+                    rowsPerPage * (page - 1) + rowsPerPage
+                  )
+                  .map((row, index) => (
+                    <StyledTableRow
+                      sx={{
+                        display: downLg ? "flex" : "",
+                        flexWrap: "wrap",
+                        borderBottom: downLg ? "" : "none",
+                      }}
+                      key={index}
+                    >
+                      <StyledTableCell
+                        sx={{
+                          order: downLg ? 1 : 1,
+                          borderBottom: downLg ? "none" : "",
                         }}
                       >
-                        <StyledMenuItem onClick={handleClose}>
-                          <EditBudgetStrategy />
-                          Edit Strategy
-                        </StyledMenuItem>
-                        <StyledMenuItem onClick={handleClose}>
-                          <ShareBudgetStrategy />
-                          Share Strategy
-                        </StyledMenuItem>
-                        <StyledMenuItem onClick={handleClose}>
-                          <DeleteBudgetStrategy />
-                          Delete Strategy
-                        </StyledMenuItem>
-                      </Menu>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
+                        <Typography variant="body1" fontWeight={"600"}>
+                          {row.name}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          Created:{" "}
+                          {moment(row.createdAt).format("DD-MM-YYYY, HH:mm:ss")}
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        sx={{
+                          order: downLg ? 3 : 2,
+                          borderBottom: downLg ? "none" : "",
+                        }}
+                      >
+                        {BudgetStrategyTypeTitle[row.type]}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        sx={{
+                          order: downLg ? 2 : 4,
+                          display: downLg ? "flex" : "",
+                          flexDirection: "row-reverse",
+                          borderBottom: downLg ? "none" : "",
+                        }}
+                      >
+                        <IconButton onClick={(e) => handleClick(e, index)}>
+                          <MoreVert />
+                        </IconButton>
+                        <Menu
+                          disableScrollLock
+                          anchorEl={anchorEls[index]}
+                          open={Boolean(anchorEls[index])}
+                          onClose={() => handleClose(index)}
+                          anchorOrigin={{
+                            vertical: "top",
+                            horizontal: "left",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                        >
+                          <StyledMenuItem
+                            onClick={() => {
+                              setSelectedStrategy(row);
+                              setIsEditStrategy(true);
+                              handleClose(index);
+                              handleOpenNewBudgetStrategy();
+                            }}
+                          >
+                            <EditBudgetStrategy />
+                            Edit Strategy
+                          </StyledMenuItem>
+                          <StyledMenuItem
+                            
+                          >
+                            <ShareBudgetStrategy />
+                            Share Strategy
+                          </StyledMenuItem>
+                          <StyledMenuItem onClick={() => {
+                              setSelectedStrategy(row);
+                              handleOpenDeleteStrategy();
+                              handleClose(index);
+                            }}>
+                            <DeleteBudgetStrategyIcon />
+                            Delete Strategy
+                          </StyledMenuItem>
+                        </Menu>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -285,7 +301,7 @@ const EcommercePageView = () => {
               </FormControl>
             </Box>
             <Pagination
-              count={3}
+              count={Math.ceil(data.length / rowsPerPage)}
               page={page}
               onChange={handleChangePage}
               shape="rounded"
@@ -294,10 +310,23 @@ const EcommercePageView = () => {
         </Box>
       </Box>
       <CopyBudgteStrategy open={dialogOpen} onClose={handleDialogClose} />
-      <NewBudgetStrategy open={openNewBudgetStrategy} onClose={()=> {
-        setOpenNewBudgetStrategy(false)
-      }} />
+      <NewBudgetStrategy
+        is_edit={isEditStrategy}
+        open={openNewBudgetStrategy}
+        setData={setData}
+        onClose={() => {
+          setOpenNewBudgetStrategy(false);
+          setIsEditStrategy(false);
+        }}
+        selectedStrategy={selectedStrategy}
+      />
+      <DeleteBudgetStrategy
+        open={isDeleteStrategy}
+        onClose={handleCloseDeleteStrategy}
+        selectedStrategy={selectedStrategy}
+        setChange={setChange}
+      />
     </Box>
   );
 };
-export default EcommercePageView;
+export default BudgetStrategyPage;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   List,
@@ -8,32 +8,36 @@ import {
   MenuItem,
   InputLabel,
   TextField,
-  Switch,
-  FormControlLabel,
   Button,
   Box,
   Typography,
-  AccordionDetails,
   AccordionSummary,
   Accordion,
+  useMediaQuery,
 } from "@mui/material";
 import { isDark } from "utils/constants";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseIcon from '@mui/icons-material/Close';
+import { BudgetStrategyType, BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
+import { IncreaseValueType, IncreaseValueTypeTitle } from "type/IncreaseValueType";
+import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
+import { showToast } from "components/toast/toast";
 
-const NewBudgetStrategy = ({ open, onClose }) => {
+const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }) => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+
+  const [idBudegetStrategy, setIdBudgetStrategy]= useState()
   const [strategyName, setStrategyName] = useState("");
-  const [method, setMethod] = useState("All orders");
+  // const [method, setMethod] = useState("All orders");
+  const [increaseValueType, setIncreaseValueType]= useState(IncreaseValueType.AFTER_LOSS)
+  const [type, setType]= useState(BudgetStrategyType.ALL_ORDERS)
   const [amount, setAmount] = useState("");
-  const [stopWhenInsufficientFunds, setStopWhenInsufficientFunds] =
-    useState(true);
-  const [autoReloadDemoFunds, setAutoReloadDemoFunds] = useState(false);
-  const [method1, setMethod1] = useState();
-  const [method2, setMethod2] = useState();
-  const [method3, setMethod3] = useState();
-  const [advanceOptionFibo, setAdvancedOptionFibo] = useState("asc_loss");
+  const [method1, setMethod1] = useState("1-1-2-6-4-3");
+  const [method2, setMethod2] = useState("1-2-4-8-17-35");
+  const [method3, setMethod3] = useState("2-3-4-5-6-1");
+  const [method4, setMethod4] = useState("2-3-4-5-6-1");
   const [count, setCount] = useState(0);
   const [count2, setCount2] = useState(0);
 
@@ -56,22 +60,177 @@ const NewBudgetStrategy = ({ open, onClose }) => {
   const [expanded, setExpanded] = useState(true);
   const isErrorInputAmount =
     parseFloat(amount) < 1 || parseFloat(amount) > 1000000;
-  const handleSave = () => {
-    console.log({
-      strategyName,
-      method,
-      amount,
-      stopWhenInsufficientFunds,
-      autoReloadDemoFunds,
-    });
+  const handleSave = async () => {
+    let data
+    let methodData
+    let response
+    switch(type) {
+      case BudgetStrategyType.ALL_ORDERS:
+        methodData= [amount]
+        data= {
+          name: strategyName,
+          method_data: methodData,
+          increaseValueType,
+          type
+        }
+        break;
+      case BudgetStrategyType.CUSTOM_AUTOWIN:
+        methodData= [method1, method2, method3]
+        data= {
+          name: strategyName,
+          method_data: methodData,
+          increaseValueType,
+          type
+        }
+        break
+      case BudgetStrategyType.FIBO_X_STEP:
+        methodData= [method1, count, count2]
+        data= {
+          name: strategyName,
+          method_data: methodData,
+          increaseValueType,
+          type
+        }
+        break
+      case BudgetStrategyType.MARTINGALE:
+        methodData= [method1]
+        data= {
+          name: strategyName,
+          method_data: methodData,
+          increaseValueType,
+          type
+        }
+        break
+      case BudgetStrategyType.VICTOR_2:
+        methodData= [method1, method2]
+        data= {
+          name: strategyName,
+          method_data: methodData,
+          increaseValueType,
+          type
+        }
+        break
+      case BudgetStrategyType.VICTOR_3:
+        methodData= [method1, method2, method3]
+        data= {
+          name: strategyName,
+          method_data: methodData,
+          increaseValueType,
+          type
+        }
+        break
+      case BudgetStrategyType.VICTOR_4:
+        methodData= [method1, method2, method3, method4]
+        data= {   
+          name: strategyName,
+          method_data: methodData,
+          increaseValueType,
+          type
+        }
+        break
+      default:
+        break;
+    }
+    try {
+      if(is_edit=== true) {
+        response= await budgetStrategyApi.userBudgetStrategyUpdate(idBudegetStrategy, data)
+      }
+      else {
+        response= await budgetStrategyApi.userBudgetStrategyCreate(data)
+      }
+      console.log(response)
+      if(response?.data?.ok=== true) {
+        if(is_edit!== true) {
+          setData(response?.data?.d)
+        }
+        showToast("Tạo chiến lược vốn thành công", "success")
+        setStrategyName("")
+        setAmount("")
+        setMethod1("")
+        setMethod2("")
+        setMethod3("")
+        setMethod4("")
+        setCount(0)
+        setCount2(0)
+        onClose()
+      }
+      else if(response?.data?.ok=== false) {
+        showToast(response?.data?.m, "error")
+      }
+    } catch (error) {
+      showToast(error?.response?.data?.m)
+    }
   };
 
+  const disableButton= ()=> {
+    let disable
+    switch(type) {
+      case BudgetStrategyType.ALL_ORDERS:
+        disable= strategyName?.length <= 0 || amount?.length <= 0 || parseInt(amount) > 10000000
+        break;
+      case BudgetStrategyType.CUSTOM_AUTOWIN:
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0
+        
+        break
+      case BudgetStrategyType.FIBO_X_STEP:
+        disable= strategyName?.length <= 0 || method1?.length <= 0
+        break
+      case BudgetStrategyType.MARTINGALE:
+        disable= strategyName?.length <= 0 || method1?.length <= 0
+        
+        break
+      case BudgetStrategyType.VICTOR_2:
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 
+        
+        break
+      case BudgetStrategyType.VICTOR_3:
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0
+    
+        break
+      case BudgetStrategyType.VICTOR_4:
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0 || method4?.length <= 0
+        break
+      default:
+        disable= false
+        break;
+      }
+    return disable;
+  }
+
+  useEffect(()=> {
+    if(is_edit=== true) {
+      setIdBudgetStrategy(selectedStrategy?._id)
+      setStrategyName(selectedStrategy?.name)
+      setType(selectedStrategy?.type)
+      setAmount(selectedStrategy?.method_data?.[0])
+      setMethod1(selectedStrategy?.method_data?.[0])
+      setMethod2(selectedStrategy?.method_data?.[1])
+      setMethod3(selectedStrategy?.method_data?.[2])
+      setMethod4(selectedStrategy?.method_data?.[3])
+      setCount(selectedStrategy?.method_data?.[1])
+      setCount2(selectedStrategy?.method_data?.[2])
+      setIncreaseValueType(selectedStrategy?.increaseValueType)
+    }
+  }, [is_edit, selectedStrategy])
+  
+  const handleClose= ()=> {
+    onClose()
+    setStrategyName("")
+        setAmount("")
+        setMethod1("")
+        setMethod2("")
+        setMethod3("")
+        setMethod4("")
+        setCount(0)
+        setCount2(0)
+  }
+
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
-      <Box p={2} width={850} height={"1000vh"} display={"flex"} justifyContent={"space-between"} flexDirection={"column"}>
+    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={handleClose}>
+      <Box className="mawkwr" p={2} width={downLg ? "100%" : 850} height={downLg ? "70vh" : "100vh"} display={"flex"} justifyContent={"space-between"} flexDirection={"column"}>
         <Box>
             <Box sx={{width: "100%", display: "flex", flexDirection: "row-reverse"}}>
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{cursor: "pointer"}} onClick={onClose}>
+                <Box display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{cursor: "pointer"}} onClick={handleClose}>
                     <CloseIcon />
                 </Box>
             </Box>
@@ -103,19 +262,19 @@ const NewBudgetStrategy = ({ open, onClose }) => {
                     Phương pháp vốn
                   </InputLabel>
                   <Select
-                    value={method}
-                    onChange={(e) => setMethod(e.target.value)}
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                    size={"small"}
                   >
-                    <MenuItem value="All orders">All orders</MenuItem>
-                    <MenuItem value="Custom Autowin">Custom Autowin</MenuItem>
-                    <MenuItem value="Fibo">Fibo</MenuItem>
-                    <MenuItem value="Martingale">Martingale</MenuItem>
+                    {Object.entries(BudgetStrategyType)?.map(([item, key])=> (
+                      <MenuItem key={key} value={item}>{BudgetStrategyTypeTitle[item]}</MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </ListItem>
             </Box>
             <>
-              {method === "All orders" && (
+              {type === BudgetStrategyType.ALL_ORDERS && (
                 <>
                   <ListItem>
                     <TextField
@@ -142,7 +301,7 @@ const NewBudgetStrategy = ({ open, onClose }) => {
                   </ListItem>
                 </>
               )}
-              {method === "Custom Autowin" && (
+              {type === BudgetStrategyType.CUSTOM_AUTOWIN && (
                 <>
                   <ListItem>
                     <TextField
@@ -194,9 +353,9 @@ const NewBudgetStrategy = ({ open, onClose }) => {
                   </ListItem>
                 </>
               )}
-              {method === "Fibo" && (
+              {type === BudgetStrategyType.FIBO_X_STEP && (
                 <>
-                  <Box display={"flex"}>
+                  <Box display={"flex"} flexDirection={downLg ? "column" : "row"}>
                     <ListItem>
                       <TextField
                         // error={isErrorInputAmount === true ? true : false}
@@ -206,17 +365,17 @@ const NewBudgetStrategy = ({ open, onClose }) => {
                         //     : ""
                         // }
                         label="Đặt giá trị lệnh"
-                        defaultValue={"11-2-2-3-12-1-1"}
+                        defaultValue={"1-2-3-5-8-13-21-34-55-89-144"}
                         fullWidth
                         type="text"
                         value={method1}
                         onChange={(e) => setMethod1(e.target.value)}
                       />
-                    </ListItem>
+                    </ListItem> 
                     <ListItem>
                       <Box display="flex" alignItems="center">
                         <Typography variant="body1" sx={{ marginRight: 2 }}>
-                            {advanceOptionFibo=== "asc_loss" ? "Khi thua sẽ tiến" : "Khi thắng sẽ tiến"}
+                            {increaseValueType=== IncreaseValueType.AFTER_LOSS ? "Khi thua sẽ tiến" : "Khi thắng sẽ tiến"}
                         </Typography>
                         <Button
                           variant="outlined"
@@ -240,7 +399,7 @@ const NewBudgetStrategy = ({ open, onClose }) => {
                       </Box>
                     </ListItem>
                   </Box>
-                  <Box display={"flex"} mt={2}>
+                  <Box display={"flex"} mt={2} flexDirection={downLg ? "column" : "row"}>
                     <ListItem>
                       <FormControl fullWidth>
                         <InputLabel
@@ -252,20 +411,22 @@ const NewBudgetStrategy = ({ open, onClose }) => {
                           Tuỳ chọn nâng cao
                         </InputLabel>
                         <Select
-                          value={advanceOptionFibo}
+                          value={increaseValueType}
                           onChange={(e) =>
-                            setAdvancedOptionFibo(e.target.value)
+                            setIncreaseValueType(e.target.value)
                           }
+                          size="small"
                         >
-                          <MenuItem value="asc_loss">Tăng khi thua</MenuItem>
-                          <MenuItem value="asc_win">Tăng khi thắng</MenuItem>
+                          {Object.entries(IncreaseValueType).map(([item, key])=> (
+                            <MenuItem key={key} value={item}>{IncreaseValueTypeTitle[item]}</MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </ListItem>
                     <ListItem>
                       <Box display="flex" alignItems="center">
                         <Typography variant="body1" sx={{ marginRight: 2 }}>
-                          {advanceOptionFibo=== "asc_loss" ? "Khi thắng sẽ lùi" : "Khi thua sẽ lùi"}
+                          {increaseValueType=== IncreaseValueType.AFTER_WIN ? "Khi thắng sẽ lùi" : "Khi thua sẽ lùi"}
                         </Typography>
                         <Button
                           variant="outlined"
@@ -291,7 +452,7 @@ const NewBudgetStrategy = ({ open, onClose }) => {
                   </Box>
                 </>
               )}
-              {method === "Martingale" && (
+              {type === BudgetStrategyType.MARTINGALE && (
                 <>
                   <Box display={"flex"}>
                     <ListItem>
@@ -321,22 +482,179 @@ const NewBudgetStrategy = ({ open, onClose }) => {
                           Option
                         </InputLabel>
                         <Select
-                          value={advanceOptionFibo}
+                          value={increaseValueType}
                           onChange={(e) =>
-                            setAdvancedOptionFibo(e.target.value)
+                            setIncreaseValueType(e.target.value)
                           }
+                          size="small"
                         >
-                          <MenuItem value="asc_loss">Tăng khi thua</MenuItem>
-                          <MenuItem value="asc_win">Tăng khi thắng</MenuItem>
-                          <MenuItem value="asc_alw">Luôn tăng</MenuItem>
+                          {Object.entries(IncreaseValueType)?.map(([item, key])=> (
+                            <MenuItem key={key} value={item}>{IncreaseValueTypeTitle[item]}</MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </ListItem>
                   </Box>
                 </>
               )}
+              {type === BudgetStrategyType.VICTOR_2 && (
+                <>
+                  <ListItem>
+                    <TextField
+                      // error={isErrorInputAmount === true ? true : false}
+                      // helperText={
+                      //   isErrorInputAmount === true
+                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                      //     : ""
+                      // }
+                      label="Cài đặt hàng 1"
+                      defaultValue={"1-1-2-6-4-3"}
+                      fullWidth
+                      type="text"
+                      value={method1}
+                      onChange={(e) => setMethod1(e.target.value)}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <TextField
+                      // error={isErrorInputAmount === true ? true : false}
+                      // helperText={
+                      //   isErrorInputAmount === true
+                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                      //     : ""
+                      // }
+                      label="Cài đặt hàng 2"
+                      defaultValue={"1-2-4-8-17-35"}
+                      fullWidth
+                      type="text"
+                      value={method2}
+                      onChange={(e) => setMethod2(e.target.value)}
+                    />
+                  </ListItem>
+                </>
+              )}
+              {type === BudgetStrategyType.VICTOR_3 && (
+                <>
+                  <ListItem>
+                    <TextField
+                      // error={isErrorInputAmount === true ? true : false}
+                      // helperText={
+                      //   isErrorInputAmount === true
+                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                      //     : ""
+                      // }
+                      label="Cài đặt hàng 1"
+                      defaultValue={"1-1-2-6-4-3"}
+                      fullWidth
+                      type="text"
+                      value={method1}
+                      onChange={(e) => setMethod1(e.target.value)}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <TextField
+                      // error={isErrorInputAmount === true ? true : false}
+                      // helperText={
+                      //   isErrorInputAmount === true
+                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                      //     : ""
+                      // }
+                      label="Cài đặt hàng 2"
+                      defaultValue={"1-2-4-8-17-35"}
+                      fullWidth
+                      type="text"
+                      value={method2}
+                      onChange={(e) => setMethod2(e.target.value)}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <TextField
+                      // error={isErrorInputAmount === true ? true : false}
+                      // helperText={
+                      //   isErrorInputAmount === true
+                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                      //     : ""
+                      // }
+                      label="Cài đặt hàng 3"
+                      defaultValue={"1-2-4-8-17-35"}
+                      fullWidth
+                      type="text"
+                      value={method3}
+                      onChange={(e) => setMethod3(e.target.value)}
+                    />
+                  </ListItem>
+                </>
+              )}
+              {type === BudgetStrategyType.VICTOR_4 && (
+                <>
+                  <ListItem>
+                    <TextField
+                      // error={isErrorInputAmount === true ? true : false}
+                      // helperText={
+                      //   isErrorInputAmount === true
+                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                      //     : ""
+                      // }
+                      label="Cài đặt hàng 1"
+                      defaultValue={"1-1-2-6-4-3"}
+                      fullWidth
+                      type="text"
+                      value={method1}
+                      onChange={(e) => setMethod1(e.target.value)}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <TextField
+                      // error={isErrorInputAmount === true ? true : false}
+                      // helperText={
+                      //   isErrorInputAmount === true
+                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                      //     : ""
+                      // }
+                      label="Cài đặt hàng 2"
+                      defaultValue={"1-2-4-8-17-35"}
+                      fullWidth
+                      type="text"
+                      value={method2}
+                      onChange={(e) => setMethod2(e.target.value)}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <TextField
+                      // error={isErrorInputAmount === true ? true : false}
+                      // helperText={
+                      //   isErrorInputAmount === true
+                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                      //     : ""
+                      // }
+                      label="Cài đặt hàng 3"
+                      defaultValue={"1-2-4-8-17-35"}
+                      fullWidth
+                      type="text"
+                      value={method3}
+                      onChange={(e) => setMethod3(e.target.value)}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <TextField
+                      // error={isErrorInputAmount === true ? true : false}
+                      // helperText={
+                      //   isErrorInputAmount === true
+                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                      //     : ""
+                      // }
+                      label="Cài đặt hàng 4"
+                      defaultValue={"1-2-4-8-17-35"}
+                      fullWidth
+                      type="text"
+                      value={method4}
+                      onChange={(e) => setMethod4(e.target.value)}
+                    />
+                  </ListItem>
+                </>
+              )}
             </>
-            <ListItem>
+            {/* <ListItem>
               <Box fullWidth sx={{ width: "100%" }}>
                 <Accordion
                   fullWidth
@@ -350,43 +668,15 @@ const NewBudgetStrategy = ({ open, onClose }) => {
                   >
                     <Typography>Nâng cao (Tùy chọn)</Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
-                    <ListItem>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={stopWhenInsufficientFunds}
-                            onChange={(e) =>
-                              setStopWhenInsufficientFunds(e.target.checked)
-                            }
-                          />
-                        }
-                        label="Dừng lại khi không đủ số dư"
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={autoReloadDemoFunds}
-                            onChange={(e) =>
-                              setAutoReloadDemoFunds(e.target.checked)
-                            }
-                          />
-                        }
-                        label="Tự động tải lại số dư demo"
-                      />
-                    </ListItem>
-                  </AccordionDetails>
                 </Accordion>
               </Box>
-            </ListItem>
+            </ListItem> */}
           </List>
         </Box>
         <Box display={"flex"} alignItems={"center"} gap={1} pl={2} pr={2}>
           <Button
             variant={"outlined"}
-            onClick={onClose}
+            onClick={handleClose}
             sx={{ padding: "10px 16px" }}
           >
             Đóng
@@ -397,6 +687,7 @@ const NewBudgetStrategy = ({ open, onClose }) => {
             variant="contained"
             color="primary"
             onClick={handleSave}
+            disabled={disableButton()}
           >
             Lưu chiến lược
           </Button>
