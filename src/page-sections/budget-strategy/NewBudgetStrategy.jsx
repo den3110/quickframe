@@ -11,12 +11,9 @@ import {
   Button,
   Box,
   Typography,
-  AccordionSummary,
-  Accordion,
   useMediaQuery,
 } from "@mui/material";
 import { isDark } from "utils/constants";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseIcon from '@mui/icons-material/Close';
@@ -56,10 +53,21 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
   const handleDecrement2 = () => {
     setCount2(count2 > 0 ? count2 - 1 : 0);
   };
+
+  const validateInput = (value) => {
+    const pattern = /^(\d+)(-\d+)*$/; 
+    if (value.match(pattern)) {
+      return false; 
+    }
+    return true; 
+  };
   
-  const [expanded, setExpanded] = useState(true);
   const isErrorInputAmount =
     parseFloat(amount) < 1 || parseFloat(amount) > 1000000;
+  const isErrormethod1= validateInput(method1)
+  const isErrormethod2= validateInput(method2)
+  const isErrormethod3= validateInput(method3)
+  const isErrormethod4= validateInput(method4)
   const handleSave = async () => {
     let data
     let methodData
@@ -88,7 +96,7 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
         data= {
           name: strategyName,
           method_data: methodData,
-          increaseValueType,
+          // increaseValueType,
           type
         }
         break
@@ -138,7 +146,6 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
       else {
         response= await budgetStrategyApi.userBudgetStrategyCreate(data)
       }
-      console.log(response)
       if(response?.data?.ok=== true) {
         if(is_edit!== true) {
           setData(response?.data?.d)
@@ -146,10 +153,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
         showToast("Tạo chiến lược vốn thành công", "success")
         setStrategyName("")
         setAmount("")
-        setMethod1("")
-        setMethod2("")
-        setMethod3("")
-        setMethod4("")
+        setIncreaseValueType(IncreaseValueType.AFTER_LOSS)
+        setType(BudgetStrategyType.ALL_ORDERS)
+        setMethod1("1-1-2-6-4-3")
+        setMethod2("1-2-4-8-17-35")
+        setMethod3("2-3-4-5-6-1")
+        setMethod4("2-3-4-5-6-1")
         setCount(0)
         setCount2(0)
         onClose()
@@ -169,29 +178,29 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
         disable= strategyName?.length <= 0 || amount?.length <= 0 || parseInt(amount) > 10000000
         break;
       case BudgetStrategyType.CUSTOM_AUTOWIN:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0 || isErrormethod1=== true || isErrormethod2=== true || isErrormethod3=== true
         
         break
       case BudgetStrategyType.FIBO_X_STEP:
-        disable= strategyName?.length <= 0 || method1?.length <= 0
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || isErrormethod1=== true
         break
       case BudgetStrategyType.MARTINGALE:
-        disable= strategyName?.length <= 0 || method1?.length <= 0
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || isErrormethod1=== true 
         
         break
       case BudgetStrategyType.VICTOR_2:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0  || isErrormethod1=== true || isErrormethod2=== true
         
         break
       case BudgetStrategyType.VICTOR_3:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0 || isErrormethod1=== true || isErrormethod2=== true || isErrormethod3=== true
     
         break
       case BudgetStrategyType.VICTOR_4:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0 || method4?.length <= 0
+        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0 || method4?.length <= 0 || isErrormethod1=== true || isErrormethod2=== true || isErrormethod3=== true || isErrormethod4  === true
         break
       default:
-        disable= false
+        disable= false  
         break;
       }
     return disable;
@@ -223,6 +232,8 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
         setMethod4("")
         setCount(0)
         setCount2(0)
+        setIncreaseValueType(IncreaseValueType.AFTER_LOSS)
+        setType(BudgetStrategyType.ALL_ORDERS)
   }
 
   return (
@@ -305,12 +316,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                 <>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                      error={isErrormethod1 === true ? true : false}
+                      helperText={
+                        isErrormethod1 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 1"
                       defaultValue={"1-1-2-6-4-3"}
                       fullWidth
@@ -321,12 +332,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                      error={isErrormethod2 === true ? true : false}
+                      helperText={
+                        isErrormethod2 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 2"
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
@@ -337,12 +348,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                      error={isErrormethod3 === true ? true : false}
+                      helperText={
+                        isErrormethod3 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 3"
                       defaultValue={"2-3-4-5-6-1"}
                       fullWidth
@@ -358,12 +369,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   <Box display={"flex"} flexDirection={downLg ? "column" : "row"}>
                     <ListItem>
                       <TextField
-                        // error={isErrorInputAmount === true ? true : false}
-                        // helperText={
-                        //   isErrorInputAmount === true
-                        //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                        //     : ""
-                        // }
+                        error={isErrormethod1 === true ? true : false}
+                        helperText={
+                          isErrormethod1 === true
+                            ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                            : ""
+                        }
                         label="Đặt giá trị lệnh"
                         defaultValue={"1-2-3-5-8-13-21-34-55-89-144"}
                         fullWidth
@@ -400,7 +411,7 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                     </ListItem>
                   </Box>
                   <Box display={"flex"} mt={2} flexDirection={downLg ? "column" : "row"}>
-                    <ListItem>
+                    <ListItem sx={{order: downLg ? 2 : 1}}>
                       <FormControl fullWidth>
                         <InputLabel
                           sx={{
@@ -426,7 +437,7 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                     <ListItem>
                       <Box display="flex" alignItems="center">
                         <Typography variant="body1" sx={{ marginRight: 2 }}>
-                          {increaseValueType=== IncreaseValueType.AFTER_WIN ? "Khi thắng sẽ lùi" : "Khi thua sẽ lùi"}
+                          {increaseValueType=== IncreaseValueType.AFTER_LOSS ? "Khi thắng sẽ lùi" : "Khi thua sẽ lùi"}
                         </Typography>
                         <Button
                           variant="outlined"
@@ -457,12 +468,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   <Box display={"flex"}>
                     <ListItem>
                       <TextField
-                        // error={isErrorInputAmount === true ? true : false}
-                        // helperText={
-                        //   isErrorInputAmount === true
-                        //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                        //     : ""
-                        // }
+                        error={isErrormethod1 === true ? true : false}
+                        helperText={
+                          isErrormethod1 === true
+                            ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                            : ""
+                        }
                         label="Đặt giá trị lệnh"
                         defaultValue={"11-2-2-3-12-1-1"}
                         fullWidth
@@ -501,12 +512,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                 <>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                      error={isErrormethod1 === true ? true : false}
+                      helperText={
+                        isErrormethod1 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 1"
                       defaultValue={"1-1-2-6-4-3"}
                       fullWidth
@@ -517,12 +528,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                      error={isErrormethod2 === true ? true : false}
+                      helperText={
+                        isErrormethod2 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 2"
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
@@ -537,12 +548,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                 <>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                     error={isErrormethod1 === true ? true : false}
+                      helperText={
+                        isErrormethod1 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 1"
                       defaultValue={"1-1-2-6-4-3"}
                       fullWidth
@@ -553,12 +564,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                      error={isErrormethod2 === true ? true : false}
+                      helperText={
+                        isErrormethod2 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 2"
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
@@ -569,12 +580,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                      error={isErrormethod3 === true ? true : false}
+                      helperText={
+                        isErrormethod3 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 3"
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
@@ -589,12 +600,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                 <>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                     error={isErrormethod1 === true ? true : false}
+                      helperText={
+                        isErrormethod1 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 1"
                       defaultValue={"1-1-2-6-4-3"}
                       fullWidth
@@ -605,12 +616,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                      error={isErrormethod2 === true ? true : false}
+                      helperText={
+                        isErrormethod2 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 2"
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
@@ -621,12 +632,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                     error={isErrormethod3 === true ? true : false}
+                      helperText={
+                        isErrormethod3 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 3"
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
@@ -637,12 +648,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                   <ListItem>
                     <TextField
-                      // error={isErrorInputAmount === true ? true : false}
-                      // helperText={
-                      //   isErrorInputAmount === true
-                      //     ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
-                      //     : ""
-                      // }
+                      error={isErrormethod4 === true ? true : false}
+                      helperText={
+                        isErrormethod4 === true
+                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          : ""
+                      }
                       label="Cài đặt hàng 4"
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
@@ -653,7 +664,7 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                 </>
               )}
-            </>
+            </> 
             {/* <ListItem>
               <Box fullWidth sx={{ width: "100%" }}>
                 <Accordion

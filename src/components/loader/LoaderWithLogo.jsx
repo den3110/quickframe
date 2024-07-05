@@ -74,7 +74,6 @@ const LoaderWithLogo = () => <RootStyle id="loading-wrapper">
     <div className="logo">
       <img src="/static/logo/logo-svg.svg" alt="quickframe" />
     </div>
-
     <div id="loading-content"></div>
   </RootStyle>;
 export default LoaderWithLogo;
