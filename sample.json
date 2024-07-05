@@ -1,0 +1,14 @@
+{
+    "targetWinStreak" : 0,
+    "targetLoseStreak" : 0,
+    "targetConditions" : [
+        { "betIndex" : 81, "conditions" : [
+            {"index" : 1, "resultType" : BetTypes.BUY},
+            {"index" : 2, "resultType" : BetTypes.BUY},
+            {"index" : 3, "resultType" : BetTypes.BUY}
+        ],
+         betType : BetTypes.BUY }
+      
+
+    ]
+}

@@ -289,6 +289,49 @@ const NewBudgetStrategy = ({
     setType(BudgetStrategyType.ALL_ORDERS);
   };
 
+  const handleSetType = (e) => {
+    setType(e.target.value);
+    setSeeMore(false);
+    if (is_edit === true && type !== e.target.value) {
+      switch (e.target.value) {
+        case BudgetStrategyType.ALL_ORDERS:
+          setAmount(1);
+          break;
+        case BudgetStrategyType.CUSTOM_AUTOWIN:
+          setMethod1("1-1-2-6-4-3");
+          setMethod2("1-2-4-8-17-35");
+          setMethod3("2-3-4-5-6-1");
+          break;
+        case BudgetStrategyType.FIBO_X_STEP:
+          setMethod1("1-1-2-6-4-3");
+          setCount(0);
+          setCount2(0);
+          break;
+        case BudgetStrategyType.MARTINGALE:
+          setMethod1("1-1-2-6-4-3");
+          setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
+          break;
+        case BudgetStrategyType.VICTOR_2:
+          setMethod1("1-1-2-6-4-3");
+          setMethod2("1-2-4-8-17-35");
+          break
+        case BudgetStrategyType.VICTOR_3:
+          setMethod1("1-1-2-6-4-3");
+          setMethod2("1-2-4-8-17-35");
+          setMethod3("2-3-4-5-6-1");
+          break
+        case BudgetStrategyType.VICTOR_4:
+          setMethod1("1-1-2-6-4-3");
+          setMethod2("1-2-4-8-17-35");
+          setMethod3("2-3-4-5-6-1");
+          setMethod4("2-3-4-5-6-1");
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
   return (
     <Drawer
       anchor={downLg ? "bottom" : "right"}
@@ -351,7 +394,7 @@ const NewBudgetStrategy = ({
                   </InputLabel>
                   <Select
                     value={type}
-                    onChange={(e) => {setType(e.target.value);setSeeMore(false)}}
+                    onChange={(e) => handleSetType(e)}
                     size={"small"}
                   >
                     {Object.entries(BudgetStrategyType)?.map(([item, key]) => (
@@ -514,13 +557,13 @@ const NewBudgetStrategy = ({
                           onChange={(e) => setIncreaseValueType(e.target.value)}
                           size="small"
                         >
-                          {Object.entries(IncreaseValueType).slice(0, 2).map(
-                            ([item, key]) => (
+                          {Object.entries(IncreaseValueType)
+                            .slice(0, 2)
+                            .map(([item, key]) => (
                               <MenuItem key={key} value={item}>
                                 {IncreaseValueTypeTitle[item]}
                               </MenuItem>
-                            )
-                          )}
+                            ))}
                         </Select>
                       </FormControl>
                     </ListItem>
@@ -776,32 +819,32 @@ const NewBudgetStrategy = ({
                 </Accordion>
               </Box>
             </ListItem> */}
-            {
-              (type!== BudgetStrategyType.ALL_ORDERS && type !== BudgetStrategyType.FIBO_X_STEP) &&
-              <ListItem>
-                <Box
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  gap={1}
-                >
-                  <Typography fontSize={14}>
-                    Tìm hiểu về chiến lược {BudgetStrategyTypeTitle[type]}
-                  </Typography>
-                  <Typography
-                    color="primary"
-                    fontWeight={600}
-                    sx={{ cursor: "pointer" }}
-                    fontSize={14}
-                    onClick={() => {
-                      setSeeMore((prev) => !prev);
-                    }}
+            {type !== BudgetStrategyType.ALL_ORDERS &&
+              type !== BudgetStrategyType.FIBO_X_STEP && (
+                <ListItem>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    gap={1}
                   >
-                    {seeMore === true ? "Ẩn" : "Xem thêm"}
-                  </Typography>
-                </Box>
-              </ListItem>
-            }
+                    <Typography fontSize={14}>
+                      Tìm hiểu về chiến lược {BudgetStrategyTypeTitle[type]}
+                    </Typography>
+                    <Typography
+                      color="primary"
+                      fontWeight={600}
+                      sx={{ cursor: "pointer" }}
+                      fontSize={14}
+                      onClick={() => {
+                        setSeeMore((prev) => !prev);
+                      }}
+                    >
+                      {seeMore === true ? "Ẩn" : "Xem thêm"}
+                    </Typography>
+                  </Box>
+                </ListItem>
+              )}
             {seeMore === true && (
               <>
                 <ListItem>
