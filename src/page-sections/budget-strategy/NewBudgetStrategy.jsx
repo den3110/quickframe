@@ -16,27 +16,42 @@ import {
 import { isDark } from "utils/constants";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import CloseIcon from '@mui/icons-material/Close';
-import { BudgetStrategyType, BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
-import { IncreaseValueType, IncreaseValueTypeTitle } from "type/IncreaseValueType";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  BudgetStrategyType,
+  BudgetStrategyTypeTitle,
+} from "type/BudgetStrategyType";
+import {
+  IncreaseValueType,
+  IncreaseValueTypeTitle,
+} from "type/IncreaseValueType";
 import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import { showToast } from "components/toast/toast";
 
-const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }) => {
+const NewBudgetStrategy = ({
+  open,
+  onClose,
+  is_edit,
+  selectedStrategy,
+  setData,
+}) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
-  const [idBudegetStrategy, setIdBudgetStrategy]= useState()
+  const [idBudegetStrategy, setIdBudgetStrategy] = useState();
   const [strategyName, setStrategyName] = useState("");
   // const [method, setMethod] = useState("All orders");
-  const [increaseValueType, setIncreaseValueType]= useState(IncreaseValueType.AFTER_LOSS)
-  const [type, setType]= useState(BudgetStrategyType.ALL_ORDERS)
-  const [amount, setAmount] = useState("");
+  const [increaseValueType, setIncreaseValueType] = useState(
+    IncreaseValueType.AFTER_LOSS
+  );
+  const [type, setType] = useState(BudgetStrategyType.ALL_ORDERS);
+  const [amount, setAmount] = useState("1");
   const [method1, setMethod1] = useState("1-1-2-6-4-3");
   const [method2, setMethod2] = useState("1-2-4-8-17-35");
   const [method3, setMethod3] = useState("2-3-4-5-6-1");
   const [method4, setMethod4] = useState("2-3-4-5-6-1");
   const [count, setCount] = useState(0);
   const [count2, setCount2] = useState(0);
+  const [seeMore, setSeeMore] = useState(false);
 
   const handleIncrement = () => {
     setCount(count + 1);
@@ -55,196 +70,258 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
   };
 
   const validateInput = (value) => {
-    const pattern = /^(\d+)(-\d+)*$/; 
-    if (value.match(pattern)) {
-      return false; 
+    const pattern = /^(\d+)(-\d+)*$/;
+    if (value?.match(pattern)) {
+      return false;
     }
-    return true; 
+    return true;
   };
-  
+
   const isErrorInputAmount =
     parseFloat(amount) < 1 || parseFloat(amount) > 1000000;
-  const isErrormethod1= validateInput(method1)
-  const isErrormethod2= validateInput(method2)
-  const isErrormethod3= validateInput(method3)
-  const isErrormethod4= validateInput(method4)
+  const isErrormethod1 = validateInput(method1);
+  const isErrormethod2 = validateInput(method2);
+  const isErrormethod3 = validateInput(method3);
+  const isErrormethod4 = validateInput(method4);
   const handleSave = async () => {
-    let data
-    let methodData
-    let response
-    switch(type) {
+    let data;
+    let methodData;
+    let response;
+    switch (type) {
       case BudgetStrategyType.ALL_ORDERS:
-        methodData= [amount]
-        data= {
+        methodData = [amount];
+        data = {
           name: strategyName,
           method_data: methodData,
           increaseValueType,
-          type
-        }
+          type,
+        };
         break;
       case BudgetStrategyType.CUSTOM_AUTOWIN:
-        methodData= [method1, method2, method3]
-        data= {
+        methodData = [method1, method2, method3];
+        data = {
           name: strategyName,
           method_data: methodData,
           increaseValueType,
-          type
-        }
-        break
+          type,
+        };
+        break;
       case BudgetStrategyType.FIBO_X_STEP:
-        methodData= [method1, count, count2]
-        data= {
+        methodData = [method1, count, count2];
+        data = {
           name: strategyName,
           method_data: methodData,
           // increaseValueType,
-          type
-        }
-        break
+          type,
+        };
+        break;
       case BudgetStrategyType.MARTINGALE:
-        methodData= [method1]
-        data= {
+        methodData = [method1];
+        data = {
           name: strategyName,
           method_data: methodData,
           increaseValueType,
-          type
-        }
-        break
+          type,
+        };
+        break;
       case BudgetStrategyType.VICTOR_2:
-        methodData= [method1, method2]
-        data= {
+        methodData = [method1, method2];
+        data = {
           name: strategyName,
           method_data: methodData,
           increaseValueType,
-          type
-        }
-        break
+          type,
+        };
+        break;
       case BudgetStrategyType.VICTOR_3:
-        methodData= [method1, method2, method3]
-        data= {
+        methodData = [method1, method2, method3];
+        data = {
           name: strategyName,
           method_data: methodData,
           increaseValueType,
-          type
-        }
-        break
+          type,
+        };
+        break;
       case BudgetStrategyType.VICTOR_4:
-        methodData= [method1, method2, method3, method4]
-        data= {   
+        methodData = [method1, method2, method3, method4];
+        data = {
           name: strategyName,
           method_data: methodData,
           increaseValueType,
-          type
-        }
-        break
+          type,
+        };
+        break;
       default:
         break;
     }
     try {
-      if(is_edit=== true) {
-        response= await budgetStrategyApi.userBudgetStrategyUpdate(idBudegetStrategy, data)
+      if (is_edit === true) {
+        response = await budgetStrategyApi.userBudgetStrategyUpdate(
+          idBudegetStrategy,
+          data
+        );
+      } else {
+        response = await budgetStrategyApi.userBudgetStrategyCreate(data);
       }
-      else {
-        response= await budgetStrategyApi.userBudgetStrategyCreate(data)
-      }
-      if(response?.data?.ok=== true) {
-        if(is_edit!== true) {
-          setData(response?.data?.d)
+      if (response?.data?.ok === true) {
+        if (is_edit !== true) {
+          setData(response?.data?.d);
         }
-        showToast("Tạo chiến lược vốn thành công", "success")
-        setStrategyName("")
-        setAmount("")
-        setIncreaseValueType(IncreaseValueType.AFTER_LOSS)
-        setType(BudgetStrategyType.ALL_ORDERS)
-        setMethod1("1-1-2-6-4-3")
-        setMethod2("1-2-4-8-17-35")
-        setMethod3("2-3-4-5-6-1")
-        setMethod4("2-3-4-5-6-1")
-        setCount(0)
-        setCount2(0)
-        onClose()
-      }
-      else if(response?.data?.ok=== false) {
-        showToast(response?.data?.m, "error")
+        showToast("Tạo chiến lược vốn thành công", "success");
+        setStrategyName("");
+        setAmount("1");
+        setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
+        setType(BudgetStrategyType.ALL_ORDERS);
+        setMethod1("1-1-2-6-4-3");
+        setMethod2("1-2-4-8-17-35");
+        setMethod3("2-3-4-5-6-1");
+        setMethod4("2-3-4-5-6-1");
+        setCount(0);
+        setCount2(0);
+        onClose();
+      } else if (response?.data?.ok === false) {
+        showToast(response?.data?.m, "error");
       }
     } catch (error) {
-      showToast(error?.response?.data?.m)
+      showToast(error?.response?.data?.m);
     }
   };
 
-  const disableButton= ()=> {
-    let disable
-    switch(type) {
+  const disableButton = () => {
+    let disable;
+    switch (type) {
       case BudgetStrategyType.ALL_ORDERS:
-        disable= strategyName?.length <= 0 || amount?.length <= 0 || parseInt(amount) > 10000000
+        disable =
+          strategyName?.length <= 0 ||
+          amount?.length <= 0 ||
+          parseInt(amount) > 10000000;
         break;
       case BudgetStrategyType.CUSTOM_AUTOWIN:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0 || isErrormethod1=== true || isErrormethod2=== true || isErrormethod3=== true
-        
-        break
-      case BudgetStrategyType.FIBO_X_STEP:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || isErrormethod1=== true
-        break
-      case BudgetStrategyType.MARTINGALE:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || isErrormethod1=== true 
-        
-        break
-      case BudgetStrategyType.VICTOR_2:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0  || isErrormethod1=== true || isErrormethod2=== true
-        
-        break
-      case BudgetStrategyType.VICTOR_3:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0 || isErrormethod1=== true || isErrormethod2=== true || isErrormethod3=== true
-    
-        break
-      case BudgetStrategyType.VICTOR_4:
-        disable= strategyName?.length <= 0 || method1?.length <= 0 || method2?.length <= 0 || method3?.length <= 0 || method4?.length <= 0 || isErrormethod1=== true || isErrormethod2=== true || isErrormethod3=== true || isErrormethod4  === true
-        break
-      default:
-        disable= false  
-        break;
-      }
-    return disable;
-  }
+        disable =
+          strategyName?.length <= 0 ||
+          method1?.length <= 0 ||
+          method2?.length <= 0 ||
+          method3?.length <= 0 ||
+          isErrormethod1 === true ||
+          isErrormethod2 === true ||
+          isErrormethod3 === true;
 
-  useEffect(()=> {
-    if(is_edit=== true) {
-      setIdBudgetStrategy(selectedStrategy?._id)
-      setStrategyName(selectedStrategy?.name)
-      setType(selectedStrategy?.type)
-      setAmount(selectedStrategy?.method_data?.[0])
-      setMethod1(selectedStrategy?.method_data?.[0])
-      setMethod2(selectedStrategy?.method_data?.[1])
-      setMethod3(selectedStrategy?.method_data?.[2])
-      setMethod4(selectedStrategy?.method_data?.[3])
-      setCount(selectedStrategy?.method_data?.[1])
-      setCount2(selectedStrategy?.method_data?.[2])
-      setIncreaseValueType(selectedStrategy?.increaseValueType)
+        break;
+      case BudgetStrategyType.FIBO_X_STEP:
+        disable =
+          strategyName?.length <= 0 ||
+          method1?.length <= 0 ||
+          isErrormethod1 === true;
+        break;
+      case BudgetStrategyType.MARTINGALE:
+        disable =
+          strategyName?.length <= 0 ||
+          method1?.length <= 0 ||
+          isErrormethod1 === true;
+
+        break;
+      case BudgetStrategyType.VICTOR_2:
+        disable =
+          strategyName?.length <= 0 ||
+          method1?.length <= 0 ||
+          method2?.length <= 0 ||
+          isErrormethod1 === true ||
+          isErrormethod2 === true;
+
+        break;
+      case BudgetStrategyType.VICTOR_3:
+        disable =
+          strategyName?.length <= 0 ||
+          method1?.length <= 0 ||
+          method2?.length <= 0 ||
+          method3?.length <= 0 ||
+          isErrormethod1 === true ||
+          isErrormethod2 === true ||
+          isErrormethod3 === true;
+
+        break;
+      case BudgetStrategyType.VICTOR_4:
+        disable =
+          strategyName?.length <= 0 ||
+          method1?.length <= 0 ||
+          method2?.length <= 0 ||
+          method3?.length <= 0 ||
+          method4?.length <= 0 ||
+          isErrormethod1 === true ||
+          isErrormethod2 === true ||
+          isErrormethod3 === true ||
+          isErrormethod4 === true;
+        break;
+      default:
+        disable = false;
+        break;
     }
-  }, [is_edit, selectedStrategy])
-  
-  const handleClose= ()=> {
-    onClose()
-    setStrategyName("")
-        setAmount("")
-        setMethod1("")
-        setMethod2("")
-        setMethod3("")
-        setMethod4("")
-        setCount(0)
-        setCount2(0)
-        setIncreaseValueType(IncreaseValueType.AFTER_LOSS)
-        setType(BudgetStrategyType.ALL_ORDERS)
-  }
+    return disable;
+  };
+
+  useEffect(() => {
+    if (is_edit === true) {
+      setIdBudgetStrategy(selectedStrategy?._id);
+      setStrategyName(selectedStrategy?.name);
+      setType(selectedStrategy?.type);
+      setAmount(selectedStrategy?.method_data?.[0]);
+      setMethod1(selectedStrategy?.method_data?.[0]);
+      setMethod2(selectedStrategy?.method_data?.[1]);
+      setMethod3(selectedStrategy?.method_data?.[2]);
+      setMethod4(selectedStrategy?.method_data?.[3]);
+      setCount(selectedStrategy?.method_data?.[1]);
+      setCount2(selectedStrategy?.method_data?.[2]);
+      setIncreaseValueType(selectedStrategy?.increaseValueType);
+    }
+  }, [is_edit, selectedStrategy]);
+
+  const handleClose = () => {
+    onClose();
+    setStrategyName("");
+    setAmount("1");
+    setMethod1("1-1-2-6-4-3");
+    setMethod2("1-2-4-8-17-35");
+    setMethod3("2-3-4-5-6-1");
+    setMethod4("2-3-4-5-6-1");
+    setCount(0);
+    setCount2(0);
+    setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
+    setType(BudgetStrategyType.ALL_ORDERS);
+  };
 
   return (
-    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={handleClose}>
-      <Box className="mawkwr" p={2} width={downLg ? "100%" : 850} height={downLg ? "70vh" : "100vh"} display={"flex"} justifyContent={"space-between"} flexDirection={"column"}>
+    <Drawer
+      anchor={downLg ? "bottom" : "right"}
+      open={open}
+      onClose={handleClose}
+    >
+      <Box
+        className="mawkwr"
+        p={2}
+        width={downLg ? "100%" : 850}
+        height={downLg ? "70vh" : "100vh"}
+        display={"flex"}
+        justifyContent={"space-between"}
+        flexDirection={"column"}
+      >
         <Box>
-            <Box sx={{width: "100%", display: "flex", flexDirection: "row-reverse"}}>
-                <Box display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{cursor: "pointer"}} onClick={handleClose}>
-                    <CloseIcon />
-                </Box>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "row-reverse",
+            }}
+          >
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              sx={{ cursor: "pointer" }}
+              onClick={handleClose}
+            >
+              <CloseIcon />
             </Box>
+          </Box>
           <Typography variant="h6">Thiết lập chiến lược của bạn</Typography>
           <List>
             <Box
@@ -274,11 +351,13 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </InputLabel>
                   <Select
                     value={type}
-                    onChange={(e) => setType(e.target.value)}
+                    onChange={(e) => {setType(e.target.value);setSeeMore(false)}}
                     size={"small"}
                   >
-                    {Object.entries(BudgetStrategyType)?.map(([item, key])=> (
-                      <MenuItem key={key} value={item}>{BudgetStrategyTypeTitle[item]}</MenuItem>
+                    {Object.entries(BudgetStrategyType)?.map(([item, key]) => (
+                      <MenuItem key={key} value={item}>
+                        {BudgetStrategyTypeTitle[item]}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -366,7 +445,10 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
               )}
               {type === BudgetStrategyType.FIBO_X_STEP && (
                 <>
-                  <Box display={"flex"} flexDirection={downLg ? "column" : "row"}>
+                  <Box
+                    display={"flex"}
+                    flexDirection={downLg ? "column" : "row"}
+                  >
                     <ListItem>
                       <TextField
                         error={isErrormethod1 === true ? true : false}
@@ -382,11 +464,13 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                         value={method1}
                         onChange={(e) => setMethod1(e.target.value)}
                       />
-                    </ListItem> 
+                    </ListItem>
                     <ListItem>
                       <Box display="flex" alignItems="center">
                         <Typography variant="body1" sx={{ marginRight: 2 }}>
-                            {increaseValueType=== IncreaseValueType.AFTER_LOSS ? "Khi thua sẽ tiến" : "Khi thắng sẽ tiến"}
+                          {increaseValueType === IncreaseValueType.AFTER_LOSS
+                            ? "Khi thua sẽ tiến"
+                            : "Khi thắng sẽ tiến"}
                         </Typography>
                         <Button
                           variant="outlined"
@@ -410,8 +494,12 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                       </Box>
                     </ListItem>
                   </Box>
-                  <Box display={"flex"} mt={2} flexDirection={downLg ? "column" : "row"}>
-                    <ListItem sx={{order: downLg ? 2 : 1}}>
+                  <Box
+                    display={"flex"}
+                    mt={2}
+                    flexDirection={downLg ? "column" : "row"}
+                  >
+                    <ListItem sx={{ order: downLg ? 2 : 1 }}>
                       <FormControl fullWidth>
                         <InputLabel
                           sx={{
@@ -423,21 +511,25 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                         </InputLabel>
                         <Select
                           value={increaseValueType}
-                          onChange={(e) =>
-                            setIncreaseValueType(e.target.value)
-                          }
+                          onChange={(e) => setIncreaseValueType(e.target.value)}
                           size="small"
                         >
-                          {Object.entries(IncreaseValueType).map(([item, key])=> (
-                            <MenuItem key={key} value={item}>{IncreaseValueTypeTitle[item]}</MenuItem>
-                          ))}
+                          {Object.entries(IncreaseValueType).slice(0, 2).map(
+                            ([item, key]) => (
+                              <MenuItem key={key} value={item}>
+                                {IncreaseValueTypeTitle[item]}
+                              </MenuItem>
+                            )
+                          )}
                         </Select>
                       </FormControl>
                     </ListItem>
-                    <ListItem>
+                    <ListItem sx={{ order: downLg ? 1 : 2 }}>
                       <Box display="flex" alignItems="center">
                         <Typography variant="body1" sx={{ marginRight: 2 }}>
-                          {increaseValueType=== IncreaseValueType.AFTER_LOSS ? "Khi thắng sẽ lùi" : "Khi thua sẽ lùi"}
+                          {increaseValueType === IncreaseValueType.AFTER_LOSS
+                            ? "Khi thắng sẽ lùi"
+                            : "Khi thua sẽ lùi"}
                         </Typography>
                         <Button
                           variant="outlined"
@@ -494,14 +586,16 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                         </InputLabel>
                         <Select
                           value={increaseValueType}
-                          onChange={(e) =>
-                            setIncreaseValueType(e.target.value)
-                          }
+                          onChange={(e) => setIncreaseValueType(e.target.value)}
                           size="small"
                         >
-                          {Object.entries(IncreaseValueType)?.map(([item, key])=> (
-                            <MenuItem key={key} value={item}>{IncreaseValueTypeTitle[item]}</MenuItem>
-                          ))}
+                          {Object.entries(IncreaseValueType)?.map(
+                            ([item, key]) => (
+                              <MenuItem key={key} value={item}>
+                                {IncreaseValueTypeTitle[item]}
+                              </MenuItem>
+                            )
+                          )}
                         </Select>
                       </FormControl>
                     </ListItem>
@@ -548,7 +642,7 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                 <>
                   <ListItem>
                     <TextField
-                     error={isErrormethod1 === true ? true : false}
+                      error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
                           ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
@@ -600,7 +694,7 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                 <>
                   <ListItem>
                     <TextField
-                     error={isErrormethod1 === true ? true : false}
+                      error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
                           ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
@@ -632,7 +726,7 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                   <ListItem>
                     <TextField
-                     error={isErrormethod3 === true ? true : false}
+                      error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
                           ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
@@ -664,7 +758,7 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                   </ListItem>
                 </>
               )}
-            </> 
+            </>
             {/* <ListItem>
               <Box fullWidth sx={{ width: "100%" }}>
                 <Accordion
@@ -682,6 +776,172 @@ const NewBudgetStrategy = ({ open, onClose, is_edit, selectedStrategy, setData }
                 </Accordion>
               </Box>
             </ListItem> */}
+            {
+              (type!== BudgetStrategyType.ALL_ORDERS && type !== BudgetStrategyType.FIBO_X_STEP) &&
+              <ListItem>
+                <Box
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  gap={1}
+                >
+                  <Typography fontSize={14}>
+                    Tìm hiểu về chiến lược {BudgetStrategyTypeTitle[type]}
+                  </Typography>
+                  <Typography
+                    color="primary"
+                    fontWeight={600}
+                    sx={{ cursor: "pointer" }}
+                    fontSize={14}
+                    onClick={() => {
+                      setSeeMore((prev) => !prev);
+                    }}
+                  >
+                    {seeMore === true ? "Ẩn" : "Xem thêm"}
+                  </Typography>
+                </Box>
+              </ListItem>
+            }
+            {seeMore === true && (
+              <>
+                <ListItem>
+                  {type === BudgetStrategyType.CUSTOM_AUTOWIN && (
+                    <Box>
+                      <Box>
+                        <Typography fontSize={14}>Có 3 chuỗi</Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Hàng 1 và 3 là index (giá trị lớn nhất = độ dài của
+                          hàng 2); hàng 2 là số tiền vào lệnh.
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Thắng thì dùng giá trị hàng 1, thua thì dùng giá trị
+                          hàng 3 làm vị trí cho hàng 2 vào lệnh tiếp theo.
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+                  {type === BudgetStrategyType.MARTINGALE && (
+                    <Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          Nếu thua sẽ di chuyển sang phải và dùng giá trị mới để
+                          vào lệnh tiếp theo. Nếu thắng hoặc kết thúc chuỗi sẽ
+                          quay về đầu chuỗi.{" "}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          Chuỗi giá trị (số tiền vào lệnh):
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Định dạng chuỗi: x-y-z-…
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Không giới hạn số bước lệnh
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Giá trị mặc định: 1-2-4-8-17-35
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+                  {type === BudgetStrategyType.VICTOR_2 && (
+                    <Box>
+                      <Box>
+                        <Typography fontSize={14}>Có 2 chuỗi</Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Di chuyển từ trái sang phải khi thua ở chuỗi 1.
+                          Thắng tại vị trí nào thì di chuyển xuống chuỗi 2.
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Nếu thắng ở chuỗi 2 thì quay trở về (1,1), nếu thua
+                          thì quay về vị trí tiếp theo ở chuỗi 1 (di chuyển chéo
+                          lên trên).
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+                  {type === BudgetStrategyType.VICTOR_3 && (
+                    <Box>
+                      <Box>
+                        <Typography fontSize={14}>Có 3 chuỗi</Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Di chuyển từ trái sang phải khi thua ở chuỗi 1, khi
+                          thắng sẽ di chuyển xuống chuỗi 2 cùng vị trí.
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Nếu thắng ở chuỗi 2 thì tiếp tục di chuyển xuống
+                          chuỗi 3 cùng vị trí, nếu thua trở lại vị trí tiếp theo
+                          ở chuỗi 1.
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Nếu thắng ở chuỗi 3 thì quay về vị trí (1,1), nếu
+                          thua trở lại vị trí tiếp theo ở chuỗi 1.
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Kết thúc chuỗi 1 sẽ quay về (1,1)
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+                  {type === BudgetStrategyType.VICTOR_4 && (
+                    <Box>
+                      <Box>
+                        <Typography fontSize={14}>Có 4 chuỗi</Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Di chuyển từ trái sang phải khi thua ở chuỗi 1, khi
+                          thắng sẽ di chuyển xuống chuỗi 2 cùng vị trí.
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Nếu thắng ở chuỗi 2 thì tiếp tục di chuyển xuống
+                          chuỗi 3 cùng vị trí, nếu thua trở lại vị trí tiếp theo
+                          ở chuỗi 1.
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Nếu thắng ở chuỗi 3 thì tiếp tục di chuyển xuống
+                          chuỗi 4 cùng vị trí, nếu thua trở lại vị trí tiếp theo
+                          ở chuỗi 1.
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography fontSize={14}>
+                          - Nếu thắng ở chuỗi 4 thì quay về vị trí (1,1), nếu
+                          thua trở lại vị trí tiếp theo ở chuỗi 1.
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+                </ListItem>
+              </>
+            )}
           </List>
         </Box>
         <Box display={"flex"} alignItems={"center"} gap={1} pl={2} pr={2}>

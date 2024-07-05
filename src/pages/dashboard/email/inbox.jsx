@@ -1,4 +1,4 @@
-import { MailInboxPageView } from "page-sections/email/page-view";
+import { MailInboxPageView } from "page-sections/signal-strategy/page-view";
 const InboxPage = () => {
   return <MailInboxPageView />;
 };

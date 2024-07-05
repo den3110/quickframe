@@ -1,4 +1,4 @@
-import { ComposeMailPageView } from "page-sections/email/page-view";
+import { ComposeMailPageView } from "page-sections/signal-strategy/page-view";
 const ComposeMailPage = () => {
   return <ComposeMailPageView />;
 };

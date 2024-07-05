@@ -288,6 +288,23 @@ export const DashboardRoutes = [
           },
         ],
       },
+      {
+        path: "signal-strategies",
+        children: [
+          {
+            path: "",
+            element: <AllMail />,
+          },
+          {
+            path: "top-signal",
+            element: <Inbox />,
+          },
+          {
+            path: "telegram-channel",
+            element: <Sent />,
+          },
+        ],
+      },
     ],
   },
 ];
