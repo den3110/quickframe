@@ -30,7 +30,7 @@ export const navigations = [
   },
   {
     name: "Signal Strategy",
-    path: "/dashboard/crm",
+    path: "/dashboard/signal-strategies/",
     icon: duotone.CommentsQuestionCheck,
   },
   {

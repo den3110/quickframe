@@ -67,7 +67,7 @@ const Layout = ({ children, showTopActions = true }) => {
   ];
   return (
     <Box sx={{padding: "16px 10px 32px 10px"}} height="100%" className="abaskw">
-      <Box display={"flex"} alignItems={"center"} gap={2}>
+      <Box display={"flex"} alignItems={"center"} gap={2} mb={2}>
         <NavLink to="/dashboard/signal-strategies">
           <Typography variant="h6" fontWeight={"600"}>
             Danh sách

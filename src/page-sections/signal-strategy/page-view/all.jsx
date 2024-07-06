@@ -40,6 +40,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useState } from "react";
 import { MoreVert } from "@mui/icons-material";
 import moment from "moment";
+import NewBotAI from "../NewBotAI";
 // STYLED COMPONENTS
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -92,8 +93,14 @@ const SignalStrategyList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [anchorEls, setAnchorEls] = useState({}); // Dùng để lưu trữ trạng thái anchorEl cho mỗi hàng
   const [page, setPage] = useState(1);
-  const upSm = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
+  const [openNewBotAI, setOpenNewBotAI]= useState(false)
+  const handleCloseNewBotAI= ()=> {
+    setOpenNewBotAI(false)
+  }
+  const handleOpenNewBotAI= ()=> {
+    setOpenNewBotAI(true)
+  }
   const handleClick = (event, index) => {
     setAnchorEls((prev) => ({ ...prev, [index]: event.currentTarget }));
   };
@@ -159,8 +166,9 @@ const SignalStrategyList = () => {
                   size={downLg ? "large" : "medium"}
                   color="success"
                   // onClick={handleOpenNewBudgetStrategy}
+                  onClick={handleOpenNewBotAI}
                 >
-                  New Strategy
+                  Thiết kế Bot AI
                 </Button>
               </Box>
             </Box>
@@ -301,23 +309,7 @@ const SignalStrategyList = () => {
             </PaginationContainer>
           </Box>
         </Box>
-        {/* <CopyBudgteStrategy open={dialogOpen} onClose={handleDialogClose} /> */}
-        {/* <NewBudgetStrategy
-          is_edit={isEditStrategy}
-          open={openNewBudgetStrategy}
-          setData={setData}
-          onClose={() => {
-            setOpenNewBudgetStrategy(false);
-            setIsEditStrategy(false);
-          }}
-          selectedStrategy={selectedStrategy}
-        /> */}
-        {/* <DeleteBudgetStrategy
-          open={isDeleteStrategy}
-          onClose={handleCloseDeleteStrategy}
-          selectedStrategy={selectedStrategy}
-          setChange={setChange}
-        /> */}
+        <NewBotAI open={openNewBotAI} onClose={handleCloseNewBotAI} />            
       </Box>
     </Layout>
   );
