@@ -130,7 +130,7 @@ const LeaderBoard = () => {
           </Tooltip>
         </Fragment>
       </Box>
-      <Box sx={{padding: "0 48px"}}>
+      <Box >
         <Swiper
           spaceBetween={20}
           pagination={{ clickable: true }}

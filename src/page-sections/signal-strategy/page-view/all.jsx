@@ -22,25 +22,20 @@ import {
   Select,
   Pagination,
 } from "@mui/material";
-import StarBorder from "@mui/icons-material/StarBorder";
 // CUSTOM DEFINED HOOK
-import useNavigate from "hooks/useNavigate";
 // CUSTOM COMPONENTS
-import { Paragraph, Small } from "components/typography";
 import { FlexBetween, FlexBox } from "components/flexbox";
 // CUSTOM LAYOUT COMPONENT
 import Layout from "../Layout";
 // CUSTOM ICON COMPONENTS
-import Trash from "icons/duotone/Trash";
-import Archive from "icons/duotone/Archive";
-import UnreadMail from "icons/duotone/UnreadMail";
 // CUSTOM UTILS METHOD
 import { isDark } from "utils/constants";
 import SearchIcon from '@mui/icons-material/Search';
-import { useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
 import moment from "moment";
 import NewBotAI from "../NewBotAI";
+import SignalStrategyContext from "contexts/SignalStrategyContext";
 // STYLED COMPONENTS
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -68,30 +63,13 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-const MailActionWrapper = styled(Box)(({ theme }) => ({
-  right: 24,
-  top: "50%",
-  zIndex: 11,
-  display: "none",
-  position: "absolute",
-  transform: "translateY(-50%)",
-  backgroundColor: theme.palette.grey[isDark(theme) ? 900 : 100],
-}));
-const MailItem = styled(FlexBetween)(({ theme }) => ({
-  cursor: "pointer",
-  position: "relative",
-  borderBottom: `1px solid ${theme.palette.divider}`,
-  ":hover": {
-    backgroundColor: theme.palette.grey[isDark(theme) ? 900 : 100],
-    "& .actions": {
-      display: "block",
-    },
-  },
-}));
+
 const SignalStrategyList = () => {
-  const [data, setData] = useState([]);
+  const {data }= useContext(SignalStrategyContext )
+  const [selectedBot, setSelectedBot]= useState()
+  const [isEdit, setIsEdit]= useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [anchorEls, setAnchorEls] = useState({}); // Dùng để lưu trữ trạng thái anchorEl cho mỗi hàng
+  const [anchorEls, setAnchorEls] = useState({}); 
   const [page, setPage] = useState(1);
   const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
   const [openNewBotAI, setOpenNewBotAI]= useState(false)
@@ -100,6 +78,7 @@ const SignalStrategyList = () => {
   }
   const handleOpenNewBotAI= ()=> {
     setOpenNewBotAI(true)
+    setIsEdit(false)
   }
   const handleClick = (event, index) => {
     setAnchorEls((prev) => ({ ...prev, [index]: event.currentTarget }));
@@ -121,16 +100,11 @@ const SignalStrategyList = () => {
       <Box
         pt={2}
         pb={4}
-        sx={{
-          // background: (theme) =>
-          //   isDark(theme) ? "rgb(17, 24, 39)" : "rgb(249, 250, 251)",
-        }}
       >
         <Box sx={{ padding: "10px" }}>
           <Box
             sx={{
               padding: "20px",
-              // background: (theme) => (isDark(theme) ? "#1f2937" : "white"),
             }}
           >
             <Box
@@ -190,93 +164,99 @@ const SignalStrategyList = () => {
                       rowsPerPage * (page - 1) + rowsPerPage
                     )
                     .map((row, index) => (
-                      <StyledTableRow
-                        sx={{
-                          display: downLg ? "flex" : "",
-                          flexWrap: "wrap",
-                          borderBottom: downLg ? "" : "none",
-                        }}
-                        key={index}
-                      >
-                        <StyledTableCell
+                      <Fragment key={index}>
+                        <StyledTableRow
                           sx={{
-                            order: downLg ? 1 : 1,
-                            borderBottom: downLg ? "none" : "",
-                          }}
-                        >
-                          <Typography variant="body1" fontWeight={"600"}>
-                            {row.name}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary">
-                            Created:{" "}
-                            {moment(row.createdAt).format(
-                              "DD-MM-YYYY, HH:mm:ss"
-                            )}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          sx={{
-                            order: downLg ? 3 : 2,
-                            borderBottom: downLg ? "none" : "",
-                          }}
-                        >
-                          {/* {BudgetStrategyTypeTitle[row.type]} */}
-                        </StyledTableCell>
-                        <StyledTableCell
-                          sx={{
-                            order: downLg ? 2 : 4,
                             display: downLg ? "flex" : "",
-                            flexDirection: "row-reverse",
-                            borderBottom: downLg ? "none" : "",
+                            flexWrap: "wrap",
+                            borderBottom: downLg ? "" : "none",
                           }}
+                         
                         >
-                          <IconButton 
-                            onClick={(e) => handleClick(e, index)}
-                          >
-                            <MoreVert />
-                          </IconButton>
-                          <Menu
-                            disableScrollLock
-                            anchorEl={anchorEls[index]}
-                            open={Boolean(anchorEls[index])}
-                            onClose={() => handleClose(index)}
-                            anchorOrigin={{
-                              vertical: "top",
-                              horizontal: "left",
-                            }}
-                            transformOrigin={{
-                              vertical: "top",
-                              horizontal: "right",
+                          <StyledTableCell
+                            sx={{
+                              order: downLg ? 1 : 1,
+                              borderBottom: downLg ? "none" : "",
                             }}
                           >
-                            <StyledMenuItem
-                              onClick={() => {
-                                // setSelectedStrategy(row);
-                                // setIsEditStrategy(true);
-                                handleClose(index);
-                                // handleOpenNewBudgetStrategy();
+                            <Typography variant="body1" fontWeight={"600"}>
+                              {row.name}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Created:{" "}
+                              {moment(row.createdAt).format(
+                                "DD-MM-YYYY, HH:mm:ss"
+                              )}
+                            </Typography>
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              order: downLg ? 3 : 2,
+                              borderBottom: downLg ? "none" : "",
+                            }}
+                          >
+                            {/* {BudgetStrategyTypeTitle[row.type]} */}
+                            {row?.type}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              order: downLg ? 2 : 4,
+                              display: downLg ? "flex" : "",
+                              flexDirection: "row-reverse",
+                              borderBottom: downLg ? "none" : "",
+                            }}
+                          >
+                            <IconButton 
+                              onClick={(e) => handleClick(e, index)}
+                            >
+                              <MoreVert />
+                            </IconButton>
+                            <Menu
+                              disableScrollLock
+                              anchorEl={anchorEls[index]}
+                              open={Boolean(anchorEls[index])}
+                              onClose={() => handleClose(index)}
+                              anchorOrigin={{
+                                vertical: "top",
+                                horizontal: "left",
+                              }}
+                              transformOrigin={{
+                                vertical: "top",
+                                horizontal: "right",
                               }}
                             >
-                              {/* <EditBudgetStrategy /> */}
-                              Edit Strategy
-                            </StyledMenuItem>
-                            <StyledMenuItem>
-                              {/* <ShareBudgetStrategy /> */}
-                              Share Strategy
-                            </StyledMenuItem>
-                            <StyledMenuItem
-                              onClick={() => {
-                                // setSelectedStrategy(row);
-                                // handleOpenDeleteStrategy();
-                                handleClose(index);
-                              }}
-                            >
-                              {/* <DeleteBudgetStrategyIcon /> */}
-                              Delete Strategy
-                            </StyledMenuItem>
-                          </Menu>
-                        </StyledTableCell>
-                      </StyledTableRow>
+                              <StyledMenuItem
+                                onClick={() => {
+                                  // setSelectedStrategy(row);
+                                  // setIsEditStrategy(true);
+                                  handleOpenNewBotAI()
+                                  handleClose(index);
+                                  setIsEdit(true)
+                                  // handleOpenNewBudgetStrategy();
+                                  setSelectedBot(row)
+                                }}
+                              >
+                                {/* <EditBudgetStrategy /> */}
+                                Edit Bot
+                              </StyledMenuItem>
+                              <StyledMenuItem>
+                                {/* <ShareBudgetStrategy /> */}
+                                Share Bot
+                              </StyledMenuItem>
+                              <StyledMenuItem
+                                onClick={() => {
+                                  // setSelectedStrategy(row);
+                                  // handleOpenDeleteStrategy();
+                                  handleClose(index);
+                                }}
+                              >
+                                {/* <DeleteBudgetStrategyIcon /> */}
+                                Delete Bot
+                              </StyledMenuItem>
+                            </Menu>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      </Fragment>
                     ))}
                 </TableBody>
               </Table>
@@ -309,7 +289,7 @@ const SignalStrategyList = () => {
             </PaginationContainer>
           </Box>
         </Box>
-        <NewBotAI open={openNewBotAI} onClose={handleCloseNewBotAI} />            
+        <NewBotAI open={openNewBotAI} onClose={handleCloseNewBotAI} selectedBot={selectedBot} setSelectedBot={setSelectedBot} is_edit={isEdit} />            
       </Box>
     </Layout>
   );

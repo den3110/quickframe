@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   Box,
@@ -25,12 +25,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
 
-const BotDrawer = ({ open, onClose }) => {
+const NewBotAI = ({ open, onClose, is_edit, selectedBot }) => {
+  const [idBotAI, setIdBotAI]= useState()
   const [name, setName]= useState("")
   const [openCandleShadow, setOpenCandleShadow]= useState(false)
-  const [targetWinStreak, setTargetWinStreak]= useState(0)
-  const [targetLoseStreak, setTargetLoseStreak]= useState(0)
   const [targetConditions, setTargetConditions]= useState([])
+  const [selectedCandle, setSelectedCandle]= useState()
   const [anchorEls, setAnchorEls] = useState([])
   const isDisableButton= name?.length <= 0 || targetConditions?.length <= 0
   const handleOpenCandleShadow= ()=> {
@@ -53,8 +53,8 @@ const BotDrawer = ({ open, onClose }) => {
   };
 
   const [goals, setGoals] = useState([
-    { type: "Chuỗi thắng", count: 1 },
-    { type: "Chuỗi thua", count: 1 },
+    { type: "win_streak", count: 1 },
+    { type: "lose_streak", count: 1 },
   ]);
 
   const handleGoalChange = (index, key, value) => {
@@ -80,15 +80,28 @@ const BotDrawer = ({ open, onClose }) => {
       const data= {
         name,
         sources: {
-          targetLoseStreak,
-          targetWinStreak,
+          targetLoseStreak: goals.find(item=> item.type=== "lose_streak").count,
+          targetWinStreak: goals.find(item=> item.type=== "win_streak").count,
           targetConditions
         },
         type: "BUBBLE_METHOD"
       }
-      const response= await signalStrategyApi.userBudgetSignalCreate(data)
+      let response
+      if(is_edit=== true) {
+        response= await signalStrategyApi.userBudgetSignalCreate(data)
+      }
+      else {
+        response= await signalStrategyApi.userBudgetSignalUpdate(idBotAI, data)
+      }
       if(response?.data?.ok=== true) {
-        showToast("Tạo bot thành công", "success")
+        showToast(is_edit=== true ? "Chỉnh sửa bot thành công" : "Tạo bot thành công", "success")
+        setName("")
+        setTargetConditions([])
+        setGoals([
+          { type: "win_streak", count: 1 },
+          { type: "lose_streak", count: 1 },
+        ])
+        onClose()
       }
       else if(response?.data?.ok=== false) {
         showToast(response?.data?.m)
@@ -98,6 +111,25 @@ const BotDrawer = ({ open, onClose }) => {
     }
   }
 
+  useEffect(()=> {
+    if(is_edit=== true) {
+      setIdBotAI(selectedBot?._id)
+      setName(selectedBot?.name)
+      setGoals([
+        { type: "win_streak", count: selectedBot?.sources?.targetWinStreak },
+          { type: "lose_streak", count: selectedBot?.sources?.targetLoseStreak },
+      ])
+      setTargetConditions(selectedBot.sources?.targetConditions)
+    }
+    if(is_edit=== false ) {
+      setName("")
+      setGoals([
+        { type: "win_streak", count: 0 },
+          { type: "lose_streak", count: 0 },
+      ])
+      setTargetConditions([])
+    }
+  }, [is_edit, selectedBot])
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
@@ -136,8 +168,8 @@ const BotDrawer = ({ open, onClose }) => {
                     }
                     sx={{width: 150}}
                   >
-                    <MenuItem value="Chuỗi thắng">Chuỗi thắng</MenuItem>
-                    <MenuItem value="Chuỗi thua">Chuỗi thua</MenuItem>
+                    <MenuItem value="win_streak">Chuỗi thắng</MenuItem>
+                    <MenuItem value="lose_streak">Chuỗi thua</MenuItem>
                   </Select>
                 </FormControl>
                 <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
@@ -194,6 +226,10 @@ const BotDrawer = ({ open, onClose }) => {
                         isDark(theme) ? "rgb(50, 59, 73)" : "#f0f0f0",
                       mr: 1,
                     }}
+                    onClick={()=> {
+                      setSelectedCandle({...condition, key: index})
+                      handleOpenCandleShadow()
+                    }}
                   >
                     <EditIcon />
                   </IconButton>
@@ -230,13 +266,13 @@ const BotDrawer = ({ open, onClose }) => {
             Đóng
           </Button>
           <Button onClick={handleCreateBot} disabled={isDisableButton} fullWidth variant="contained" color="primary" sx={{padding: "10px"}}>
-            Tạo bot
+            {is_edit=== true ? "Lưu Bot" : "Tạo bot"}
           </Button>
         </Box>
       </Box>
-      <CandleShadow open={openCandleShadow} onClose={handleCloseCandleShadow} setTargetConditions={setTargetConditions} />
+      <CandleShadow open={openCandleShadow} onClose={handleCloseCandleShadow} setTargetConditions={setTargetConditions} targetConditions={targetConditions} selectedCandle={selectedCandle} is_edit={is_edit} />
     </Drawer>
   );
 };
 
-export default BotDrawer;
+export default NewBotAI;

@@ -103,12 +103,12 @@ const Chat = Loadable(lazy(() => import("pages/dashboard/chat")));
 const TodoList = Loadable(lazy(() => import("pages/dashboard/todo-list")));
 
 // MAIL RELATED PAGES
-const Sent = Loadable(lazy(() => import("pages/dashboard/email/sent")));
-const AllMail = Loadable(lazy(() => import("pages/dashboard/email/all")));
-const Inbox = Loadable(lazy(() => import("pages/dashboard/email/inbox")));
-const Compose = Loadable(lazy(() => import("pages/dashboard/email/compose")));
+const Sent = Loadable(lazy(() => import("pages/dashboard/signal-strategy/sent")));
+const AllMail = Loadable(lazy(() => import("pages/dashboard/signal-strategy")));
+const Inbox = Loadable(lazy(() => import("pages/dashboard/signal-strategy/inbox")));
+const Compose = Loadable(lazy(() => import("pages/dashboard/signal-strategy/compose")));
 const MailDetails = Loadable(
-  lazy(() => import("pages/dashboard/email/details"))
+  lazy(() => import("pages/dashboard/signal-strategy/details"))
 );
 export const DashboardRoutes = [
   {

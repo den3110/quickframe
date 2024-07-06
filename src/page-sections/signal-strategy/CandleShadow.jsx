@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   Box,
@@ -10,10 +10,29 @@ import {
   FormControl,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import _ from "lodash";
 
 const colors = ["#565d67", "#0caf60", "#fd4f4f"];
 
-const BallButton = ({ number, state, onClick, handleBallSelected }) => {
+const BallButton = ({
+  number,
+  state,
+  onClick,
+  handleBallSelected,
+  selectedCandle,
+  index,
+  handleBallStates,
+}) => {
+  useEffect(() => {
+    if (selectedCandle) {
+      if (number === selectedCandle.betIndex) {
+        console.log(index);
+        const newBallStates = Array(20).fill(0);
+        newBallStates[index] = 1;
+        handleBallStates(newBallStates);
+      }
+    }
+  }, [selectedCandle, index, number]);
   return (
     <IconButton
       disabled={number % 2 === 0}
@@ -45,18 +64,44 @@ const GridBallButton = ({
   number,
   setSelectedGridBall,
   selectedGridBall,
+  selectedCandle,
+  index,
+  handleGridBallStates,
+  tableIndex,
+  gridBallStates,
+  is_edit
 }) => {
+  useEffect(() => {
+    if (selectedCandle) {
+      selectedCandle?.conditions?.map((item, key)=> {
+        if (number === item.index) {
+          const newGridBallStates = gridBallStates;
+          const resultType= item.resultType
+          let state
+          if(resultType=== "BUY") {
+            state= 1
+          }
+          if(resultType=== "SELL") {
+            state= 2
+          }
+          newGridBallStates[tableIndex][index] = state;
+          handleGridBallStates(newGridBallStates);
+        }
+        return 0
+      })
+    }
+  }, [selectedCandle, index, number, tableIndex]);
+
   return (
     <Box
       onClick={() => {
         onClick();
-        if ((state ) === 2) {
+        if (state === 2) {
           setSelectedGridBall(
             selectedGridBall.filter((item) => item.index !== number)
           );
-        } 
-        
-        else {
+        }
+         else {
           setSelectedGridBall((prev) => {
             const existingIndex = prev.findIndex(
               (item) => item.index === number
@@ -66,11 +111,14 @@ const GridBallButton = ({
               const updatedSelectedGridBall = [...prev];
               updatedSelectedGridBall[existingIndex] = {
                 index: number,
-                resultType: state=== 1 ? "SELL" : "BUY",
+                resultType: state === 1 ? "SELL" : "BUY",
               };
               return updatedSelectedGridBall;
             } else {
-              return [...prev, { index: number, resultType: state=== 1 ? "SELL" : "BUY" }];
+              return [
+                ...prev,
+                { index: number, resultType: state === 1 ? "SELL" : "BUY" },
+              ];
             }
           });
         }
@@ -91,16 +139,23 @@ const GridBallButton = ({
   );
 };
 
-const CandleShadow = ({ open, onClose, setTargetConditions }) => {
-  const [selectedBall, setSelectedBall] = useState(1);
+const CandleShadow = ({
+  open,
+  onClose,
+  setTargetConditions,
+  selectedCandle,
+  is_edit,
+  targetConditions
+}) => {
   const [selectedGridBall, setSelectedGridBall] = useState([]);
+  const [selectedBall, setSelectedBall] = useState(1);
   const [ballStates, setBallStates] = useState([1, ...Array(19).fill(0)]);
-  const [longShort, setLongShort] = useState("Long");
   const [gridBallStates, setGridBallStates] = useState(
     Array(5)
       .fill()
       .map(() => Array(20).fill(0))
   );
+  const [longShort, setLongShort] = useState("Long");
 
   const handleBallClick = (index) => {
     const newStates = Array(20).fill(0);
@@ -111,19 +166,42 @@ const CandleShadow = ({ open, onClose, setTargetConditions }) => {
 
   const handleGridBallClick = (gridIndex, ballIndex) => {
     const newGridStates = [...gridBallStates];
-    newGridStates[gridIndex][ballIndex] =
-      (newGridStates[gridIndex][ballIndex] + 1) % 3;
+    newGridStates[gridIndex][ballIndex] = (newGridStates[gridIndex][ballIndex] + 1) % 3;
+      console.log(newGridStates[gridIndex][ballIndex] + 1)
     setGridBallStates(newGridStates);
   };
 
-  const handleSave= ()=> {
-    const data= {
-        betIndex: selectedBall,
-        conditions: selectedGridBall
+  const handleSave = () => {
+    const data = {
+      betIndex: selectedBall,
+      conditions: selectedGridBall.map((item) => ({
+        ...item,
+        betType: longShort === "LONG" ? "DOWN" : "UP",
+      })),
+    };
+  
+    setTargetConditions((prev) => {
+      const existingIndex = prev.findIndex((item) => _.isEqual(item.betIndex, data.betIndex));
+  
+      if (existingIndex !== -1) {
+        // Update the existing item
+        const updatedConditions = [...prev];
+        updatedConditions[existingIndex] = data;
+        return updatedConditions;
+      } else {
+        // Add new item
+        return [...prev, data];
+      }
+    });
+    onClose();
+  };
+
+  useEffect(() => {
+    if (selectedCandle) {
+      setSelectedBall(selectedCandle?.betIndex);
+      setSelectedGridBall(selectedCandle?.conditions)
     }
-    setTargetConditions(prev=> [...prev, data])
-    onClose()
-  }
+  }, [selectedCandle]);
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
@@ -178,6 +256,7 @@ const CandleShadow = ({ open, onClose, setTargetConditions }) => {
               {ballStates.map((state, index) => (
                 <BallButton
                   key={index}
+                  index={index}
                   number={
                     index % 5 === 0
                       ? index / 5 + 1
@@ -188,7 +267,9 @@ const CandleShadow = ({ open, onClose, setTargetConditions }) => {
                   }
                   state={state}
                   onClick={() => handleBallClick(index)}
+                  handleBallStates={setBallStates}
                   handleBallSelected={setSelectedBall}
+                  selectedCandle={selectedCandle}
                 />
               ))}
             </Box>
@@ -211,7 +292,7 @@ const CandleShadow = ({ open, onClose, setTargetConditions }) => {
                     alignItems: "center",
                   }}
                 >
-                  {gridBallStates[tableIndex].map((state, ballIndex) => (
+                  {gridBallStates?.[tableIndex].map((state, ballIndex) => (
                     <GridBallButton
                       key={ballIndex}
                       state={state}
@@ -227,6 +308,12 @@ const CandleShadow = ({ open, onClose, setTargetConditions }) => {
                       onClick={() => handleGridBallClick(tableIndex, ballIndex)}
                       setSelectedGridBall={setSelectedGridBall}
                       selectedGridBall={selectedGridBall}
+                      handleGridBallStates={setGridBallStates}
+                      selectedCandle={selectedCandle}
+                      tableIndex={tableIndex}
+                      index={ballIndex}
+                      gridBallStates={gridBallStates}
+                      is_edit={is_edit}
                     />
                   ))}
                 </Box>

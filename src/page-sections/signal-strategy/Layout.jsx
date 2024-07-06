@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -29,48 +29,22 @@ import Archive from "icons/duotone/Archive";
 import ReadMail from "icons/duotone/ReadMail";
 import UnreadMail from "icons/duotone/UnreadMail";
 import { NavLink } from "react-router-dom";
+import SignalStrategyContext from "contexts/SignalStrategyContext";
 
 // ==============================================================
 
 // ==============================================================
 
 const Layout = ({ children, showTopActions = true }) => {
-  const { palette, direction } = useTheme();
-  const upSm = useMediaQuery((theme) => theme.breakpoints.up("sm"));
-  const downMd = useMediaQuery((theme) => theme.breakpoints.down("md"));
-  const downLg = useMediaQuery((theme) => theme.breakpoints.down("xl"));
-  const ICONS = [
-    {
-      title: "Reload",
-      Icon: Reload,
-    },
-    {
-      title: "Archive",
-      Icon: Archive,
-    },
-    {
-      title: "Report",
-      Icon: Report,
-    },
-    {
-      title: "Trash",
-      Icon: Trash,
-    },
-    {
-      title: "Read All",
-      Icon: ReadMail,
-    },
-    {
-      title: "Unread All",
-      Icon: UnreadMail,
-    },
-  ];
+  // const downLg = useMediaQuery((theme) => theme.breakpoints.down("xl"));
+  const {data }= useContext(SignalStrategyContext)
+
   return (
     <Box sx={{padding: "16px 10px 32px 10px"}} height="100%" className="abaskw">
       <Box display={"flex"} alignItems={"center"} gap={2} mb={2}>
         <NavLink to="/dashboard/signal-strategies">
           <Typography variant="h6" fontWeight={"600"}>
-            Danh sách
+            Danh sách ({data?.length  })
           </Typography>
         </NavLink>
         <NavLink to="/dashboard/signal-strategies/top-signal">
