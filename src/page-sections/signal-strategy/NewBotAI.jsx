@@ -79,9 +79,12 @@ const BotDrawer = ({ open, onClose }) => {
     try {
       const data= {
         name,
-        targetLoseStreak,
-        targetWinStreak,
-        targetConditions
+        sources: {
+          targetLoseStreak,
+          targetWinStreak,
+          targetConditions
+        },
+        type: "BUBBLE_METHOD"
       }
       const response= await signalStrategyApi.userBudgetSignalCreate(data)
       if(response?.data?.ok=== true) {
