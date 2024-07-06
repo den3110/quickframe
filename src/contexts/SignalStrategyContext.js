@@ -23,7 +23,7 @@ export const SignalStrategyProvider = ({ children }) => {
   }, [change]);
 
   return (
-    <SignalStrategyContext.Provider value={{ data, change, setChange }}>
+    <SignalStrategyContext.Provider value={{ data, change, setChange, setData }}>
       {children}
     </SignalStrategyContext.Provider>
   );

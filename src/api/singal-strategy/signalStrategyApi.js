@@ -13,6 +13,10 @@ const signalStrategyApi = {
     const url= `/users/budget-signal/update/${id}`
     return axiosClient.post(url, data)
   },
+  userBudgetSignalDelete(id, data){ 
+    const url= `/users/budget-signal/delete/${id}`
+    return axiosClient.delete(url, data)
+  },
   
 };
 

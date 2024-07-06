@@ -10,7 +10,9 @@ import {
   FormControl,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import _ from "lodash";
+import _, { random } from "lodash";
+import { useInView } from "react-intersection-observer";
+import { v4 } from "uuid";
 
 const colors = ["#565d67", "#0caf60", "#fd4f4f"];
 
@@ -25,8 +27,8 @@ const BallButton = ({
 }) => {
   useEffect(() => {
     if (selectedCandle) {
-      if (number === selectedCandle.betIndex) {
-        console.log(index);
+      if (number === selectedCandle.betIndex - 80) {
+        console.log("index", index)
         const newBallStates = Array(20).fill(0);
         newBallStates[index] = 1;
         handleBallStates(newBallStates);
@@ -57,7 +59,7 @@ const BallButton = ({
     </IconButton>
   );
 };
-
+// load data từ api chỗ nào
 const GridBallButton = ({
   state,
   onClick,
@@ -69,26 +71,27 @@ const GridBallButton = ({
   handleGridBallStates,
   tableIndex,
   gridBallStates,
-  is_edit
+  is_edit,
 }) => {
   useEffect(() => {
     if (selectedCandle) {
-      selectedCandle?.conditions?.map((item, key)=> {
+      selectedCandle?.conditions?.map((item, key) => {
         if (number === item.index) {
           const newGridBallStates = gridBallStates;
-          const resultType= item.resultType
-          let state
-          if(resultType=== "BUY") {
-            state= 1
+          console.log("item.resultType", item.resultType)
+          const resultType = item.resultType;
+          let state;
+          if (resultType === "UP") {
+            state = 1;
           }
-          if(resultType=== "SELL") {
-            state= 2
+          if (resultType === "DOWN") {
+            state = 2;
           }
           newGridBallStates[tableIndex][index] = state;
           handleGridBallStates(newGridBallStates);
         }
-        return 0
-      })
+        return 0;
+      });
     }
   }, [selectedCandle, index, number, tableIndex]);
 
@@ -100,8 +103,7 @@ const GridBallButton = ({
           setSelectedGridBall(
             selectedGridBall.filter((item) => item.index !== number)
           );
-        }
-         else {
+        } else {
           setSelectedGridBall((prev) => {
             const existingIndex = prev.findIndex(
               (item) => item.index === number
@@ -111,13 +113,13 @@ const GridBallButton = ({
               const updatedSelectedGridBall = [...prev];
               updatedSelectedGridBall[existingIndex] = {
                 index: number,
-                resultType: state === 1 ? "SELL" : "BUY",
+                resultType: state === 1 ? "DOWN" : "UP",
               };
               return updatedSelectedGridBall;
             } else {
               return [
                 ...prev,
-                { index: number, resultType: state === 1 ? "SELL" : "BUY" },
+                { index: number, resultType: state === 1 ? "DOWN" : "UP" },
               ];
             }
           });
@@ -134,7 +136,7 @@ const GridBallButton = ({
         alignItems: "center",
       }}
     >
-      <Typography fontSize={10}>{}</Typography>
+      <Typography fontSize={10}>{number}</Typography>
     </Box>
   );
 };
@@ -145,17 +147,25 @@ const CandleShadow = ({
   setTargetConditions,
   selectedCandle,
   is_edit,
-  targetConditions
+  targetConditions,
+  is_new,
+  setIsNew,
+  setIsEdit
 }) => {
-  const [selectedGridBall, setSelectedGridBall] = useState([]);
+  const { ref, inView } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
   const [selectedBall, setSelectedBall] = useState(1);
+  const [selectedGridBall, setSelectedGridBall] = useState([]);
   const [ballStates, setBallStates] = useState([1, ...Array(19).fill(0)]);
   const [gridBallStates, setGridBallStates] = useState(
     Array(5)
       .fill()
       .map(() => Array(20).fill(0))
   );
-  const [longShort, setLongShort] = useState("Long");
+
+  const [longShort, setLongShort] = useState("UP");
 
   const handleBallClick = (index) => {
     const newStates = Array(20).fill(0);
@@ -166,46 +176,99 @@ const CandleShadow = ({
 
   const handleGridBallClick = (gridIndex, ballIndex) => {
     const newGridStates = [...gridBallStates];
-    newGridStates[gridIndex][ballIndex] = (newGridStates[gridIndex][ballIndex] + 1) % 3;
-      console.log(newGridStates[gridIndex][ballIndex] + 1)
+    newGridStates[gridIndex][ballIndex] =
+      (newGridStates[gridIndex][ballIndex] + 1) % 3;
     setGridBallStates(newGridStates);
   };
 
   const handleSave = () => {
+    console.log('test handleSave', selectedBall);
     const data = {
-      betIndex: selectedBall,
+    
+      betIndex: selectedBall > 80 ? selectedBall : selectedBall +  80,
       conditions: selectedGridBall.map((item) => ({
         ...item,
-        betType: longShort === "LONG" ? "DOWN" : "UP",
+        // betIndex: item
       })),
+      betType: longShort,
     };
-  
-    setTargetConditions((prev) => {
-      const existingIndex = prev.findIndex((item) => _.isEqual(item.betIndex, data.betIndex));
-  
-      if (existingIndex !== -1) {
-        // Update the existing item
-        const updatedConditions = [...prev];
-        updatedConditions[existingIndex] = data;
-        return updatedConditions;
-      } else {
-        // Add new item
-        return [...prev, data];
-      }
-    });
-    onClose();
+    if(selectedCandle?.index && is_edit=== true) {
+      data.index= selectedCandle?.index
+    }
+    else {
+      data.index= random(10000000)
+    }
+    console.log(data)
+    if(is_edit=== true) {
+      setTargetConditions((prev) => {
+        const existingIndex = targetConditions?.findIndex(
+          (item) => item.index === selectedCandle?.index
+        );
+        console.log("existing", existingIndex)
+        if (existingIndex !== -1) {
+          const updatedConditions = targetConditions;
+          updatedConditions[existingIndex] = data;
+          return updatedConditions;
+        }
+        else {
+          const updatedConditions = targetConditions;
+          return updatedConditions;
+        }
+      });
+    }
+    else {
+      setTargetConditions(prev=> ([...prev, data]))
+    }
+    setBallStates([1, ...Array(19).fill(0)]);
+    setGridBallStates(
+      Array(5)
+        .fill()
+        .map(() => Array(20).fill(0))
+    );
+    handleCloseCandleShadow()
   };
 
+  const handleCloseCandleShadow= ()=> {
+    setIsEdit(false)
+    setIsNew(false)
+    onClose()
+  }
+
   useEffect(() => {
-    if (selectedCandle) {
-      setSelectedBall(selectedCandle?.betIndex);
-      setSelectedGridBall(selectedCandle?.conditions)
+    if (is_edit === false) {
+      setBallStates([1, ...Array(19).fill(0)]);
+      setGridBallStates(
+        Array(5)
+          .fill()
+          .map(() => Array(20).fill(0))
+      );
+      setSelectedBall(1);
+      setSelectedGridBall([]);
     }
-  }, [selectedCandle]);
+  }, [is_edit]);
+
+  useEffect(() => {
+    if (selectedCandle && is_new=== false) {
+      setSelectedBall(selectedCandle?.betIndex);
+      setSelectedGridBall(selectedCandle?.conditions);
+    }
+  }, [selectedCandle, inView, is_new]);
+
+  useEffect(()=> {
+    if(is_new=== true) {
+      setSelectedBall(1)
+      setSelectedGridBall([])
+      setBallStates([1, ...Array(19).fill(0)])
+      setGridBallStates( Array(5)
+      .fill()
+      .map(() => Array(20).fill(0)))
+    }
+  }, [is_new])
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
+    <Drawer anchor="right" open={open} onClose={handleCloseCandleShadow}>
       <Box
+        ref={ref}
         sx={{
           width: 850,
           p: 2,
@@ -214,11 +277,12 @@ const CandleShadow = ({
           display: "flex",
           justifyContent: "space-between",
           flexDirection: "column",
+          overflow: "auto"
         }}
       >
         <Box>
           <IconButton
-            onClick={onClose}
+            onClick={handleCloseCandleShadow}
             sx={{ position: "absolute", top: 8, right: 8 }}
           >
             <Close />
@@ -236,8 +300,8 @@ const CandleShadow = ({
                 value={longShort}
                 onChange={(e) => setLongShort(e.target.value)}
               >
-                <MenuItem value="Long">Long</MenuItem>
-                <MenuItem value="Short">Short</MenuItem>
+                <MenuItem value="UP">Long</MenuItem>
+                <MenuItem value="DOWN">Short</MenuItem>
               </Select>
             </FormControl>
             cho bóng số
@@ -329,7 +393,7 @@ const CandleShadow = ({
             gap: 1,
           }}
         >
-          <Button variant="outlined" onClick={onClose} sx={{ padding: "10px" }}>
+          <Button variant="outlined" onClick={handleCloseCandleShadow} sx={{ padding: "10px" }}>
             Đóng
           </Button>
           <Button
@@ -337,7 +401,7 @@ const CandleShadow = ({
             variant="contained"
             color="primary"
             sx={{ padding: "10px" }}
-            onClick={handleSave}
+            onClick={() => handleSave()}
           >
             Lưu
           </Button>

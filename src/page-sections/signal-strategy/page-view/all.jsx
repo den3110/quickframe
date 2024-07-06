@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 // CUSTOM DEFINED HOOK
 // CUSTOM COMPONENTS
-import { FlexBetween, FlexBox } from "components/flexbox";
+// import { FlexBetween, FlexBox } from "components/flexbox";
 // CUSTOM LAYOUT COMPONENT
 import Layout from "../Layout";
 // CUSTOM ICON COMPONENTS
@@ -32,10 +32,12 @@ import Layout from "../Layout";
 import { isDark } from "utils/constants";
 import SearchIcon from '@mui/icons-material/Search';
 import { Fragment, useContext, useState } from "react";
-import { MoreVert } from "@mui/icons-material";
+import { MoreVert, Add, InsertChart } from "@mui/icons-material";
 import moment from "moment";
 import NewBotAI from "../NewBotAI";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
+import NewBotAIStringMethod from "../NewBotAIStringMethod";
+import DeleteSignalStrategy from "../DeleteSignalStrategy";
 // STYLED COMPONENTS
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -63,26 +65,48 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-
 const SignalStrategyList = () => {
-  const {data }= useContext(SignalStrategyContext )
-  const [selectedBot, setSelectedBot]= useState()
-  const [isEdit, setIsEdit]= useState(false)
+  const { data, setData } = useContext(SignalStrategyContext);
+  const [initState, setInitState] = useState(false);
+  const [selectedBot, setSelectedBot] = useState();
+  const [isEdit, setIsEdit] = useState(false);
+  const [isEditStringMethod, setIsEditStringMethod]= useState(false)
+  const [isDeleteBot, setIsDeleteBot]= useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [anchorEls, setAnchorEls] = useState({}); 
+  const [anchorEls, setAnchorEls] = useState({});
   const [page, setPage] = useState(1);
-  const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
-  const [openNewBotAI, setOpenNewBotAI]= useState(false)
-  const handleCloseNewBotAI= ()=> {
-    setOpenNewBotAI(false)
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const [openNewBotAI, setOpenNewBotAI] = useState(false);
+  const [openNewBotAIStringMethod, setOpenNewBotAIStringMethod]= useState(false)
+  const [anchorElMenu, setAnchorElMenu] = useState(null);
+
+  const handleOpenDeleteBot= ()=> {
+    setIsDeleteBot(true)
   }
-  const handleOpenNewBotAI= ()=> {
-    setOpenNewBotAI(true)
-    setIsEdit(false)
+  const handleCloseDeleteBot= ()=> {
+    setIsDeleteBot(false)
   }
+  const handleCloseNewBotAI = () => {
+    setOpenNewBotAI(false);
+  };
+
+  const handleOpenNewBotAI = () => {
+    setOpenNewBotAI(true);
+    setInitState(false);
+    setIsEdit(false);
+  };
+
+  const handleOpenNewBotAIStringMethod = () => {
+    setOpenNewBotAIStringMethod(true);
+  };
+  const handleCloseNewBotAIStringMethod = () => {
+    setOpenNewBotAIStringMethod(false);
+  };
+
   const handleClick = (event, index) => {
     setAnchorEls((prev) => ({ ...prev, [index]: event.currentTarget }));
   };
+
   const handleClose = (index) => {
     setAnchorEls((prev) => ({ ...prev, [index]: null }));
   };
@@ -95,18 +119,19 @@ const SignalStrategyList = () => {
     setPage(value);
   };
 
+  const handleMenuClick = (event) => {
+    setAnchorElMenu(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorElMenu(null);
+  };
+
   return (
     <Layout>
-      <Box
-        pt={2}
-        pb={4}
-      >
+      <Box pt={2} pb={4}>
         <Box sx={{ padding: "10px" }}>
-          <Box
-            sx={{
-              padding: "20px",
-            }}
-          >
+          <Box sx={{ padding: "20px" }}>
             <Box
               sx={{
                 display: "flex",
@@ -140,10 +165,40 @@ const SignalStrategyList = () => {
                   size={downLg ? "large" : "medium"}
                   color="success"
                   // onClick={handleOpenNewBudgetStrategy}
-                  onClick={handleOpenNewBotAI}
+                  onClick={handleMenuClick}
                 >
                   Thiết kế Bot AI
                 </Button>
+                <Menu
+                  anchorEl={anchorElMenu}
+                  open={Boolean(anchorElMenu)}
+                  onClose={handleMenuClose}
+                  // anchorPosition={""}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      handleOpenNewBotAIStringMethod()
+                      handleMenuClose();
+                    }}
+                  >
+                    <Add />
+                    String Method mới
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      // Handle new candle model action
+                      handleOpenNewBotAI();
+                      handleMenuClose();
+                    }}
+                  >
+                    <InsertChart />
+                    Mô hình nến mới
+                  </MenuItem>
+                </Menu>
               </Box>
             </Box>
             <TableContainer component={Paper}>
@@ -171,7 +226,6 @@ const SignalStrategyList = () => {
                             flexWrap: "wrap",
                             borderBottom: downLg ? "" : "none",
                           }}
-                         
                         >
                           <StyledTableCell
                             sx={{
@@ -206,9 +260,7 @@ const SignalStrategyList = () => {
                               borderBottom: downLg ? "none" : "",
                             }}
                           >
-                            <IconButton 
-                              onClick={(e) => handleClick(e, index)}
-                            >
+                            <IconButton onClick={(e) => handleClick(e, index)}>
                               <MoreVert />
                             </IconButton>
                             <Menu
@@ -227,30 +279,34 @@ const SignalStrategyList = () => {
                             >
                               <StyledMenuItem
                                 onClick={() => {
-                                  // setSelectedStrategy(row);
-                                  // setIsEditStrategy(true);
-                                  handleOpenNewBotAI()
-                                  handleClose(index);
-                                  setIsEdit(true)
-                                  // handleOpenNewBudgetStrategy();
-                                  setSelectedBot(row)
+                                  if(row.type=== "STRING_METHOD") {
+                                    handleOpenNewBotAIStringMethod()
+                                    setIsEditStringMethod(true)
+                                    setSelectedBot(row);
+                                    handleClose(index);
+
+                                  }
+                                  else if(row.type=== "BUBBLE_METHOD") {
+                                    handleOpenNewBotAI();
+                                    handleClose(index);
+                                    setIsEdit(true);
+                                    setSelectedBot(row);
+                                    setInitState(true);
+                                  }
                                 }}
                               >
-                                {/* <EditBudgetStrategy /> */}
                                 Edit Bot
                               </StyledMenuItem>
                               <StyledMenuItem>
-                                {/* <ShareBudgetStrategy /> */}
                                 Share Bot
                               </StyledMenuItem>
                               <StyledMenuItem
                                 onClick={() => {
-                                  // setSelectedStrategy(row);
-                                  // handleOpenDeleteStrategy();
                                   handleClose(index);
+                                  setSelectedBot(row)
+                                  handleOpenDeleteBot()
                                 }}
                               >
-                                {/* <DeleteBudgetStrategyIcon /> */}
                                 Delete Bot
                               </StyledMenuItem>
                             </Menu>
@@ -289,7 +345,17 @@ const SignalStrategyList = () => {
             </PaginationContainer>
           </Box>
         </Box>
-        <NewBotAI open={openNewBotAI} onClose={handleCloseNewBotAI} selectedBot={selectedBot} setSelectedBot={setSelectedBot} is_edit={isEdit} />            
+        <NewBotAI
+          initState={initState}
+          open={openNewBotAI}
+          onClose={handleCloseNewBotAI}
+          selectedBot={selectedBot}
+          setSelectedBot={setSelectedBot}
+          is_edit={isEdit}
+          setIsEdit={setIsEdit}
+        />
+        <NewBotAIStringMethod open={openNewBotAIStringMethod} onClose={handleCloseNewBotAIStringMethod} is_edit={isEditStringMethod} setIsEdit={setIsEditStringMethod} selectedBot={selectedBot} />
+        <DeleteSignalStrategy open={isDeleteBot} onClose={handleCloseDeleteBot} selectedBot={selectedBot} setData={setData} />
       </Box>
     </Layout>
   );

@@ -6,7 +6,11 @@ import Loadable from "./Loadable";
 import DashboardLayout from "layouts/dashboard/DashboardLayout";
 import ProtectedRoute from "hoc/ProtectedRoute";
 import CheckConnectExchange from "hoc/CheckConnectExchange";
-
+import { SignalStrategyProvider } from "contexts/SignalStrategyContext";
+import { AllMailPageView } from "page-sections/signal-strategy/page-view";
+import InboxPage from "pages/dashboard/signal-strategy/inbox";
+import ComposeMailPage from "pages/dashboard/signal-strategy/compose";
+import Sent from "pages/dashboard/signal-strategy/sent"
 // ALL DASHBOARD PAGES
 const CRM = Loadable(lazy(() => import("pages/dashboard/crm")));
 const Finance = Loadable(lazy(() => import("pages/dashboard/finance")));
@@ -103,10 +107,6 @@ const Chat = Loadable(lazy(() => import("pages/dashboard/chat")));
 const TodoList = Loadable(lazy(() => import("pages/dashboard/todo-list")));
 
 // MAIL RELATED PAGES
-const Sent = Loadable(lazy(() => import("pages/dashboard/signal-strategy/sent")));
-const AllMail = Loadable(lazy(() => import("pages/dashboard/signal-strategy")));
-const Inbox = Loadable(lazy(() => import("pages/dashboard/signal-strategy/inbox")));
-const Compose = Loadable(lazy(() => import("pages/dashboard/signal-strategy/compose")));
 const MailDetails = Loadable(
   lazy(() => import("pages/dashboard/signal-strategy/details"))
 );
@@ -268,11 +268,11 @@ export const DashboardRoutes = [
         children: [
           {
             path: "all",
-            element: <AllMail />,
+            element: <AllMailPageView />,
           },
           {
             path: "inbox",
-            element: <Inbox />,
+            element: <InboxPage />,
           },
           {
             path: "sent",
@@ -280,7 +280,7 @@ export const DashboardRoutes = [
           },
           {
             path: "compose",
-            element: <Compose />,
+            element: <ComposeMailPage />,
           },
           {
             path: "details",
@@ -290,14 +290,17 @@ export const DashboardRoutes = [
       },
       {
         path: "signal-strategies",
+        element: <SignalStrategyProvider>
+          <Outlet />
+        </SignalStrategyProvider>,
         children: [
           {
             path: "",
-            element: <AllMail />,
+            element: <AllMailPageView />,
           },
           {
             path: "top-signal",
-            element: <Inbox />,
+            element: <InboxPage />,
           },
           {
             path: "telegram-channel",
