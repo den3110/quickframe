@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Drawer,
   Box,
@@ -8,57 +8,64 @@ import {
   Select,
   MenuItem,
   FormControl,
+  styled,
+  useMediaQuery,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import _, { random } from "lodash";
+import { random } from "lodash";
 import { useInView } from "react-intersection-observer";
 import { v4 } from "uuid";
 
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  "&:disabled": {
+    backgroundColor: "#2e3645",
+  },
+}));
 const colors = ["#565d67", "#0caf60", "#fd4f4f"];
 
-const BallButton = ({
-  number,
-  state,
-  onClick,
-  handleBallSelected,
-  selectedCandle,
-  index,
-  handleBallStates,
-}) => {
-  useEffect(() => {
-    if (selectedCandle) {
-      if (number === selectedCandle.betIndex - 80) {
-        console.log("index", index)
-        const newBallStates = Array(20).fill(0);
-        newBallStates[index] = 1;
-        handleBallStates(newBallStates);
-      }
-    }
-  }, [selectedCandle, index, number]);
-  return (
-    <IconButton
-      disabled={number % 2 === 0}
-      onClick={() => {
-        onClick();
-        handleBallSelected(number);
-      }}
-      sx={{
-        width: 30,
-        height: 30,
-        backgroundColor: colors[state],
-        color: number % 2 === 0 ? "#323b49" : "white",
-        border: state === 0 ? "#565d67" : "#565d67",
-        "&.Mui-disabled": {
-          backgroundColor: colors[state],
-          color: "#323b49",
-          border: state === 0 ? "#565d67" : "#565d67",
-        },
-      }}
-    >
-      <Typography fontSize={10}>{number}</Typography>
-    </IconButton>
-  );
-};
+// const BallButton = ({
+//   number,
+//   state,
+//   onClick,
+//   handleBallSelected,
+//   selectedCandle,
+//   index,
+//   handleBallStates,
+// }) => {
+//   useEffect(() => {
+//     if (selectedCandle) {
+//       if (number === selectedCandle.betIndex - 80) {
+//         console.log("index", index)
+//         const newBallStates = Array(20).fill(0);
+//         newBallStates[index] = 1;
+//         handleBallStates(newBallStates);
+//       }
+//     }
+//   }, [selectedCandle, index, number]);
+//   return (
+//     <IconButton
+//       disabled={number % 2 === 0}
+//       onClick={() => {
+//         onClick();
+//         handleBallSelected(number);
+//       }}
+//       sx={{
+//         width: 30,
+//         height: 30,
+//         backgroundColor: colors[state],
+//         color: number % 2 === 0 ? "#323b49" : "white",
+//         border: state === 0 ? "#565d67" : "#565d67",
+//         "&.Mui-disabled": {
+//           backgroundColor: colors[state],
+//           color: "#323b49",
+//           border: state === 0 ? "#565d67" : "#565d67",
+//         },
+//       }}
+//     >
+//       <Typography fontSize={10}>{number}</Typography>
+//     </IconButton>
+//   );
+// };
 // load data từ api chỗ nào
 const GridBallButton = ({
   state,
@@ -73,12 +80,19 @@ const GridBallButton = ({
   gridBallStates,
   is_edit,
 }) => {
+  const disableBubble = (betIndex) => {
+    switch (betIndex) {
+      case 81:
+        return 99;
+      default:
+        return selectedCandle?.betIndex + selectedCandle?.betIndex - 22 - 80;
+    }
+  };
   useEffect(() => {
     if (selectedCandle) {
       selectedCandle?.conditions?.map((item, key) => {
         if (number === item.index) {
           const newGridBallStates = gridBallStates;
-          console.log("item.resultType", item.resultType)
           const resultType = item.resultType;
           let state;
           if (resultType === "UP") {
@@ -90,13 +104,16 @@ const GridBallButton = ({
           newGridBallStates[tableIndex][index] = state;
           handleGridBallStates(newGridBallStates);
         }
-        return 0;
       });
     }
   }, [selectedCandle, index, number, tableIndex]);
 
   return (
-    <Box
+    <StyledIconButton
+      disableRipple
+      disabled={
+        number <= disableBubble(selectedCandle?.betIndex) ? false : true
+      }
       onClick={() => {
         onClick();
         if (state === 2) {
@@ -137,7 +154,7 @@ const GridBallButton = ({
       }}
     >
       <Typography fontSize={10}>{number}</Typography>
-    </Box>
+    </StyledIconButton>
   );
 };
 
@@ -150,8 +167,10 @@ const CandleShadow = ({
   targetConditions,
   is_new,
   setIsNew,
-  setIsEdit
+  setIsEdit,
+  selectedBallProps,
 }) => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
@@ -182,42 +201,36 @@ const CandleShadow = ({
   };
 
   const handleSave = () => {
-    console.log('test handleSave', selectedBall);
     const data = {
-    
-      betIndex: selectedBall > 80 ? selectedBall : selectedBall +  80,
+      betIndex: selectedBall,
       conditions: selectedGridBall.map((item) => ({
         ...item,
         // betIndex: item
       })),
       betType: longShort,
     };
-    if(selectedCandle?.index && is_edit=== true) {
-      data.index= selectedCandle?.index
+    if (selectedCandle?.index && is_edit === true) {
+      data.index = selectedCandle?.index;
+    } else {
+      data.index = random(10000000);
     }
-    else {
-      data.index= random(10000000)
-    }
-    console.log(data)
-    if(is_edit=== true) {
+    if (is_edit === true) {
       setTargetConditions((prev) => {
         const existingIndex = targetConditions?.findIndex(
           (item) => item.index === selectedCandle?.index
         );
-        console.log("existing", existingIndex)
+        console.log("existing", existingIndex);
         if (existingIndex !== -1) {
           const updatedConditions = targetConditions;
           updatedConditions[existingIndex] = data;
           return updatedConditions;
-        }
-        else {
+        } else {
           const updatedConditions = targetConditions;
           return updatedConditions;
         }
       });
-    }
-    else {
-      setTargetConditions(prev=> ([...prev, data]))
+    } else {
+      setTargetConditions((prev) => [...prev, data]);
     }
     setBallStates([1, ...Array(19).fill(0)]);
     setGridBallStates(
@@ -225,14 +238,35 @@ const CandleShadow = ({
         .fill()
         .map(() => Array(20).fill(0))
     );
-    handleCloseCandleShadow()
+    handleCloseCandleShadow();
   };
 
-  const handleCloseCandleShadow= ()=> {
-    setIsEdit(false)
-    setIsNew(false)
-    onClose()
-  }
+  const handleDelete = () => {
+    setTargetConditions(
+      targetConditions.filter((item) => item.betIndex !== selectedBall)
+    );
+    handleCloseCandleShadow();
+  };
+
+  const handleCopy = () => {
+    const data = {
+      betIndex: selectedBall,
+      conditions: selectedGridBall.map((item) => ({
+        ...item,
+        // betIndex: item
+      })),
+      betType: longShort,
+    };
+    data.index = random(1000000000);
+    setTargetConditions((prev) => [...prev, data]);
+    handleCloseCandleShadow();
+  };
+
+  const handleCloseCandleShadow = () => {
+    setIsEdit(false);
+    setIsNew(false);
+    onClose();
+  };
 
   useEffect(() => {
     if (is_edit === false) {
@@ -248,36 +282,45 @@ const CandleShadow = ({
   }, [is_edit]);
 
   useEffect(() => {
-    if (selectedCandle && is_new=== false) {
+    if (selectedCandle && is_new === false) {
       setSelectedBall(selectedCandle?.betIndex);
       setSelectedGridBall(selectedCandle?.conditions);
     }
   }, [selectedCandle, inView, is_new]);
 
-  useEffect(()=> {
-    if(is_new=== true) {
-      setSelectedBall(1)
-      setSelectedGridBall([])
-      setBallStates([1, ...Array(19).fill(0)])
-      setGridBallStates( Array(5)
-      .fill()
-      .map(() => Array(20).fill(0)))
+  useEffect(() => {
+    if (is_new === true) {
+      setSelectedBall(selectedCandle?.betIndex ? selectedCandle?.betIndex : 1);
+      setSelectedGridBall([]);
+      setBallStates([1, ...Array(19).fill(0)]);
+      setGridBallStates(
+        Array(5)
+          .fill()
+          .map(() => Array(20).fill(0))
+      );
     }
-  }, [is_new])
+  }, [is_new, selectedCandle]);
+  // useEffect(()=> {
+  //   setSelectedBall(selectedBallProps)
+  // }, [selectedBallProps, inView])
 
   return (
-    <Drawer anchor="right" open={open} onClose={handleCloseCandleShadow}>
+    <Drawer
+      anchor={downLg ? "bottom" : "right"}
+      open={open}
+      onClose={handleCloseCandleShadow}
+    >
       <Box
         ref={ref}
         sx={{
-          width: 850,
+          width: downLg ? "100%" : 850,
+          height: downLg ? "70vh" : "100vh",
           p: 2,
           position: "relative",
-          height: "100vh",
           display: "flex",
           justifyContent: "space-between",
           flexDirection: "column",
-          overflow: "auto"
+          overflow: "auto",
         }}
       >
         <Box>
@@ -304,9 +347,9 @@ const CandleShadow = ({
                 <MenuItem value="DOWN">Short</MenuItem>
               </Select>
             </FormControl>
-            cho bóng số
+            {/* cho bóng số */}
           </Typography>
-          <Box sx={{ display: "flex", flexWrap: "wrap", maxWidth: 300 }}>
+          {/* <Box sx={{ display: "flex", flexWrap: "wrap", maxWidth: 300 }}>
             <Box
               sx={{
                 display: "grid",
@@ -337,7 +380,7 @@ const CandleShadow = ({
                 />
               ))}
             </Box>
-          </Box>
+          </Box> */}
           <Typography variant="body1" sx={{ mt: 4 }}>
             Nếu các điều kiện sau được thỏa mãn:
           </Typography>
@@ -385,26 +428,55 @@ const CandleShadow = ({
             ))}
           </Box>
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            mt: 2,
-            gap: 1,
-          }}
-        >
-          <Button variant="outlined" onClick={handleCloseCandleShadow} sx={{ padding: "10px" }}>
-            Đóng
-          </Button>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{ padding: "10px" }}
-            onClick={() => handleSave()}
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mt: 2,
+              gap: 1,
+            }}
           >
-            Lưu
-          </Button>
+            <Button
+              variant="outlined"
+              onClick={handleCloseCandleShadow}
+              sx={{ padding: "10px" }}
+            >
+              Đóng
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ padding: "10px" }}
+              onClick={() => handleSave()}
+            >
+              Lưu
+            </Button>
+          </Box>
+          <Box mt={2} gap={1} sx={{ display: "flex",
+            justifyContent: "space-between",}}>
+            {is_edit === true && (
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{ padding: "10px" }}
+                onClick={() => handleDelete()}
+              >
+                Xoá điều kiện
+              </Button>
+            )}
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ padding: "10px" }}
+              onClick={() => handleCopy()}
+            >
+              Thêm một bản sao
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Drawer>

@@ -7,8 +7,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
   Box,
-  Checkbox,
-  FormControlLabel,
+  // Checkbox,
+  // FormControlLabel,
   IconButton,
   styled,
 } from "@mui/material";
@@ -23,16 +23,17 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   alignItems: "center",
 }));
 
-export default function DeleteSignalStrategy({ open, onClose, selectedBot, setChange }) {
+export default function DeleteSignalStrategy({ open, onClose, selectedBot, setChange, setData, data }) {
 
   const handleDeletBudgetStrategy= async ()=> {
     try {
-      let response
-    response= await signalStrategyApi.userBudgetSignalDelete(selectedBot?._id)
+    const response= await signalStrategyApi.userBudgetSignalDelete(selectedBot?._id)
+    console.log(response?.data)
       if(response?.data?.ok=== true) {
-        setChange(prev=> !prev)
         showToast("Đã xoá phuơng pháp thành công", "success")
         onClose()
+        // setChange(prev=> !prev)
+        setData(data?.filter(item=> item?._id !== selectedBot?._id))
       }
       else if(response?.data?.ok=== false) {
         showToast(response?.data?.m, "error")

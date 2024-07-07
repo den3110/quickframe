@@ -355,7 +355,7 @@ const SignalStrategyList = () => {
           setIsEdit={setIsEdit}
         />
         <NewBotAIStringMethod open={openNewBotAIStringMethod} onClose={handleCloseNewBotAIStringMethod} is_edit={isEditStringMethod} setIsEdit={setIsEditStringMethod} selectedBot={selectedBot} />
-        <DeleteSignalStrategy open={isDeleteBot} onClose={handleCloseDeleteBot} selectedBot={selectedBot} setData={setData} />
+        <DeleteSignalStrategy open={isDeleteBot} onClose={handleCloseDeleteBot} selectedBot={selectedBot} setData={setData} data={data} />
       </Box>
     </Layout>
   );
