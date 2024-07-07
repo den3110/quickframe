@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   IconButton,
   Menu,
@@ -65,6 +66,7 @@ const BudgetStrategyPage = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   const [data, setData] = useState([]);
+  const [loading, setLoading]= useState()
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
   const [anchorEls, setAnchorEls] = useState({}); // Dùng để lưu trữ trạng thái anchorEl cho mỗi hàng
@@ -110,6 +112,7 @@ const BudgetStrategyPage = () => {
   useEffect(() => {
     (async () => {
       try {
+        setLoading(true)
         const response = await budgetStrategyApi.userBudgetStrategyList();
         if (response?.data?.ok === true) {
           setData(response?.data?.d);
@@ -118,6 +121,9 @@ const BudgetStrategyPage = () => {
         }
       } catch (error) {
         showToast(error?.response?.data?.message);
+      }
+      finally {
+        setLoading(false)
       }
     })();
   }, [change]);
@@ -191,7 +197,12 @@ const BudgetStrategyPage = () => {
                 </TableHead>
               )}
               <TableBody>
-                {data
+                {loading=== true && <TableRow>
+                      <TableCell rowSpan={10} colSpan={3} align="center" sx={{height: 200}}>
+                        <CircularProgress />
+                      </TableCell>
+                    </TableRow>}
+                {loading=== false && data
                   .slice(
                     rowsPerPage * (page - 1),
                     rowsPerPage * (page - 1) + rowsPerPage

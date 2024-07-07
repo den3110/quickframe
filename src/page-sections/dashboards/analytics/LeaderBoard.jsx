@@ -144,9 +144,14 @@ const LeaderBoard = () => {
             },
             // when window width is >= 768px
             768: {
+              slidesPerView: 4,
+              spaceBetween: 20,
+            },
+            1200: {
               slidesPerView: 5,
               spaceBetween: 20,
             },
+
             2000: {
               slidesPerView: 10,
               spaceBetween: 20,
@@ -265,7 +270,7 @@ const LeaderBoard = () => {
                   <Typography variant="subtitle1" color="textSecondary">
                     #{item.rank}
                   </Typography>
-                  <Typography variant="h6" color="textPrimary">
+                  <Typography variant={downLg ? "body1" : "h6"} color="textPrimary">
                     {item.name}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
