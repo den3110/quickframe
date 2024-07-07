@@ -1,4 +1,5 @@
 import userApi from 'api/user/userApi';
+import { constant } from 'constant/constant';
 import React, { createContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
@@ -15,7 +16,11 @@ export const AuthProvider = ({ children }) => {
       try {
         const response = await userApi.getUserProfile(accessToken);
         if(response?.data?.ok=== true) {
-          setUser(response.data?.d);          
+          try {
+            setUser({...response.data?.d, avatar: constant.URL_AVATAR_URER + response?.data?.d?.photo_token});          
+          } catch (error) {
+            setUser({...response.data?.d, avatar: null});          
+          }
         }
       } catch (error) {
         console.error('Failed to load user profile', error);

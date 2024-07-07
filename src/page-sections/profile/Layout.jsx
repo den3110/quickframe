@@ -1,8 +1,9 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Box, Tab, Card, Stack, styled, IconButton } from "@mui/material";
 import CameraAlt from "@mui/icons-material/CameraAlt";
 import TabList from "@mui/lab/TabList";
+import axios from "axios";
 // CUSTOM COMPONENTS
 import { AvatarBadge } from "components/avatar-badge";
 import { H6, Paragraph } from "components/typography";
@@ -15,6 +16,9 @@ import MapMarkerIcon from "icons/MapMarkerIcon";
 import { format } from "utils/currency";
 import { AvatarLoading } from "components/avatar-loading";
 import AuthContext from "contexts/AuthContext";
+import userApi from "api/user/userApi";
+import { showToast } from "components/toast/toast";
+import { constant } from "constant/constant";
 
 // STYLED COMPONENTS
 const ContentWrapper = styled(Box)({
@@ -46,12 +50,42 @@ const StyledTabList = styled(TabList)(({ theme }) => ({
   },
 }));
 
-// =======================================================================
-
-// =======================================================================
-
 const Layout = ({ children, handleTabList }) => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
+  const [avatarUrl, setAvatarUrl] = useState(user?.avatar);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      try {
+        const response = await userApi.usersUploadAvatar(formData, {
+          headers: {"Content-Type": "multipart/form-data"},
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(percentCompleted);
+          },
+        });
+
+        if (response.data.ok === true) {
+          showToast("Cập nhật ảnh đại diện thành công", "success");
+          setAvatarUrl(constant.URL_AVATAR_URER + response.data.d);
+          setUser(prev=> ({...prev, avatar: constant.URL_AVATAR_URER + response.data.d}))
+          setUploadProgress(0);
+        } else if (response.data.d === false) {
+          showToast(response.data.m, "error");
+        }
+      } catch (error) {
+        showToast(error.response.data.m, "error");
+      }
+    }
+  };
+
   return (
     <Fragment>
       <Card
@@ -83,6 +117,7 @@ const Layout = ({ children, handleTabList }) => {
                     style={{
                       display: "none",
                     }}
+                    onChange={handleFileChange}
                   />
 
                   <IconButton aria-label="upload picture" component="span">
@@ -99,8 +134,8 @@ const Layout = ({ children, handleTabList }) => {
               <AvatarLoading
                 alt="user"
                 borderSize={2}
-                percentage={60}
-                src="/static/user/user-11.png"
+                percentage={uploadProgress}
+                src={avatarUrl}
                 sx={{
                   width: 100,
                   height: 100,
@@ -155,10 +190,6 @@ const Layout = ({ children, handleTabList }) => {
   );
 };
 export default Layout;
-
-// ============================================================================================
-
-// ============================================================================================
 
 function ListItem({ title, Icon }) {
   return (

@@ -14,14 +14,15 @@ import {
 import { Close } from "@mui/icons-material";
 import { random } from "lodash";
 import { useInView } from "react-intersection-observer";
-import { v4 } from "uuid";
+// import { v4 } from "uuid";
+import { isDark } from "utils/constants";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   "&:disabled": {
-    backgroundColor: "#2e3645",
+    backgroundColor: theme.palette.mode=== "dark" ? "#2e3645" : "#f7f7f7",
   },
 }));
-const colors = ["#565d67", "#0caf60", "#fd4f4f"];
+const colors = [theme=> isDark(theme) ? "#565d67" : "#d9d9d9", "#0caf60", "#fd4f4f"];
 
 // const BallButton = ({
 //   number,
@@ -81,17 +82,18 @@ const GridBallButton = ({
   is_edit,
 }) => {
   const disableBubble = (betIndex) => {
+    // tinh nhu nay dung khong a
     switch (betIndex) {
       case 81:
         return 99;
       default:
-        return selectedCandle?.betIndex + selectedCandle?.betIndex - 22 - 80;
+        return selectedCandle?.betIndex - 22 - 80 + 100;
     }
   };
   useEffect(() => {
     if (selectedCandle) {
       selectedCandle?.conditions?.map((item, key) => {
-        if (number === item.index) {
+        if (number === item.index && number <= disableBubble(selectedCandle?.betIndex)) {
           const newGridBallStates = gridBallStates;
           const resultType = item.resultType;
           let state;
@@ -111,9 +113,9 @@ const GridBallButton = ({
   return (
     <StyledIconButton
       disableRipple
-      // disabled={
-      //   number <= disableBubble(selectedCandle?.betIndex) ? false : true
-      // }
+      disabled={
+        number <= disableBubble(selectedCandle?.betIndex) ? false : true
+      }
       onClick={() => {
         onClick();
         if (state === 2) {
@@ -153,7 +155,9 @@ const GridBallButton = ({
         alignItems: "center",
       }}
     >
-      <Typography fontSize={10}>{number}</Typography>
+      <Typography fontSize={10}>
+        {/* {number} */}
+      </Typography>
     </StyledIconButton>
   );
 };
@@ -347,7 +351,7 @@ const CandleShadow = ({
                 <MenuItem value="DOWN">Short</MenuItem>
               </Select>
             </FormControl>
-            {/* cho bóng số */}
+            cho bóng số {selectedBall - 80}
           </Typography>
           {/* <Box sx={{ display: "flex", flexWrap: "wrap", maxWidth: 300 }}>
             <Box

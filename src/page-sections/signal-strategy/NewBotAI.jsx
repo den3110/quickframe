@@ -649,7 +649,7 @@ const NewBotAI = ({ open, onClose, is_edit, selectedBot, setIsEdit, initState })
           <CardContent sx={{padding: "0"}}>
             <CardHeader
               sx={{padding: 0}}
-              titleTypographyProps={{fontSize: 16}}
+              titleTypographyProps={{variant: "body1"}}
               title={"Điều kiện đã thêm"}
               
               action={
@@ -699,7 +699,7 @@ const NewBotAI = ({ open, onClose, is_edit, selectedBot, setIsEdit, initState })
               })}
             </Grid>
           </CardContent>
-          <List>
+          {/* <List>
             {targetConditions?.length > 0 && targetConditions.map((condition, index) => (
               <ListItem key={index} sx={{ marginBottom: 1 }}>
                 <ListItemText
@@ -749,7 +749,7 @@ const NewBotAI = ({ open, onClose, is_edit, selectedBot, setIsEdit, initState })
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
-          </List>
+          </List> */}
           
         </Box>
         <Box

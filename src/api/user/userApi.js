@@ -64,6 +64,14 @@ const userApi = {
     userExchangeLinkAccountTransfer(data) {
         const url= "/users/exchange/link-account/transfer"
         return axiosClient.post(url, data)
+    },
+    usersUploadAvatar(data, options) {
+        const url= "/users/upload-avatar"
+        return axiosClient.post(url, data, options)
+    },
+    userGetAvatarToken(token, data) {
+        const url= `/users/avatar/${token}`
+        return axiosClient.get(url, data)
     }
     
 };

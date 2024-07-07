@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
 
   return (
     <Box
-      sx={{ padding: "16px 10px 32px 10px" }}
+      sx={{ padding: "26px 24px 32px 24px" }}
       height="100%"
       className="abaskw"
     >

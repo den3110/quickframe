@@ -21,14 +21,9 @@ import {
   FormControl,
   Select,
   Pagination,
+  CircularProgress,
 } from "@mui/material";
-// CUSTOM DEFINED HOOK
-// CUSTOM COMPONENTS
-// import { FlexBetween, FlexBox } from "components/flexbox";
-// CUSTOM LAYOUT COMPONENT
 import Layout from "../Layout";
-// CUSTOM ICON COMPONENTS
-// CUSTOM UTILS METHOD
 import { isDark } from "utils/constants";
 import SearchIcon from '@mui/icons-material/Search';
 import { Fragment, useContext, useState } from "react";
@@ -38,7 +33,7 @@ import NewBotAI from "../NewBotAI";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
 import NewBotAIStringMethod from "../NewBotAIStringMethod";
 import DeleteSignalStrategy from "../DeleteSignalStrategy";
-// STYLED COMPONENTS
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
@@ -66,7 +61,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const SignalStrategyList = () => {
-  const { data, setData } = useContext(SignalStrategyContext);
+  const { data, setData, loading } = useContext(SignalStrategyContext);
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
@@ -79,6 +74,7 @@ const SignalStrategyList = () => {
   const [openNewBotAI, setOpenNewBotAI] = useState(false);
   const [openNewBotAIStringMethod, setOpenNewBotAIStringMethod]= useState(false)
   const [anchorElMenu, setAnchorElMenu] = useState(null);
+  // const [loading, setLoading]= useState(false)
 
   const handleOpenDeleteBot= ()=> {
     setIsDeleteBot(true)
@@ -213,7 +209,12 @@ const SignalStrategyList = () => {
                   </TableHead>
                 )}
                 <TableBody>
-                  {data
+                  {loading=== true && <TableRow>
+                      <TableCell rowSpan={10} colSpan={3} align="center" sx={{height: 200}}>
+                        <CircularProgress />
+                      </TableCell>
+                    </TableRow>}
+                  {loading=== false && data
                     .slice(
                       rowsPerPage * (page - 1),
                       rowsPerPage * (page - 1) + rowsPerPage

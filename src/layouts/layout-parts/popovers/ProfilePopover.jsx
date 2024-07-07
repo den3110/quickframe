@@ -45,8 +45,8 @@ const ProfilePopover = () => {
       <StyledButtonBase ref={anchorRef} onClick={() => setOpen(true)}>
         <AvatarLoading
           alt="user"
-          percentage={60}
-          src="/static/user/user-11.png"
+          percentage={100}
+          src={user?.avatar}
           sx={{
             width: 35,
             height: 35,
@@ -64,7 +64,7 @@ const ProfilePopover = () => {
         title={
           <FlexBox alignItems="center" gap={1}>
             <Avatar
-              src="/static/user/user-11.png"
+              src={user?.avatar}
               sx={{
                 width: 35,
                 height: 35,
