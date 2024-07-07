@@ -670,11 +670,11 @@ const NewBotAI = ({ open, onClose, is_edit, selectedBot, setIsEdit, initState })
               {targetConditions.map((value, index) => {
                 const current = { color: 'info.main', textcolor: 'black' };
 
-                if (value.betType === 1) {
+                if (value.betType === "UP") {
                   current.color = 'success.main';
                   current.textcolor = 'black';
                 }
-                if (value.betType === 0) {
+                if (value.betType === "DOWN") {
                   current.color = 'error.main';
                   current.textcolor = 'white';
                 }

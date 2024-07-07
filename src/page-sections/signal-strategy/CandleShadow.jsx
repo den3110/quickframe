@@ -111,9 +111,9 @@ const GridBallButton = ({
   return (
     <StyledIconButton
       disableRipple
-      disabled={
-        number <= disableBubble(selectedCandle?.betIndex) ? false : true
-      }
+      // disabled={
+      //   number <= disableBubble(selectedCandle?.betIndex) ? false : true
+      // }
       onClick={() => {
         onClick();
         if (state === 2) {
