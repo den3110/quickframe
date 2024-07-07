@@ -23,6 +23,7 @@ import {
   Typography,
   CardHeader,
   Stack,
+  useTheme,
 } from "@mui/material";
 import { Add, Remove, Edit, MoreVert, Close } from "@mui/icons-material";
 import { isDark } from "utils/constants";
@@ -60,6 +61,7 @@ const NewBotAI = ({
     { type: "lose_streak", count: 1 },
   ]);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const theme= useTheme()
   const [idBotAI, setIdBotAI] = useState();
   const [name, setName] = useState("");
   const [openCandleShadow, setOpenCandleShadow] = useState(false);
@@ -229,7 +231,7 @@ const NewBotAI = ({
   }, [initState, selectedBot]);
 
   return (
-    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose}>
+    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose} sx={{zIndex: 1400}}>
       <Box
         sx={{
           width: downLg ? "100%" : 850,
@@ -240,6 +242,7 @@ const NewBotAI = ({
           justifyContent: "space-between",
           flexDirection: "column",
           overflow: "auto",
+          // background: theme.palette.background.paper
         }}
       >
         <Box>
@@ -247,6 +250,12 @@ const NewBotAI = ({
             display={"flex"}
             justifyContent={"space-between"}
             alignItems={"center"}
+            sx={{ 
+            //   position: downLg? "sticky": "",
+            // top: downLg ? 0: "",
+            // zIndex: downLg ? 2 : "",
+            // background: downLg ? theme.palette.background.paper : ""
+            }}
           >
             <IconButton
               onClick={onClose}
@@ -254,7 +263,7 @@ const NewBotAI = ({
             >
               <Close />
             </IconButton>
-            <h2>Thiết lập mô hình nền của bạn</h2>
+            <Typography variant="h6">Thiết lập mô hình nến của bạn</Typography>
           </Box>
           <TextField
             fullWidth
@@ -821,6 +830,10 @@ const NewBotAI = ({
             justifyContent: "space-between",
             mt: 2,
             gap: 1,
+            position: downLg? "sticky": "",
+            bottom: downLg ? 0: "",
+            zIndex: downLg ? 2 : "",
+            background: downLg ? theme.palette.background.paper : ""
           }}
         >
           <Button variant="outlined" onClick={onClose} sx={{ padding: "10px" }}>

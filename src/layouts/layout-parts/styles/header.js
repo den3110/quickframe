@@ -11,9 +11,14 @@ export const DashboardHeaderRoot = styled(AppBar)(({
   color: theme.palette.text.primary
 }));
 export const StyledToolBar = styled(Toolbar)({
-  "@media (min-width: 0px)": {
+  "@media (min-width: 1200px)": {
     paddingLeft: 0,
     paddingRight: 0,
+    minHeight: "auto"
+  },
+  "@media (min-width: 0px)": {
+    paddingLeft: 8,
+    paddingRight: 8,
     minHeight: "auto"
   }
 });

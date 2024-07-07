@@ -337,6 +337,7 @@ const NewBudgetStrategy = ({
       anchor={downLg ? "bottom" : "right"}
       open={open}
       onClose={handleClose}
+      sx={{zIndex: 1400}}
     >
       <Box
         className="mawkwr"

@@ -12,7 +12,7 @@ import "@fontsource/inter/700.css";
 const baseOptions = {
   direction: "ltr",
   typography: {
-    fontFamily: "'Inter', sans-serif"
+    fontFamily: "'Inter', sans-serif",
   },
   breakpoints: {
     values: {
@@ -20,11 +20,11 @@ const baseOptions = {
       sm: 600,
       md: 900,
       lg: 1200,
-      xl: 1536
-    }
-  }
+      xl: 1536,
+    },
+  },
 };
-export const createCustomTheme = settings => {
+export const createCustomTheme = (settings) => {
   /**
    * settings.theme value is 'light' or 'dark'
    * update settings in contexts/settingsContext.tsx
@@ -33,9 +33,14 @@ export const createCustomTheme = settings => {
   if (!themeOptions) {
     themeOptions = themesOptions[THEMES.LIGHT];
   }
-  const mergedThemeOptions = merge({}, baseOptions, themeOptions, {
-    direction: settings.direction
-  });
+  const mergedThemeOptions = merge(
+    {},
+    baseOptions,
+    themeOptions,
+    {
+      direction: settings.direction,
+    },
+  );
   let theme = createTheme(mergedThemeOptions);
 
   // OVERRIDE SHADOWS

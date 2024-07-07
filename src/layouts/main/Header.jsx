@@ -63,7 +63,7 @@ const Header = () => {
 
   // FOR SMALL AND MEDIUM SCREEN DEVICE
   const SMALL_DEVICE_CONTENT = <Fragment>
-      <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
+      <Drawer anchor="right" open={open} onClose={() => setOpen(false)} sx={{zIndex: 1400}}>
         <Scrollbar>
           <List disablePadding sx={{
           minWidth: 260,

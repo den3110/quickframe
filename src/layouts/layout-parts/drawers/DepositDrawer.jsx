@@ -184,7 +184,7 @@ export default function DepositDrawer(props) {
 
   return (
     <div>
-      <Drawer open={open} onClose={onClose} anchor={downLg ? "bottom" : "right"}>
+      <Drawer open={open} onClose={onClose} anchor={downLg ? "bottom" : "right"} sx={{zIndex: 1400}}>
         {DrawerList}
       </Drawer>
     </div>

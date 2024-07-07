@@ -56,7 +56,7 @@ const ChatPageView = () => {
     </Card>;
   return <Box pt={2} pb={4}>
       <Grid container spacing={3}>
-        {downMd ? <Drawer anchor="left" open={openLeftDrawer} onClose={() => setOpenLeftDrawer(false)}>
+        {downMd ? <Drawer anchor="left" open={openLeftDrawer} onClose={() => setOpenLeftDrawer(false)} sx={{zIndex: 1400}}>
             <Box width={300} padding={1}>
               {MESSAGE_CONTENT}
             </Box>

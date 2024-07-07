@@ -26,7 +26,9 @@ const LayoutDrawer = props => {
   } = props;
   return <Drawer anchor="left" open={open} onClose={onClose} PaperProps={{
     sx: {
-      width: drawerWidth
+      width: drawerWidth,
+      zIndex: 1400
+      
     }
   }}>
       <Wrapper>{children}</Wrapper>

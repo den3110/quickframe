@@ -5,20 +5,28 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import HomeIcon from '@mui/icons-material/Home';
 import { Paper } from "@mui/material";
 import useLayout from "./context/useLayout";
 import MenuIcon from '@mui/icons-material/Menu'
 import { useNavigate } from "react-router-dom";
+import BottomMenuDialog from "layouts/layout-parts/dialog/BottomMenuDialog";
+
 export default function BottomMenu() {
   const [value, setValue] = React.useState(0);
-  const { handleOpenMobileSidebar } = useLayout();
+  const { handleOpenMobileSidebar } = useLayout()
+  const [openBottomMenuDialog, setOpenBottomMenuDialog]= React.useState(false)
   const navigate= useNavigate()
+  const handleOpenBottomMenuDialog= ()=> {
+    setOpenBottomMenuDialog(true)
+  }
   const handleNavigate= (link)=> {
+    setOpenBottomMenuDialog(false)
     navigate(link)
   }
   return (
     <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 3 }}
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 1301 }}
       elevation={3}
     >
       <Box sx={{ width: "100%" }}>
@@ -29,12 +37,13 @@ export default function BottomMenu() {
             setValue(newValue);
           }}
         >
-          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard")} label="Dashboard" icon={<RestoreIcon />} />
-          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/profile")} label="Profile" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="Wallet" icon={<LocationOnIcon />} />
-          <BottomNavigationAction onClick={handleOpenMobileSidebar} label="More" icon={<MenuIcon />} />
+          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard")}  icon={<HomeIcon />} />
+          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/portfolios")} icon={<FavoriteIcon />} />
+          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/signal-strategies")}  icon={<LocationOnIcon />} />
+          <BottomNavigationAction onClick={setOpenBottomMenuDialog} icon={<MenuIcon />} />
         </BottomNavigation>
       </Box>
+      <BottomMenuDialog open={openBottomMenuDialog} setOpen={setOpenBottomMenuDialog} />
     </Paper>
   );
 }

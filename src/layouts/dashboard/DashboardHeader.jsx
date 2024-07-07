@@ -26,6 +26,7 @@ import {
 import WalletPopover from "layouts/layout-parts/popovers/WalletPopover";
 import { Link } from "react-router-dom";
 const DashboardHeader = () => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { handleOpenMobileSidebar } = useLayout();
   // const [openSearchBar, setSearchBar] = useState(false);
   const { settings, saveSettings } = useContext(SettingsContext);
@@ -81,35 +82,37 @@ const DashboardHeader = () => {
 
         <Box flexGrow={1} ml={1} />
         <WalletPopover />
-        {/* TEXT DIRECTION SWITCH BUTTON */}
-        {settings.direction === "rtl" ? (
-          <IconButton onClick={() => handleChangeDirection("ltr")}>
-            <MenuLeft
-              sx={{
-                color: "grey.400",
+        {!downLg && (
+          <>
+            {settings.direction === "rtl" ? (
+              <IconButton onClick={() => handleChangeDirection("ltr")}>
+                <MenuLeft
+                  sx={{
+                    color: "grey.400",
+                  }}
+                />
+              </IconButton>
+            ) : (
+              <IconButton onClick={() => handleChangeDirection("rtl")}>
+                <MenuLeftRight
+                  sx={{
+                    color: "grey.400",
+                  }}
+                />
+              </IconButton>
+            )}
+            <IconButton
+              onClick={() => {
+                handleChangeTheme(
+                  settings.theme === "light" ? "dark" : "light"
+                );
               }}
-            />
-          </IconButton>
-        ) : (
-          <IconButton onClick={() => handleChangeDirection("rtl")}>
-            <MenuLeftRight
-              sx={{
-                color: "grey.400",
-              }}
-            />
-          </IconButton>
+            >
+              <ThemeIcon />
+            </IconButton>
+            <LanguagePopover />
+          </>
         )}
-
-        {/* THEME SWITCH BUTTON */}
-        <IconButton
-          onClick={() => {
-            handleChangeTheme(settings.theme === "light" ? "dark" : "light");
-          }}
-        >
-          <ThemeIcon />
-        </IconButton>
-
-        <LanguagePopover />
         <NotificationsPopover />
         {/* {upSm && (
           <Fragment>

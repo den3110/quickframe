@@ -260,6 +260,7 @@ export default function MoveBalanceDrawer(props) {
         open={open}
         onClose={onClose}
         anchor={downLg ? "bottom" : "right"}
+        sx={{zIndex: 1400}}
       >
         {DrawerList}
       </Drawer>

@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   Checkbox,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
@@ -18,6 +19,7 @@ import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
 
 const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }) => {
+  const theme= useTheme()
   const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
   const [idBotAI, setIdBotAI]= useState()
   const [name, setName] = useState("");
@@ -84,12 +86,12 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
   }, [is_edit, selectedBot])
 
   return (
-    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={handleClose}>
+    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={handleClose} sx={{zIndex: 1400}}>
       <Box
         sx={{
           width: downLg ? "100%" : 850,
           height: downLg ? "70vh" : "100vh",
-          padding: 3,
+          padding: 2,
           display: "flex",
           flexDirection: "column",
           gap: 2,
@@ -169,6 +171,10 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
             justifyContent: "space-between",
             marginTop: 4,
             gap: 1,
+            position: downLg? "sticky": "",
+            bottom: downLg ? 0: "",
+            zIndex: downLg ? 2 : "",
+            background: downLg ? theme.palette.background.paper : ""
           }}
         >
           <Button variant="outlined" onClick={handleClose} sx={{ padding: "10px" }}>

@@ -118,6 +118,7 @@ const WalletPopover = () => {
         onClose={handleClose}
         maxWidth="sm"
         fullWidth
+        sx={{zIndex: 1400}}
       >
         <DialogTitle>
           Ví giao dịch

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Box, Card, styled, Typography } from "@mui/material";
+import { Box, Card, styled, Typography, useMediaQuery } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
 
@@ -12,10 +12,11 @@ const StyledNavLink = styled(NavLink)`
 
 const Layout = ({ children }) => {
   const { data } = useContext(SignalStrategyContext);
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   return (
     <Box
-      sx={{ padding: "26px 24px 32px 24px" }}
+      sx={{ padding: downLg ? "8px" : "26px 24px 32px 24px" }}
       height="100%"
       className="abaskw"
     >
