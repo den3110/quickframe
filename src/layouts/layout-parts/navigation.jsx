@@ -16,44 +16,44 @@ export const navigations = [
   {
     name: "Dashboard",
     path: "/dashboard",
-    icon: duotone.PersonChalkboard,
+    icon: duotone.DashboardIcon,
   },
   {
     name: "Portfolio",
-    path: "/dashboard/analytics-2",
-    icon: duotone.BadgeDollar,
+    path: "/dashboard/portfolios",
+    icon: duotone.Portfolios,
   },
   {
     name: "Budget Strategy",
-    path: "/dashboard/budget-strategy",
-    icon: duotone.RectangleCirclePlus,
+    path: "/dashboard/budget-strategies",
+    icon: duotone.BudgetStrategy,
   },
   {
     name: "Signal Strategy",
     path: "/dashboard/signal-strategies/",
-    icon: duotone.CommentsQuestionCheck,
+    icon: duotone.SignalStrategy,
   },
   {
     type: "divider",
   },
   {
     name: "Management Follower",
-    icon: duotone.UserProfile,
+    icon: duotone.Follower,
     path: "/dashboard/manage-follower",
   },
   {
     name: "Manual Trade",
-    icon: duotone.Accounts,
+    icon: duotone.ManualTrade,
     path: "/dashboard/manual-trade",
   },
   {
     name: "Referral",
-    icon: duotone.Accounts,
+    icon: duotone.Introduction,
     path: "/dashboard/referral",
   },
   {
     name: "Vip Member",
-    icon: duotone.Accounts,
+    icon: duotone.VipMember,
     path: "/dashboard/account",
   },
   // {

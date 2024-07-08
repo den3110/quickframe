@@ -35,6 +35,7 @@ import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
 import moment from "moment";
 import DeleteBudgetStrategy from "page-sections/budget-strategy/DeleteBudgetStrategy";
 import DeleteBudgetStrategyIcon from "icons/budget-strategy/DeleteBudgetStrategy";
+import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -293,6 +294,11 @@ const BudgetStrategyPage = () => {
                     </StyledTableRow>
                   ))}
               </TableBody>
+              {loading=== false && data?.length <= 0 &&
+                <Box sx={{width: "200%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                  <EmptyPage />
+                </Box>
+              }
             </Table>
           </TableContainer>
           <PaginationContainer>

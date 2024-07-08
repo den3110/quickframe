@@ -19,7 +19,7 @@ const FinanceV2 = Loadable(lazy(() => import("pages/dashboard/finance-2")));
 const BudgetStrategy = Loadable(lazy(() => import("pages/dashboard/budget-strategy")));
 const Logistics = Loadable(lazy(() => import("pages/dashboard/logistics")));
 const Marketing = Loadable(lazy(() => import("pages/dashboard/marketing")));
-const AnalyticsV2 = Loadable(lazy(() => import("pages/dashboard/analytics-2")));
+const Portfolios = Loadable(lazy(() => import("pages/dashboard/analytics-2")));
 
 // USER LIST PAGES
 const AddNewUser = Loadable(
@@ -140,7 +140,7 @@ export const DashboardRoutes = [
         element: <FinanceV2 />,
       },
       {
-        path: "budget-strategy",
+        path: "budget-strategies",
         element: <BudgetStrategy />,
       },
       {
@@ -152,8 +152,8 @@ export const DashboardRoutes = [
         element: <Marketing />,
       },
       {
-        path: "analytics-2",
-        element: <AnalyticsV2 />,
+        path: "portfolios",
+        element: <Portfolios />,
       },
       {
         path: "add-user",

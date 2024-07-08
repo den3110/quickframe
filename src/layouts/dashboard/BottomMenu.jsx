@@ -11,6 +11,7 @@ import useLayout from "./context/useLayout";
 import MenuIcon from '@mui/icons-material/Menu'
 import { useNavigate } from "react-router-dom";
 import BottomMenuDialog from "layouts/layout-parts/dialog/BottomMenuDialog";
+import duotone from "icons/duotone";
 
 export default function BottomMenu() {
   const [value, setValue] = React.useState(0);
@@ -37,10 +38,10 @@ export default function BottomMenu() {
             setValue(newValue);
           }}
         >
-          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard")}  icon={<HomeIcon />} />
-          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/portfolios")} icon={<FavoriteIcon />} />
-          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/signal-strategies")}  icon={<LocationOnIcon />} />
-          <BottomNavigationAction onClick={setOpenBottomMenuDialog} icon={<MenuIcon />} />
+          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard")}  icon={<duotone.DashboardIcon />} />
+          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/portfolios")} icon={<duotone.Portfolios />} />
+          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/signal-strategies")}  icon={<duotone.SignalStrategy />} />
+          <BottomNavigationAction onClick={setOpenBottomMenuDialog} icon={<duotone.Menu />} />
         </BottomNavigation>
       </Box>
       <BottomMenuDialog open={openBottomMenuDialog} setOpen={setOpenBottomMenuDialog} />

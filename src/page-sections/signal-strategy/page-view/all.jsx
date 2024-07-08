@@ -33,6 +33,7 @@ import NewBotAI from "../NewBotAI";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
 import NewBotAIStringMethod from "../NewBotAIStringMethod";
 import DeleteSignalStrategy from "../DeleteSignalStrategy";
+import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -316,6 +317,11 @@ const SignalStrategyList = () => {
                       </Fragment>
                     ))}
                 </TableBody>
+                {loading=== false && data?.length <= 0 &&
+                <Box sx={{width: "200%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                  <EmptyPage />
+                </Box>
+              }
               </Table>
             </TableContainer>
             <PaginationContainer>

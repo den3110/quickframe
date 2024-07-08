@@ -42,6 +42,15 @@ import Reply from "./Reply";
 import Forward from "./Forward";
 import Folder from "./Folder";
 import Apps from "./Apps";
+import DashboardIcon from "./DashboardIcon";
+import BudgetStrategy from "./BudgetStrategy";
+import SignalStrategy from "./SignalStrategy";
+import Portfolios from "./Portfolios";
+import Follower from "./Follower";
+import ManualTrade from "./ManualTrade";
+import Introduction from "./Introduction";
+import VipMember from "./VipMember";
+import Menu from "./Menu";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -88,5 +97,14 @@ export default {
   Reply,
   Forward,
   Folder,
-  Apps
+  Apps,
+  DashboardIcon,
+  BudgetStrategy,
+  SignalStrategy,
+  Portfolios,
+  Follower,
+  ManualTrade,
+  Introduction,
+  VipMember,
+  Menu
 };
