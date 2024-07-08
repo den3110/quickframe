@@ -30,15 +30,19 @@ import { Fragment, useContext, useState } from "react";
 import { MoreVert, Add, InsertChart } from "@mui/icons-material";
 import moment from "moment";
 import NewBotAI from "../NewBotAI";
-import SignalStrategyContext from "contexts/SignalStrategyContext";
 import NewBotAIStringMethod from "../NewBotAIStringMethod";
 import DeleteSignalStrategy from "../DeleteSignalStrategy";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
+import { PortfoliosContext } from "contexts/PortfoliosContext";
+import SettingIcon from "icons/SettingIcon";
+import DailyGoalDialog from "../dialog/DailyGoalDialog";
+import NewPlanDrawer from "../drawer/NewPlanDrawer";
+import AddIcon from '@mui/icons-material/Add';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
-  width: theme.breakpoints.down("lg") ? "50%" : "auto",
+  width: theme.breakpoints.down("lg") ? "20%" : "auto",
 }));
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
@@ -61,8 +65,8 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-const SignalStrategyList = () => {
-  const { data, setData, loading } = useContext(SignalStrategyContext);
+const PortfoliosList = () => {
+  const { data, setData, loading } = useContext(PortfoliosContext);
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
@@ -75,7 +79,24 @@ const SignalStrategyList = () => {
   const [openNewBotAI, setOpenNewBotAI] = useState(false);
   const [openNewBotAIStringMethod, setOpenNewBotAIStringMethod]= useState(false)
   const [anchorElMenu, setAnchorElMenu] = useState(null);
+  const [isOpenSetDailyGoal, setIsOpenSetDailyGoal]= useState(false)
+  const [isOpenPlanDrawer, setIsOpenPlanDrawer]= useState(false)
   // const [loading, setLoading]= useState(false)
+  const handleOpenSetDailyGoal= ()=> {
+    setIsOpenSetDailyGoal(true)
+  }
+
+  const handleCloseSetDailyGoal= ()=> {
+    setIsOpenSetDailyGoal(false)
+  }
+
+  const handleOpenPlanDrawer= ()=> {
+    setIsOpenPlanDrawer(true)
+  }
+
+  const handleClosePlanDrawer= ()=> {
+    setIsOpenPlanDrawer(false)
+  }
 
   const handleOpenDeleteBot= ()=> {
     setIsDeleteBot(true)
@@ -139,7 +160,7 @@ const SignalStrategyList = () => {
             >
               <TextField
                 variant="outlined"
-                placeholder="Search Strategy..."
+                placeholder="Search Plan..."
                 InputProps={{
                   startAdornment: (
                     <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
@@ -147,6 +168,16 @@ const SignalStrategyList = () => {
                 }}
               />
               <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "block"}>
+                <Button
+                  variant="outlined"
+                  sx={{ mr: 2 }}
+                  size={downLg ? "large" : "medium"}
+                  fullWidth={downLg ? true : false}
+                  endIcon={<SettingIcon />}
+                  onClick={handleOpenSetDailyGoal}
+                >
+                  Mục tiêu ngày
+                </Button>
                 <Button
                   variant="outlined"
                   sx={{ mr: 2 }}
@@ -161,10 +192,11 @@ const SignalStrategyList = () => {
                   fullWidth={downLg ? true : false}
                   size={downLg ? "large" : "medium"}
                   color="success"
+                  endIcon={<AddIcon />}
                   // onClick={handleOpenNewBudgetStrategy}
-                  onClick={handleMenuClick}
+                  onClick={handleOpenPlanDrawer}
                 >
-                  Thiết kế Bot AI
+                  Tạo plan
                 </Button>
                 <Menu
                   anchorEl={anchorElMenu}
@@ -203,9 +235,11 @@ const SignalStrategyList = () => {
                 {!downLg && (
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>Strategy name</StyledTableCell>
-                      <StyledTableCell>Method Using</StyledTableCell>
-                      <StyledTableCell>Actions</StyledTableCell>
+                      <StyledTableCell>Tên gói</StyledTableCell>
+                      <StyledTableCell>Lợi nhuận 7N</StyledTableCell>
+                      <StyledTableCell>Lợi nhuận</StyledTableCell>
+                      <StyledTableCell>Thao tác</StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
                     </TableRow>
                   </TableHead>
                 )}
@@ -314,6 +348,9 @@ const SignalStrategyList = () => {
                             </Menu>
                           </StyledTableCell>
                         </StyledTableRow>
+                        <StyledTableRow></StyledTableRow>
+                        <StyledTableRow></StyledTableRow>
+                        
                       </Fragment>
                     ))}
                 </TableBody>
@@ -365,8 +402,10 @@ const SignalStrategyList = () => {
         />
         <NewBotAIStringMethod open={openNewBotAIStringMethod} onClose={handleCloseNewBotAIStringMethod} is_edit={isEditStringMethod} setIsEdit={setIsEditStringMethod} selectedBot={selectedBot} />
         <DeleteSignalStrategy open={isDeleteBot} onClose={handleCloseDeleteBot} selectedBot={selectedBot} setData={setData} data={data} />
+        <DailyGoalDialog open={isOpenSetDailyGoal} handleClose={handleCloseSetDailyGoal} />
+        <NewPlanDrawer open={isOpenPlanDrawer} handleClose={handleClosePlanDrawer} />
       </Box>
     </Layout>
   );
 };
-export default SignalStrategyList;
+export default PortfoliosList;

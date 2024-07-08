@@ -11,6 +11,9 @@ import { AllMailPageView } from "page-sections/signal-strategy/page-view";
 import InboxPage from "pages/dashboard/signal-strategy/inbox";
 import ComposeMailPage from "pages/dashboard/signal-strategy/compose";
 import Sent from "pages/dashboard/signal-strategy/sent"
+import SignalStrategyList from "page-sections/signal-strategy/page-view/all";
+import PortfoliosList from "page-sections/portfolios/page-view/all";
+import { PortfoliosProvider } from "contexts/PortfoliosContext";
 // ALL DASHBOARD PAGES
 const CRM = Loadable(lazy(() => import("pages/dashboard/crm")));
 const Finance = Loadable(lazy(() => import("pages/dashboard/finance")));
@@ -151,10 +154,10 @@ export const DashboardRoutes = [
         path: "marketing",
         element: <Marketing />,
       },
-      {
-        path: "portfolios",
-        element: <Portfolios />,
-      },
+      // {
+      //   path: "portfolios",
+      //   element: <Portfolios />,
+      // },
       {
         path: "add-user",
         element: <AddNewUser />,
@@ -296,7 +299,7 @@ export const DashboardRoutes = [
         children: [
           {
             path: "",
-            element: <AllMailPageView />,
+            element: <SignalStrategyList />,
           },
           {
             path: "top-signal",
@@ -304,6 +307,26 @@ export const DashboardRoutes = [
           },
           {
             path: "telegram-channel",
+            element: <Sent />,
+          },
+        ],
+      },
+      {
+        path: "portfolios",
+        element: <PortfoliosProvider>
+          <Outlet />
+        </PortfoliosProvider>,
+        children: [
+          {
+            path: "",
+            element: <PortfoliosList />,
+          },
+          {
+            path: "statistic",
+            element: <InboxPage />,
+          },
+          {
+            path: "schedule",
             element: <Sent />,
           },
         ],
