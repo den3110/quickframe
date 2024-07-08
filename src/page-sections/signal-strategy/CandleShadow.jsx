@@ -16,6 +16,8 @@ import { random } from "lodash";
 import { useInView } from "react-intersection-observer";
 // import { v4 } from "uuid";
 import { isDark } from "utils/constants";
+import { Swiper, SwiperSlide,  } from "swiper/react";
+import { Navigation, Pagination } from "swiper";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   "&:disabled": {
@@ -390,7 +392,73 @@ const CandleShadow = ({
             Nếu các điều kiện sau được thỏa mãn:
           </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", mt: 2, gap: 6 }}>
-            {[1, 2, 3, 4, 5].map((table, tableIndex) => (
+          <Swiper
+            spaceBetween={20}
+            pagination={{ clickable: true }}
+            modules={[Navigation, Pagination]}
+            style={{ paddingBottom: "20px", overflowY: "unset" }}
+            className="waa"
+            navigation
+            breakpoints={{
+              // when window width is >= 640px
+              300: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              // when window width is >= 768px
+              768: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+            }}
+          >
+             {[1, 2, 3, 4, 5].map((table, tableIndex) => (
+              <SwiperSlide key={tableIndex}>
+                <Box  sx={{ mb: 2 }}>
+                  <Typography variant="body2" mb={1}>
+                    Bảng {table}
+                  </Typography>
+                  <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(5, 30px)",
+                        gap: "10px",
+                        justifyItems: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {gridBallStates?.[tableIndex].map((state, ballIndex) => (
+                        <GridBallButton
+                          key={ballIndex}
+                          state={state}
+                          number={
+                            ballIndex % 5 === 0
+                              ? ballIndex / 5 + 1 + tableIndex * 20
+                              : Math.floor(ballIndex / 5) +
+                                4 * ballIndex +
+                                1 -
+                                Math.floor(ballIndex / 5) * 5 * 4 +
+                                tableIndex * 20
+                          }
+                          onClick={() => handleGridBallClick(tableIndex, ballIndex)}
+                          setSelectedGridBall={setSelectedGridBall}
+                          selectedGridBall={selectedGridBall}
+                          handleGridBallStates={setGridBallStates}
+                          selectedCandle={selectedCandle}
+                          tableIndex={tableIndex}
+                          index={ballIndex}
+                          gridBallStates={gridBallStates}
+                          is_edit={is_edit}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                </Box>
+              </SwiperSlide>
+            ))}
+        </Swiper>
+            {/* {[1, 2, 3, 4, 5].map((table, tableIndex) => (
               <Box key={table} sx={{ mb: 2 }}>
                 <Typography variant="body2" mb={1}>
                   Bảng {table}
@@ -430,7 +498,7 @@ const CandleShadow = ({
                   ))}
                 </Box>
               </Box>
-            ))}
+            ))} */}
           </Box>
         </Box>
         <Box>

@@ -295,7 +295,7 @@ const BudgetStrategyPage = () => {
                   ))}
               </TableBody>
               {loading=== false && data?.length <= 0 &&
-                <Box sx={{width: "200%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
                   <EmptyPage />
                 </Box>
               }
