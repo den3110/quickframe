@@ -79,7 +79,7 @@ const AccountsPageView = () => {
                 <H5 fontSize={16}>More</H5>
               </FlexBox>
 
-              <Drawer open={openDrawer} onClose={() => setOpenDrawer(false)} sx={{zIndex: 1400}}>
+              <Drawer open={openDrawer} onClose={() => setOpenDrawer(false)} sx={{zIndex: ""}}>
                 <Box padding={1}>{TabListContent}</Box>
               </Drawer>
             </Fragment> : <Card sx={{

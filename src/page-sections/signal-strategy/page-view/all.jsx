@@ -128,7 +128,7 @@ const SignalStrategyList = () => {
     <Layout>
       <Box pt={2} pb={4}>
         <Box sx={{ padding: "10px" }}>
-          <Box sx={{ padding: "20px" }}>
+          <Box sx={{ padding: downLg ? 0 : "20px" }}>
             <Box
               sx={{
                 display: "flex",

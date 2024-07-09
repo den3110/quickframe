@@ -34,7 +34,7 @@ export const createCustomTheme = (settings) => {
     themeOptions = themesOptions[THEMES.LIGHT];
   }
   const mergedThemeOptions = merge(
-    {},
+   
     baseOptions,
     themeOptions,
     {

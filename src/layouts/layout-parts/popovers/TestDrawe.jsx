@@ -51,7 +51,7 @@ export default function TemporaryDrawer() {
   return (
     <div>
       <Button onClick={toggleDrawer(true)}>Open drawer</Button>
-      <Drawer open={open} onClose={toggleDrawer(false)} sx={{zIndex: 1400}}>
+      <Drawer open={open} onClose={toggleDrawer(false)} sx={{zIndex: ""}}>
         {DrawerList}
       </Drawer>
     </div>

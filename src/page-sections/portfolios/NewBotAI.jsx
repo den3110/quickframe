@@ -232,7 +232,7 @@ const NewBotAI = ({
   }, [initState, selectedBot]);
 
   return (
-    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose} sx={{zIndex: 1400}}>
+    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose} sx={{zIndex: ""}}>
       <Box
         sx={{
           width: downLg ? "100%" : 850,

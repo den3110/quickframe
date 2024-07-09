@@ -27,7 +27,7 @@ export default function BottomMenu() {
   }
   return (
     <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 1301 }}
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 5 }}
       elevation={3}
     >
       <Box sx={{ width: "100%" }}>
@@ -40,6 +40,7 @@ export default function BottomMenu() {
         >
           <BottomNavigationAction onClick={()=> handleNavigate("/dashboard")}  icon={<duotone.DashboardIcon />} />
           <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/portfolios")} icon={<duotone.Portfolios />} />
+          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/budget-strategies")}  icon={<duotone.BudgetStrategy />} />
           <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/signal-strategies")}  icon={<duotone.SignalStrategy />} />
           <BottomNavigationAction onClick={setOpenBottomMenuDialog} icon={<duotone.Menu />} />
         </BottomNavigation>

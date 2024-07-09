@@ -37,7 +37,7 @@ const DailyGoalDialog = ({ open, handleClose }) => {
           Khi tổng lợi nhuận đạt ngưỡng như đã cài đặt dưới đây thì toàn bộ gói
           sẽ được ngưng.
         </Typography>
-        <Box mt={3} display="flex" justifyContent="space-between">
+        <Box mt={3} display="flex" justifyContent="space-between" gap={1  }>
           <Box>
             <Typography variant="subtitle1" color="textPrimary">
               Tổng Lợi đạt

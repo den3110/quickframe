@@ -29,8 +29,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Fragment, useContext, useState } from "react";
 import { MoreVert, Add, InsertChart } from "@mui/icons-material";
 import moment from "moment";
-import NewBotAI from "../NewBotAI";
-import NewBotAIStringMethod from "../NewBotAIStringMethod";
+// import NewBotAI from "../NewBotAI";
+// import NewBotAIStringMethod from "../NewBotAIStringMethod";
 import DeleteSignalStrategy from "../DeleteSignalStrategy";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import { PortfoliosContext } from "contexts/PortfoliosContext";
@@ -38,6 +38,7 @@ import SettingIcon from "icons/SettingIcon";
 import DailyGoalDialog from "../dialog/DailyGoalDialog";
 import NewPlanDrawer from "../drawer/NewPlanDrawer";
 import AddIcon from '@mui/icons-material/Add';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -149,7 +150,7 @@ const PortfoliosList = () => {
     <Layout>
       <Box pt={2} pb={4}>
         <Box sx={{ padding: "10px" }}>
-          <Box sx={{ padding: "20px" }}>
+          <Box sx={{ padding: downLg ? "" : "20px" }}>
             <Box
               sx={{
                 display: "flex",
@@ -176,16 +177,17 @@ const PortfoliosList = () => {
                   endIcon={<SettingIcon />}
                   onClick={handleOpenSetDailyGoal}
                 >
-                  Mục tiêu ngày
+                  {downLg ? "" : "Mục tiêu ngày"}
                 </Button>
                 <Button
                   variant="outlined"
                   sx={{ mr: 2 }}
                   size={downLg ? "large" : "medium"}
                   fullWidth={downLg ? true : false}
+                  endIcon={<ContentCopyIcon />}
                   // onClick={handleDialogOpen}
                 >
-                  Copy
+                  {downLg ? "" : "Copy"}
                 </Button>
                 <Button
                   variant="contained"
@@ -196,7 +198,7 @@ const PortfoliosList = () => {
                   // onClick={handleOpenNewBudgetStrategy}
                   onClick={handleOpenPlanDrawer}
                 >
-                  Tạo plan
+                  {downLg ? "" : "Tạo plan"}
                 </Button>
                 <Menu
                   anchorEl={anchorElMenu}
@@ -391,7 +393,7 @@ const PortfoliosList = () => {
             </PaginationContainer>
           </Box>
         </Box>
-        <NewBotAI
+        {/* <NewBotAI
           initState={initState}
           open={openNewBotAI}
           onClose={handleCloseNewBotAI}
@@ -399,8 +401,8 @@ const PortfoliosList = () => {
           setSelectedBot={setSelectedBot}
           is_edit={isEdit}
           setIsEdit={setIsEdit}
-        />
-        <NewBotAIStringMethod open={openNewBotAIStringMethod} onClose={handleCloseNewBotAIStringMethod} is_edit={isEditStringMethod} setIsEdit={setIsEditStringMethod} selectedBot={selectedBot} />
+        /> */}
+        {/* <NewBotAIStringMethod open={openNewBotAIStringMethod} onClose={handleCloseNewBotAIStringMethod} is_edit={isEditStringMethod} setIsEdit={setIsEditStringMethod} selectedBot={selectedBot} /> */}
         <DeleteSignalStrategy open={isDeleteBot} onClose={handleCloseDeleteBot} selectedBot={selectedBot} setData={setData} data={data} />
         <DailyGoalDialog open={isOpenSetDailyGoal} handleClose={handleCloseSetDailyGoal} />
         <NewPlanDrawer open={isOpenPlanDrawer} handleClose={handleClosePlanDrawer} />

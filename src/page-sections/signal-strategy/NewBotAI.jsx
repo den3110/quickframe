@@ -231,7 +231,7 @@ const NewBotAI = ({
   }, [initState, selectedBot]);
 
   return (
-    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose} sx={{zIndex: 1400}}>
+    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose} sx={{zIndex: ""}}>
       <Box
         sx={{
           width: downLg ? "100%" : 850,
@@ -732,7 +732,7 @@ const NewBotAI = ({
               }
             />
             <Grid container spacing={1}>
-              {targetConditions.map((value, index) => {
+              {targetConditions?.map((value, index) => {
                 const current = { color: "info.main", textcolor: "black" };
 
                 if (value.betType === "UP") {
