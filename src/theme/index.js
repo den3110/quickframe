@@ -4,7 +4,7 @@ import { shadows } from "./shadows";
 import { THEMES } from "utils/constants";
 import themesOptions from "./themeOptions";
 import componentsOverride from "./components";
-// FONT VARIANTS
+
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Drawer,
   AppBar,
@@ -10,7 +10,7 @@ import {
   TextField,
   MenuItem,
   Select,
-  InputLabel,
+  // InputLabel,
   FormControl,
   Switch,
   FormControlLabel,
@@ -18,29 +18,49 @@ import {
   useMediaQuery,
   Accordion,
   AccordionSummary,
+  Checkbox,
+  ListItemText,
+  Chip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
+import {
+  SignalFeatureTypes,
+  SignalFeatureTypesTitle,
+} from "type/SignalFeatureTypes";
+import { JwtContext } from "contexts/jwtContext";
+import { AutoTypes, AutoTypesTitle } from "type/AutoTypes";
+import { SettingsContext } from "contexts/settingsContext";
+
 const NewPlanDrawer = ({ open, handleClose }) => {
+  const { decodedData } = useContext(JwtContext);
+  const {walletMode }= useContext(SettingsContext)
   const [step, setStep] = useState(1);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
   const [planName, setPlanName] = useState("");
+  const [autoType, setAutoType] = useState(AutoTypes.BOT);
   const [investmentFund, setInvestmentFund] = useState(100);
   const [baseAmount, setBaseAmount] = useState(1);
+  const [isBrokerMode, setIsBrokerMode]= useState(false)
   const [budgetStrategy, setBudgetStrategy] = useState("");
-  const [signalStrategy, setSignalStrategy]= useState("")
+  const [signalStrategy, setSignalStrategy] = useState("");
+  const [arraySignalStrategy, setArraySignalStrategy] = useState([]);
   const [takeProfit, setTakeProfit] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Bot AI");
   const [leaderUserName, setLeaderUserName] = useState([]);
   const [privateMode, setPrivateMode] = useState(false);
   const [reserveSignal, setReserveSignal] = useState(false);
+  const [featureType, setFeatureType] = useState(
+    SignalFeatureTypes.SINGLE_METHOD
+  );
   const [expanded, setExpanded] = useState(true);
   const [dataBudgetStrategy, setDataBudgetStrategy] = useState([]);
   const [dataSignalStrategy, setDataSignalStrategy] = useState([]);
+  const [isChooseBot, setIsChooseBot] = useState(false);
   const isDisableButton = planName?.length <= 0;
   const handleIncrement = (setFunc, value) => setFunc(value + 1);
   const handleDecrement = (setFunc, value) =>
@@ -76,6 +96,14 @@ const NewPlanDrawer = ({ open, handleClose }) => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (decodedData) {
+      if (decodedData?.data?.levelStaff > 0) {
+        setIsChooseBot(true);
+      }
+    }
+  }, [decodedData]);
+
   return (
     <Drawer
       anchor={downLg ? "bottom" : "right"}
@@ -97,8 +125,11 @@ const NewPlanDrawer = ({ open, handleClose }) => {
             <div>
               <AppBar position="static" color="default">
                 <Toolbar>
-                  <Typography variant="h6" style={{ flexGrow: 1 }}>
-                    Step 1: Plan profile
+                  <Typography variant="h6" style={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
+                    Step 1: Plan profile 
+                    <Typography color={walletMode ? theme.palette.success.main : "primary"} variant="body1" fontWeight={600} style={{ flexGrow: 1, marginLeft: "8px" }}>
+                      {walletMode ? "Live" : "Demo"}
+                    </Typography>
                   </Typography>
                   <IconButton edge="end" color="inherit" onClick={onClose}>
                     <CloseIcon />
@@ -197,27 +228,112 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   ))}
                 </Box>
               </Box>
-
+              <Box mt={4}>
+                <Typography variant="subtitle1">Tính năng sử dụng</Typography>
+                <FormControl variant="outlined" fullWidth margin="normal">
+                  <Select
+                    value={featureType}
+                    onChange={(e) => setFeatureType(e.target.value)}
+                    size="medium"
+                  >
+                    {Object.entries(SignalFeatureTypes).map(([item, key]) => (
+                      <MenuItem key={key} value={item}>
+                        {SignalFeatureTypesTitle[item]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              {/*  */}
+              {isChooseBot === true && (
+                <>
+                  {" "}
+                  <Box mt={4}>
+                    <Typography variant="subtitle1">Chọn Bot</Typography>
+                    <FormControl variant="outlined" fullWidth margin="normal">
+                      <Select
+                        value={autoType}
+                        onChange={(e) => setAutoType(e.target.value)}
+                        size="medium"
+                      >
+                        <MenuItem value={AutoTypes.BOT}>
+                          {AutoTypesTitle.BOT}
+                        </MenuItem>
+                        <MenuItem value={AutoTypes.TELEBOT}>
+                          {AutoTypesTitle.TELEBOT}
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </>
+              )}
+              {/*  */}
               <Box mt={4}>
                 <Typography variant="subtitle1">
                   {selectedTab === "Bot AI" ? "Signal*" : "Leader username"}
                 </Typography>
                 {selectedTab === "Bot AI" && (
                   <FormControl variant="outlined" fullWidth margin="normal">
-                    <Select
-                      value={signalStrategy}
-                      onChange={(e) => setSignalStrategy(e.target.value)}
-                      size="medium"
-                    >
-                      {dataSignalStrategy?.map((item, key) => (
-                        <MenuItem key={key} value={item?._id}>
-                          {item?.name}
-                        </MenuItem>
-                      ))}
-                      {/* Thêm các tùy chọn khác nếu cần */}
-                    </Select>
+                    {featureType === SignalFeatureTypes.SINGLE_METHOD ? (
+                      <>
+                        <Select
+                          value={signalStrategy}
+                          onChange={(e) => setSignalStrategy(e.target.value)}
+                          size="medium"
+                        >
+                          {dataSignalStrategy?.map((item, key) => (
+                            <MenuItem key={key} value={item?._id}>
+                              {item?.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </>
+                    ) : (
+                      <>
+                        <Select
+                          multiple
+                          value={arraySignalStrategy}
+                          onChange={(e) =>
+                            setArraySignalStrategy(e.target.value)
+                          }
+                          size="medium"
+                          renderValue={(selected) => (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 0.5,
+                              }}
+                            >
+                              {selected.map((value) => (
+                                <Chip
+                                  key={value}
+                                  label={
+                                    dataSignalStrategy.find(
+                                      (item) => item._id === value
+                                    )?.name
+                                  }
+                                />
+                              ))}
+                            </Box>
+                          )}
+                        >
+                          {dataSignalStrategy?.map((item, key) => (
+                            <MenuItem key={key} value={item?._id}>
+                              <Checkbox
+                                checked={
+                                  arraySignalStrategy.indexOf(item._id) > -1
+                                }
+                              />
+                              <ListItemText primary={item.name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </>
+                    )}
                   </FormControl>
                 )}
+                {/*  */}
                 {selectedTab === "Follow Leader" && (
                   <Box sx={{ width: "100%" }} mt={2}>
                     <MuiChipsInput
@@ -228,6 +344,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     />
                   </Box>
                 )}
+                {/*  */}
                 {selectedTab === "Bot AI" && (
                   <Box mt={2}>
                     <Typography variant="subtitle1">
@@ -304,7 +421,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   </Box>
                 </Box>
               </Box>
-              {selectedTab === "Bot AI" && (
+              {/* {selectedTab === "Bot AI" && (
                 <Box mt={4}>
                   <Typography variant="h6">
                     Reset Budget Strategy Conditions
@@ -322,8 +439,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     label="Reset budget after clicking 'Reset PnL'"
                   />
                 </Box>
-              )}
-
+              )} */}
               <Box mt={4}>
                 <Typography variant="h6">
                   Take-Profit/Stop-Loss Conditions
@@ -343,7 +459,21 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   label="Enable TP/SL"
                 />
               </Box>
-
+              <Box mt={4}>
+                <Typography variant="h6">
+                  Chế độ chuyên gia
+                </Typography>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isBrokerMode}
+                      onChange={() => setIsBrokerMode(!isBrokerMode)}
+                    />
+                  }
+                  label="Broker mode"
+                />
+              </Box>
+              {/* Advanced option */}
               <Box mt={4}>
                 <Accordion expanded={expanded} onChange={handleAccordionChange}>
                   <AccordionSummary

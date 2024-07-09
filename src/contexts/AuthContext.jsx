@@ -7,8 +7,6 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  // Load user profile from localStorage and check if the user is authenticated
   const loadUserProfile = async () => {
     const accessToken = localStorage.getItem('accessToken');
 

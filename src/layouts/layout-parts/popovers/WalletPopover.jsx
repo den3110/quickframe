@@ -26,11 +26,13 @@ import MoveBalanceDrawer from "../drawers/MoveBalanceDrawer";
 import DetailTransactionDrawer from "../drawers/DetailTransactionDrawer";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import WithdrawDrawer from "../drawers/WithdrawDrawer";
+import { SettingsContext } from "contexts/settingsContext";
 
 const WalletPopover = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { spotBalance } = useContext(SpotBalanceContext);
-  const [mode, setMode] = useState(false);
+  const {walletMode, setWalletMode }= useContext(SettingsContext)
+  const [mode, setMode] = useState(walletMode);
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
@@ -41,6 +43,7 @@ const WalletPopover = () => {
   };
   const handleToggleMode = () => {
     setMode(!mode);
+    setWalletMode(!mode)
     localStorage.setItem("walletMode", JSON.stringify(!mode));
   };
 
@@ -66,8 +69,10 @@ const WalletPopover = () => {
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("walletMode"))) {
       setMode(JSON.parse(localStorage.getItem("walletMode")));
+      setWalletMode(JSON.parse(localStorage.getItem("walletMode")))
     } else {
       setMode(false);
+      setWalletMode(false)
     }
   }, []);
 

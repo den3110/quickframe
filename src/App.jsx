@@ -20,6 +20,7 @@ import "./i18n";
 import { AuthProvider } from "contexts/AuthContext";
 import Toast from "components/toast/toast";
 import { SpotBalanceProvider } from "contexts/SpotBalanceContext";
+import JwtProvider from "contexts/jwtContext";
 const App = () => {
   const { settings } = useSettings();
   const theme = createCustomTheme(settings);
@@ -30,13 +31,15 @@ const App = () => {
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <AuthProvider>
-            <SpotBalanceProvider>
-              <RTL>
-                <Toast />
-                <CssBaseline />
-                <RouterProvider router={router} />
-              </RTL>
-            </SpotBalanceProvider>
+            <JwtProvider>
+              <SpotBalanceProvider>
+                <RTL>
+                  <Toast />
+                  <CssBaseline />
+                  <RouterProvider router={router} />
+                </RTL>
+              </SpotBalanceProvider>
+            </JwtProvider>
           </AuthProvider>
         </ThemeProvider>
       </StyledEngineProvider>
