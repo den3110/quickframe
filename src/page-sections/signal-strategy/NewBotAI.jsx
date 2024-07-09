@@ -355,7 +355,7 @@ const NewBotAI = ({
               justifyContent="center"
             >
               <Grid item xs={10} md={10}>
-                <Grid container spacing={3}>
+                <Grid container spacing={3} sx={{justifyContent: "center"}}>
                   <Grid item xs={2} md={2}>
                     <IconButton
                       aria-label="cart"
@@ -494,7 +494,7 @@ const NewBotAI = ({
                 </Grid>
               </Grid>
               <Grid item xs={10} md={10}>
-                <Grid container spacing={3}>
+                <Grid container spacing={3} sx={{justifyContent: "center"}}>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
                       <Badge color="warning" overlap="circular">
@@ -533,7 +533,7 @@ const NewBotAI = ({
                 </Grid>
               </Grid>
               <Grid item xs={10} md={10}>
-                <Grid container spacing={3}>
+                <Grid container spacing={3} sx={{justifyContent: "center"}}>
                   <Grid item xs={2} md={2}>
                     <IconButton
                       aria-label="cart"
@@ -672,7 +672,7 @@ const NewBotAI = ({
                 </Grid>
               </Grid>
               <Grid item xs={10} md={10}>
-                <Grid container spacing={3}>
+                <Grid container spacing={3} sx={{justifyContent: "center"}}>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
                       <Badge color="warning" overlap="circular">

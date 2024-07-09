@@ -320,7 +320,7 @@ const CandleShadow = ({
       anchor={downLg ? "bottom" : "right"}
       open={open}
       onClose={handleCloseCandleShadow}
-      sx={{ zIndex: 1400 }}
+      sx={{ zIndex: "" }}
     >
       <Box
         ref={ref}
