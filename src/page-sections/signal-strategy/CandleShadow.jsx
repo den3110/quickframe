@@ -348,15 +348,20 @@ const CandleShadow = ({
             display={"flex"}
             alignItems={"center"}
           >
-            (Bảng 5) Tôi muốn
+            Tôi muốn
             <FormControl sx={{ mx: 1 }}>
               <Select
                 size={"small"}
                 value={longShort}
                 onChange={(e) => setLongShort(e.target.value)}
+                sx={{
+                  "& .MuiSelect-select": {
+                    color: longShort=== "UP" ? "#0caf60" : "#fd4f4f",
+                  },
+                }}
               >
-                <MenuItem value="UP">Long</MenuItem>
-                <MenuItem value="DOWN">Short</MenuItem>
+                <MenuItem value="UP">Buy</MenuItem>
+                <MenuItem value="DOWN">Sell</MenuItem>
               </Select>
             </FormControl>
             cho bóng số {selectedBall - 80}

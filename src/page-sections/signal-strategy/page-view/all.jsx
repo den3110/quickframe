@@ -34,6 +34,7 @@ import SignalStrategyContext from "contexts/SignalStrategyContext";
 import NewBotAIStringMethod from "../NewBotAIStringMethod";
 import DeleteSignalStrategy from "../DeleteSignalStrategy";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
+import sortData from "util/sortData";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -215,7 +216,7 @@ const SignalStrategyList = () => {
                         <CircularProgress />
                       </TableCell>
                     </TableRow>}
-                  {loading=== false && data
+                  {loading=== false && sortData(data, "createdAt", "desc")
                     .slice(
                       rowsPerPage * (page - 1),
                       rowsPerPage * (page - 1) + rowsPerPage

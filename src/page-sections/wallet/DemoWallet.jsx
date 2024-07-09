@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography, useMediaQuery } from "@mui/material";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
 import { constant } from "constant/constant";
@@ -9,6 +9,7 @@ import React, { useContext } from "react";
 import TransactionWallet from "./TransactionWallet";
 
 const DemoWallet = (props) => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { linked } = useContext(ConnectExchangeContext);
   const {setChange }= useContext(SpotBalanceContext)
   const {spotBalance}= useContext(SpotBalanceContext)
@@ -39,7 +40,7 @@ const DemoWallet = (props) => {
             position: "absolute",
             right: 16,
             bottom: 0,
-            fontSize: 40,
+            fontSize: downLg ? 28 : 40,
             fontWeight: 900,
             color: "rgb(250, 250, 250)",
             opacity: 0.1,

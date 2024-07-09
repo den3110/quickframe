@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   AppBar,
@@ -22,6 +22,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
+import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 const NewPlanDrawer = ({ open, handleClose }) => {
   const [step, setStep] = useState(1);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -29,13 +31,16 @@ const NewPlanDrawer = ({ open, handleClose }) => {
   const [planName, setPlanName] = useState("");
   const [investmentFund, setInvestmentFund] = useState(100);
   const [baseAmount, setBaseAmount] = useState(1);
-  const [budgetStrategy, setBudgetStrategy] = useState("aaaa");
+  const [budgetStrategy, setBudgetStrategy] = useState("");
+  const [signalStrategy, setSignalStrategy]= useState("")
   const [takeProfit, setTakeProfit] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Bot AI");
   const [leaderUserName, setLeaderUserName] = useState([]);
   const [privateMode, setPrivateMode] = useState(false);
   const [reserveSignal, setReserveSignal] = useState(false);
   const [expanded, setExpanded] = useState(true);
+  const [dataBudgetStrategy, setDataBudgetStrategy] = useState([]);
+  const [dataSignalStrategy, setDataSignalStrategy] = useState([]);
   const isDisableButton = planName?.length <= 0;
   const handleIncrement = (setFunc, value) => setFunc(value + 1);
   const handleDecrement = (setFunc, value) =>
@@ -54,12 +59,29 @@ const NewPlanDrawer = ({ open, handleClose }) => {
     setExpanded(!expanded);
   };
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response1 = await budgetStrategyApi.userBudgetStrategyList();
+        const response2 = await signalStrategyApi.userBudgetSignalList();
+        if (response1?.data?.ok === true) {
+          setBudgetStrategy(response1?.data?.d?.[0]?._id);
+          setDataBudgetStrategy(response1?.data?.d);
+        }
+        if (response2?.data?.ok === true) {
+          setSignalStrategy(response2?.data?.d?.[0]?._id);
+          setDataSignalStrategy(response2?.data?.d);
+        }
+      } catch (error) {}
+    })();
+  }, []);
+
   return (
     <Drawer
       anchor={downLg ? "bottom" : "right"}
       open={open}
       onClose={onClose}
-      sx={{ zIndex: 1400 }}
+      sx={{ zIndex: "" }}
     >
       <Box
         width={downLg ? "100%" : 850}
@@ -106,7 +128,13 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     >
                       -
                     </Button>
-                    <Box sx={{ display: "flex", alignItems: "center", padding: "0 5px" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        padding: "0 5px",
+                      }}
+                    >
                       <Typography>$</Typography>
                       <TextField
                         value={investmentFund}
@@ -175,13 +203,20 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   {selectedTab === "Bot AI" ? "Signal*" : "Leader username"}
                 </Typography>
                 {selectedTab === "Bot AI" && (
-                  <TextField
-                    fullWidth
-                    placeholder="1 Copy Copy Copy Copy Copy"
-                    margin="normal"
-                    value={selectedTab}
-                    onChange={(e) => setSelectedTab(e.target.value)}
-                  />
+                  <FormControl variant="outlined" fullWidth margin="normal">
+                    <Select
+                      value={signalStrategy}
+                      onChange={(e) => setSignalStrategy(e.target.value)}
+                      size="medium"
+                    >
+                      {dataSignalStrategy?.map((item, key) => (
+                        <MenuItem key={key} value={item?._id}>
+                          {item?.name}
+                        </MenuItem>
+                      ))}
+                      {/* Thêm các tùy chọn khác nếu cần */}
+                    </Select>
+                  </FormControl>
                 )}
                 {selectedTab === "Follow Leader" && (
                   <Box sx={{ width: "100%" }} mt={2}>
@@ -202,8 +237,13 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                       <Select
                         value={budgetStrategy}
                         onChange={(e) => setBudgetStrategy(e.target.value)}
+                        size="medium"
                       >
-                        <MenuItem value="aaaa">aaaa</MenuItem>
+                        {dataBudgetStrategy?.map((item, key) => (
+                          <MenuItem key={key} value={item?._id}>
+                            {item?.name}
+                          </MenuItem>
+                        ))}
                         {/* Thêm các tùy chọn khác nếu cần */}
                       </Select>
                     </FormControl>
@@ -220,7 +260,13 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     >
                       -
                     </Button>
-                    <Box sx={{ display: "flex", alignItems: "center", padding: "0 5px" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        padding: "0 5px",
+                      }}
+                    >
                       <Typography>$</Typography>
                       <TextField
                         value={baseAmount}

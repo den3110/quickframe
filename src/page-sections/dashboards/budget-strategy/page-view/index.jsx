@@ -36,6 +36,7 @@ import moment from "moment";
 import DeleteBudgetStrategy from "page-sections/budget-strategy/DeleteBudgetStrategy";
 import DeleteBudgetStrategyIcon from "icons/budget-strategy/DeleteBudgetStrategy";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
+import sortData from "util/sortData";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -203,7 +204,7 @@ const BudgetStrategyPage = () => {
                         <CircularProgress />
                       </TableCell>
                     </TableRow>}
-                {loading=== false && data
+                {loading=== false && sortData(data, "createdAt", "desc")
                   .slice(
                     rowsPerPage * (page - 1),
                     rowsPerPage * (page - 1) + rowsPerPage
