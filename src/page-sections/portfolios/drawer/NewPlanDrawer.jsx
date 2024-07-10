@@ -500,7 +500,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                       variant={selectedTab === tab ? "contained" : "outlined"}
                       color={selectedTab === tab ? "primary" : "secondary"}
                       style={{ marginRight: 8 }}
-                      onClick={() => setSelectedTab(tab)}
+                      onClick={() => {setSelectedTab(tab); setArraySignalStrategy([])}}
                     >
                       {tab}
                     </Button>
@@ -616,8 +616,8 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                 {selectedTab === "Follow Leader" && (
                   <Box sx={{ width: "100%" }} mt={2}>
                     <MuiChipsInput
-                      value={leaderUserName}
-                      onChange={(value) => setLeaderUserName(value)}
+                      value={arraySignalStrategy}
+                      onChange={(value) => setArraySignalStrategy(value)}
                       placeholder="Nhấn enter để thêm"
                       sx={{ width: "100%" }}
                     />
