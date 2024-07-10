@@ -48,17 +48,17 @@ const EmptyPage = () => {
         alt="Empty Page"
         className={classes.image}
       />
-      <Typography variant="h5" className={classes.title}>
+      <Typography mt={2} variant="h5" className={classes.title}>
         Danh mục đầu tư đang trống
       </Typography>
-      <Typography variant="body1" className={classes.subtitle}>
+      <Typography mt={2} mb={2} variant="body1" className={classes.subtitle}>
         Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay.
       </Typography>
       <Button variant="contained" className={classes.button}>
         Tạo gói đầu tư ngay
       </Button>
       <Link href="#" className={classes.link}>
-        <Typography variant="body2">
+        <Typography variant="body2" mt={2}>
           <Box component="span" className={classes.linkIcon}>+</Box>
           Sao chép gói đầu tư được chia sẻ
         </Typography>

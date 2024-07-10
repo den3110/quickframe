@@ -21,6 +21,13 @@ import {
   Checkbox,
   ListItemText,
   Chip,
+  Grid,
+  Alert,
+  FormGroup,
+  Tabs,
+  Tab,
+  Paper,
+  Container,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
@@ -34,18 +41,21 @@ import {
 import { JwtContext } from "contexts/jwtContext";
 import { AutoTypes, AutoTypesTitle } from "type/AutoTypes";
 import { SettingsContext } from "contexts/settingsContext";
+import portfolioApi from "api/portfolios/portfolioApi";
+import { showToast } from "components/toast/toast";
 
 const NewPlanDrawer = ({ open, handleClose }) => {
   const { decodedData } = useContext(JwtContext);
-  const {walletMode }= useContext(SettingsContext)
+  const { walletMode } = useContext(SettingsContext);
   const [step, setStep] = useState(1);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
   const [planName, setPlanName] = useState("");
   const [autoType, setAutoType] = useState(AutoTypes.BOT);
   const [investmentFund, setInvestmentFund] = useState(100);
+  const [betSecond, setBetSecond] = useState(1);
   const [baseAmount, setBaseAmount] = useState(1);
-  const [isBrokerMode, setIsBrokerMode]= useState(false)
+  const [isBrokerMode, setIsBrokerMode] = useState(false);
   const [budgetStrategy, setBudgetStrategy] = useState("");
   const [signalStrategy, setSignalStrategy] = useState("");
   const [arraySignalStrategy, setArraySignalStrategy] = useState([]);
@@ -54,14 +64,58 @@ const NewPlanDrawer = ({ open, handleClose }) => {
   const [leaderUserName, setLeaderUserName] = useState([]);
   const [privateMode, setPrivateMode] = useState(false);
   const [reserveSignal, setReserveSignal] = useState(false);
+
   const [featureType, setFeatureType] = useState(
     SignalFeatureTypes.SINGLE_METHOD
-  );
+  ); // signal feature
   const [expanded, setExpanded] = useState(true);
   const [dataBudgetStrategy, setDataBudgetStrategy] = useState([]);
   const [dataSignalStrategy, setDataSignalStrategy] = useState([]);
   const [isChooseBot, setIsChooseBot] = useState(false);
+  const [takeProfitTarget, setTakeProfitTarget] = useState(0);
+  const [stopLossTarget, setStopLossTarget] = useState(0);
+  const [winStreakTarget, setWinStreakTarget] = useState(0);
+  const [loseStreakTarget, setLoseStreakTarget] = useState(0);
+  const [winTotalTarget, setWinTotalTarget] = useState(0);
+  const [loseTotalTarget, setLoseTotalTarget] = useState(0);
+  const [telegramToken, setTelegramToken] = useState("");
+  const [telegramChatId, setTelegramChatId] = useState("");
+  const [winningTotalReach, setWinningTotalReach] = useState(0);
+  const [loseTotalReach, setLoseTotalReach] = useState(0);
+  const [winningContinue, setWinningContinue] = useState(0);
+  const [loseContinue, setLoseContinue] = useState(0);
+  const [whenProfit, setWhenProfit] = useState(0);
+  const [whenLosing, setWhenLosing] = useState(0);
+  // const [selectedTab, setSelectedTab] = useState(0);
   const isDisableButton = planName?.length <= 0;
+  const [selectedTab1, setSelectedTab1] = useState(0);
+  const [shuffleMethodsOrder, setShuffleMethodsOrder] = useState(false);
+  const [noRepeatMethodsNextTurn, setNoRepeatMethodsNextTurn] = useState(false);
+  const [winEnabled, setWinEnabled] = useState();
+  const [winReverseSignal, setWinReverseSignal] = useState();
+  const [winEndWinStreak, setWinEndWinStreak] = useState();
+  const [winExactlyWinStreak, setWinExactlyWinStreak] = useState(0);
+  const [winStreakEntryTarget, setWinStreakEntryTarget] = useState(0);
+  const [winTurnCount, setWinTurnCount] = useState(0);
+  const [winChangeMethodAfterLoseStreak, setWinChangeMethodAfterLoseStreak] =
+    useState(0);
+  const [winChangeMethodAfterWinStreak, setWinChangeMethodAfterWinStreak] =
+    useState(0);
+  const [loseEnabled, setLoseEnabled] = useState(false);
+  const [loseReverseSignal, setLoseReverseSignal] = useState(false);
+  const [loseEndLoseStreak, setLoseEndLoseStreak] = useState(0);
+  const [loseExactlyLoseStreak, setLoseExactlyLoseStreak] = useState(0);
+  const [loseStreakEntryTarget, setLoseStreakEntryTarget] = useState(0);
+  const [loseTurnCount, setLoseTurnCount] = useState(0);
+  const [loseChangeMethodAfterLoseStreak, setLoseChangeMethodAfterLoseStreak] =
+    useState(0);
+  const [loseChangeMethodAfterWinStreak, setLoseChangeMethodAfterWinStreak] =
+    useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab1(newValue);
+  };
+
   const handleIncrement = (setFunc, value) => setFunc(value + 1);
   const handleDecrement = (setFunc, value) =>
     setFunc(value > 0 ? value - 1 : 0);
@@ -77,6 +131,163 @@ const NewPlanDrawer = ({ open, handleClose }) => {
 
   const handleAccordionChange = () => {
     setExpanded(!expanded);
+  };
+
+  const handleConfirmAndSave = async () => {
+    let response;
+    let data;
+    switch (featureType) {
+      case SignalFeatureTypes.SINGLE_METHOD:
+        data = {
+          autoType: autoType,
+          name: planName,
+          accountType: walletMode ? "LIVE" : "DEMO",
+          budgetStrategyId: budgetStrategy,
+          bet_second: betSecond,
+          margin_dense: baseAmount,
+          isBrokerMode: isBrokerMode,
+          isNotificationsEnabled: true,
+          method_data: {
+            method_list: [signalStrategy],
+            feature_data: {},
+          },
+          take_profit_target: takeProfitTarget,
+          stop_loss_target: stopLossTarget,
+          win_streak_target: winStreakTarget,
+          lose_streak_target: loseStreakTarget,
+          win_total_target: winTotalTarget,
+          lose_total_target: loseTotalTarget,
+          budget_amount: investmentFund,
+          telegram_token: telegramToken,
+          telegram_chatId: telegramChatId,
+          isPrivate: privateMode,
+          is_reverse: reserveSignal,
+          signal_feature: featureType,
+        };
+        break;
+      case SignalFeatureTypes.MIX_METHODS:
+        data = {
+          autoType: autoType,
+          name: planName,
+          accountType: walletMode ? "LIVE" : "DEMO",
+          budgetStrategyId: budgetStrategy,
+          bet_second: betSecond,
+          margin_dense: baseAmount,
+          isBrokerMode: isBrokerMode,
+          isNotificationsEnabled: true,
+          method_data: {
+            method_list: arraySignalStrategy,
+            feature_data: {},
+          },
+          take_profit_target: takeProfitTarget,
+          stop_loss_target: stopLossTarget,
+          win_streak_target: winStreakTarget,
+          lose_streak_target: loseStreakTarget,
+          win_total_target: winTotalTarget,
+          lose_total_target: loseTotalTarget,
+          budget_amount: investmentFund,
+          telegram_token: telegramToken,
+          telegram_chatId: telegramChatId,
+          isPrivate: privateMode,
+          is_reverse: reserveSignal,
+          signal_feature: featureType,
+        };
+        break;
+      case SignalFeatureTypes.AUTO_CHANGE_METHODS:
+        data = {
+          autoType: autoType,
+          name: planName,
+          accountType: walletMode ? "LIVE" : "DEMO",
+          budgetStrategyId: budgetStrategy,
+          bet_second: betSecond,
+          margin_dense: baseAmount,
+          isBrokerMode: isBrokerMode,
+          isNotificationsEnabled: true,
+          method_data: {
+            method_list: arraySignalStrategy,
+            feature_data: {
+              win_streak_target: winningTotalReach,
+              lose_streak_target: loseTotalReach,
+              win_total_target: winningContinue,
+              lose_total_target: loseContinue,
+              take_profit_target: whenProfit,
+              stop_loss_target: whenLosing,
+            },
+          },
+          take_profit_target: takeProfitTarget,
+          stop_loss_target: stopLossTarget,
+          win_streak_target: winStreakTarget,
+          lose_streak_target: loseStreakTarget,
+          win_total_target: winTotalTarget,
+          lose_total_target: loseTotalTarget,
+          budget_amount: investmentFund,
+          telegram_token: telegramToken,
+          telegram_chatId: telegramChatId,
+          isPrivate: privateMode,
+          is_reverse: reserveSignal,
+          signal_feature: featureType,
+        };
+        break;
+      case SignalFeatureTypes.WAIT_SIGNALS:
+        data = {
+          autoType: autoType,
+          name: planName,
+          accountType: walletMode ? "LIVE" : "DEMO",
+          budgetStrategyId: budgetStrategy,
+          bet_second: betSecond,
+          margin_dense: baseAmount,
+          isBrokerMode: isBrokerMode,
+          isNotificationsEnabled: true,
+          method_data: {
+            method_list: arraySignalStrategy,
+            feature_data: {
+              shuffle_methods_order: shuffleMethodsOrder,
+              no_repeat_methods_next_turn: noRepeatMethodsNextTurn,
+              win_enabled: winEnabled,
+              win_reverse_signal: winReverseSignal,
+              win_end_win_streak: winEndWinStreak,
+              win_exactly_win_streak: winExactlyWinStreak,
+              win_streak_entry_target: winStreakEntryTarget,
+              win_turn_count: winTurnCount,
+              win_change_method_after_lose_streak:
+                winChangeMethodAfterLoseStreak,
+              win_change_method_after_win_streak: winChangeMethodAfterWinStreak,
+
+              lose_enabled: loseEnabled,
+              lose_reverse_signal: loseReverseSignal,
+              lose_end_lose_streak: loseEndLoseStreak,
+              lose_exactly_lose_streak: loseExactlyLoseStreak,
+              lose_streak_entry_target: loseStreakEntryTarget,
+              lose_turn_count: loseTurnCount,
+              lose_change_method_after_lose_streak:
+                loseChangeMethodAfterLoseStreak,
+              lose_change_method_after_win_streak:
+                loseChangeMethodAfterWinStreak,
+            },
+          },
+          take_profit_target: takeProfitTarget,
+          stop_loss_target: stopLossTarget,
+          win_streak_target: winStreakTarget,
+          lose_streak_target: loseStreakTarget,
+          win_total_target: winTotalTarget,
+          lose_total_target: loseTotalTarget,
+          budget_amount: investmentFund,
+          telegram_token: telegramToken,
+          telegram_chatId: telegramChatId,
+          isPrivate: privateMode,
+          is_reverse: reserveSignal,
+          signal_feature: featureType,
+        };
+        break;
+
+      default:
+        break;
+    }
+    response = await portfolioApi.usersBotCreate(data);
+    if (response?.data?.ok === true) {
+      showToast("Tạo bot thành công", "success");
+      onClose();
+    }
   };
 
   useEffect(() => {
@@ -125,9 +336,23 @@ const NewPlanDrawer = ({ open, handleClose }) => {
             <div>
               <AppBar position="static" color="default">
                 <Toolbar>
-                  <Typography variant="h6" style={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
-                    Step 1: Plan profile 
-                    <Typography color={walletMode ? theme.palette.success.main : "primary"} variant="body1" fontWeight={600} style={{ flexGrow: 1, marginLeft: "8px" }}>
+                  <Typography
+                    variant="h6"
+                    style={{
+                      flexGrow: 1,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    Step 1: Plan profile
+                    <Typography
+                      color={
+                        walletMode ? theme.palette.success.main : "primary"
+                      }
+                      variant="body1"
+                      fontWeight={600}
+                      style={{ flexGrow: 1, marginLeft: "8px" }}
+                    >
                       {walletMode ? "Live" : "Demo"}
                     </Typography>
                   </Typography>
@@ -204,9 +429,63 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     </Button>
                   </Box>
                 </Box>
+                <Box display="flex" alignItems="center" mt={2}>
+                  <Typography variant="subtitle1">
+                    Thời gian vào lệnh
+                  </Typography>
+                  <Box ml={2} display="flex" alignItems="center">
+                    <Button
+                      variant="contained"
+                      onClick={() => handleDecrement(setBetSecond, betSecond)}
+                      style={{ minWidth: 30, padding: 5 }}
+                    >
+                      -
+                    </Button>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        padding: "0 5px",
+                      }}
+                    >
+                      <TextField
+                        value={betSecond}
+                        onChange={(e) => {
+                          setBetSecond(parseFloat(e.target.value) || 0);
+                        }}
+                        inputProps={{
+                          min: 0,
+                          style: {
+                            padding: 5,
+                          },
+                        }}
+                        InputProps={{
+                          disableUnderline: true,
+                        }}
+                        style={{
+                          width: 50,
+                          margin: "0 4px",
+                          textAlign: "center",
+                          border: "none",
+                          outline: "none",
+                        }}
+                        sx={{
+                          "& fieldset": { border: "none", outline: "none" },
+                        }}
+                      />
+                    </Box>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleIncrement(setBetSecond, betSecond)}
+                      style={{ minWidth: 30, padding: 5 }}
+                    >
+                      +
+                    </Button>
+                  </Box>
+                </Box>
               </Box>
 
-              <Box mt={4}>
+              <Box mt={2}>
                 <AppBar position="static" color="default">
                   <Toolbar>
                     <Typography variant="h6" style={{ flexGrow: 1 }}>
@@ -228,7 +507,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   ))}
                 </Box>
               </Box>
-              <Box mt={4}>
+              <Box mt={2}>
                 <Typography variant="subtitle1">Tính năng sử dụng</Typography>
                 <FormControl variant="outlined" fullWidth margin="normal">
                   <Select
@@ -248,7 +527,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
               {isChooseBot === true && (
                 <>
                   {" "}
-                  <Box mt={4}>
+                  <Box mt={2}>
                     <Typography variant="subtitle1">Chọn Bot</Typography>
                     <FormControl variant="outlined" fullWidth margin="normal">
                       <Select
@@ -268,7 +547,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                 </>
               )}
               {/*  */}
-              <Box mt={4}>
+              <Box mt={2}>
                 <Typography variant="subtitle1">
                   {selectedTab === "Bot AI" ? "Signal*" : "Leader username"}
                 </Typography>
@@ -366,7 +645,339 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     </FormControl>
                   </Box>
                 )}
+                {featureType === SignalFeatureTypes.WAIT_SIGNALS && (
+                  <>
+                    <Box>
+                      <Paper elevation={3} style={{ padding: "16px" }}>
+                        <FormControl component="fieldset">
+                          <FormGroup>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={shuffleMethodsOrder}
+                                  onChange={(e) =>
+                                    setShuffleMethodsOrder(e.target.checked)
+                                  }
+                                />
+                              }
+                              label="Xáo trộn thứ tự phương pháp"
+                            />
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={noRepeatMethodsNextTurn}
+                                  onChange={(e) =>
+                                    setNoRepeatMethodsNextTurn(e.target.checked)
+                                  }
+                                />
+                              }
+                              label="Không lặp lại phương pháp ở lượt sau"
+                            />
+                          </FormGroup>
 
+                          <Tabs
+                            value={selectedTab1}
+                            onChange={handleTabChange}
+                            variant="fullWidth"
+                          >
+                            <Tab label="Win.S" />
+                            <Tab label="Lose.S" />
+                          </Tabs>
+
+                          <Box hidden={selectedTab1 !== 0}>
+                            <FormGroup>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={winEnabled}
+                                    onChange={(e) =>
+                                      setWinEnabled(e.target.checked)
+                                    }
+                                  />
+                                }
+                                label="Kích hoạt Win Signal"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={winReverseSignal}
+                                    onChange={(e) =>
+                                      setWinReverseSignal(e.target.checked)
+                                    }
+                                  />
+                                }
+                                label="Đảo lệnh"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={winEndWinStreak}
+                                    onChange={(e) =>
+                                      setWinEndWinStreak(e.target.checked)
+                                    }
+                                  />
+                                }
+                                label="Vào lệnh khi kết thúc chuỗi thắng"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={winExactlyWinStreak}
+                                    onChange={(e) =>
+                                      setWinExactlyWinStreak(e.target.checked)
+                                    }
+                                  />
+                                }
+                                label="Vào lệnh khi đạt chính xác lượt thắng LT"
+                              />
+
+                              <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Vào lệnh khi lượt thắng LT đạt"
+                                    variant="outlined"
+                                    value={winStreakEntryTarget}
+                                    onChange={(e) =>
+                                      setWinStreakEntryTarget(e.target.value)
+                                    }
+                                    margin="normal"
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Số lượt vào (1 Thắng = 1 Lượt)"
+                                    variant="outlined"
+                                    value={winTurnCount}
+                                    onChange={(e) =>
+                                      setWinTurnCount(e.target.value)
+                                    }
+                                    margin="normal"
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Đổi phương pháp khi thua liên tiếp"
+                                    variant="outlined"
+                                    value={winChangeMethodAfterLoseStreak}
+                                    onChange={(e) =>
+                                      setWinChangeMethodAfterLoseStreak(
+                                        e.target.value
+                                      )
+                                    }
+                                    margin="normal"
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Đổi phương pháp khi thắng liên tiếp"
+                                    variant="outlined"
+                                    value={winChangeMethodAfterWinStreak}
+                                    onChange={(e) =>
+                                      setWinChangeMethodAfterWinStreak(
+                                        e.target.value
+                                      )
+                                    }
+                                    margin="normal"
+                                  />
+                                </Grid>
+                              </Grid>
+                            </FormGroup>
+                          </Box>
+
+                          <Box hidden={selectedTab1 !== 1}>
+                            <FormGroup>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={loseEnabled}
+                                    onChange={(e) =>
+                                      setLoseEnabled(e.target.checked)
+                                    }
+                                  />
+                                }
+                                label="Kích hoạt Lose Signal"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={loseReverseSignal}
+                                    onChange={(e) =>
+                                      setLoseReverseSignal(e.target.checked)
+                                    }
+                                  />
+                                }
+                                label="Đảo lệnh"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={loseEndLoseStreak}
+                                    onChange={(e) =>
+                                      setLoseEndLoseStreak(e.target.checked)
+                                    }
+                                  />
+                                }
+                                label="Vào lệnh khi kết thúc chuỗi thua"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={loseExactlyLoseStreak}
+                                    onChange={(e) =>
+                                      setLoseExactlyLoseStreak(e.target.checked)
+                                    }
+                                  />
+                                }
+                                label="Vào lệnh khi đạt chính xác lượt thua LT"
+                              />
+
+                              <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Vào lệnh khi lượt thua LT đạt"
+                                    variant="outlined"
+                                    value={loseStreakEntryTarget}
+                                    onChange={(e) =>
+                                      setLoseStreakEntryTarget(e.target.value)
+                                    }
+                                    margin="normal"
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Số lượt vào (1 Thắng = 1 Lượt)"
+                                    variant="outlined"
+                                    value={loseTurnCount}
+                                    onChange={(e) =>
+                                      setLoseTurnCount(e.target.value)
+                                    }
+                                    margin="normal"
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Đổi phương pháp khi thua liên tiếp"
+                                    variant="outlined"
+                                    value={loseChangeMethodAfterLoseStreak}
+                                    onChange={(e) =>
+                                      setLoseChangeMethodAfterLoseStreak(
+                                        e.target.value
+                                      )
+                                    }
+                                    margin="normal"
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Đổi phương pháp khi thắng liên tiếp"
+                                    variant="outlined"
+                                    value={loseChangeMethodAfterWinStreak}
+                                    onChange={(e) =>
+                                      setLoseChangeMethodAfterWinStreak(
+                                        e.target.value
+                                      )
+                                    }
+                                    margin="normal"
+                                  />
+                                </Grid>
+                              </Grid>
+                            </FormGroup>
+                          </Box>
+
+                          <Box hidden={selectedTab1 !== 2}>
+                            {/* Nội dung của tab Victor.S */}
+                          </Box>
+                        </FormControl>
+                      </Paper>
+                    </Box>
+                  </>
+                )}
+                {featureType === SignalFeatureTypes.AUTO_CHANGE_METHODS && (
+                  <Box mt={2} component="form" noValidate autoComplete="off">
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          type="number"
+                          fullWidth
+                          label="Đổi khi tổng thắng đạt"
+                          variant="outlined"
+                          defaultValue="0"
+                          margin="normal"
+                          value={winningTotalReach}
+                          onChange={(e) => setWinningTotalReach(e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          type="number"
+                          fullWidth
+                          label="Đổi khi tổng thua đạt"
+                          variant="outlined"
+                          defaultValue="0"
+                          margin="normal"
+                          value={loseTotalReach}
+                          onChange={(e) => setLoseTotalReach(e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          type="number"
+                          fullWidth
+                          label="Đổi khi thắng liên tiếp"
+                          variant="outlined"
+                          defaultValue="0"
+                          margin="normal"
+                          value={winningContinue}
+                          onChange={(e) => setWinningContinue(e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          type="number"
+                          fullWidth
+                          label="Đổi khi thua liên tiếp"
+                          variant="outlined"
+                          defaultValue="0"
+                          margin="normal"
+                          value={loseContinue}
+                          onChange={(e) => setLoseContinue(e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          type="number"
+                          fullWidth
+                          label="Đổi khi lãi ($)"
+                          variant="outlined"
+                          defaultValue="0"
+                          margin="normal"
+                          value={whenProfit}
+                          onChange={(e) => setWhenProfit(e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          type="number"
+                          fullWidth
+                          label="Đổi khi lỗ ($)"
+                          variant="outlined"
+                          defaultValue="0"
+                          margin="normal"
+                          value={whenLosing}
+                          onChange={(e) => setWhenLosing(e.target.value)}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Box>
+                )}
                 <Box display="flex" alignItems="center" mt={2}>
                   <Typography variant="subtitle1">Set base amount</Typography>
                   <Box ml={2} display="flex" alignItems="center">
@@ -440,7 +1051,88 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   />
                 </Box>
               )} */}
-              <Box mt={4}>
+              <Box mt={2} component="form" noValidate autoComplete="off">
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="number"
+                      fullWidth
+                      label="Mục tiêu chốt lời ($)"
+                      variant="outlined"
+                      defaultValue="0"
+                      margin="normal"
+                      value={takeProfitTarget}
+                      onChange={(e) => setTakeProfitTarget(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="number"
+                      fullWidth
+                      label="Mục tiêu cắt lỗ ($)"
+                      variant="outlined"
+                      defaultValue="0"
+                      margin="normal"
+                      value={stopLossTarget}
+                      onChange={(e) => setStopLossTarget(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="number"
+                      fullWidth
+                      label="Dừng khi thắng LT"
+                      variant="outlined"
+                      defaultValue="0"
+                      margin="normal"
+                      value={winStreakTarget}
+                      onChange={(e) => setWinStreakTarget(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="number"
+                      fullWidth
+                      label="Dừng khi thua LT"
+                      variant="outlined"
+                      defaultValue="0"
+                      margin="normal"
+                      value={loseStreakTarget}
+                      onChange={(e) => setLoseStreakTarget(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="number"
+                      fullWidth
+                      label="Dừng khi thắng tổng"
+                      variant="outlined"
+                      defaultValue="0"
+                      margin="normal"
+                      value={winTotalTarget}
+                      onChange={(e) => setWinTotalTarget(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="number"
+                      fullWidth
+                      label="Dừng khi thua tổng"
+                      variant="outlined"
+                      defaultValue="0"
+                      margin="normal"
+                      value={loseTotalTarget}
+                      onChange={(e) => setLoseTotalTarget(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Alert severity="warning">
+                      Các mục tiêu không sử dụng hãy nhập số 0
+                    </Alert>
+                  </Grid>
+                </Grid>
+              </Box>
+              <Box mt={2}>
                 <Typography variant="h6">
                   Take-Profit/Stop-Loss Conditions
                 </Typography>
@@ -459,22 +1151,8 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   label="Enable TP/SL"
                 />
               </Box>
-              <Box mt={4}>
-                <Typography variant="h6">
-                  Chế độ chuyên gia
-                </Typography>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={isBrokerMode}
-                      onChange={() => setIsBrokerMode(!isBrokerMode)}
-                    />
-                  }
-                  label="Broker mode"
-                />
-              </Box>
               {/* Advanced option */}
-              <Box mt={4}>
+              <Box mt={2}>
                 <Accordion expanded={expanded} onChange={handleAccordionChange}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -486,7 +1164,19 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     </Typography>
                   </AccordionSummary>
                   <Box p={2}>
-                    <Box mt={4}>
+                    <Box mt={2}>
+                      <Typography variant="h6">Chế độ chuyên gia</Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={isBrokerMode}
+                            onChange={() => setIsBrokerMode(!isBrokerMode)}
+                          />
+                        }
+                        label="Broker mode"
+                      />
+                    </Box>
+                    <Box mt={2}>
                       <Typography variant="h6">Private Mode</Typography>
                       <Typography variant="body2">
                         Other user will not be able to copy your plan when you
@@ -502,7 +1192,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                         label="Private Mode"
                       />
                     </Box>
-                    <Box mt={4}>
+                    <Box mt={2}>
                       <Typography variant="h6">Reverse Signal</Typography>
                       <Typography variant="body2">
                         The order you open will be the opposite of the received
@@ -626,6 +1316,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                 color="primary"
                 fullWidth
                 sx={{ padding: "10px" }}
+                onClick={handleConfirmAndSave}
               >
                 Confirm & Save
               </Button>
