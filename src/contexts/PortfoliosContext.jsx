@@ -1,17 +1,19 @@
 import portfolioApi from "api/portfolios/portfolioApi";
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { SettingsContext } from "./settingsContext";
 
 export const PortfoliosContext = createContext();
 
 export const PortfoliosProvider = ({ children }) => {
   const [data, setData] = useState([]);
+  const {walletMode }= useContext(SettingsContext)
   const [loading, setLoading] = useState();
   const [change, setChange] = useState(false);
   // Load user profile from localStorage and check if the user is authenticated
   const getSpotBalanceUser = async () => {
     try {
       setLoading(true);
-      const response= await portfolioApi.userBotList()
+      const response= await portfolioApi.userBotList({params: {type: walletMode ? "LIVE" : "DEMO"}})
       if(response?.data?.ok=== true) {
         setData(response?.data?.d)
       }
@@ -28,7 +30,7 @@ export const PortfoliosProvider = ({ children }) => {
 
   useEffect(() => {
     getSpotBalanceUser();
-  }, [change]);
+  }, [change, walletMode]);
 
   return (
     <PortfoliosContext.Provider

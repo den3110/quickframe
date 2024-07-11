@@ -23,6 +23,7 @@ const SettingsProvider = ({
   } = storage;
   const saveSettings = updateSettings => setStoreSettings(updateSettings);
   const [walletMode, setWalletMode]= useState(walletModeLocal)
+  
   return <SettingsContext.Provider value={{
     settings,
     saveSettings,

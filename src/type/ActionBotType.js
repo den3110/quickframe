@@ -1,6 +1,7 @@
 export const ActionBotType = {
-  START: "START",
-  STOP: "STOP",
   PAUSE: "PAUSE",
+  RESUME: "RESUME",
+  RESTART: "RESTART",
+  RESET: "RESET",
   REMOVE: "REMOVE",
 };

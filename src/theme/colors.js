@@ -1,4 +1,6 @@
 import { alpha } from "@mui/material/styles";
+import config from '../config/config.json';
+
 const grey = {
   25: "#F9FAFB",
   50: "#F6F7F8",
@@ -24,7 +26,7 @@ export const primary = {
   700: "#4317CA",
   800: "#33129C",
   900: "#240C6E",
-  main: "#6950E8"
+  main: config.theme.primaryColor
 };
 export const success = {
   25: "#F1FEF5",
@@ -133,6 +135,7 @@ const palette = {
   secondary
 };
 
+// #6950E8
 // LIGHT THEME COLOR PALETTE
 export const lightPalette = {
   ...palette,

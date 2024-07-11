@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
-import { Divider, IconButton, Typography, useMediaQuery } from "@mui/material";
+import { Divider, IconButton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import userApi from "api/user/userApi";
@@ -68,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MoveBalanceDrawer(props) {
+  const theme= useTheme()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { spotBalance, setChange } = React.useContext(SpotBalanceContext);
   const { open, setOpen } = props;
@@ -204,7 +205,7 @@ export default function MoveBalanceDrawer(props) {
             {mode === false
               ? spotBalance?.usdtAvailableBalance?.toFixed(2)
               : spotBalance?.availableBalance?.toFixed(2)}{" "}
-            <Typography color="#6950E8" fontWeight={"600"}>
+            <Typography color={theme.palette.primary} fontWeight={"600"}>
               TỐI ĐA
             </Typography>
           </Typography>

@@ -43,8 +43,22 @@ import { AutoTypes, AutoTypesTitle } from "type/AutoTypes";
 import { SettingsContext } from "contexts/settingsContext";
 import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
+import { useInView } from "react-intersection-observer";
 
-const NewPlanDrawer = ({ open, handleClose }) => {
+const NewPlanDrawer = ({
+  open,
+  handleClose,
+  isEdit,
+  selectedPlan,
+  setData,
+  dataProps,
+  setIsEdit,
+}) => {
+  const { ref, inView } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
+  const [idPlan, setIdPlan] = useState();
   const { decodedData } = useContext(JwtContext);
   const { walletMode } = useContext(SettingsContext);
   const [step, setStep] = useState(1);
@@ -134,159 +148,185 @@ const NewPlanDrawer = ({ open, handleClose }) => {
   };
 
   const handleConfirmAndSave = async () => {
-    let response;
-    let data;
-    switch (featureType) {
-      case SignalFeatureTypes.SINGLE_METHOD:
-        data = {
-          autoType: autoType,
-          name: planName,
-          accountType: walletMode ? "LIVE" : "DEMO",
-          budgetStrategyId: budgetStrategy,
-          bet_second: betSecond,
-          margin_dense: baseAmount,
-          isBrokerMode: isBrokerMode,
-          isNotificationsEnabled: true,
-          method_data: {
-            method_list: [signalStrategy],
-            feature_data: {},
-          },
-          take_profit_target: takeProfitTarget,
-          stop_loss_target: stopLossTarget,
-          win_streak_target: winStreakTarget,
-          lose_streak_target: loseStreakTarget,
-          win_total_target: winTotalTarget,
-          lose_total_target: loseTotalTarget,
-          budget_amount: investmentFund,
-          telegram_token: telegramToken,
-          telegram_chatId: telegramChatId,
-          isPrivate: privateMode,
-          is_reverse: reserveSignal,
-          signal_feature: featureType,
-        };
-        break;
-      case SignalFeatureTypes.MIX_METHODS:
-        data = {
-          autoType: autoType,
-          name: planName,
-          accountType: walletMode ? "LIVE" : "DEMO",
-          budgetStrategyId: budgetStrategy,
-          bet_second: betSecond,
-          margin_dense: baseAmount,
-          isBrokerMode: isBrokerMode,
-          isNotificationsEnabled: true,
-          method_data: {
-            method_list: arraySignalStrategy,
-            feature_data: {},
-          },
-          take_profit_target: takeProfitTarget,
-          stop_loss_target: stopLossTarget,
-          win_streak_target: winStreakTarget,
-          lose_streak_target: loseStreakTarget,
-          win_total_target: winTotalTarget,
-          lose_total_target: loseTotalTarget,
-          budget_amount: investmentFund,
-          telegram_token: telegramToken,
-          telegram_chatId: telegramChatId,
-          isPrivate: privateMode,
-          is_reverse: reserveSignal,
-          signal_feature: featureType,
-        };
-        break;
-      case SignalFeatureTypes.AUTO_CHANGE_METHODS:
-        data = {
-          autoType: autoType,
-          name: planName,
-          accountType: walletMode ? "LIVE" : "DEMO",
-          budgetStrategyId: budgetStrategy,
-          bet_second: betSecond,
-          margin_dense: baseAmount,
-          isBrokerMode: isBrokerMode,
-          isNotificationsEnabled: true,
-          method_data: {
-            method_list: arraySignalStrategy,
-            feature_data: {
-              win_streak_target: winningTotalReach,
-              lose_streak_target: loseTotalReach,
-              win_total_target: winningContinue,
-              lose_total_target: loseContinue,
-              take_profit_target: whenProfit,
-              stop_loss_target: whenLosing,
+    try {
+      let response;
+      let data;
+      switch (featureType) {
+        case SignalFeatureTypes.SINGLE_METHOD:
+          data = {
+            autoType: autoType,
+            name: planName,
+            accountType: walletMode ? "LIVE" : "DEMO",
+            budgetStrategyId: budgetStrategy,
+            bet_second: betSecond,
+            margin_dense: baseAmount,
+            isBrokerMode: isBrokerMode,
+            isNotificationsEnabled: true,
+            method_data: {
+              method_list: [signalStrategy],
+              feature_data: {},
             },
-          },
-          take_profit_target: takeProfitTarget,
-          stop_loss_target: stopLossTarget,
-          win_streak_target: winStreakTarget,
-          lose_streak_target: loseStreakTarget,
-          win_total_target: winTotalTarget,
-          lose_total_target: loseTotalTarget,
-          budget_amount: investmentFund,
-          telegram_token: telegramToken,
-          telegram_chatId: telegramChatId,
-          isPrivate: privateMode,
-          is_reverse: reserveSignal,
-          signal_feature: featureType,
-        };
-        break;
-      case SignalFeatureTypes.WAIT_SIGNALS:
-        data = {
-          autoType: autoType,
-          name: planName,
-          accountType: walletMode ? "LIVE" : "DEMO",
-          budgetStrategyId: budgetStrategy,
-          bet_second: betSecond,
-          margin_dense: baseAmount,
-          isBrokerMode: isBrokerMode,
-          isNotificationsEnabled: true,
-          method_data: {
-            method_list: arraySignalStrategy,
-            feature_data: {
-              shuffle_methods_order: shuffleMethodsOrder,
-              no_repeat_methods_next_turn: noRepeatMethodsNextTurn,
-              win_enabled: winEnabled,
-              win_reverse_signal: winReverseSignal,
-              win_end_win_streak: winEndWinStreak,
-              win_exactly_win_streak: winExactlyWinStreak,
-              win_streak_entry_target: winStreakEntryTarget,
-              win_turn_count: winTurnCount,
-              win_change_method_after_lose_streak:
-                winChangeMethodAfterLoseStreak,
-              win_change_method_after_win_streak: winChangeMethodAfterWinStreak,
+            take_profit_target: takeProfitTarget,
+            stop_loss_target: stopLossTarget,
+            win_streak_target: winStreakTarget,
+            lose_streak_target: loseStreakTarget,
+            win_total_target: winTotalTarget,
+            lose_total_target: loseTotalTarget,
+            budget_amount: investmentFund,
+            telegram_token: telegramToken,
+            telegram_chatId: telegramChatId,
+            isPrivate: privateMode,
+            is_reverse: reserveSignal,
+            signal_feature: featureType,
+          };
 
-              lose_enabled: loseEnabled,
-              lose_reverse_signal: loseReverseSignal,
-              lose_end_lose_streak: loseEndLoseStreak,
-              lose_exactly_lose_streak: loseExactlyLoseStreak,
-              lose_streak_entry_target: loseStreakEntryTarget,
-              lose_turn_count: loseTurnCount,
-              lose_change_method_after_lose_streak:
-                loseChangeMethodAfterLoseStreak,
-              lose_change_method_after_win_streak:
-                loseChangeMethodAfterWinStreak,
+          break;
+        case SignalFeatureTypes.MIX_METHODS:
+          data = {
+            autoType: autoType,
+            name: planName,
+            accountType: walletMode ? "LIVE" : "DEMO",
+            budgetStrategyId: budgetStrategy,
+            bet_second: betSecond,
+            margin_dense: baseAmount,
+            isBrokerMode: isBrokerMode,
+            isNotificationsEnabled: true,
+            method_data: {
+              method_list: arraySignalStrategy,
+              feature_data: {},
             },
-          },
-          take_profit_target: takeProfitTarget,
-          stop_loss_target: stopLossTarget,
-          win_streak_target: winStreakTarget,
-          lose_streak_target: loseStreakTarget,
-          win_total_target: winTotalTarget,
-          lose_total_target: loseTotalTarget,
-          budget_amount: investmentFund,
-          telegram_token: telegramToken,
-          telegram_chatId: telegramChatId,
-          isPrivate: privateMode,
-          is_reverse: reserveSignal,
-          signal_feature: featureType,
-        };
-        break;
+            take_profit_target: takeProfitTarget,
+            stop_loss_target: stopLossTarget,
+            win_streak_target: winStreakTarget,
+            lose_streak_target: loseStreakTarget,
+            win_total_target: winTotalTarget,
+            lose_total_target: loseTotalTarget,
+            budget_amount: investmentFund,
+            telegram_token: telegramToken,
+            telegram_chatId: telegramChatId,
+            isPrivate: privateMode,
+            is_reverse: reserveSignal,
+            signal_feature: featureType,
+          };
+          break;
+        case SignalFeatureTypes.AUTO_CHANGE_METHODS:
+          data = {
+            autoType: autoType,
+            name: planName,
+            accountType: walletMode ? "LIVE" : "DEMO",
+            budgetStrategyId: budgetStrategy,
+            bet_second: betSecond,
+            margin_dense: baseAmount,
+            isBrokerMode: isBrokerMode,
+            isNotificationsEnabled: true,
+            method_data: {
+              method_list: arraySignalStrategy,
+              feature_data: {
+                win_streak_target: winningTotalReach,
+                lose_streak_target: loseTotalReach,
+                win_total_target: winningContinue,
+                lose_total_target: loseContinue,
+                take_profit_target: whenProfit,
+                stop_loss_target: whenLosing,
+              },
+            },
+            take_profit_target: takeProfitTarget,
+            stop_loss_target: stopLossTarget,
+            win_streak_target: winStreakTarget,
+            lose_streak_target: loseStreakTarget,
+            win_total_target: winTotalTarget,
+            lose_total_target: loseTotalTarget,
+            budget_amount: investmentFund,
+            telegram_token: telegramToken,
+            telegram_chatId: telegramChatId,
+            isPrivate: privateMode,
+            is_reverse: reserveSignal,
+            signal_feature: featureType,
+          };
+          break;
+        case SignalFeatureTypes.WAIT_SIGNALS:
+          data = {
+            autoType: autoType,
+            name: planName,
+            accountType: walletMode ? "LIVE" : "DEMO",
+            budgetStrategyId: budgetStrategy,
+            bet_second: betSecond,
+            margin_dense: baseAmount,
+            isBrokerMode: isBrokerMode,
+            isNotificationsEnabled: true,
+            method_data: {
+              method_list: arraySignalStrategy,
+              feature_data: {
+                shuffle_methods_order: shuffleMethodsOrder,
+                no_repeat_methods_next_turn: noRepeatMethodsNextTurn,
+                win_enabled: winEnabled,
+                win_reverse_signal: winReverseSignal,
+                win_end_win_streak: winEndWinStreak,
+                win_exactly_win_streak: winExactlyWinStreak,
+                win_streak_entry_target: winStreakEntryTarget,
+                win_turn_count: winTurnCount,
+                win_change_method_after_lose_streak:
+                  winChangeMethodAfterLoseStreak,
+                win_change_method_after_win_streak:
+                  winChangeMethodAfterWinStreak,
 
-      default:
-        break;
-    }
-    response = await portfolioApi.usersBotCreate(data);
-    if (response?.data?.ok === true) {
-      showToast("Tạo bot thành công", "success");
-      onClose();
+                lose_enabled: loseEnabled,
+                lose_reverse_signal: loseReverseSignal,
+                lose_end_lose_streak: loseEndLoseStreak,
+                lose_exactly_lose_streak: loseExactlyLoseStreak,
+                lose_streak_entry_target: loseStreakEntryTarget,
+                lose_turn_count: loseTurnCount,
+                lose_change_method_after_lose_streak:
+                  loseChangeMethodAfterLoseStreak,
+                lose_change_method_after_win_streak:
+                  loseChangeMethodAfterWinStreak,
+              },
+            },
+            take_profit_target: takeProfitTarget,
+            stop_loss_target: stopLossTarget,
+            win_streak_target: winStreakTarget,
+            lose_streak_target: loseStreakTarget,
+            win_total_target: winTotalTarget,
+            lose_total_target: loseTotalTarget,
+            budget_amount: investmentFund,
+            telegram_token: telegramToken,
+            telegram_chatId: telegramChatId,
+            isPrivate: privateMode,
+            is_reverse: reserveSignal,
+            signal_feature: featureType,
+          };
+          break;
+
+        default:
+          break;
+      }
+      if (isEdit === true) {
+        data = { ...selectedPlan, ...data };
+        response = await portfolioApi.userBotUpdate(idPlan, data);
+      } else {
+        response = await portfolioApi.usersBotCreate(data);
+      }
+      if (response?.data?.ok === true) {
+        if (isEdit === true) {
+          let dataTemp = dataProps;
+          const indexData = dataTemp?.findIndex(
+            (item) => item?._id === selectedPlan?._id
+          );
+          console.log("index data", indexData);
+          dataTemp[indexData] = data;
+          setData(dataTemp);
+        }
+        showToast(
+          isEdit ? "Cập nhật bot thành công" : "Tạo bot thành công",
+          "success"
+        );
+        onClose();
+      } else {
+        showToast(response?.data?.m);
+      }
+    } catch (error) {
+      console.log(error);
+      showToast(error?.response?.data?.m);
     }
   };
 
@@ -315,6 +355,53 @@ const NewPlanDrawer = ({ open, handleClose }) => {
     }
   }, [decodedData]);
 
+  useEffect(() => {
+    if (isEdit === true) {
+      setIdPlan(selectedPlan?._id);
+      setPlanName(selectedPlan?.name);
+      setInvestmentFund(selectedPlan?.budget_amount);
+      setBetSecond(selectedPlan?.bet_second);
+      setAutoType(selectedPlan?.autoType);
+      setFeatureType(selectedPlan?.signal_feature);
+      setBudgetStrategy(selectedPlan?.budgetStrategyId);
+      setBaseAmount(selectedPlan?.margin_dense);
+      setTakeProfit(selectedPlan?.enabled_tpsl);
+      setIsBrokerMode(selectedPlan?.isBrokerMode);
+      setPrivateMode(selectedPlan?.isPrivate);
+      setReserveSignal(selectedPlan?.is_reverse);
+      setArraySignalStrategy(selectedPlan?.method_data?.method_list);
+      setShuffleMethodsOrder(selectedPlan?.method_data?.feature_data?.shuffle_methods_order);
+      setNoRepeatMethodsNextTurn(
+        selectedPlan?.method_data?.feature_data?.no_repeat_methods_next_turn
+      );
+      setWinEnabled(selectedPlan?.method_data?.feature_data?.win_enabled);
+      setWinReverseSignal(selectedPlan?.method_data?.feature_data?.win_reverse_signal)
+      setWinEndWinStreak(selectedPlan?.method_data?.feature_data?.win_end_win_streak)
+      setWinExactlyWinStreak(selectedPlan?.method_data?.feature_data?.win_exactly_win_streak)
+      setWinStreakEntryTarget(selectedPlan?.method_data?.feature_data?.win_streak_entry_target)
+      setWinTurnCount(selectedPlan?.method_data?.feature_data?.win_turn_count)
+      setWinChangeMethodAfterWinStreak(selectedPlan?.method_data?.feature_data?.win_change_method_after_win_streak)
+      setWinChangeMethodAfterLoseStreak(selectedPlan?.method_data?.feature_data?.win_change_method_after_lose_streak)
+
+      setLoseEnabled(selectedPlan?.method_data?.feature_data?.lose_enabled)
+      setLoseReverseSignal(selectedPlan?.method_data?.feature_data?.lose_reverse_signal)
+      setLoseEndLoseStreak(selectedPlan?.method_data?.feature_data?.lose_end_lose_streak)
+      setLoseExactlyLoseStreak(selectedPlan?.method_data?.feature_data?.lose_exactly_lose_streak)
+      setLoseStreakEntryTarget(selectedPlan?.method_data?.feature_data?.lose_streak_entry_target)
+      setLoseTurnCount(selectedPlan?.method_data?.feature_data?.lose_turn_count)
+      setLoseChangeMethodAfterLoseStreak(selectedPlan?.method_data?.feature_data?.lose_change_method_after_lose_streak)
+      setLoseChangeMethodAfterWinStreak(selectedPlan?.method_data?.feature_data?.lose_change_method_after_win_streak)
+      // e dang lam a co gi khong a xem ti
+      // a oi ba cai sau thi chua co api ha a, lam 3 cai la stop start va remove thoi e oke a
+    }
+  }, [isEdit, selectedPlan]);
+
+  useEffect(() => {
+    if (inView === false) {
+      setIsEdit(false);
+    }
+  }, [inView]);
+
   return (
     <Drawer
       anchor={downLg ? "bottom" : "right"}
@@ -323,8 +410,9 @@ const NewPlanDrawer = ({ open, handleClose }) => {
       sx={{ zIndex: "" }}
     >
       <Box
+        ref={ref}
         width={downLg ? "100%" : 850}
-        p={3}
+        p={downLg ? 2 : 3}
         display="flex"
         flexDirection="column"
         justifyContent="space-between"
@@ -372,14 +460,177 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   value={planName}
                   onChange={(e) => setPlanName(e.target.value)}
                 />
-                <Box display="flex" alignItems="center" mt={2}>
-                  <Typography variant="subtitle1">Investment fund</Typography>
-                  <Box ml={2} display="flex" alignItems="center">
+                <Box sx={{display: "flex", alignItems: "center", gap: 1, flexDirection: downLg ? "column" : "row"}}>
+                  <Box sx={{width: "100%"}} display="flex" alignItems="center" mt={2}>
+                    <Typography variant="subtitle1">Investment fund</Typography>
+                    <Box ml={2} display="flex" alignItems="center">
+                      <Button
+                        variant="contained"
+                        onClick={() =>
+                          handleDecrement(setInvestmentFund, investmentFund)
+                        }
+                        style={{ minWidth: 30, padding: 5 }}
+                      >
+                        -
+                      </Button>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "0 5px",
+                        }}
+                      >
+                        <Typography>$</Typography>
+                        <TextField
+                          value={investmentFund}
+                          onChange={(e) => {
+                            setInvestmentFund(parseFloat(e.target.value) || 0);
+                          }}
+                          inputProps={{
+                            min: 0,
+                            style: {
+                              padding: 5,
+                            },
+                          }}
+                          InputProps={{
+                            disableUnderline: true,
+                          }}
+                          style={{
+                            width: 50,
+                            margin: "0 4px",
+                            textAlign: "center",
+                            border: "none",
+                            outline: "none",
+                          }}
+                          sx={{
+                            "& fieldset": { border: "none", outline: "none" },
+                          }}
+                        />
+                      </Box>
+                      <Button
+                        variant="contained"
+                        onClick={() =>
+                          handleIncrement(setInvestmentFund, investmentFund)
+                        }
+                        style={{ minWidth: 30, padding: 5 }}
+                      >
+                        +
+                      </Button>
+                    </Box>
+                  </Box>
+                  <Box sx={{width: "100%"}} display="flex" alignItems="center" mt={2}>
+                    <Typography variant="subtitle1">
+                      Thời gian vào lệnh
+                    </Typography>
+                    <Box ml={2} display="flex" alignItems="center">
+                      <Button
+                        variant="contained"
+                        onClick={() => handleDecrement(setBetSecond, betSecond)}
+                        style={{ minWidth: 30, padding: 5 }}
+                      >
+                        -
+                      </Button>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "0 5px",
+                        }}
+                      >
+                        <TextField
+                          value={betSecond}
+                          onChange={(e) => {
+                            setBetSecond(parseFloat(e.target.value) || 0);
+                          }}
+                          inputProps={{
+                            min: 0,
+                            style: {
+                              padding: 5,
+                            },
+                          }}
+                          InputProps={{
+                            disableUnderline: true,
+                          }}
+                          style={{
+                            width: 50,
+                            margin: "0 4px",
+                            textAlign: "center",
+                            border: "none",
+                            outline: "none",
+                          }}
+                          sx={{
+                            "& fieldset": { border: "none", outline: "none" },
+                          }}
+                        />
+                      </Box>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleIncrement(setBetSecond, betSecond)}
+                        style={{ minWidth: 30, padding: 5 }}
+                      >
+                        +
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+
+              <Box mt={2}>
+                <AppBar position="static" color="default">
+                  <Toolbar>
+                    <Typography variant="h6" style={{ flexGrow: 1 }}>
+                      Step 2: Set up your plan
+                    </Typography>
+                  </Toolbar>
+                </AppBar>
+                {!isEdit && (
+                  <Box display="flex" mt={2}>
+                    {["Bot AI", "Follow Leader"].map((tab) => (
+                      <Button
+                        key={tab}
+                        variant={selectedTab === tab ? "contained" : "outlined"}
+                        color={selectedTab === tab ? "primary" : "secondary"}
+                        style={{ marginRight: 8 }}
+                        onClick={() => {
+                          setSelectedTab(tab);
+                          setArraySignalStrategy([]);
+                        }}
+                      >
+                        {tab}
+                      </Button>
+                    ))}
+                  </Box>
+                )}
+              </Box>
+              <Box className="aslawkalw" sx={{display: "flex", alignItems: "start", gap: 1}}>
+                {selectedTab === "Bot AI" && (
+                  <Box sx={{width: "100%"}} mt={2}>
+                    <Typography variant="subtitle1">
+                      Tính năng sử dụng
+                    </Typography>
+                    <FormControl variant="outlined" fullWidth margin="normal">
+                      <Select
+                        value={featureType}
+                        onChange={(e) => setFeatureType(e.target.value)}
+                        size="medium"
+                      >
+                        {Object.entries(SignalFeatureTypes).map(
+                          ([item, key]) => (
+                            <MenuItem key={key} value={item}>
+                              {SignalFeatureTypesTitle[item]}
+                            </MenuItem>
+                          )
+                        )}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                )}
+                <Box sx={{width: "100%"}}  mt={2}>
+                  <Typography variant="subtitle1">Set base amount</Typography>
+                  <Box mt={2} display="flex" alignItems="center" height={56}>
                     <Button
                       variant="contained"
-                      onClick={() =>
-                        handleDecrement(setInvestmentFund, investmentFund)
-                      }
+                      onClick={() => handleDecrement(setBaseAmount, baseAmount)}
                       style={{ minWidth: 30, padding: 5 }}
                     >
                       -
@@ -393,9 +644,9 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     >
                       <Typography>$</Typography>
                       <TextField
-                        value={investmentFund}
+                        value={baseAmount}
                         onChange={(e) => {
-                          setInvestmentFund(parseFloat(e.target.value) || 0);
+                          setBaseAmount(parseFloat(e.target.value) || 0);
                         }}
                         inputProps={{
                           min: 0,
@@ -420,63 +671,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     </Box>
                     <Button
                       variant="contained"
-                      onClick={() =>
-                        handleIncrement(setInvestmentFund, investmentFund)
-                      }
-                      style={{ minWidth: 30, padding: 5 }}
-                    >
-                      +
-                    </Button>
-                  </Box>
-                </Box>
-                <Box display="flex" alignItems="center" mt={2}>
-                  <Typography variant="subtitle1">
-                    Thời gian vào lệnh
-                  </Typography>
-                  <Box ml={2} display="flex" alignItems="center">
-                    <Button
-                      variant="contained"
-                      onClick={() => handleDecrement(setBetSecond, betSecond)}
-                      style={{ minWidth: 30, padding: 5 }}
-                    >
-                      -
-                    </Button>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        padding: "0 5px",
-                      }}
-                    >
-                      <TextField
-                        value={betSecond}
-                        onChange={(e) => {
-                          setBetSecond(parseFloat(e.target.value) || 0);
-                        }}
-                        inputProps={{
-                          min: 0,
-                          style: {
-                            padding: 5,
-                          },
-                        }}
-                        InputProps={{
-                          disableUnderline: true,
-                        }}
-                        style={{
-                          width: 50,
-                          margin: "0 4px",
-                          textAlign: "center",
-                          border: "none",
-                          outline: "none",
-                        }}
-                        sx={{
-                          "& fieldset": { border: "none", outline: "none" },
-                        }}
-                      />
-                    </Box>
-                    <Button
-                      variant="contained"
-                      onClick={() => handleIncrement(setBetSecond, betSecond)}
+                      onClick={() => handleIncrement(setBaseAmount, baseAmount)}
                       style={{ minWidth: 30, padding: 5 }}
                     >
                       +
@@ -484,48 +679,6 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   </Box>
                 </Box>
               </Box>
-
-              <Box mt={2}>
-                <AppBar position="static" color="default">
-                  <Toolbar>
-                    <Typography variant="h6" style={{ flexGrow: 1 }}>
-                      Step 2: Set up your plan
-                    </Typography>
-                  </Toolbar>
-                </AppBar>
-                <Box display="flex" mt={2}>
-                  {["Bot AI", "Follow Leader"].map((tab) => (
-                    <Button
-                      key={tab}
-                      variant={selectedTab === tab ? "contained" : "outlined"}
-                      color={selectedTab === tab ? "primary" : "secondary"}
-                      style={{ marginRight: 8 }}
-                      onClick={() => {setSelectedTab(tab); setArraySignalStrategy([])}}
-                    >
-                      {tab}
-                    </Button>
-                  ))}
-                </Box>
-              </Box>
-              {
-                selectedTab=== "Bot AI" && 
-                <Box mt={2}>
-                  <Typography variant="subtitle1">Tính năng sử dụng</Typography>
-                  <FormControl variant="outlined" fullWidth margin="normal">
-                    <Select
-                      value={featureType}
-                      onChange={(e) => setFeatureType(e.target.value)}
-                      size="medium"
-                    >
-                      {Object.entries(SignalFeatureTypes).map(([item, key]) => (
-                        <MenuItem key={key} value={item}>
-                          {SignalFeatureTypesTitle[item]}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-              }
               {/*  */}
               {isChooseBot === true && (
                 <>
@@ -550,85 +703,13 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                 </>
               )}
               {/*  */}
-              <Box mt={2}>
-                <Typography variant="subtitle1">
-                  {selectedTab === "Bot AI" ? "Signal*" : "Leader username"}
-                </Typography>
+              <Box
+                className="asklawa"
+                sx={{ display: "flex", gap: 1, alignItems: "center" }}
+                mt={1}
+              >
                 {selectedTab === "Bot AI" && (
-                  <FormControl variant="outlined" fullWidth margin="normal">
-                    {featureType === SignalFeatureTypes.SINGLE_METHOD ? (
-                      <>
-                        <Select
-                          value={signalStrategy}
-                          onChange={(e) => setSignalStrategy(e.target.value)}
-                          size="medium"
-                        >
-                          {dataSignalStrategy?.map((item, key) => (
-                            <MenuItem key={key} value={item?._id}>
-                              {item?.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </>
-                    ) : (
-                      <>
-                        <Select
-                          multiple
-                          value={arraySignalStrategy}
-                          onChange={(e) =>
-                            setArraySignalStrategy(e.target.value)
-                          }
-                          size="medium"
-                          renderValue={(selected) => (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 0.5,
-                              }}
-                            >
-                              {selected.map((value) => (
-                                <Chip
-                                  key={value}
-                                  label={
-                                    dataSignalStrategy.find(
-                                      (item) => item._id === value
-                                    )?.name
-                                  }
-                                />
-                              ))}
-                            </Box>
-                          )}
-                        >
-                          {dataSignalStrategy?.map((item, key) => (
-                            <MenuItem key={key} value={item?._id}>
-                              <Checkbox
-                                checked={
-                                  arraySignalStrategy.indexOf(item._id) > -1
-                                }
-                              />
-                              <ListItemText primary={item.name} />
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </>
-                    )}
-                  </FormControl>
-                )}
-                {/*  */}
-                {selectedTab === "Follow Leader" && (
-                  <Box sx={{ width: "100%" }} mt={2}>
-                    <MuiChipsInput
-                      value={arraySignalStrategy}
-                      onChange={(value) => setArraySignalStrategy(value)}
-                      placeholder="Nhấn enter để thêm"
-                      sx={{ width: "100%" }}
-                    />
-                  </Box>
-                )}
-                {/*  */}
-                {selectedTab === "Bot AI" && (
-                  <Box mt={2}>
+                  <Box sx={{ width: "100%" }} fullWidth>
                     <Typography variant="subtitle1">
                       Budget strategy*
                     </Typography>
@@ -648,6 +729,86 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     </FormControl>
                   </Box>
                 )}
+                <Box sx={{ width: "100%" }}>
+                  <Typography variant="subtitle1">
+                    {selectedTab === "Bot AI" ? "Signal*" : "Leader username"}
+                  </Typography>
+                  {selectedTab === "Bot AI" && (
+                    <FormControl variant="outlined" fullWidth margin="normal">
+                      {featureType === SignalFeatureTypes.SINGLE_METHOD ? (
+                        <>
+                          <Select
+                            value={signalStrategy}
+                            onChange={(e) => setSignalStrategy(e.target.value)}
+                            size="medium"
+                          >
+                            {dataSignalStrategy?.map((item, key) => (
+                              <MenuItem key={key} value={item?._id}>
+                                {item?.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </>
+                      ) : (
+                        <>
+                          <Select
+                            multiple
+                            value={arraySignalStrategy}
+                            onChange={(e) =>
+                              setArraySignalStrategy(e.target.value)
+                            }
+                            size="medium"
+                            renderValue={(selected) => (
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: 0.5,
+                                }}
+                              >
+                                {selected.map((value) => (
+                                  <Chip
+                                    key={value}
+                                    label={
+                                      dataSignalStrategy.find(
+                                        (item) => item._id === value
+                                      )?.name
+                                    }
+                                  />
+                                ))}
+                              </Box>
+                            )}
+                          >
+                            {dataSignalStrategy?.map((item, key) => (
+                              <MenuItem key={key} value={item?._id}>
+                                <Checkbox
+                                  checked={
+                                    arraySignalStrategy.indexOf(item._id) > -1
+                                  }
+                                />
+                                <ListItemText primary={item.name} />
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </>
+                      )}
+                    </FormControl>
+                  )}
+                  {/*  */}
+                  {selectedTab === "Follow Leader" && (
+                    <Box sx={{ width: "100%" }} mt={2}>
+                      <MuiChipsInput
+                        value={arraySignalStrategy}
+                        onChange={(value) => setArraySignalStrategy(value)}
+                        placeholder="Nhấn enter để thêm"
+                        sx={{ width: "100%" }}
+                      />
+                    </Box>
+                  )}
+                  {/*  */}
+                </Box>
+              </Box>
+              <Box mt={2}>
                 {featureType === SignalFeatureTypes.WAIT_SIGNALS && (
                   <>
                     <Box>
@@ -981,60 +1142,8 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     </Grid>
                   </Box>
                 )}
-                <Box display="flex" alignItems="center" mt={2}>
-                  <Typography variant="subtitle1">Set base amount</Typography>
-                  <Box ml={2} display="flex" alignItems="center">
-                    <Button
-                      variant="contained"
-                      onClick={() => handleDecrement(setBaseAmount, baseAmount)}
-                      style={{ minWidth: 30, padding: 5 }}
-                    >
-                      -
-                    </Button>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        padding: "0 5px",
-                      }}
-                    >
-                      <Typography>$</Typography>
-                      <TextField
-                        value={baseAmount}
-                        onChange={(e) => {
-                          setBaseAmount(parseFloat(e.target.value) || 0);
-                        }}
-                        inputProps={{
-                          min: 0,
-                          style: {
-                            padding: 5,
-                          },
-                        }}
-                        InputProps={{
-                          disableUnderline: true,
-                        }}
-                        style={{
-                          width: 50,
-                          margin: "0 4px",
-                          textAlign: "center",
-                          border: "none",
-                          outline: "none",
-                        }}
-                        sx={{
-                          "& fieldset": { border: "none", outline: "none" },
-                        }}
-                      />
-                    </Box>
-                    <Button
-                      variant="contained"
-                      onClick={() => handleIncrement(setBaseAmount, baseAmount)}
-                      style={{ minWidth: 30, padding: 5 }}
-                    >
-                      +
-                    </Button>
-                  </Box>
-                </Box>
               </Box>
+              {/*  */}
               {/* {selectedTab === "Bot AI" && (
                 <Box mt={4}>
                   <Typography variant="h6">
@@ -1054,7 +1163,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   />
                 </Box>
               )} */}
-             
+
               <Box mt={2}>
                 <Typography variant="h6">
                   Take-Profit/Stop-Loss Conditions
@@ -1074,8 +1183,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   label="Enable TP/SL"
                 />
               </Box>
-              {
-                takeProfit=== true &&
+              {takeProfit === true && (
                 <Box mt={2} component="form" noValidate autoComplete="off">
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
@@ -1157,7 +1265,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                     </Grid>
                   </Grid>
                 </Box>
-              } 
+              )}
               {/* Advanced option */}
               <Box mt={2}>
                 <Accordion expanded={expanded} onChange={handleAccordionChange}>
@@ -1230,7 +1338,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
               bgcolor={theme.palette.background.paper}
               py={2}
             >
-              <Button variant="outlined" sx={{ padding: "10px" }}>
+              <Button variant="outlined" sx={{ padding: "10px" }} fullWidth={downLg ? true : false}>
                 Test Plan (0/40)
               </Button>
               <Button

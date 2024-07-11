@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
@@ -10,6 +9,7 @@ import {
   styled,
   Box,
   Divider,
+  useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 const BoxFlex = styled(Box)(({ theme }) => ({
@@ -19,6 +19,7 @@ const BoxFlex = styled(Box)(({ theme }) => ({
 }));
 
 const CopyBudgteStrategy = ({ open, onClose }) => {
+  const theme= useTheme()
   const [code, setCode] = useState("");
 
   const handleCodeChange = (event) => {
@@ -37,7 +38,7 @@ const CopyBudgteStrategy = ({ open, onClose }) => {
       </BoxFlex>
       <Divider />
       <DialogContent>
-        <Typography variant="h6" gutterBottom sx={{ color: "#6950E8" }}>
+        <Typography variant="h6" gutterBottom sx={{ color: theme.palette.primary }}>
           Easy way to set up your superb strategy!
         </Typography>
         <Typography variant="body2" color="textSecondary" gutterBottom>

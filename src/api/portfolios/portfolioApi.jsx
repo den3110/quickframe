@@ -12,7 +12,15 @@ const portfolioApi = {
   userBotAction(id, data) {
     const url= `/users/bot/action/${id}`
     return axiosClient.post(url, data)
+  },
+  userBotUpdate(id, data) {
+    const url= `/users/bot/update/${id}`
+    return axiosClient.post(url, data)
+  },
+  userBotTotal(data) {
+    const url= `/users/bot/total`
+    return axiosClient.get(url, data)
   }
-};
+};  
 
 export default portfolioApi;

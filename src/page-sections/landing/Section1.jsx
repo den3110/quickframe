@@ -24,8 +24,8 @@ const animated = keyframes`
 `;
 
 // STYLED COMPONENTS
-const MainTitle = styled(H1)(() => ({
-  background: `linear-gradient(300deg, #6950E8 0%,#FB6186 25%, #6950E8 50%, #FB6186 75%,#6950E8 100%)`,
+const MainTitle = styled(H1)((theme) => ({
+  background: `linear-gradient(300deg, ${theme.palette.primary} 0%,#FB6186 25%, ${theme.palette.primary} 50%, #FB6186 75%,${theme.palette.primary} 100%)`,
   WebkitBackgroundClip: "text",
   backgroundClip: "text",
   WebkitTextFillColor: "transparent",

@@ -2,29 +2,47 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import RestoreIcon from "@mui/icons-material/Restore";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import HomeIcon from '@mui/icons-material/Home';
-import { Paper } from "@mui/material";
+import { Paper, Badge } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
 import useLayout from "./context/useLayout";
-import MenuIcon from '@mui/icons-material/Menu'
-import { useNavigate } from "react-router-dom";
 import BottomMenuDialog from "layouts/layout-parts/dialog/BottomMenuDialog";
 import duotone from "icons/duotone";
+import { GlobalContext } from "contexts/GlobalContext";
 
 export default function BottomMenu() {
-  const [value, setValue] = React.useState(0);
-  const { handleOpenMobileSidebar } = useLayout()
-  const [openBottomMenuDialog, setOpenBottomMenuDialog]= React.useState(false)
-  const navigate= useNavigate()
-  const handleOpenBottomMenuDialog= ()=> {
-    setOpenBottomMenuDialog(true)
-  }
-  const handleNavigate= (link)=> {
-    setOpenBottomMenuDialog(false)
-    navigate(link)
-  }
+  const {botTotal }= React.useContext(GlobalContext)
+  const { handleOpenMobileSidebar } = useLayout();
+  const [openBottomMenuDialog, setOpenBottomMenuDialog] = React.useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleOpenBottomMenuDialog = () => {
+    setOpenBottomMenuDialog(true);
+  };
+
+  const handleNavigate = (link) => {
+    setOpenBottomMenuDialog(false);
+    navigate(link);
+  };
+
+  // Determine the active index based on the current path
+  const getActiveIndex = () => {
+    switch (location.pathname) {
+      case "/dashboard":
+        return 0;
+      case "/dashboard/portfolios":
+        return 1;
+      case "/dashboard/budget-strategies":
+        return 2;
+      case "/dashboard/signal-strategies":
+        return 3;
+      default:
+        return 4; // Assuming the last item is the menu
+    }
+  };
+
+  const activeIndex = getActiveIndex();
+
   return (
     <Paper
       sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 5 }}
@@ -33,16 +51,32 @@ export default function BottomMenu() {
       <Box sx={{ width: "100%" }}>
         <BottomNavigation
           showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
+          value={activeIndex}
         >
-          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard")}  icon={<duotone.DashboardIcon />} />
-          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/portfolios")} icon={<duotone.Portfolios />} />
-          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/budget-strategies")}  icon={<duotone.BudgetStrategy />} />
-          <BottomNavigationAction onClick={()=> handleNavigate("/dashboard/signal-strategies")}  icon={<duotone.SignalStrategy />} />
-          <BottomNavigationAction onClick={setOpenBottomMenuDialog} icon={<duotone.Menu />} />
+          <BottomNavigationAction 
+            onClick={() => handleNavigate("/dashboard")} 
+            icon={<duotone.DashboardIcon />} 
+          />
+          <BottomNavigationAction 
+            onClick={() => handleNavigate("/dashboard/portfolios")} 
+            icon={
+              <Badge badgeContent={botTotal} color="primary">
+                <duotone.Portfolios />
+              </Badge>
+            }
+          />
+          <BottomNavigationAction 
+            onClick={() => handleNavigate("/dashboard/budget-strategies")} 
+            icon={<duotone.BudgetStrategy />} 
+          />
+          <BottomNavigationAction 
+            onClick={() => handleNavigate("/dashboard/signal-strategies")} 
+            icon={<duotone.SignalStrategy />} 
+          />
+          <BottomNavigationAction 
+            onClick={handleOpenBottomMenuDialog} 
+            icon={<duotone.Menu />} 
+          />
         </BottomNavigation>
       </Box>
       <BottomMenuDialog open={openBottomMenuDialog} setOpen={setOpenBottomMenuDialog} />

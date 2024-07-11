@@ -139,7 +139,7 @@ const BudgetStrategyPage = () => {
           isDark(theme) ? "rgb(17, 24, 39)" : "rgb(249, 250, 251)",
       }}
     >
-      <Box sx={{ padding: "10px 24px" }}>
+      <Box sx={{ padding: downLg ? "10px" : "10px 24px" }}>
         <Typography variant="h6" fontWeight={600} gutterBottom>
           Budget Management ({data?.length})
         </Typography>

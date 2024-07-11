@@ -47,6 +47,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ShareArchievement from "../dialog/ShareArchievement";
 import RunningPlan from "../component/RunningPlan";
 import PopupControll from "../popup/PopupControll";
+import axiosClient from "api/axiosClient";
+import { showToast } from "components/toast/toast";
+import userApi from "api/user/userApi";
+import { SettingsContext } from "contexts/settingsContext";
+import { ActionBotType } from "type/ActionBotType";
+import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -76,6 +82,12 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 
 const PortfoliosList = () => {
   const { data, setData, loading } = useContext(PortfoliosContext);
+  const { walletMode } = useContext(SettingsContext);
+  const [dailyTarget, setDailyTarget] = useState({
+    profit: 0,
+    take_profit_target: 0,
+    stop_loss_target: 0,
+  });
   const canvasRef = useRef();
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
@@ -155,6 +167,11 @@ const PortfoliosList = () => {
     setIsEdit(false);
   };
 
+  const handleEditBotAI = () => {
+    setOpenNewBotAI(true);
+    setIsEdit(true);
+  };
+
   const handleOpenNewBotAIStringMethod = () => {
     setOpenNewBotAIStringMethod(true);
   };
@@ -193,6 +210,190 @@ const PortfoliosList = () => {
     }));
   };
 
+  const handlePausePlan = async () => {
+    const selectedPlans = data.filter(
+      (_, index) => checkedRows[index] === true
+    );
+    // setLoading(true);
+
+    try {
+      const requests = selectedPlans.map((plan, index) =>
+        axiosClient.post(`/users/bot/action/${plan?._id}`, {
+          action: ActionBotType.PAUSE,
+        })
+      );
+
+      const responses = await Promise.all(requests);
+      const listResult = responses?.map((item) => item.data.ok);
+      // setData();
+      setData(
+        data?.map((item, key) => {
+          if (
+            selectedPlans.some((obj) => obj._id === item._id) &&
+            listResult[key] === true
+          ) {
+            return { ...item, isRunning: false };
+          }
+          // if(selectedPlans.some(obj=> obj._id=== item._id) && listResult[key]=== false) {
+          //   return ({...item, isRunning: false})
+          // }
+          else {
+            return { ...item };
+          }
+        })
+      );
+      showToast("Tạm ngưng các gọi đã chọn thành công", "success");
+    } catch (error) {
+      console.error("Error sending requests:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  const handleResumePlan = async () => {
+    const selectedPlans = data.filter(
+      (_, index) => checkedRows[index] === true
+    );
+    // setLoading(true);
+
+    try {
+      const requests = selectedPlans.map((plan, index) =>
+        axiosClient.post(`/users/bot/action/${plan?._id}`, {
+          action: ActionBotType.RESUME,
+        })
+      );
+
+      const responses = await Promise.all(requests);
+      const listResult = responses?.map((item) => item.data.ok);
+      // setData();
+      showToast("Tiếp tục các gọi đã chọn thành công", "success");
+      setData(
+        data?.map((item, key) => {
+          if (
+            selectedPlans.some((obj) => obj._id === item._id) &&
+            listResult[key] === true
+          ) {
+            return { ...item, isRunning: true };
+          } else {
+            return { ...item };
+          }
+        })
+      );
+    } catch (error) {
+      console.error("Error sending requests:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  const handleRestartPlan = async () => {
+    const selectedPlans = data.filter(
+      (_, index) => checkedRows[index] === true
+    );
+    // setLoading(true);
+
+    try {
+      const requests = selectedPlans.map((plan, index) =>
+        axiosClient.post(`/users/bot/action/${plan?._id}`, {
+          action: ActionBotType.RESUME,
+        })
+      );
+
+      const responses = await Promise.all(requests);
+      const listResult = responses?.map((item) => item.data.ok);
+      // setData();
+      showToast("Tiếp tục các gọi đã chọn thành công", "success");
+      setData(
+        data?.map((item, key) => {
+          if (
+            selectedPlans.some((obj) => obj._id === item._id) &&
+            listResult[key] === true
+          ) {
+            return { ...item, isRunning: true };
+          } else {
+            return { ...item };
+          }
+        })
+      );
+    } catch (error) {
+      console.error("Error sending requests:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  const handleResetPlan = async () => {
+    const selectedPlans = data.filter(
+      (_, index) => checkedRows[index] === true
+    );
+    // setLoading(true);
+
+    try {
+      const requests = selectedPlans.map((plan, index) =>
+        axiosClient.post(`/users/bot/action/${plan?._id}`, {
+          action: ActionBotType.RESUME,
+        })
+      );
+
+      const responses = await Promise.all(requests);
+      const listResult = responses?.map((item) => item.data.ok);
+      // setData();
+      showToast("Tiếp tục các gọi đã chọn thành công", "success");
+      setData(
+        data?.map((item, key) => {
+          if (
+            selectedPlans.some((obj) => obj._id === item._id) &&
+            listResult[key] === true
+          ) {
+            return { ...item, isRunning: true };
+          } else {
+            return { ...item };
+          }
+        })
+      );
+    } catch (error) {
+      console.error("Error sending requests:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  const handleRemovePlan = async () => {
+    const selectedPlans = data.filter(
+      (_, index) => checkedRows[index] === true
+    );
+    // setLoading(true);
+
+    try {
+      const requests = selectedPlans.map((plan, index) =>
+        axiosClient.post(`/users/bot/action/${plan?._id}`, {
+          action: ActionBotType.RESUME,
+        })
+      );
+
+      const responses = await Promise.all(requests);
+      const listResult = responses?.map((item) => item.data.ok);
+      // setData();
+      showToast("Tiếp tục các gọi đã chọn thành công", "success");
+      setData(
+        data?.map((item, key) => {
+          if (
+            selectedPlans.some((obj) => obj._id === item._id) &&
+            listResult[key] === true
+          ) {
+            return { ...item, isRunning: true };
+          } else {
+            return { ...item };
+          }
+        })
+      );
+    } catch (error) {
+      console.error("Error sending requests:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
   useEffect(() => {
     setCheckedRows(
       data
@@ -206,6 +407,17 @@ const PortfoliosList = () => {
     const isChecked = checkedRows.some((row) => row);
     setShowPopup(isChecked);
   }, [checkedRows]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await userApi.getUsersExchangeLinkAccountDailyTarget({
+        params: { accountType: walletMode ? "LIVE" : "DEMO" },
+      });
+      if (response?.data?.ok === true) {
+        setDailyTarget(response?.data?.d);
+      }
+    })();
+  }, [walletMode]);
 
   return (
     <Layout>
@@ -232,7 +444,12 @@ const PortfoliosList = () => {
               <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "block"}>
                 <Button
                   variant="outlined"
-                  sx={{ mr: 2 }}
+                  sx={{
+                    mr: 2,
+                    "& .MuiButton-endIcon": {
+                      margin: downLg ? 0 : "",
+                    },
+                  }}
                   size={downLg ? "large" : "medium"}
                   fullWidth={downLg ? true : false}
                   endIcon={<SettingIcon />}
@@ -242,7 +459,12 @@ const PortfoliosList = () => {
                 </Button>
                 <Button
                   variant="outlined"
-                  sx={{ mr: 2 }}
+                  sx={{
+                    mr: 2,
+                    "& .MuiButton-endIcon": {
+                      margin: downLg ? 0 : "",
+                    },
+                  }}
                   size={downLg ? "large" : "medium"}
                   fullWidth={downLg ? true : false}
                   endIcon={<ContentCopyIcon />}
@@ -258,6 +480,11 @@ const PortfoliosList = () => {
                   endIcon={<AddIcon />}
                   // onClick={handleOpenNewBudgetStrategy}
                   onClick={handleOpenPlanDrawer}
+                  sx={{
+                    "& .MuiButton-endIcon": {
+                      margin: downLg ? 0 : "",
+                    },
+                  }}
                 >
                   {downLg ? "" : "Tạo plan"}
                 </Button>
@@ -293,7 +520,7 @@ const PortfoliosList = () => {
                 </Menu>
               </Box>
             </Box>
-            <Box sx={{position: "relative"}}>
+            <Box sx={{ position: "relative" }}>
               <TableContainer component={Paper}>
                 <Table>
                   {!downLg && (
@@ -307,7 +534,12 @@ const PortfoliosList = () => {
                         </StyledTableCell>
                         <StyledTableCell>Tên gói</StyledTableCell>
                         <StyledTableCell>Lợi nhuận 7N</StyledTableCell>
-                        <StyledTableCell>Lợi nhuận</StyledTableCell>
+                        <StyledTableCell>
+                          <Typography>Lợi nhuận</Typography>
+                          <Typography>
+                            ${dailyTarget?.profit?.toFixed(2)}
+                          </Typography>
+                        </StyledTableCell>
                         <StyledTableCell>Thao tác</StyledTableCell>
                         <StyledTableCell></StyledTableCell>
                       </TableRow>
@@ -335,33 +567,77 @@ const PortfoliosList = () => {
                         )
                         ?.map((plan, index) => (
                           <Fragment key={index}>
-                            <TableRow>
-                              <StyledTableCell>
-                                {console.log(checkedRows[index])}
-                                <Checkbox
-                                  checked={checkedRows[index] ? true : false}
-                                  onChange={() => handleToggleRow(index)}
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <Typography variant="body1" fontWeight={"600"}>
-                                  {plan.name}
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                  Created:{" "}
-                                  {moment(plan.createdAt).format(
-                                    "DD-MM-YYYY, HH:mm:ss"
+                            <TableRow
+                              sx={{
+                                display: downLg ? "flex" : "",
+                                flexWrap: downLg ? "wrap" : "",
+                              }}
+                            >
+                              {!downLg && (
+                                <StyledTableCell>
+                                  <Checkbox
+                                    checked={checkedRows[index] ? true : false}
+                                    onChange={() => handleToggleRow(index)}
+                                  />
+                                </StyledTableCell>
+                              )}
+                              <StyledTableCell
+                                sx={{ width: downLg ? "100%" : "aaa" }}
+                              >
+                                <Box
+                                  sx={{
+                                    display: downLg ? "flex" : "",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  {downLg && (
+                                    <Checkbox
+                                      checked={
+                                        checkedRows[index] ? true : false
+                                      }
+                                      onChange={() => handleToggleRow(index)}
+                                    />
                                   )}
-                                </Typography>
+                                  <Box>
+                                    <Typography
+                                      variant="body1"
+                                      fontWeight={"600"}
+                                    >
+                                      {plan.name}
+                                    </Typography>
+                                    <Typography
+                                      variant="body2"
+                                      color="textSecondary"
+                                    >
+                                      Created:{" "}
+                                      {moment(plan.createdAt).format(
+                                        "DD-MM-YYYY, HH:mm:ss"
+                                      )}
+                                    </Typography>
+                                  </Box>
+                                </Box>
                               </StyledTableCell>
-                              <StyledTableCell>{`$${plan?.week_profit?.toFixed(
+                              <StyledTableCell
+                                sx={{ width: downLg ? "50%" : "aaa" }}
+                              >{`$${plan?.week_profit?.toFixed(
                                 2
                               )}`}</StyledTableCell>
-                              <StyledTableCell>{`$${plan?.total_profit?.toFixed(
+                              <StyledTableCell
+                                sx={{ width: downLg ? "50%" : "aaa" }}
+                              >{`$${plan?.total_profit?.toFixed(
                                 2
                               )}`}</StyledTableCell>
-                              <StyledTableCell>
-                                <RunningPlan {...plan} />
+                              <StyledTableCell
+                                sx={{
+                                  width: downLg ? "100%" : "aaa",
+                                  display: downLg ? "flex" : "",
+                                }}
+                              >
+                                <RunningPlan
+                                  data={data}
+                                  setData={setData}
+                                  plan={plan}
+                                />
                                 <IconButton
                                   onClick={(event) =>
                                     handleMoreClick(event, index)
@@ -374,7 +650,14 @@ const PortfoliosList = () => {
                                   open={Boolean(anchorEls[index])}
                                   onClose={() => handleClose(index)}
                                 >
-                                  <MenuItem onClick={() => handleClose(index)}>
+                                  <MenuItem
+                                    onClick={() => {
+                                      handleClose(index);
+                                      handleEditBotAI();
+                                      handleOpenPlanDrawer();
+                                      setSelectedPlan(plan);
+                                    }}
+                                  >
                                     Edit Plan
                                   </MenuItem>
                                   <MenuItem onClick={() => handleClose(index)}>
@@ -396,13 +679,20 @@ const PortfoliosList = () => {
                                   </MenuItem>
                                 </Menu>
                               </StyledTableCell>
-                              <StyledTableCell>
+                              <StyledTableCell
+                                sx={{ width: downLg ? "100%" : "aaa" }}
+                              >
                                 <Box
                                   display={"flex"}
                                   flexDirection={"row-reverse"}
+                                  sx={{
+                                    justifyContent: downLg ? "center" : "",
+                                    alignItems: "center",
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => handleRowClick(index)}
                                 >
                                   <IconButton
-                                    onClick={() => handleRowClick(index)}
                                   >
                                     {openRows[index] ? (
                                       <KeyboardArrowUpIcon />
@@ -410,6 +700,11 @@ const PortfoliosList = () => {
                                       <KeyboardArrowDownIcon />
                                     )}
                                   </IconButton>
+                                  {downLg && (
+                                    <Typography>
+                                      {openRows[index] ? "Thu gọn" : "Xem thêm"}
+                                    </Typography>
+                                  )}
                                 </Box>
                               </StyledTableCell>
                             </TableRow>
@@ -432,22 +727,45 @@ const PortfoliosList = () => {
                                     <Box
                                       sx={{
                                         display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
+                                        justifyContent: downLg
+                                          ? ""
+                                          : "space-between",
+                                        alignItems: downLg ? "" : "center",
+                                        flexDirection: downLg
+                                          ? "column"
+                                          : "row",
                                       }}
                                     >
-                                      <Box flex={1}>
+                                      <Box
+                                        flex={1}
+                                        mb={downLg ? 1 : 0}
+                                        sx={{
+                                          display: downLg ? "flex" : "",
+                                          justifyContent: "space-between",
+                                          alignItems: "center",
+                                          flexDirection: "row-reverse",
+                                        }}
+                                      >
                                         <Typography
                                           variant="body1"
                                           component="div"
                                         >
-                                          ****
+                                          {SignalFeatureTypesTitle[plan.signal_feature]}
                                         </Typography>
                                         <Typography fontSize={12}>
                                           Chiến lược tín hiệu
                                         </Typography>
                                       </Box>
-                                      <Box flex={1}>
+                                      <Box
+                                        flex={1}
+                                        mb={downLg ? 1 : 0}
+                                        sx={{
+                                          display: downLg ? "flex" : "",
+                                          justifyContent: "space-between",
+                                          alignItems: "center",
+                                          flexDirection: "row-reverse",
+                                        }}
+                                      >
                                         <Typography
                                           variant="body1"
                                           component="div"
@@ -458,7 +776,16 @@ const PortfoliosList = () => {
                                           Chiến lược vốn
                                         </Typography>
                                       </Box>
-                                      <Box flex={1}>
+                                      <Box
+                                        flex={1}
+                                        mb={downLg ? 1 : 0}
+                                        sx={{
+                                          display: downLg ? "flex" : "",
+                                          justifyContent: "space-between",
+                                          alignItems: "center",
+                                          flexDirection: "row-reverse",
+                                        }}
+                                      >
                                         <Typography
                                           variant="body1"
                                           component="div"
@@ -488,7 +815,12 @@ const PortfoliosList = () => {
                   )}
                 </Table>
               </TableContainer>
-              {showPopup === true && <PopupControll />}
+              {showPopup === true && (
+                <PopupControll
+                  onClickStop={handlePausePlan}
+                  onClickStart={handleResumePlan}
+                />
+              )}
             </Box>
             <PaginationContainer>
               <Box
@@ -536,12 +868,19 @@ const PortfoliosList = () => {
           data={data}
         />
         <DailyGoalDialog
+          dailyTarget={dailyTarget}
+          setDailyTarget={setDailyTarget}
           open={isOpenSetDailyGoal}
           handleClose={handleCloseSetDailyGoal}
         />
         <NewPlanDrawer
           open={isOpenPlanDrawer}
           handleClose={handleClosePlanDrawer}
+          isEdit={isEdit}
+          selectedPlan={selectedPlan}
+          setData={setData}
+          dataProps={data}
+          setIsEdit={setIsEdit}
         />
         <ShareArchievement
           open={dialogOpen}

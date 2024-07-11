@@ -1,3 +1,7 @@
 {
-  "siteId": "coinbuck.net"
+  "siteId": "coinbuck.net",
+  "theme": {
+    "primaryColor": "#2e89ff", 
+    "textColor": "#000000"
+  }
 }

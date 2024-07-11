@@ -1,16 +1,17 @@
 import { useContext } from "react";
-import { Box, Card, styled, Typography, useMediaQuery } from "@mui/material";
+import { Box, Card, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
 
 const StyledNavLink = styled(NavLink)`
   &.active {
     font-weight: bold;
-    color: #6950E8 !important;
+    color: ${props => props.theme.palette.primary.main} !important;
   }
 `;
 
 const Layout = ({ children }) => {
+  const theme= useTheme()
   const { data } = useContext(SignalStrategyContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
@@ -22,10 +23,11 @@ const Layout = ({ children }) => {
     >
       <Box display={"flex"} alignItems={"center"} gap={2} mb={2}>
         <StyledNavLink
+          theme={theme}
           exact
           to="/dashboard/signal-strategies"
           activeStyle={{
-            color: "#6950E8",
+            color: theme.palette.primary,
             fontWeight: "bold",
           }}
           style={{ textDecoration: "none", color: "inherit" }}
@@ -33,15 +35,16 @@ const Layout = ({ children }) => {
           <Typography
             variant="h6"
             fontWeight={"600"}
-            sx={{ "&:hover": { color: "#6950E8" } }}
+            sx={{ "&:hover": { color: theme.palette.primary } }}
           >
             Danh sách ({data?.length})
           </Typography>
         </StyledNavLink>
         <StyledNavLink
+        theme={theme}
           to="/dashboard/signal-strategies/top-signal"
           activeStyle={{
-            color: "#6950E8",
+            color: theme.palette.primary,
             fontWeight: "bold",
           }}
           style={{ textDecoration: "none", color: "inherit" }}
@@ -49,15 +52,16 @@ const Layout = ({ children }) => {
           <Typography
             variant="h6"
             fontWeight={"600"}
-            sx={{ "&:hover": { color: "#6950E8" } }}
+            sx={{ "&:hover": { color: theme.palette.primary } }}
           >
             Xếp hạng
           </Typography>
         </StyledNavLink>
         <StyledNavLink
+          theme={theme}
           to="/dashboard/signal-strategies/telegram-channel"
           activeStyle={{
-            color: "#6950E8",
+            color: theme.palette.primary,
             fontWeight: "bold",
           }}
           style={{ textDecoration: "none", color: "inherit" }}
@@ -65,7 +69,7 @@ const Layout = ({ children }) => {
           <Typography
             variant="h6"
             fontWeight={"600"}
-            sx={{ "&:hover": { color: "#6950E8" } }}
+            sx={{ "&:hover": { color: theme.palette.primary } }}
           >
             Kênh Telegram
           </Typography>

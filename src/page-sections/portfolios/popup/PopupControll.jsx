@@ -1,23 +1,97 @@
-import { Box, Button } from '@mui/material'
-import React from 'react'
-import PauseIcon from '@mui/icons-material/Pause';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import CachedIcon from '@mui/icons-material/Cached';
-import ReplayIcon from '@mui/icons-material/Replay';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, Button, Divider, useMediaQuery } from "@mui/material";
+import React from "react";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import CachedIcon from "@mui/icons-material/Cached";
+import ReplayIcon from "@mui/icons-material/Replay";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const PopupControll = () => {
+const PopupControll = ({ onClickStop, onClickStart }) => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+
   return (
-    <Box sx={{position: "absolute", left: "50%", top: "50px", transform: "translateX(-50%)", width: "auto", zIndex: 9, background: "white", boxShadow: "8.08219px 12.1233px 40.411px rgb(97 106 119 / 53%)", borderRadius: "8px"}}>
-      <Box sx={{display: "flex", gap: 1, alignItems: "center", padding: 1}}>
-        <Button startIcon={<PauseIcon />}>Tạm ngưng</Button>
-        <Button startIcon={<PlayArrowIcon />}>Tiếp tục</Button>
-        <Button startIcon={<CachedIcon />}>Khởi động lại</Button>
-        <Button startIcon={<ReplayIcon />}>Cài lại</Button>
-        <Button startIcon={<DeleteIcon />}>Xoá</Button>
+    <Box
+      sx={{
+        position: downLg ? "fixed" : "absolute",
+        left: "50%",
+        top: !downLg && "50px",
+        bottom: downLg && "56px",
+        transform: "translateX(-50%)",
+        width: downLg ? "100%" : "auto",
+        zIndex: 9,
+        background: "white",
+        boxShadow:
+          !downLg && "8.08219px 12.1233px 40.411px rgb(97 106 119 / 53%)",
+        borderRadius: !downLg && "8px",
+      }}
+    >
+      <Box sx={{ display: "flex", gap: 1, alignItems: "center", justifyContent: downLg ? "center" : "", padding: 1 }}>
+        <Button
+          onClick={onClickStop}
+          startIcon={<PauseIcon />}
+          sx={{
+            fontSize: downLg ? 10 : "",
+            flexDirection: downLg ? "column" : "row",
+            "& .MuiButton-startIcon": {
+              margin: downLg ? 0 : "",
+            },
+          }}
+        >
+          Tạm ngưng
+        </Button>
+        <Button
+          onClick={onClickStart}
+          startIcon={<PlayArrowIcon />}
+          sx={{
+            fontSize: downLg ? 10 : "",
+            flexDirection: downLg ? "column" : "row",
+            "& .MuiButton-startIcon": {
+              margin: downLg ? 0 : "",
+            },
+          }}
+        >
+          Tiếp tục
+        </Button>
+        <Button
+          startIcon={<CachedIcon />}
+          sx={{
+            fontSize: downLg ? 10 : "",
+            flexDirection: downLg ? "column" : "row",
+            "& .MuiButton-startIcon": {
+              margin: downLg ? 0 : "",
+            },
+          }}
+        >
+          Khởi động lại
+        </Button>
+        <Button
+          startIcon={<ReplayIcon />}
+          sx={{
+            fontSize: downLg ? 10 : "",
+            flexDirection: downLg ? "column" : "row",
+            "& .MuiButton-startIcon": {
+              margin: downLg ? 0 : "",
+            },
+          }}
+        >
+          Cài lại
+        </Button>
+        <Button
+          startIcon={<DeleteIcon />}
+          sx={{
+            fontSize: downLg ? 10 : "",
+            flexDirection: downLg ? "column" : "row",
+            "& .MuiButton-startIcon": {
+              margin: downLg ? 0 : "",
+            },
+          }}
+        >
+          Xoá
+        </Button>
       </Box>
+      {downLg && <Divider />}
     </Box>
-  )
-}
+  );
+};
 
-export default PopupControll
+export default PopupControll;

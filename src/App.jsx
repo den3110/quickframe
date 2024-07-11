@@ -21,6 +21,7 @@ import { AuthProvider } from "contexts/AuthContext";
 import Toast from "components/toast/toast";
 import { SpotBalanceProvider } from "contexts/SpotBalanceContext";
 import JwtProvider from "contexts/jwtContext";
+import GlobalProvider from "contexts/GlobalContext";
 const App = () => {
   const { settings } = useSettings();
   const theme = createCustomTheme(settings);
@@ -33,11 +34,13 @@ const App = () => {
           <AuthProvider>
             <JwtProvider>
               <SpotBalanceProvider>
-                <RTL>
-                  <Toast />
-                  <CssBaseline />
-                  <RouterProvider router={router} />
-                </RTL>
+                <GlobalProvider>
+                  <RTL>
+                    <Toast />
+                    <CssBaseline />
+                    <RouterProvider router={router} />
+                  </RTL>
+                </GlobalProvider>
               </SpotBalanceProvider>
             </JwtProvider>
           </AuthProvider>

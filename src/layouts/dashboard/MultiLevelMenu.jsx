@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 // CUSTOM DEFINED HOOK
 import useAuth from "hooks/useAuth";
@@ -18,13 +18,16 @@ import {
   ExternalLink,
   NavItemButton,
 } from "../layout-parts/styles/sidebar";
-import { Box, Divider } from "@mui/material";
+import { Box, Divider, Badge } from "@mui/material";
+import { GlobalContext } from "contexts/GlobalContext";
 
 // ===========================================================================
 
 // ===========================================================================
 
 const MultiLevelMenu = ({ sidebarCompact }) => {
+  const {botTotal }= useContext(GlobalContext)
+  console.log(botTotal)
   const { user } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -54,12 +57,12 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
           </ListLabel>
         );
       }
-      if(item.type=== "divider") {
+      if (item.type === "divider") {
         return (
           <Box key={index} mt={1} mb={1}>
             <Divider />
           </Box>
-        )
+        );
       }
 
       // MENU LIST WITH CHILDREN
@@ -81,15 +84,25 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
             target="_blank"
           >
             <NavItemButton key={item.name} name="child" active={0}>
-              {item.icon ? (
-                <item.icon sx={ICON_STYLE(0)} />
-              ) : (
-                <span className="item-icon icon-text">{item.iconText}</span>
-              )}
+              <Box>
+                {item.icon ? (
+                  <item.icon sx={ICON_STYLE(0)} />
+                ) : (
+                  <span className="item-icon icon-text">{item.iconText}</span>
+                )}
 
-              <ItemText compact={COMPACT} active={activeRoute(item.path)}>
-                {item.name}
-              </ItemText>
+                <ItemText compact={COMPACT} active={activeRoute(item.path)}>
+                  {item.name}
+                </ItemText>
+              </Box>
+              <Badge
+                badgeContent={item.badgeContent}
+                color="primary"
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              />
             </NavItemButton>
           </ExternalLink>
         );
@@ -100,16 +113,29 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
           disabled={item.disabled}
           active={activeRoute(item.path)}
           onClick={() => handleNavigation(item.path)}
+          sx={{justifyContent: "space-between"}}
         >
-          {item?.icon ? (
-            <item.icon sx={ICON_STYLE(activeRoute(item.path))} />
-          ) : (
-            <BulletIcon active={activeRoute(item.path)} />
-          )}
+          <Box>
+            {item?.icon ? (
+              <item.icon sx={ICON_STYLE(activeRoute(item.path))} />
+            ) : (
+              <BulletIcon active={activeRoute(item.path)} />
+            )}
 
-          <ItemText compact={COMPACT} active={activeRoute(item.path)}>
-            {t(item.name)}
-          </ItemText>
+            <ItemText compact={COMPACT} active={activeRoute(item.path)}>
+              {t(item.name)}
+            </ItemText>
+          </Box>
+          {index=== 2 && 
+            <Badge
+              badgeContent={botTotal?.toString()}
+              color="primary"
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            />
+          }
         </NavItemButton>
       );
     });
