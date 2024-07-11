@@ -507,22 +507,25 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   ))}
                 </Box>
               </Box>
-              <Box mt={2}>
-                <Typography variant="subtitle1">Tính năng sử dụng</Typography>
-                <FormControl variant="outlined" fullWidth margin="normal">
-                  <Select
-                    value={featureType}
-                    onChange={(e) => setFeatureType(e.target.value)}
-                    size="medium"
-                  >
-                    {Object.entries(SignalFeatureTypes).map(([item, key]) => (
-                      <MenuItem key={key} value={item}>
-                        {SignalFeatureTypesTitle[item]}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
+              {
+                selectedTab=== "Bot AI" && 
+                <Box mt={2}>
+                  <Typography variant="subtitle1">Tính năng sử dụng</Typography>
+                  <FormControl variant="outlined" fullWidth margin="normal">
+                    <Select
+                      value={featureType}
+                      onChange={(e) => setFeatureType(e.target.value)}
+                      size="medium"
+                    >
+                      {Object.entries(SignalFeatureTypes).map(([item, key]) => (
+                        <MenuItem key={key} value={item}>
+                          {SignalFeatureTypesTitle[item]}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              }
               {/*  */}
               {isChooseBot === true && (
                 <>
@@ -1051,87 +1054,7 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   />
                 </Box>
               )} */}
-              <Box mt={2} component="form" noValidate autoComplete="off">
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      type="number"
-                      fullWidth
-                      label="Mục tiêu chốt lời ($)"
-                      variant="outlined"
-                      defaultValue="0"
-                      margin="normal"
-                      value={takeProfitTarget}
-                      onChange={(e) => setTakeProfitTarget(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      type="number"
-                      fullWidth
-                      label="Mục tiêu cắt lỗ ($)"
-                      variant="outlined"
-                      defaultValue="0"
-                      margin="normal"
-                      value={stopLossTarget}
-                      onChange={(e) => setStopLossTarget(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      type="number"
-                      fullWidth
-                      label="Dừng khi thắng LT"
-                      variant="outlined"
-                      defaultValue="0"
-                      margin="normal"
-                      value={winStreakTarget}
-                      onChange={(e) => setWinStreakTarget(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      type="number"
-                      fullWidth
-                      label="Dừng khi thua LT"
-                      variant="outlined"
-                      defaultValue="0"
-                      margin="normal"
-                      value={loseStreakTarget}
-                      onChange={(e) => setLoseStreakTarget(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      type="number"
-                      fullWidth
-                      label="Dừng khi thắng tổng"
-                      variant="outlined"
-                      defaultValue="0"
-                      margin="normal"
-                      value={winTotalTarget}
-                      onChange={(e) => setWinTotalTarget(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      type="number"
-                      fullWidth
-                      label="Dừng khi thua tổng"
-                      variant="outlined"
-                      defaultValue="0"
-                      margin="normal"
-                      value={loseTotalTarget}
-                      onChange={(e) => setLoseTotalTarget(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Alert severity="warning">
-                      Các mục tiêu không sử dụng hãy nhập số 0
-                    </Alert>
-                  </Grid>
-                </Grid>
-              </Box>
+             
               <Box mt={2}>
                 <Typography variant="h6">
                   Take-Profit/Stop-Loss Conditions
@@ -1151,6 +1074,90 @@ const NewPlanDrawer = ({ open, handleClose }) => {
                   label="Enable TP/SL"
                 />
               </Box>
+              {
+                takeProfit=== true &&
+                <Box mt={2} component="form" noValidate autoComplete="off">
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        type="number"
+                        fullWidth
+                        label="Mục tiêu chốt lời ($)"
+                        variant="outlined"
+                        defaultValue="0"
+                        margin="normal"
+                        value={takeProfitTarget}
+                        onChange={(e) => setTakeProfitTarget(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        type="number"
+                        fullWidth
+                        label="Mục tiêu cắt lỗ ($)"
+                        variant="outlined"
+                        defaultValue="0"
+                        margin="normal"
+                        value={stopLossTarget}
+                        onChange={(e) => setStopLossTarget(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        type="number"
+                        fullWidth
+                        label="Dừng khi thắng LT"
+                        variant="outlined"
+                        defaultValue="0"
+                        margin="normal"
+                        value={winStreakTarget}
+                        onChange={(e) => setWinStreakTarget(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        type="number"
+                        fullWidth
+                        label="Dừng khi thua LT"
+                        variant="outlined"
+                        defaultValue="0"
+                        margin="normal"
+                        value={loseStreakTarget}
+                        onChange={(e) => setLoseStreakTarget(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        type="number"
+                        fullWidth
+                        label="Dừng khi thắng tổng"
+                        variant="outlined"
+                        defaultValue="0"
+                        margin="normal"
+                        value={winTotalTarget}
+                        onChange={(e) => setWinTotalTarget(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        type="number"
+                        fullWidth
+                        label="Dừng khi thua tổng"
+                        variant="outlined"
+                        defaultValue="0"
+                        margin="normal"
+                        value={loseTotalTarget}
+                        onChange={(e) => setLoseTotalTarget(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Alert severity="warning">
+                        Các mục tiêu không sử dụng hãy nhập số 0
+                      </Alert>
+                    </Grid>
+                  </Grid>
+                </Box>
+              } 
               {/* Advanced option */}
               <Box mt={2}>
                 <Accordion expanded={expanded} onChange={handleAccordionChange}>

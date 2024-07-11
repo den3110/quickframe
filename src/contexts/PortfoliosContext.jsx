@@ -1,3 +1,4 @@
+import portfolioApi from "api/portfolios/portfolioApi";
 import React, { createContext, useState, useEffect } from "react";
 
 export const PortfoliosContext = createContext();
@@ -10,11 +11,14 @@ export const PortfoliosProvider = ({ children }) => {
   const getSpotBalanceUser = async () => {
     try {
       setLoading(true);
-      //   const response = await signalStrategyApi.userBudgetSignalList();
+      const response= await portfolioApi.userBotList()
+      if(response?.data?.ok=== true) {
+        setData(response?.data?.d)
+      }
+      //   const response = await signalStrategyApi.const [anchorEls, setAnchorEls] = useState({});userBudgetSignalList();
       //   if (response?.data?.ok === true) {
       //     setData(response.data?.d);
       //   }
-      setData([]);
     } catch (error) {
       console.error("Failed to load user profile", error);
     } finally {

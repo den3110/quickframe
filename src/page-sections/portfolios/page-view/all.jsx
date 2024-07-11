@@ -22,11 +22,13 @@ import {
   Select,
   Pagination,
   CircularProgress,
+  Switch,
+  Collapse,
 } from "@mui/material";
 import Layout from "../Layout";
 import { isDark } from "utils/constants";
-import SearchIcon from '@mui/icons-material/Search';
-import { Fragment, useContext, useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { MoreVert, Add, InsertChart } from "@mui/icons-material";
 import moment from "moment";
 // import NewBotAI from "../NewBotAI";
@@ -37,13 +39,19 @@ import { PortfoliosContext } from "contexts/PortfoliosContext";
 import SettingIcon from "icons/SettingIcon";
 import DailyGoalDialog from "../dialog/DailyGoalDialog";
 import NewPlanDrawer from "../drawer/NewPlanDrawer";
-import AddIcon from '@mui/icons-material/Add';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import AddIcon from "@mui/icons-material/Add";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ShareArchievement from "../dialog/ShareArchievement";
+import RunningPlan from "../component/RunningPlan";
+import PopupControll from "../popup/PopupControll";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
-  width: theme.breakpoints.down("lg") ? "20%" : "auto",
+  // width: theme.breakpoints.down("lg") ? "20%" : "auto",
 }));
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
@@ -68,43 +76,75 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 
 const PortfoliosList = () => {
   const { data, setData, loading } = useContext(PortfoliosContext);
+  const canvasRef = useRef();
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
-  const [isEditStringMethod, setIsEditStringMethod]= useState(false)
-  const [isDeleteBot, setIsDeleteBot]= useState(false)
+  const [isEditStringMethod, setIsEditStringMethod] = useState(false);
+  const [isDeleteBot, setIsDeleteBot] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [anchorEls, setAnchorEls] = useState({});
   const [page, setPage] = useState(1);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [openNewBotAI, setOpenNewBotAI] = useState(false);
-  const [openNewBotAIStringMethod, setOpenNewBotAIStringMethod]= useState(false)
+  const [openNewBotAIStringMethod, setOpenNewBotAIStringMethod] =
+    useState(false);
   const [anchorElMenu, setAnchorElMenu] = useState(null);
-  const [isOpenSetDailyGoal, setIsOpenSetDailyGoal]= useState(false)
-  const [isOpenPlanDrawer, setIsOpenPlanDrawer]= useState(false)
+  const [isOpenSetDailyGoal, setIsOpenSetDailyGoal] = useState(false);
+  const [isOpenPlanDrawer, setIsOpenPlanDrawer] = useState(false);
+  const [openRows, setOpenRows] = useState({});
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [checkedRows, setCheckedRows] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleToggleAllRows = (event) => {
+    const checked = event.target.checked;
+    const newCheckedRows = checkedRows.map(() => checked);
+    setCheckedRows(newCheckedRows);
+  };
+
+  const handleToggleRow = (index) => {
+    const newCheckedRows = [...checkedRows];
+    newCheckedRows[index] = !newCheckedRows[index];
+    setCheckedRows(newCheckedRows);
+  };
+
+  const handleDialogOpen = (plan) => {
+    setSelectedPlan(plan);
+    setDialogOpen(true);
+  };
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+    setSelectedPlan(null);
+  };
+  const handleRowClick = (index) => {
+    setOpenRows((prevState) => ({ ...prevState, [index]: !prevState[index] }));
+  };
+
   // const [loading, setLoading]= useState(false)
-  const handleOpenSetDailyGoal= ()=> {
-    setIsOpenSetDailyGoal(true)
-  }
+  const handleOpenSetDailyGoal = () => {
+    setIsOpenSetDailyGoal(true);
+  };
 
-  const handleCloseSetDailyGoal= ()=> {
-    setIsOpenSetDailyGoal(false)
-  }
+  const handleCloseSetDailyGoal = () => {
+    setIsOpenSetDailyGoal(false);
+  };
 
-  const handleOpenPlanDrawer= ()=> {
-    setIsOpenPlanDrawer(true)
-  }
+  const handleOpenPlanDrawer = () => {
+    setIsOpenPlanDrawer(true);
+  };
 
-  const handleClosePlanDrawer= ()=> {
-    setIsOpenPlanDrawer(false)
-  }
+  const handleClosePlanDrawer = () => {
+    setIsOpenPlanDrawer(false);
+  };
 
-  const handleOpenDeleteBot= ()=> {
-    setIsDeleteBot(true)
-  }
-  const handleCloseDeleteBot= ()=> {
-    setIsDeleteBot(false)
-  }
+  const handleOpenDeleteBot = () => {
+    setIsDeleteBot(true);
+  };
+  const handleCloseDeleteBot = () => {
+    setIsDeleteBot(false);
+  };
   const handleCloseNewBotAI = () => {
     setOpenNewBotAI(false);
   };
@@ -145,6 +185,27 @@ const PortfoliosList = () => {
   const handleMenuClose = () => {
     setAnchorElMenu(null);
   };
+
+  const handleMoreClick = (event, index) => {
+    setAnchorEls((prevState) => ({
+      ...prevState,
+      [index]: event.currentTarget,
+    }));
+  };
+
+  useEffect(() => {
+    setCheckedRows(
+      data
+        .slice(rowsPerPage * (page - 1), rowsPerPage * (page - 1) + rowsPerPage)
+        ?.map((item) => false)
+    );
+  }, [data, page, rowsPerPage]);
+
+  useEffect(() => {
+    // Check if at least one row is checked to show the popup
+    const isChecked = checkedRows.some((row) => row);
+    setShowPopup(isChecked);
+  }, [checkedRows]);
 
   return (
     <Layout>
@@ -206,13 +267,13 @@ const PortfoliosList = () => {
                   onClose={handleMenuClose}
                   // anchorPosition={""}
                   anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
+                    vertical: "bottom",
+                    horizontal: "right",
                   }}
                 >
                   <MenuItem
                     onClick={() => {
-                      handleOpenNewBotAIStringMethod()
+                      handleOpenNewBotAIStringMethod();
                       handleMenuClose();
                     }}
                   >
@@ -232,139 +293,203 @@ const PortfoliosList = () => {
                 </Menu>
               </Box>
             </Box>
-            <TableContainer component={Paper}>
-              <Table>
-                {!downLg && (
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell>Tên gói</StyledTableCell>
-                      <StyledTableCell>Lợi nhuận 7N</StyledTableCell>
-                      <StyledTableCell>Lợi nhuận</StyledTableCell>
-                      <StyledTableCell>Thao tác</StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                )}
-                <TableBody>
-                  {loading=== true && <TableRow>
-                      <TableCell rowSpan={10} colSpan={3} align="center" sx={{height: 200}}>
-                        <CircularProgress />
-                      </TableCell>
-                    </TableRow>}
-                  {loading=== false && data
-                    .slice(
-                      rowsPerPage * (page - 1),
-                      rowsPerPage * (page - 1) + rowsPerPage
-                    )
-                    .map((row, index) => (
-                      <Fragment key={index}>
-                        <StyledTableRow
-                          sx={{
-                            display: downLg ? "flex" : "",
-                            flexWrap: "wrap",
-                            borderBottom: downLg ? "" : "none",
-                          }}
-                        >
-                          <StyledTableCell
-                            sx={{
-                              order: downLg ? 1 : 1,
-                              borderBottom: downLg ? "none" : "",
-                            }}
-                          >
-                            <Typography variant="body1" fontWeight={"600"}>
-                              {row.name}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              Created:{" "}
-                              {moment(row.createdAt).format(
-                                "DD-MM-YYYY, HH:mm:ss"
-                              )}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell
-                            sx={{
-                              order: downLg ? 3 : 2,
-                              borderBottom: downLg ? "none" : "",
-                            }}
-                          >
-                            {/* {BudgetStrategyTypeTitle[row.type]} */}
-                            {row?.type}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            sx={{
-                              order: downLg ? 2 : 4,
-                              display: downLg ? "flex" : "",
-                              flexDirection: "row-reverse",
-                              borderBottom: downLg ? "none" : "",
-                            }}
-                          >
-                            <IconButton onClick={(e) => handleClick(e, index)}>
-                              <MoreVert />
-                            </IconButton>
-                            <Menu
-                              disableScrollLock
-                              anchorEl={anchorEls[index]}
-                              open={Boolean(anchorEls[index])}
-                              onClose={() => handleClose(index)}
-                              anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "left",
-                              }}
-                              transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                              }}
-                            >
-                              <StyledMenuItem
-                                onClick={() => {
-                                  if(row.type=== "STRING_METHOD") {
-                                    handleOpenNewBotAIStringMethod()
-                                    setIsEditStringMethod(true)
-                                    setSelectedBot(row);
-                                    handleClose(index);
-
-                                  }
-                                  else if(row.type=== "BUBBLE_METHOD") {
-                                    handleOpenNewBotAI();
-                                    handleClose(index);
-                                    setIsEdit(true);
-                                    setSelectedBot(row);
-                                    setInitState(true);
-                                  }
-                                }}
-                              >
-                                Edit Bot
-                              </StyledMenuItem>
-                              <StyledMenuItem>
-                                Share Bot
-                              </StyledMenuItem>
-                              <StyledMenuItem
-                                onClick={() => {
-                                  handleClose(index);
-                                  setSelectedBot(row)
-                                  handleOpenDeleteBot()
-                                }}
-                              >
-                                Delete Bot
-                              </StyledMenuItem>
-                            </Menu>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                        <StyledTableRow></StyledTableRow>
-                        <StyledTableRow></StyledTableRow>
-                        
-                      </Fragment>
-                    ))}
-                </TableBody>
-                {loading=== false && data?.length <= 0 &&
+            <Box sx={{position: "relative"}}>
+              <TableContainer component={Paper}>
+                <Table>
+                  {!downLg && (
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell>
+                          <Checkbox
+                            checked={checkedRows.every(Boolean)}
+                            onChange={handleToggleAllRows}
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell>Tên gói</StyledTableCell>
+                        <StyledTableCell>Lợi nhuận 7N</StyledTableCell>
+                        <StyledTableCell>Lợi nhuận</StyledTableCell>
+                        <StyledTableCell>Thao tác</StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                  )}
                   <TableBody>
-                    <TableCell colSpan={5} rowSpan={5} sx={{width: "100%" }}>
-                      <EmptyPage />
-                    </TableCell>
+                    {loading === true && (
+                      <TableRow>
+                        <TableCell
+                          rowSpan={10}
+                          colSpan={3}
+                          align="center"
+                          sx={{ height: 200 }}
+                        >
+                          <CircularProgress />
+                        </TableCell>
+                      </TableRow>
+                    )}
+
+                    {loading === false &&
+                      data
+                        .slice(
+                          rowsPerPage * (page - 1),
+                          rowsPerPage * (page - 1) + rowsPerPage
+                        )
+                        ?.map((plan, index) => (
+                          <Fragment key={index}>
+                            <TableRow>
+                              <StyledTableCell>
+                                {console.log(checkedRows[index])}
+                                <Checkbox
+                                  checked={checkedRows[index] ? true : false}
+                                  onChange={() => handleToggleRow(index)}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <Typography variant="body1" fontWeight={"600"}>
+                                  {plan.name}
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                  Created:{" "}
+                                  {moment(plan.createdAt).format(
+                                    "DD-MM-YYYY, HH:mm:ss"
+                                  )}
+                                </Typography>
+                              </StyledTableCell>
+                              <StyledTableCell>{`$${plan?.week_profit?.toFixed(
+                                2
+                              )}`}</StyledTableCell>
+                              <StyledTableCell>{`$${plan?.total_profit?.toFixed(
+                                2
+                              )}`}</StyledTableCell>
+                              <StyledTableCell>
+                                <RunningPlan {...plan} />
+                                <IconButton
+                                  onClick={(event) =>
+                                    handleMoreClick(event, index)
+                                  }
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                                <Menu
+                                  anchorEl={anchorEls[index]}
+                                  open={Boolean(anchorEls[index])}
+                                  onClose={() => handleClose(index)}
+                                >
+                                  <MenuItem onClick={() => handleClose(index)}>
+                                    Edit Plan
+                                  </MenuItem>
+                                  <MenuItem onClick={() => handleClose(index)}>
+                                    Duplicate Plan
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() => {
+                                      handleDialogOpen(plan);
+                                      handleClose(index);
+                                    }}
+                                  >
+                                    Share Achievement
+                                  </MenuItem>
+                                  <MenuItem onClick={() => handleClose(index)}>
+                                    Share Plan
+                                  </MenuItem>
+                                  <MenuItem onClick={() => handleClose(index)}>
+                                    Copy plan to LIVE
+                                  </MenuItem>
+                                </Menu>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <Box
+                                  display={"flex"}
+                                  flexDirection={"row-reverse"}
+                                >
+                                  <IconButton
+                                    onClick={() => handleRowClick(index)}
+                                  >
+                                    {openRows[index] ? (
+                                      <KeyboardArrowUpIcon />
+                                    ) : (
+                                      <KeyboardArrowDownIcon />
+                                    )}
+                                  </IconButton>
+                                </Box>
+                              </StyledTableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell
+                                style={{
+                                  paddingBottom: 0,
+                                  paddingTop: 0,
+                                  paddingLeft: 20,
+                                  paddingRight: 20,
+                                }}
+                                colSpan={6}
+                              >
+                                <Collapse
+                                  in={openRows[index]}
+                                  timeout="auto"
+                                  unmountOnExit
+                                >
+                                  <Box margin={1}>
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                      }}
+                                    >
+                                      <Box flex={1}>
+                                        <Typography
+                                          variant="body1"
+                                          component="div"
+                                        >
+                                          ****
+                                        </Typography>
+                                        <Typography fontSize={12}>
+                                          Chiến lược tín hiệu
+                                        </Typography>
+                                      </Box>
+                                      <Box flex={1}>
+                                        <Typography
+                                          variant="body1"
+                                          component="div"
+                                        >
+                                          {plan?.name}
+                                        </Typography>
+                                        <Typography fontSize={12}>
+                                          Chiến lược vốn
+                                        </Typography>
+                                      </Box>
+                                      <Box flex={1}>
+                                        <Typography
+                                          variant="body1"
+                                          component="div"
+                                        >
+                                          ${plan?.margin_dense?.toFixed(2)}
+                                        </Typography>
+                                        <Typography fontSize={12}>
+                                          Hệ số vào lệnh
+                                        </Typography>
+                                      </Box>
+                                    </Box>
+
+                                    {/* Place any additional content here */}
+                                  </Box>
+                                </Collapse>
+                              </TableCell>
+                            </TableRow>
+                          </Fragment>
+                        ))}
                   </TableBody>
-                }
-              </Table>
-            </TableContainer>
+                  {loading === false && data?.length <= 0 && (
+                    <TableBody>
+                      <TableCell colSpan={5} rowSpan={5} sx={{ width: "100%" }}>
+                        <EmptyPage />
+                      </TableCell>
+                    </TableBody>
+                  )}
+                </Table>
+              </TableContainer>
+              {showPopup === true && <PopupControll />}
+            </Box>
             <PaginationContainer>
               <Box
                 display={"flex"}
@@ -403,9 +528,27 @@ const PortfoliosList = () => {
           setIsEdit={setIsEdit}
         /> */}
         {/* <NewBotAIStringMethod open={openNewBotAIStringMethod} onClose={handleCloseNewBotAIStringMethod} is_edit={isEditStringMethod} setIsEdit={setIsEditStringMethod} selectedBot={selectedBot} /> */}
-        <DeleteSignalStrategy open={isDeleteBot} onClose={handleCloseDeleteBot} selectedBot={selectedBot} setData={setData} data={data} />
-        <DailyGoalDialog open={isOpenSetDailyGoal} handleClose={handleCloseSetDailyGoal} />
-        <NewPlanDrawer open={isOpenPlanDrawer} handleClose={handleClosePlanDrawer} />
+        <DeleteSignalStrategy
+          open={isDeleteBot}
+          onClose={handleCloseDeleteBot}
+          selectedBot={selectedBot}
+          setData={setData}
+          data={data}
+        />
+        <DailyGoalDialog
+          open={isOpenSetDailyGoal}
+          handleClose={handleCloseSetDailyGoal}
+        />
+        <NewPlanDrawer
+          open={isOpenPlanDrawer}
+          handleClose={handleClosePlanDrawer}
+        />
+        <ShareArchievement
+          open={dialogOpen}
+          handleClose={handleDialogClose}
+          selectedPlan={selectedPlan}
+          ref={canvasRef}
+        />
       </Box>
     </Layout>
   );
