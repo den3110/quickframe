@@ -53,6 +53,7 @@ import userApi from "api/user/userApi";
 import { SettingsContext } from "contexts/settingsContext";
 import { ActionBotType } from "type/ActionBotType";
 import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
+import sortData from "util/sortData";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -560,7 +561,7 @@ const PortfoliosList = () => {
                     )}
 
                     {loading === false &&
-                      data
+                      sortData(data, "createdAt", "desc")
                         .slice(
                           rowsPerPage * (page - 1),
                           rowsPerPage * (page - 1) + rowsPerPage

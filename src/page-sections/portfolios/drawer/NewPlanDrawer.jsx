@@ -312,9 +312,11 @@ const NewPlanDrawer = ({
           const indexData = dataTemp?.findIndex(
             (item) => item?._id === selectedPlan?._id
           );
-          console.log("index data", indexData);
           dataTemp[indexData] = data;
           setData(dataTemp);
+        }
+        else {
+          setData(prev=> [response?.data?.d, ...prev])
         }
         showToast(
           isEdit ? "Cập nhật bot thành công" : "Tạo bot thành công",
