@@ -584,7 +584,7 @@ const LeaderBoard = () => {
                 >
                   #{item.rank}
                 </Typography>
-                {item.rank === 1 && (
+                {/* {item.rank === 1 && (
                   <img
                     src="https://quickinvest.ai/img/icons/rank-1.png"
                     style={{ width: 28, marginRight: 10 }}
@@ -604,7 +604,7 @@ const LeaderBoard = () => {
                     style={{ width: 28, marginRight: 10 }}
                     alt="Can't open"
                   />
-                )}
+                )} */}
                 <ListItemAvatar>
                   <Avatar alt={item.name} src={item.avatar} />
                 </ListItemAvatar>

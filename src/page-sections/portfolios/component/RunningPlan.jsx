@@ -17,7 +17,7 @@ const RunningPlan = (props) => {
   const handleChangeIsRunning = async (e) => {
     try {
       const payload = {
-        action: e.target.checked === true ? ActionBotType.RESUME : ActionBotType.PAUSE,
+        action: e.target.checked === true ? ActionBotType.START : ActionBotType.STOP,
       };
       await portfolioApi.userBotAction(plan?._id, payload);
         let dataLocal= data

@@ -20,6 +20,14 @@ const portfolioApi = {
   userBotTotal(data) {
     const url= `/users/bot/total`
     return axiosClient.get(url, data)
+  },
+  userBotHistory(id, data) {
+    const url= `/users/bot/history/${id}`
+    return axiosClient.get(url, data)
+  },
+  userBotInfo(id, data) {
+    const url= `/users/bot/info/${id}`
+    return axiosClient.get(url, data)
   }
 };  
 

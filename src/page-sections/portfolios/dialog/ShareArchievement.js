@@ -1,48 +1,84 @@
-import {
-  Dialog,
-} from "@mui/material";
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { Box, Button, Dialog } from "@mui/material";
+import React, { forwardRef, useEffect, useState } from "react";
+import share_plan_01 from "../../../assets/share_plan_01.png"
+import share_plan_02 from "../../../assets/share_plan_02.png"
+import logo_dark from "../../../assets/logo_dark.png"
+import moment from "moment";
+import numberToWords from "util/numToWord";
+import DownloadIcon from "icons/DownloadIcon";
 
 const ShareArchievement = forwardRef(
   ({ open, handleClose, selectedPlan }, canvasRef) => {
     const [count, setCount] = useState(1);
-
+    const handleDownload = () => {
+      if (canvasRef.current) {
+        const canvas = canvasRef.current;
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = `${selectedPlan?.name}.png`;
+        link.click();
+      }
+    };
     useEffect(() => {
-      if (open && canvasRef.current ) {
+      if (open && canvasRef.current) {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
-        // Clear the canvas
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw background
         const img = new Image();
-        img.src = "https://quickinvest.ai/img/share_plan/01.png";
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            // Draw text
-            ctx.fillStyle = "#41ae60"; // Green color for the percentage text
-            ctx.font = "bold 64px Manrope";
-            ctx.fillText("+0%", 40, 140);
-    
-            ctx.fillStyle = "#ffffff"; // White color for other texts
-            ctx.font = "20px Manrope";
-            ctx.fillText("aa Copy | Bot AI | Custom Autowin", 40, 70);
-            ctx.fillStyle = "#9fabbc"; // White color for other texts
-            ctx.font = "18px Manrope";
-            ctx.fillText("Trong 4 phút", 40, 160);
-            ctx.fillText(`Mã gói: ${selectedPlan.code}`, 20, 110);
-            ctx.fillText("Quét để sao chép gói", 20, 140);
-    
-            // Draw the download button
-            ctx.fillStyle = "#ffffff"; // Button text color
-            ctx.fillRect(320, 20, 60, 30); // Button background
-            ctx.fillStyle = "#000000"; // Button background color
-            ctx.fillText("Tải về", 330, 40);
-    
-            // Draw the footer
-            ctx.fillStyle = "#00FF00"; // Green color for footer text
-            ctx.font = "15px Arial";
-            ctx.fillText("BotTrading", 20, 180);
-            ctx.fillText("11/07/2024, 01:10:10", 20, 200);
+        const img2 = new Image();
+        const img4 = new Image();
+
+        // img.crossOrigin= "anonymous"
+        // img2.crossOrigin= "anonymous"
+        // img4.crossOrigin= "anonymous"
+
+        img.src = share_plan_01;
+        img2.src = share_plan_02;
+        img4.src = logo_dark;
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height - 80);
+
+        ctx.fillStyle = "#41ae60";
+        ctx.font = "bold 64px Manrope"; 
+        ctx.fillText("+0%", 40, 140);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "20px Manrope";
+        ctx.fillText(`${selectedPlan?.name} | Bot AI | Custom Autowin`, 40, 70);
+        ctx.fillStyle = "#9fabbc";
+        ctx.font = "18px Manrope";
+        ctx.fillText(`Trong ${numberToWords(moment(new Date()).diff(moment(selectedPlan?.createdAt), "days"))} ngày`, 40, 170);
+        ctx.drawImage(
+          img2,
+          canvas.width - img2.width,
+          canvas.height - img2.height - 100
+        );
+        ctx.fillStyle = "#121927";
+        ctx.fillRect(0, canvas.height - 100 - 1, canvas.width, 100);
+        ctx.drawImage(
+          img4,
+          canvas.width - img4.width / 2 - 20,
+          canvas.height + img4.height / 2 - 100 - 10,
+          img4.width / 2,
+          img4.height / 2
+        );
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 20px Manrope";
+        ctx.fillText("BotTrading", 40, canvas.height + img4.height / 2 - 100);
+        ctx.fillStyle = "#9fabbc";
+        ctx.font = "bold 14px Manrope";
+        ctx.fillText(
+          "BotTrading",
+          40,
+          canvas.height + img4.height / 2 - 100 + 20
+        );
+        // ctx.fillText("Tải về", 330, 40);
+        // ctx.fillStyle = "#fff";
+        // ctx.font = "15px Arial";
+        // ctx.fillText("BotTrading", 20, 180);
+        // ctx.fillText("11/07/2024, 01:10:10", 20, 200);
       }
     }, [open, selectedPlan, canvasRef, count]);
 
@@ -52,19 +88,33 @@ const ShareArchievement = forwardRef(
           setCount(0);
         }, 1);
       }
-      return ()=> {
-        setCount(1)
-      }
+      return () => {
+        setCount(1);
+      };
     }, [count]);
 
     return (
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
-        <canvas
-          crossOrigin="anonymous"
-          ref={canvasRef}
-          width={730}
-          height={507}
-        ></canvas>
+        <Box style={{position: "relative", height: 507, overflow: "hidden"}}>
+          <canvas
+            style={{ background: "#121927" }}
+            crossOrigin="anonymous"
+            ref={canvasRef}
+            width={730}
+            height={507}
+          ></canvas>
+          <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleDownload}
+              startIcon={<DownloadIcon />}
+              size="large"
+            >
+              Tải về
+            </Button>
+          </div>
+        </Box>
       </Dialog>
     );
   }

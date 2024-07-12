@@ -4,29 +4,28 @@ import { useTranslation } from "react-i18next";
 // CUSTOM DEFINED HOOK
 import useLocation from "hooks/useLocation";
 // CUSTOM STYLED COMPONENTS
-import { ItemText, BulletIcon, ICON_STYLE, AccordionButton, ChevronRightStyled, AccordionExpandPanel } from "../layout-parts/styles/sidebar";
+import {
+  ItemText,
+  BulletIcon,
+  ICON_STYLE,
+  AccordionButton,
+  ChevronRightStyled,
+  AccordionExpandPanel,
+} from "../layout-parts/styles/sidebar";
 // NAVIGATION ITEM TYPE
 
 // ==============================================================
 
 // ==============================================================
 
-const SidebarAccordion = props => {
-  const {
-    item,
-    children,
-    sidebarCompact
-  } = props;
-  const {
-    t
-  } = useTranslation();
-  const {
-    pathname
-  } = useLocation();
+const SidebarAccordion = (props) => {
+  const { item, children, sidebarCompact } = props;
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
   const [hasActive, setHasActive] = useState(0);
   const [collapsed, setCollapsed] = useState(false);
-  const handleClick = () => setCollapsed(state => !state);
-  const find = item?.children?.find(li => li.path === pathname);
+  const handleClick = () => setCollapsed((state) => !state);
+  const find = item?.children?.find((li) => li.path === pathname);
   useEffect(() => {
     if (find) {
       setCollapsed(true);
@@ -37,7 +36,8 @@ const SidebarAccordion = props => {
       setHasActive(0);
     };
   }, [find]);
-  return <Fragment>
+  return (
+    <Fragment>
       <AccordionButton onClick={handleClick} active={hasActive}>
         <Box pl="7px" display="flex" alignItems="center">
           {/* ICON SHOW IF EXIST */}
@@ -51,12 +51,20 @@ const SidebarAccordion = props => {
           </ItemText>
         </Box>
 
-        <ChevronRightStyled active={hasActive} compact={sidebarCompact} className="accordionArrow" collapsed={collapsed ? 1 : 0} />
+        <ChevronRightStyled
+          active={hasActive}
+          compact={sidebarCompact}
+          className="accordionArrow"
+          collapsed={collapsed ? 1 : 0}
+        />
       </AccordionButton>
 
       <Collapse in={collapsed} unmountOnExit>
-        <AccordionExpandPanel className="expand">{children}</AccordionExpandPanel>
+        <AccordionExpandPanel className="expand">
+          {children}
+        </AccordionExpandPanel>
       </Collapse>
-    </Fragment>;
+    </Fragment>
+  );
 };
 export default SidebarAccordion;

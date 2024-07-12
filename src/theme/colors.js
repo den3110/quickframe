@@ -1,5 +1,7 @@
 import { alpha } from "@mui/material/styles";
 import config from '../config/config.json';
+import hexToRgb from "util/hexToRgba";
+import rgbToRgba from "util/rgbTorgba";
 
 const grey = {
   25: "#F9FAFB",
@@ -22,7 +24,7 @@ export const primary = {
   300: "#A996F8",
   400: "#907AF1",
   500: "#6950E8",
-  600: "#592BE7",
+  600: config.theme.primaryColorHover,
   700: "#4317CA",
   800: "#33129C",
   900: "#240C6E",
@@ -32,6 +34,7 @@ export const success = {
   25: "#F1FEF5",
   50: "#E3FDEB",
   100: "#CDFBDB",
+  101: rgbToRgba(hexToRgb(config.theme.primaryColor), 0.25),
   200: "#9DF7C2",
   300: "#6AE9AA",
   400: "#43D49A",
@@ -40,7 +43,8 @@ export const success = {
   700: "#088477",
   800: "#056A6A",
   900: "#035058",
-  main: "#11b886"
+  main: "#11b886",
+  buy: rgbToRgba(hexToRgb(config.theme.primaryColor), 0.8)
 };
 export const warning = {
   25: "#FFFCF5",
@@ -84,14 +88,16 @@ export const info = {
 export const textLight = {
   primary: grey[900],
   secondary: grey[500],
-  disabled: grey[200]
+  disabled: grey[200],
+  main: "black"
 };
 
 // FOR DARK THEME TEXT COLORS
 export const textDark = {
   primary: "#ffffff",
   secondary: grey[400],
-  disabled: grey[200]
+  disabled: grey[200],
+  main: "white"
 };
 
 // FOR LIGHT THEME ACTION COLORS

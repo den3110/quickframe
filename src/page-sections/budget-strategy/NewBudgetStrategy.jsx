@@ -70,7 +70,7 @@ const NewBudgetStrategy = ({
   };
 
   const validateInput = (value) => {
-    const pattern = /^(\d+)(-\d+)*$/;
+    const pattern = /^(\d+(\.\d+)?)(-(\d+(\.\d+)?))*$/;
     if (value?.match(pattern)) {
       return false;
     }

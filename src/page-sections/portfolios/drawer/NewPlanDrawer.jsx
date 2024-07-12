@@ -364,6 +364,7 @@ const NewPlanDrawer = ({
       setInvestmentFund(selectedPlan?.budget_amount);
       setBetSecond(selectedPlan?.bet_second);
       setAutoType(selectedPlan?.autoType);
+      setSelectedTab(selectedPlan?.autoType=== 1 ? "Follow Leader" : "Bot AI")
       setFeatureType(selectedPlan?.signal_feature);
       setBudgetStrategy(selectedPlan?.budgetStrategyId);
       setBaseAmount(selectedPlan?.margin_dense);
@@ -373,9 +374,7 @@ const NewPlanDrawer = ({
       setReserveSignal(selectedPlan?.is_reverse);
       setArraySignalStrategy(selectedPlan?.method_data?.method_list);
       setShuffleMethodsOrder(selectedPlan?.method_data?.feature_data?.shuffle_methods_order);
-      setNoRepeatMethodsNextTurn(
-        selectedPlan?.method_data?.feature_data?.no_repeat_methods_next_turn
-      );
+      setNoRepeatMethodsNextTurn(selectedPlan?.method_data?.feature_data?.no_repeat_methods_next_turn);
       setWinEnabled(selectedPlan?.method_data?.feature_data?.win_enabled);
       setWinReverseSignal(selectedPlan?.method_data?.feature_data?.win_reverse_signal)
       setWinEndWinStreak(selectedPlan?.method_data?.feature_data?.win_end_win_streak)
@@ -393,6 +392,42 @@ const NewPlanDrawer = ({
       setLoseTurnCount(selectedPlan?.method_data?.feature_data?.lose_turn_count)
       setLoseChangeMethodAfterLoseStreak(selectedPlan?.method_data?.feature_data?.lose_change_method_after_lose_streak)
       setLoseChangeMethodAfterWinStreak(selectedPlan?.method_data?.feature_data?.lose_change_method_after_win_streak)
+     
+    }
+    else {
+      setIdPlan();
+      setPlanName("");
+      setInvestmentFund(100);
+      setBetSecond(1);
+      setAutoType(AutoTypes.BOT);
+      setSelectedTab("Bot AI")
+      setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
+      setBudgetStrategy(dataBudgetStrategy?.[0]?._id);
+      setBaseAmount(1);
+      setTakeProfit(false);
+      setIsBrokerMode(false);
+      setPrivateMode(false);
+      setReserveSignal(false);
+      setArraySignalStrategy([]);
+      setShuffleMethodsOrder(false);
+      setNoRepeatMethodsNextTurn(false);
+      setWinEnabled(false);
+      setWinReverseSignal(false)
+      setWinEndWinStreak(false)
+      setWinExactlyWinStreak(false)
+      setWinStreakEntryTarget(0)
+      setWinTurnCount(0)
+      setWinChangeMethodAfterWinStreak(0)
+      setWinChangeMethodAfterLoseStreak(0)
+
+      setLoseEnabled(false)
+      setLoseReverseSignal(false)
+      setLoseEndLoseStreak(false)
+      setLoseExactlyLoseStreak(false)
+      setLoseStreakEntryTarget(0)
+      setLoseTurnCount(0)
+      setLoseChangeMethodAfterLoseStreak(0)
+      setLoseChangeMethodAfterWinStreak(0)
       // e dang lam a co gi khong a xem ti
       // a oi ba cai sau thi chua co api ha a, lam 3 cai la stop start va remove thoi e oke a
     }
@@ -452,7 +487,7 @@ const NewPlanDrawer = ({
                 </Toolbar>
               </AppBar>
 
-              <Box mt={2}>
+              <Box mt={1}>
                 <Typography variant="subtitle1">Plan name</Typography>
                 <TextField
                   fullWidth
@@ -463,7 +498,7 @@ const NewPlanDrawer = ({
                   onChange={(e) => setPlanName(e.target.value)}
                 />
                 <Box sx={{display: "flex", alignItems: "center", gap: 1, flexDirection: downLg ? "column" : "row"}}>
-                  <Box sx={{width: "100%"}} display="flex" alignItems="center" mt={2}>
+                  <Box sx={{width: "100%"}} display="flex" alignItems="center">
                     <Typography variant="subtitle1">Investment fund</Typography>
                     <Box ml={2} display="flex" alignItems="center">
                       <Button
@@ -577,7 +612,7 @@ const NewPlanDrawer = ({
                 </Box>
               </Box>
 
-              <Box mt={2}>
+              <Box mt={1}>
                 <AppBar position="static" color="default">
                   <Toolbar>
                     <Typography variant="h6" style={{ flexGrow: 1 }}>
@@ -585,7 +620,7 @@ const NewPlanDrawer = ({
                     </Typography>
                   </Toolbar>
                 </AppBar>
-                {!isEdit && (
+                { (
                   <Box display="flex" mt={2}>
                     {["Bot AI", "Follow Leader"].map((tab) => (
                       <Button
@@ -595,6 +630,7 @@ const NewPlanDrawer = ({
                         style={{ marginRight: 8 }}
                         onClick={() => {
                           setSelectedTab(tab);
+                          setAutoType(tab=== "Follow Leader" ? 1 : 0)
                           setArraySignalStrategy([]);
                         }}
                       >
@@ -685,7 +721,7 @@ const NewPlanDrawer = ({
               {isChooseBot === true && (
                 <>
                   {" "}
-                  <Box mt={2}>
+                  <Box mt={1}>
                     <Typography variant="subtitle1">Chọn Bot</Typography>
                     <FormControl variant="outlined" fullWidth margin="normal">
                       <Select
@@ -708,7 +744,7 @@ const NewPlanDrawer = ({
               <Box
                 className="asklawa"
                 sx={{ display: "flex", gap: 1, alignItems: "center" }}
-                mt={1}
+                // mt={1}
               >
                 {selectedTab === "Bot AI" && (
                   <Box sx={{ width: "100%" }} fullWidth>
@@ -1166,7 +1202,7 @@ const NewPlanDrawer = ({
                 </Box>
               )} */}
 
-              <Box mt={2}>
+              <Box mt={1}>
                 <Typography variant="h6">
                   Take-Profit/Stop-Loss Conditions
                 </Typography>
@@ -1186,7 +1222,7 @@ const NewPlanDrawer = ({
                 />
               </Box>
               {takeProfit === true && (
-                <Box mt={2} component="form" noValidate autoComplete="off">
+                <Box mt={1} component="form" noValidate autoComplete="off">
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       <TextField
@@ -1269,7 +1305,7 @@ const NewPlanDrawer = ({
                 </Box>
               )}
               {/* Advanced option */}
-              <Box mt={2}>
+              <Box mt={1}>
                 <Accordion expanded={expanded} onChange={handleAccordionChange}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -1331,7 +1367,7 @@ const NewPlanDrawer = ({
             </div>
 
             <Box
-              mt={4}
+              // mt={4}
               display="flex"
               gap={1}
               justifyContent="space-between"

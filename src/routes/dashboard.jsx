@@ -14,6 +14,7 @@ import Sent from "pages/dashboard/signal-strategy/sent"
 import SignalStrategyList from "page-sections/signal-strategy/page-view/all";
 import PortfoliosList from "page-sections/portfolios/page-view/all";
 import { PortfoliosProvider } from "contexts/PortfoliosContext";
+import PortfolioDetail from "page-sections/portfolios/page-view/detail";
 // ALL DASHBOARD PAGES
 const CRM = Loadable(lazy(() => import("pages/dashboard/crm")));
 const Finance = Loadable(lazy(() => import("pages/dashboard/finance")));
@@ -329,6 +330,10 @@ export const DashboardRoutes = [
             path: "schedule",
             element: <Sent />,
           },
+          {
+            path: ":id",
+            element: <PortfolioDetail /> 
+          }
         ],
       },
     ],

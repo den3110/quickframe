@@ -18,7 +18,7 @@ import {
   ExternalLink,
   NavItemButton,
 } from "../layout-parts/styles/sidebar";
-import { Box, Divider, Badge } from "@mui/material";
+import { Box, Divider, Badge, useMediaQuery } from "@mui/material";
 import { GlobalContext } from "contexts/GlobalContext";
 
 // ===========================================================================
@@ -27,7 +27,7 @@ import { GlobalContext } from "contexts/GlobalContext";
 
 const MultiLevelMenu = ({ sidebarCompact }) => {
   const {botTotal }= useContext(GlobalContext)
-  console.log(botTotal)
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { user } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -84,7 +84,7 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
             target="_blank"
           >
             <NavItemButton key={item.name} name="child" active={0}>
-              <Box>
+              <Box className="asklaskaw">
                 {item.icon ? (
                   <item.icon sx={ICON_STYLE(0)} />
                 ) : (
@@ -115,7 +115,7 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
           onClick={() => handleNavigation(item.path)}
           sx={{justifyContent: "space-between"}}
         >
-          <Box>
+          <Box className="asklaskaw" sx={{width: COMPACT=== 1 ? "100%" : "aaa"}}>
             {item?.icon ? (
               <item.icon sx={ICON_STYLE(activeRoute(item.path))} />
             ) : (

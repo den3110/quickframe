@@ -54,6 +54,7 @@ import { SettingsContext } from "contexts/settingsContext";
 import { ActionBotType } from "type/ActionBotType";
 import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 import sortData from "util/sortData";
+import { useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -83,6 +84,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 
 const PortfoliosList = () => {
   const { data, setData, loading } = useContext(PortfoliosContext);
+  const navigate= useNavigate()
   const { walletMode } = useContext(SettingsContext);
   const [dailyTarget, setDailyTarget] = useState({
     profit: 0,
@@ -601,8 +603,12 @@ const PortfoliosList = () => {
                                   )}
                                   <Box>
                                     <Typography
+                                      onClick={()=> {
+                                        navigate(plan._id)
+                                      }}
                                       variant="body1"
                                       fontWeight={"600"}
+                                      sx={{cursor: "pointer"}}
                                     >
                                       {plan.name}
                                     </Typography>

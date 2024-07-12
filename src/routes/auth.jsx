@@ -12,12 +12,7 @@ const ForgetPassword = Loadable(
 const LoginDemoWithAuth0 = Loadable(
   lazy(() => import("pages/auth-demo/auth0/login"))
 );
-const LoginDemoWithFirebase = Loadable(
-  lazy(() => import("pages/auth-demo/firebase/login"))
-);
-const RegisterDemoWithFirebase = Loadable(
-  lazy(() => import("pages/auth-demo/firebase/register"))
-);
+
 const LoginDemoWithAmplify = Loadable(
   lazy(() => import("pages/auth-demo/amplify/login"))
 );
@@ -52,14 +47,6 @@ export const AuthRoutes = [
   {
     path: "auth0/login",
     element: <LoginDemoWithAuth0 />,
-  },
-  {
-    path: "firebase/login",
-    element: <LoginDemoWithFirebase />,
-  },
-  {
-    path: "firebase/register",
-    element: <RegisterDemoWithFirebase />,
   },
   {
     path: "amplify/login",

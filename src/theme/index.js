@@ -19,7 +19,7 @@ const baseOptions = {
       xs: 0,
       sm: 600,
       md: 900,
-      lg: 1200,
+      lg: 974,
       xl: 1536,
     },
   },
