@@ -63,7 +63,7 @@ const Statistics = () => {
                       percentage="Lợi nhuận hôm nay"
                       hidden={true}
                     />
-                    <StatisticCard title="KLGD 7N" value={`$${dataStat?.week_volume?.toFixed(2)}`} />
+                    <StatisticCard title="KLGD 7N" value={`${formatCurrency(dataStat?.week_volume)}`} />
                     <StatisticCard title="Lợi nhuận 7N" value={formatCurrency(dataStat?.week_profit)} />
                     <StatisticCard title="Chuỗi thắng tối đa" value={dataStat?.lastData?.longestWinStreak || 0} />
                     <StatisticCard title="Chuỗi thua tối đa" value={dataStat?.lastData?.longestLoseStreak || 0} />

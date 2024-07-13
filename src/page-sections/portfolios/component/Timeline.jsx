@@ -30,6 +30,9 @@ import { PortfolioDetailContext } from "../page-view/detail";
 import moment from "moment";
 import formatCurrency from "util/formatCurrency";
 import { SocketContext } from "contexts/SocketContext";
+import { useParams } from "react-router-dom";
+import CountDownIcon from "icons/duotone/CountDown";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -93,11 +96,19 @@ const events = [
 ];
 
 const CustomTimeline = () => {
+  const { id } = useParams();
   const theme = useTheme();
-  const {socket, isConnected }= useContext(SocketContext) 
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const [countDown, setCountDown] = useState();
   // const [data, setData]= useState([])
-  const { data: dataProps, loading, setData } = useContext(PortfolioDetailContext);
+  const { socket, isConnected } = useContext(SocketContext);
+  const {
+    data: dataProps,
+    dataStat: dataStatProps,
+    loading,
+    setData,
+    setDataStat,
+  } = useContext(PortfolioDetailContext);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
 
@@ -135,33 +146,85 @@ const CustomTimeline = () => {
         break;
     }
   };
-  useEffect(()=> {
-    if(isConnected) {
-      let dataTemp= dataProps;
-      
-      // casi luc ma isConnected thi lam gi da co du lieu o dataProps nhi ? hin hnh de e thu dem
-      socket.on("ADD_CLOSE_ORDER", data=> {
-        const index= dataTemp?.findIndex(item=> item.betTime === data.betTime && item.botId === data.botId)
-        if(index=== -1) {
-          dataTemp= [data, ...dataTemp]
+  
+  useEffect(() => {
+    if (isConnected && dataProps && dataStatProps) {
+      console.log(dataStatProps)
+      let dataTemp = dataProps;
+      let dataStatTemp= dataStatProps
+      socket.on("ADD_CLOSE_ORDER", (data) => {
+        const index = dataTemp?.findIndex(
+          (item) => item.betTime === data.betTime && item.botId === data.botId
+        );
+        if (index === -1) {
+          dataTemp = [data, ...dataTemp];
+        } else {
+          dataTemp[index] = data;
         }
-        else {
-          dataTemp[index]= data
+        
+        console.log('dataStat', dataStatTemp);
+        const newObjData = {
+          ...dataStatTemp,
+          win_day: data?.runningData?.win_day,
+          lose_day: data?.runningData?.lose_day,
+          day_profit: data?.runningData?.day_profit,
+          week_profit: data?.runningData?.week_profit,
+          week_volume: data?.runningData?.week_volume,
+          longestWinStreak: data?.runningData?.longestWinStreak,
+          longestLoseStreak: data?.runningData?.longestLoseStreak,
+          lastData: {
+            ...dataStatTemp.lastData,
+            budgetStrategy: {
+              ...dataStatTemp.lastData.budgetStrategy,
+              bs: {
+                ...dataStatTemp.lastData.budgetStrategy.bs,
+                method_data: data?.runningData?.budgetStrategy?.method_data,
+              },
+            },
+          },
+        };
+        setDataStat(newObjData);
+        setData(dataTemp);
+      });
+
+      socket.on("ADD_OPEN_ORDER", (data) => {
+        const index = dataTemp?.findIndex(
+          (item) =>
+            item.betTime === data.betTime &&
+            item.botId === data.botId &&
+            item.botId === id
+        );
+        if (index === -1) {
+          dataTemp = [data, ...dataTemp];
+        } else {
+          dataTemp[index] = data;
         }
-        setData(dataTemp)
-      })
-      socket.on("ADD_OPEN_ORDER", data=> {
-        const index= dataTemp?.findIndex(item=> item.betTime === data.betTime && item.botId === data.botId)
-        if(index=== -1) {
-          dataTemp= [data, ...dataTemp]
-        }
-        else {
-          dataTemp[index]= data
-        }
-        setData(dataTemp)
-      })
+        setData(dataTemp);
+      });
     }
-  }, [isConnected, dataProps])
+  }, [isConnected, dataProps, dataStatProps, id, socket]);
+
+  useEffect(() => {
+    if (isConnected) {
+      socket.emit("CURRENT_SESSION_SUBCRIBE");
+      socket.on("CURRENT_SESSION", (data) => {
+        // console.log("CURRENT_SESSION", data);
+        if (data?.ss_t === "WAIT") {
+          setCountDown(data?.r_second);
+        } else if (data?.ss_t === "TRADE") {
+          setCountDown(data?.r_second + 30);
+        }
+      });
+      socket.emit("LAST_RESULTS_SUBCRIBE");
+      socket.on("LAST_RESULTS", (data) => {
+        // console.log("LAST_RESULTS", data);
+      });
+      return () => {
+        socket.emit("CURRENT_SESSION_UNSUBCRIBE");
+        socket.emit("LAST_RESULTS_UNSUBCRIBE");
+      };
+    }
+  }, [isConnected]);
 
   return (
     <Box>
@@ -185,12 +248,15 @@ const CustomTimeline = () => {
                 key={index}
               >
                 <TimelineSeparator>
-                  <TimelineDot style={{ backgroundColor: theme.palette.success.buy }}>
-                    <CheckCircleIcon fontSize={"16px"} sx={{color: "white !important"}} />
+                  <TimelineDot
+                    style={{ backgroundColor: theme.palette.success.buy }}
+                  >
+                    <CheckCircleIcon
+                      fontSize={"16px"}
+                      sx={{ color: "white !important" }}
+                    />
                   </TimelineDot>
-                  {index < dataProps.length - 1 && (
-                    <TimelineConnector />
-                  )}
+                  {index < dataProps.length - 1 && <TimelineConnector />}
                 </TimelineSeparator>
                 <TimelineContent sx={{ paddingRight: 0 }}>
                   <Card variant="outlined" sx={{ mb: 2 }}>
@@ -208,9 +274,31 @@ const CustomTimeline = () => {
                             "DD/MM/YYYY, HH:mm:ss"
                           )}
                         </Typography>
-                        <Typography fontSize={12}>
-                          Thời gian (UTC + 7)
-                        </Typography>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Typography fontSize={12}>
+                            Thời gian (UTC + 7){" "}
+                          </Typography>
+                          {(item?.betType === "UP" ||
+                            item?.betType === "DOWN") && (
+                            <Box
+                              display={"flex"}
+                              alignItems="center"
+                              gap={0.5}
+                              ml={0.5}
+                            >
+                              <AccessTimeIcon
+                                fontSize="16"
+                                sx={{ color: theme.palette.success.main }}
+                              />
+                              <Typography
+                                fontSize={12}
+                                sx={{ color: theme.palette.success.main }}
+                              >
+                                {dataStatProps?.bet_second}
+                              </Typography>
+                            </Box>
+                          )}
+                        </Box>
                       </Box>
                       {/* row 2 */}
                       <Box sx={{ width: "20%" }}>
@@ -251,6 +339,7 @@ const CustomTimeline = () => {
                             </Typography>
                           </>
                         )}
+                        {/* tiep di a nay e  */}
                         {item?.message === "stop_plan_take_profit_target" &&
                           item?.result === "ACTION_BOT" && (
                             <>
@@ -295,37 +384,34 @@ const CustomTimeline = () => {
                       </Box>
                       {/* row 5 */}
                       <Box sx={{ width: "20%" }}>
-                        {((item?.betType === "UP" ||
-                          item?.betType === "DOWN") && item.result && item.message === "success") && (
+                        {(item?.betType === "UP" || item?.betType === "DOWN") &&
+                          item.result &&
+                          item.message === "success" && (
+                            <>
+                              <Typography
+                                fontSize={12}
+                                fontWeight={600}
+                                mb={1}
+                                color={
+                                  item?.winAmount >= 0
+                                    ? theme.palette.success.main
+                                    : "error"
+                                }
+                              >
+                                {formatCurrency(item?.winAmount)}
+                              </Typography>
+                              <Typography fontSize={12}>Thu nhập</Typography>
+                            </>
+                          )}
+                        {!item.result && item.message === "success" && (
                           <>
                             <Typography
                               fontSize={12}
                               fontWeight={600}
                               mb={1}
-                              color={
-                                item?.winAmount >= 0
-                                  ? theme.palette.success.main
-                                  : "error"
-                              }
+                              color={"warning.main"}
                             >
-                              {formatCurrency(
-                                item?.winAmount
-                              )}
-                            </Typography>
-                            <Typography fontSize={12}>Thu nhập</Typography>
-                          </>
-                        )}
-                        {(!item.result && item.message === "success") && (
-                          <>
-                            <Typography
-                              fontSize={12}
-                              fontWeight={600}
-                              mb={1}
-                              color={
-                                "warning.main"
-                              }
-                            >
-                                Chờ ...s
+                              Chờ {countDown}s
                             </Typography>
                             <Typography fontSize={12}>Thu nhập</Typography>
                           </>

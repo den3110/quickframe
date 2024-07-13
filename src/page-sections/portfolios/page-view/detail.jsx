@@ -10,7 +10,7 @@ import MenuComponent from "../component/MenuDetail";
 import { SocketContext } from "contexts/SocketContext";
 
 const TabPanel = (props) => {
-  const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   const { children, value, index, ...other } = props;
 
@@ -31,19 +31,18 @@ const TabPanel = (props) => {
 const a11yProps = (index) => {
   return {
     id: `tab-${index}`,
-    'aria-controls': `tabpanel-${index}`,
+    "aria-controls": `tabpanel-${index}`,
   };
 };
 
 export const PortfolioDetailContext = createContext();
 const PortfolioDetail = () => {
-  
-  const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [value, setValue] = React.useState(0);
   const { id } = useParams();
   const [loading, setLoading] = useState();
   const [data, setData] = useState([]);
-  const [dataStat, setDataStat]= useState()
+  const [dataStat, setDataStat] = useState();
 
   const mergeAndSortData = (data) => {
     const { open, close } = data;
@@ -61,7 +60,7 @@ const PortfolioDetail = () => {
         setLoading(true);
         const response = await portfolioApi.userBotHistory(id);
         if (response?.data?.ok === true) {
-          const dataResult= mergeAndSortData(response?.data)
+          const dataResult = mergeAndSortData(response?.data);
           setData(dataResult);
         } else {
         }
@@ -80,7 +79,6 @@ const PortfolioDetail = () => {
         if (response?.data?.ok === true) {
           setDataStat(response?.data?.d);
         } else {
-
         }
       } catch (error) {
       } finally {
@@ -89,10 +87,10 @@ const PortfolioDetail = () => {
     })();
   }, [id]);
 
-  
-
   return (
-    <PortfolioDetailContext.Provider value={{ loading, data, setData, dataStat, setDataStat }}>
+    <PortfolioDetailContext.Provider
+      value={{ loading, data, setData, dataStat, setDataStat }}
+    >
       <Box padding={downLg ? 1 : 2}>
         <MenuComponent />
         <Tabs value={value} onChange={handleChange} aria-label="tabs example">
