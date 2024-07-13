@@ -1,13 +1,15 @@
 // src/components/InvestmentOverview.js
 import React, { useContext } from "react";
-import { Card, CardContent, Typography, Box, Divider } from "@mui/material";
+import { Card, CardContent, Typography, Box, Divider, useMediaQuery } from "@mui/material";
 import { PortfolioDetailContext } from "../page-view/detail";
+import formatCurrency from "util/formatCurrency";
+import { isDark } from "utils/constants";
 
 const InvestmentOverview = () => {
   const {dataStat }= useContext(PortfolioDetailContext)
-
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   return (
-    <Card sx={{background: "#eeeff2"}}>
+    <Card sx={{background: theme=> isDark(theme) ? "" : "#eeeff2"}}>
       <CardContent
         sx={{
           background:
@@ -54,10 +56,11 @@ const InvestmentOverview = () => {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="body2">Chốt lời/Cắt lỗ</Typography>
-          <Typography variant="body2">+$0/-$0</Typography>
+          <Typography variant="body2">Chốt lời/Cắt lỗ</Typography> 
+          {/* e co ham day a */}
+          <Typography variant="body2">+${dataStat?.take_profit_target}/-${dataStat?.stop_loss_target}</Typography>
         </Box>
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             alignItems: "center",
@@ -67,7 +70,7 @@ const InvestmentOverview = () => {
         >
           <Typography variant="body2">Số lệnh đã cài lại</Typography>
           <Typography variant="body2">1</Typography>
-        </Box>
+        </Box> */}
         <Box
           sx={{
             display: "flex",
@@ -77,7 +80,7 @@ const InvestmentOverview = () => {
           }}
         >
           <Typography variant="body2">Lợi nhuận</Typography>
-          <Typography variant="body2">$7.60 Cài lại</Typography>
+          <Typography variant="body2">{formatCurrency(dataStat?.isRunning ? dataStat?.lastData.profit : dataStat?.current_profit)} Cài lại</Typography>
         </Box>
       </CardContent>
     </Card>

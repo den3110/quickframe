@@ -245,7 +245,7 @@ const PortfoliosList = () => {
           }
         })
       );
-      showToast("Tạm ngưng các gọi đã chọn thành công", "success");
+      showToast("Tạm ngưng các gói đã chọn thành công", "success");
     } catch (error) {
       console.error("Error sending requests:", error);
     } finally {
@@ -269,7 +269,7 @@ const PortfoliosList = () => {
       const responses = await Promise.all(requests);
       const listResult = responses?.map((item) => item.data.ok);
       // setData();
-      showToast("Tiếp tục các gọi đã chọn thành công", "success");
+      showToast("Tiếp tục các gói đã chọn thành công", "success");
       setData(
         data?.map((item, key) => {
           if (
@@ -305,7 +305,7 @@ const PortfoliosList = () => {
       const responses = await Promise.all(requests);
       const listResult = responses?.map((item) => item.data.ok);
       // setData();
-      showToast("Tiếp tục các gọi đã chọn thành công", "success");
+      showToast("Tiếp tục các gói đã chọn thành công", "success");
       setData(
         data?.map((item, key) => {
           if (
@@ -341,7 +341,7 @@ const PortfoliosList = () => {
       const responses = await Promise.all(requests);
       const listResult = responses?.map((item) => item.data.ok);
       // setData();
-      showToast("Tiếp tục các gọi đã chọn thành công", "success");
+      showToast("Tiếp tục các gói đã chọn thành công", "success");
       setData(
         data?.map((item, key) => {
           if (
@@ -370,25 +370,16 @@ const PortfoliosList = () => {
     try {
       const requests = selectedPlans.map((plan, index) =>
         axiosClient.post(`/users/bot/action/${plan?._id}`, {
-          action: ActionBotType.RESUME,
+          action: ActionBotType.REMOVE,
         })
       );
 
       const responses = await Promise.all(requests);
       const listResult = responses?.map((item) => item.data.ok);
       // setData();
-      showToast("Tiếp tục các gọi đã chọn thành công", "success");
+      showToast("Xoá các gói đã chọn thành công", "success");
       setData(
-        data?.map((item, key) => {
-          if (
-            selectedPlans.some((obj) => obj._id === item._id) &&
-            listResult[key] === true
-          ) {
-            return { ...item, isRunning: true };
-          } else {
-            return { ...item };
-          }
-        })
+        data?.filter((item, key) => !selectedPlans.find(a=> a._id === item._id))
       );
     } catch (error) {
       console.error("Error sending requests:", error);
@@ -826,6 +817,7 @@ const PortfoliosList = () => {
                 <PopupControll
                   onClickStop={handlePausePlan}
                   onClickStart={handleResumePlan}
+                  onClickDelete={handleRemovePlan}
                 />
               )}
             </Box>

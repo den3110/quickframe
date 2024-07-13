@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
-import { Button, Popover, MenuItem, Box, IconButton } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { ActionBotType } from 'type/ActionBotType';
-import portfolioApi from 'api/portfolios/portfolioApi';
-import { useNavigate, useParams } from 'react-router-dom';
-import { showToast } from 'components/toast/toast';
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Popover,
+  MenuItem,
+  Box,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {
+  ActionBotType,
+  ActionBotTypeMessageSucces,
+  ActionBotTypeStatus,
+} from "type/ActionBotType";
+import portfolioApi from "api/portfolios/portfolioApi";
+import { useNavigate, useParams } from "react-router-dom";
+import { showToast } from "components/toast/toast";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import { Replay } from "@mui/icons-material";
+import useQuery from "hooks/useQuery";
 
-const MenuComponent = () => {
-    const {id }= useParams()
-    const navigate= useNavigate()
+const MenuComponent = ({ dataStat, setDataStat }) => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [isRunning, setIsRunning] = useState();
+  const [isPause, setIsPause]= useState()
 
   const handleClick = (event) => {
     setMenuAnchorEl(event.currentTarget);
@@ -31,34 +50,103 @@ const MenuComponent = () => {
   const open = Boolean(anchorEl);
   const menuOpen = Boolean(menuAnchorEl);
 
-  const handleChangeIsRunning = async (e) => {
+  const handleChangeIsRunning = async (action) => {
     try {
       const payload = {
-        action: e.target.checked === true ? ActionBotType.START : ActionBotType.STOP,
+        action: ActionBotType[action],
       };
+      // const { data, error, loading, refetch }= useQuery()
       await portfolioApi.userBotAction(id, payload);
-        console.log(e.target.checked)
-        // setData()
-        showToast( !e.target.checked === true ? "Chạy gói thành công" : "Ngưng gói thành công", "success")
+      // setData()
+      // setIsRunning(ActionBotTypeStatus[action]);
+      setIsPause(!isPause)
+      showToast(ActionBotTypeMessageSucces[action], "success");
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }
   };
 
-  const handleBack= ()=> {
-    navigate(-1)
-  }
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  useEffect(() => {
+    setIsRunning(dataStat?.isRunning);
+    setIsPause(dataStat?.lastData?.isPause);
+  }, [dataStat]);
 
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Button variant="outlined" size={"large"} onClick={handleBack}>Quay lại</Button>
+        <Button variant="outlined" size={"large"} onClick={handleBack}>
+          Quay lại
+        </Button>
         <Box>
-          <Button variant="contained" color="primary" size={"large"} style={{ marginRight: '8px' }}>
-            Tiếp tục
-          </Button>
-          <Button variant="contained" color="secondary" size={"large"} style={{ marginRight: '8px' }}>
-            Khởi động lại
+        {(isRunning === false) && (
+            <Button
+              sx={{
+                "& .MuiButton-startIcon": {
+                  margin: downLg ? 0 : "",
+                },
+              }}
+              startIcon={<PlayArrowIcon />}
+              variant="contained"
+              color="success"
+              size={"large"}
+              style={{ marginRight: "8px" }}
+              onClick={() => handleChangeIsRunning("START")}
+            >
+              {downLg ? "" : "Khởi chạy"}
+            </Button>
+          )}
+          {(isRunning === true && !isPause) && (
+            <Button
+              sx={{
+                "& .MuiButton-startIcon": {
+                  margin: downLg ? 0 : "",
+                },
+              }}
+              startIcon={<PauseIcon />}
+              variant="contained"
+              color="success"
+              size={"large"}
+              style={{ marginRight: "8px" }}
+              onClick={() => handleChangeIsRunning("PAUSE")}
+            >
+              {downLg ? "" : "Tạm ngưng"}
+            </Button>
+          )}
+          {(isRunning === true && isPause) && (
+            <Button
+              sx={{
+                "& .MuiButton-startIcon": {
+                  margin: downLg ? 0 : "",
+                },
+              }}
+              startIcon={<PlayArrowIcon />}
+              variant="contained"
+              color="primary"
+              size={"large"}
+              style={{ marginRight: "8px" }}
+              onClick={() => handleChangeIsRunning("RESUME")}
+            >
+              {downLg ? "" : "Tiếp tục"}
+            </Button>
+          )}
+          <Button
+            sx={{
+              "& .MuiButton-startIcon": {
+                margin: downLg ? 0 : "",
+              },
+            }}
+            startIcon={<Replay />}
+            variant="contained"
+            color="secondary"
+            size={"large"}
+            style={{ marginRight: "8px" }}
+            onClick={() => handleChangeIsRunning("RESTART")}
+          >
+            {downLg ? "" : "Khởi động lại"}
           </Button>
           <IconButton size={"large"} onClick={handleClick}>
             <MoreVertIcon />
@@ -72,12 +160,12 @@ const MenuComponent = () => {
         open={menuOpen}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: "bottom",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
       >
         <Box>

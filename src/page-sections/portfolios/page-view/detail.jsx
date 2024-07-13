@@ -8,6 +8,7 @@ import portfolioApi from "api/portfolios/portfolioApi";
 import { useParams } from "react-router-dom";
 import MenuComponent from "../component/MenuDetail";
 import { SocketContext } from "contexts/SocketContext";
+import sessionApi from "api/session/sessionApi";
 
 const TabPanel = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -38,11 +39,13 @@ const a11yProps = (index) => {
 export const PortfolioDetailContext = createContext();
 const PortfolioDetail = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const {isConnected,  socket}= useContext(SocketContext)
   const [value, setValue] = React.useState(0);
   const { id } = useParams();
   const [loading, setLoading] = useState();
   const [data, setData] = useState([]);
   const [dataStat, setDataStat] = useState();
+  const [dataSignal, setDataSignal]= useState()
 
   const mergeAndSortData = (data) => {
     const { open, close } = data;
@@ -87,12 +90,36 @@ const PortfolioDetail = () => {
     })();
   }, [id]);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const response = await sessionApi.getGlobalLastResults();
+        if (response?.data?.ok === true) {
+          setDataSignal(response?.data?.d);
+        } else {
+        }
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [id]);
+
+  useEffect(()=> {
+    if(isConnected) {
+      socket.on("LAST_RESULTS", data=> {
+        setDataSignal(data)
+      })
+    }
+  }, [isConnected, socket, dataSignal])
+
   return (
     <PortfolioDetailContext.Provider
-      value={{ loading, data, setData, dataStat, setDataStat }}
+      value={{ loading, data, setData, dataStat, setDataStat, dataSignal, setDataSignal }}
     >
       <Box padding={downLg ? 1 : 2}>
-        <MenuComponent />
+        <MenuComponent dataStat={dataStat} setDataStat={setDataStat} />
         <Tabs value={value} onChange={handleChange} aria-label="tabs example">
           <Tab label="Quá trình đầu tư" {...a11yProps(0)} />
           <Tab label="Chiến Lược Lợi Nhuận" {...a11yProps(1)} />

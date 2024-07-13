@@ -5,8 +5,9 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CachedIcon from "@mui/icons-material/Cached";
 import ReplayIcon from "@mui/icons-material/Replay";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { isDark } from "utils/constants";
 
-const PopupControll = ({ onClickStop, onClickStart }) => {
+const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   return (
@@ -19,7 +20,7 @@ const PopupControll = ({ onClickStop, onClickStart }) => {
         transform: "translateX(-50%)",
         width: downLg ? "100%" : "auto",
         zIndex: 9,
-        background: "white",
+        background: theme=> isDark(theme) ? theme.palette.background.cell : "white",
         boxShadow:
           !downLg && "8.08219px 12.1233px 40.411px rgb(97 106 119 / 53%)",
         borderRadius: !downLg && "8px",
@@ -77,6 +78,7 @@ const PopupControll = ({ onClickStop, onClickStart }) => {
           Cài lại
         </Button>
         <Button
+          onClick={onClickDelete}
           startIcon={<DeleteIcon />}
           sx={{
             fontSize: downLg ? 10 : "",

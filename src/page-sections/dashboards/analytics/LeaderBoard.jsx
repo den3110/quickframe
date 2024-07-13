@@ -10,6 +10,7 @@ import {
   Button,
   Tooltip,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import exchangeApi from "api/exchange/exchangeApi";
@@ -72,6 +73,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 }));
 
 const LeaderBoard = () => {
+  const theme= useTheme()
   const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
   const [dataUser, setDataUser] = useState([]);
   const [dataBot, setDataBot] = useState([]);
@@ -116,7 +118,7 @@ const LeaderBoard = () => {
           gutterBottom
           style={{
             background:
-              "linear-gradient(rgb(221 255 0) 0%, rgb(65 255 0) 3.04%, rgb(23 73 48) 100%) text",
+              `linear-gradient(rgb(221 255 0) 0%, ${theme.palette.primary.secondary} 3.04%, ${theme.palette.primary.main} 100%) text`,
             WebkitTextFillColor: "transparent",
           }}
           mt={1}
@@ -558,7 +560,7 @@ const LeaderBoard = () => {
         mb={9}
         style={{
           background:
-            "linear-gradient(rgb(221 255 0) 0%, rgb(65 255 0) 3.04%, rgb(23 73 48) 100%) text",
+            `linear-gradient(rgb(221 255 0) 0%, ${theme.palette.primary.secondary} 3.04%, ${theme.palette.primary.main} 100%) text`,
           WebkitTextFillColor: "transparent",
         }}
       >

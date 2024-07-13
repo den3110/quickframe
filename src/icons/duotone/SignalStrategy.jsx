@@ -3,22 +3,16 @@ import React from "react";
 
 const SignalStrategy = (props) => {
   return (
-    <SvgIcon viewBox="0 0 24 21" {...props}>
+    <SvgIcon
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      {...props}
+    >
       <path
-        d="M5.9 17h12.19c1.9 0 2.9-1 2.9-2.9V2h-18v12.1C3 16 4 17 5.9 17ZM2 2h20M8 22l4-2v-3M16 22l-4-2"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeMiterlimit={10}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="m7.5 11 3.15-2.63c.25-.21.58-.15.75.13l1.2 2c.17.28.5.33.75.13L16.5 8"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeMiterlimit={10}
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        fill="currentColor"
+        d="M14.5 21q-1.25 0-2.125-.875T11.5 18t.875-2.125T14.5 15t2.125.875T17.5 18t-.875 2.125T14.5 21m2-7q-2.3 0-3.9-1.6T11 8.5t1.6-3.9T16.5 3t3.9 1.6T22 8.5t-1.6 3.9t-3.9 1.6M7 18q-1.65 0-2.825-1.175T3 14t1.175-2.825T7 10t2.825 1.175T11 14t-1.175 2.825T7 18"
       />
     </SvgIcon>
   );

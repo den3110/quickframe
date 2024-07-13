@@ -94,6 +94,7 @@ const NewPlanDrawer = ({
   const [loseTotalTarget, setLoseTotalTarget] = useState(0);
   const [telegramToken, setTelegramToken] = useState("");
   const [telegramChatId, setTelegramChatId] = useState("");
+  const [telegramUrl, setTelegramUrl] = useState("");
   const [winningTotalReach, setWinningTotalReach] = useState(0);
   const [loseTotalReach, setLoseTotalReach] = useState(0);
   const [winningContinue, setWinningContinue] = useState(0);
@@ -138,6 +139,7 @@ const NewPlanDrawer = ({
     setStep(step);
   };
 
+  // sao ko dùng formik cho nhàn . đù mé nhìn loạn thật, e cung k quen dung formik a
   const onClose = () => {
     handleClose();
     setStep(1);
@@ -151,154 +153,191 @@ const NewPlanDrawer = ({
     try {
       let response;
       let data;
-      switch (featureType) {
-        case SignalFeatureTypes.SINGLE_METHOD:
-          data = {
-            autoType: autoType,
-            name: planName,
-            accountType: walletMode ? "LIVE" : "DEMO",
-            budgetStrategyId: budgetStrategy,
-            bet_second: betSecond,
-            margin_dense: baseAmount,
-            isBrokerMode: isBrokerMode,
-            isNotificationsEnabled: true,
-            method_data: {
-              method_list: [signalStrategy],
-              feature_data: {},
-            },
-            take_profit_target: takeProfitTarget,
-            stop_loss_target: stopLossTarget,
-            win_streak_target: winStreakTarget,
-            lose_streak_target: loseStreakTarget,
-            win_total_target: winTotalTarget,
-            lose_total_target: loseTotalTarget,
-            budget_amount: investmentFund,
-            telegram_token: telegramToken,
-            telegram_chatId: telegramChatId,
-            isPrivate: privateMode,
-            is_reverse: reserveSignal,
-            signal_feature: featureType,
-          };
+      // switch(selectedTab)
+      if(selectedTab=== "Follow Leader") {
+        data = {
+          autoType: autoType,
+          name: planName,
+          accountType: walletMode ? "LIVE" : "DEMO",
+          budgetStrategyId: budgetStrategy,
+          bet_second: betSecond,
+          margin_dense: baseAmount,
+          isBrokerMode: isBrokerMode,
+          isNotificationsEnabled: true,
+          method_data: {
+            method_list: arraySignalStrategy,
+            feature_data: {},
+          },
+          take_profit_target: takeProfitTarget,
+          stop_loss_target: stopLossTarget,
+          win_streak_target: winStreakTarget,
+          lose_streak_target: loseStreakTarget,
+          win_total_target: winTotalTarget,
+          lose_total_target: loseTotalTarget,
+          budget_amount: investmentFund,
+          telegram_token: telegramToken,
+          telegram_chatId: telegramChatId,
+          telegram_url: telegramUrl,
+          isPrivate: privateMode,
+          is_reverse: reserveSignal,
+          signal_feature: featureType,
+        };
 
-          break;
-        case SignalFeatureTypes.MIX_METHODS:
-          data = {
-            autoType: autoType,
-            name: planName,
-            accountType: walletMode ? "LIVE" : "DEMO",
-            budgetStrategyId: budgetStrategy,
-            bet_second: betSecond,
-            margin_dense: baseAmount,
-            isBrokerMode: isBrokerMode,
-            isNotificationsEnabled: true,
-            method_data: {
-              method_list: arraySignalStrategy,
-              feature_data: {},
-            },
-            take_profit_target: takeProfitTarget,
-            stop_loss_target: stopLossTarget,
-            win_streak_target: winStreakTarget,
-            lose_streak_target: loseStreakTarget,
-            win_total_target: winTotalTarget,
-            lose_total_target: loseTotalTarget,
-            budget_amount: investmentFund,
-            telegram_token: telegramToken,
-            telegram_chatId: telegramChatId,
-            isPrivate: privateMode,
-            is_reverse: reserveSignal,
-            signal_feature: featureType,
-          };
-          break;
-        case SignalFeatureTypes.AUTO_CHANGE_METHODS:
-          data = {
-            autoType: autoType,
-            name: planName,
-            accountType: walletMode ? "LIVE" : "DEMO",
-            budgetStrategyId: budgetStrategy,
-            bet_second: betSecond,
-            margin_dense: baseAmount,
-            isBrokerMode: isBrokerMode,
-            isNotificationsEnabled: true,
-            method_data: {
-              method_list: arraySignalStrategy,
-              feature_data: {
-                win_streak_target: winningTotalReach,
-                lose_streak_target: loseTotalReach,
-                win_total_target: winningContinue,
-                lose_total_target: loseContinue,
-                take_profit_target: whenProfit,
-                stop_loss_target: whenLosing,
+      }
+      else {
+        switch (featureType) {
+          case SignalFeatureTypes.SINGLE_METHOD:
+            data = {
+              autoType: autoType,
+              name: planName,
+              accountType: walletMode ? "LIVE" : "DEMO",
+              budgetStrategyId: budgetStrategy,
+              bet_second: betSecond,
+              margin_dense: baseAmount,
+              isBrokerMode: isBrokerMode,
+              isNotificationsEnabled: true,
+              method_data: {
+                method_list: [signalStrategy],
+                feature_data: {},
               },
-            },
-            take_profit_target: takeProfitTarget,
-            stop_loss_target: stopLossTarget,
-            win_streak_target: winStreakTarget,
-            lose_streak_target: loseStreakTarget,
-            win_total_target: winTotalTarget,
-            lose_total_target: loseTotalTarget,
-            budget_amount: investmentFund,
-            telegram_token: telegramToken,
-            telegram_chatId: telegramChatId,
-            isPrivate: privateMode,
-            is_reverse: reserveSignal,
-            signal_feature: featureType,
-          };
-          break;
-        case SignalFeatureTypes.WAIT_SIGNALS:
-          data = {
-            autoType: autoType,
-            name: planName,
-            accountType: walletMode ? "LIVE" : "DEMO",
-            budgetStrategyId: budgetStrategy,
-            bet_second: betSecond,
-            margin_dense: baseAmount,
-            isBrokerMode: isBrokerMode,
-            isNotificationsEnabled: true,
-            method_data: {
-              method_list: arraySignalStrategy,
-              feature_data: {
-                shuffle_methods_order: shuffleMethodsOrder,
-                no_repeat_methods_next_turn: noRepeatMethodsNextTurn,
-                win_enabled: winEnabled,
-                win_reverse_signal: winReverseSignal,
-                win_end_win_streak: winEndWinStreak,
-                win_exactly_win_streak: winExactlyWinStreak,
-                win_streak_entry_target: winStreakEntryTarget,
-                win_turn_count: winTurnCount,
-                win_change_method_after_lose_streak:
-                  winChangeMethodAfterLoseStreak,
-                win_change_method_after_win_streak:
-                  winChangeMethodAfterWinStreak,
-
-                lose_enabled: loseEnabled,
-                lose_reverse_signal: loseReverseSignal,
-                lose_end_lose_streak: loseEndLoseStreak,
-                lose_exactly_lose_streak: loseExactlyLoseStreak,
-                lose_streak_entry_target: loseStreakEntryTarget,
-                lose_turn_count: loseTurnCount,
-                lose_change_method_after_lose_streak:
-                  loseChangeMethodAfterLoseStreak,
-                lose_change_method_after_win_streak:
-                  loseChangeMethodAfterWinStreak,
+              take_profit_target: takeProfitTarget,
+              stop_loss_target: stopLossTarget,
+              win_streak_target: winStreakTarget,
+              lose_streak_target: loseStreakTarget,
+              win_total_target: winTotalTarget,
+              lose_total_target: loseTotalTarget,
+              budget_amount: investmentFund,
+              telegram_token: telegramToken,
+              telegram_chatId: telegramChatId,
+              telegram_url: telegramUrl,
+              isPrivate: privateMode,
+              is_reverse: reserveSignal,
+              signal_feature: featureType,
+            };
+  
+            break;
+          case SignalFeatureTypes.MIX_METHODS:
+            data = {
+              autoType: autoType,
+              name: planName,
+              accountType: walletMode ? "LIVE" : "DEMO",
+              budgetStrategyId: budgetStrategy,
+              bet_second: betSecond,
+              margin_dense: baseAmount,
+              isBrokerMode: isBrokerMode,
+              isNotificationsEnabled: true,
+              method_data: {
+                method_list: arraySignalStrategy,
+                feature_data: {},
               },
-            },
-            take_profit_target: takeProfitTarget,
-            stop_loss_target: stopLossTarget,
-            win_streak_target: winStreakTarget,
-            lose_streak_target: loseStreakTarget,
-            win_total_target: winTotalTarget,
-            lose_total_target: loseTotalTarget,
-            budget_amount: investmentFund,
-            telegram_token: telegramToken,
-            telegram_chatId: telegramChatId,
-            isPrivate: privateMode,
-            is_reverse: reserveSignal,
-            signal_feature: featureType,
-          };
-          break;
-
-        default:
-          break;
+              take_profit_target: takeProfitTarget,
+              stop_loss_target: stopLossTarget,
+              win_streak_target: winStreakTarget,
+              lose_streak_target: loseStreakTarget,
+              win_total_target: winTotalTarget,
+              lose_total_target: loseTotalTarget,
+              budget_amount: investmentFund,
+              telegram_token: telegramToken,
+              telegram_url: telegramUrl,
+              telegram_chatId: telegramChatId,
+              isPrivate: privateMode,
+              is_reverse: reserveSignal,
+              signal_feature: featureType,
+            };
+            break;
+          case SignalFeatureTypes.AUTO_CHANGE_METHODS:
+            data = {
+              autoType: autoType,
+              name: planName,
+              accountType: walletMode ? "LIVE" : "DEMO",
+              budgetStrategyId: budgetStrategy,
+              bet_second: betSecond,
+              margin_dense: baseAmount,
+              isBrokerMode: isBrokerMode,
+              isNotificationsEnabled: true,
+              method_data: {
+                method_list: arraySignalStrategy,
+                feature_data: {
+                  win_streak_target: winningTotalReach,
+                  lose_streak_target: loseTotalReach,
+                  win_total_target: winningContinue,
+                  lose_total_target: loseContinue,
+                  take_profit_target: whenProfit,
+                  stop_loss_target: whenLosing,
+                },
+              },
+              take_profit_target: takeProfitTarget,
+              stop_loss_target: stopLossTarget,
+              win_streak_target: winStreakTarget,
+              lose_streak_target: loseStreakTarget,
+              win_total_target: winTotalTarget,
+              lose_total_target: loseTotalTarget,
+              budget_amount: investmentFund,
+              telegram_token: telegramToken,
+              telegram_chatId: telegramChatId,
+              telegram_url: telegramUrl,
+              isPrivate: privateMode,
+              is_reverse: reserveSignal,
+              signal_feature: featureType,
+            };
+            break;
+          case SignalFeatureTypes.WAIT_SIGNALS:
+            data = {
+              autoType: autoType,
+              name: planName,
+              accountType: walletMode ? "LIVE" : "DEMO",
+              budgetStrategyId: budgetStrategy,
+              bet_second: betSecond,
+              margin_dense: baseAmount,
+              isBrokerMode: isBrokerMode,
+              isNotificationsEnabled: true,
+              method_data: {
+                method_list: arraySignalStrategy,
+                feature_data: {
+                  shuffle_methods_order: shuffleMethodsOrder,
+                  no_repeat_methods_next_turn: noRepeatMethodsNextTurn,
+                  win_enabled: winEnabled,
+                  win_reverse_signal: winReverseSignal,
+                  win_end_win_streak: winEndWinStreak,
+                  win_exactly_win_streak: winExactlyWinStreak,
+                  win_streak_entry_target: winStreakEntryTarget,
+                  win_turn_count: winTurnCount,
+                  win_change_method_after_lose_streak:
+                    winChangeMethodAfterLoseStreak,
+                  win_change_method_after_win_streak:
+                    winChangeMethodAfterWinStreak,
+  
+                  lose_enabled: loseEnabled,
+                  lose_reverse_signal: loseReverseSignal,
+                  lose_end_lose_streak: loseEndLoseStreak,
+                  lose_exactly_lose_streak: loseExactlyLoseStreak,
+                  lose_streak_entry_target: loseStreakEntryTarget,
+                  lose_turn_count: loseTurnCount,
+                  lose_change_method_after_lose_streak:
+                    loseChangeMethodAfterLoseStreak,
+                  lose_change_method_after_win_streak:
+                    loseChangeMethodAfterWinStreak,
+                },
+              },
+              take_profit_target: takeProfitTarget,
+              stop_loss_target: stopLossTarget,
+              win_streak_target: winStreakTarget,
+              lose_streak_target: loseStreakTarget,
+              win_total_target: winTotalTarget,
+              lose_total_target: loseTotalTarget,
+              budget_amount: investmentFund,
+              telegram_token: telegramToken,
+              telegram_chatId: telegramChatId,
+              telegram_url: telegramUrl,
+              isPrivate: privateMode,
+              is_reverse: reserveSignal,
+              signal_feature: featureType,
+            };
+            break;
+  
+          default:
+            break;
+        }
       }
       if (isEdit === true) {
         data = { ...selectedPlan, ...data };
@@ -392,7 +431,10 @@ const NewPlanDrawer = ({
       setLoseTurnCount(selectedPlan?.method_data?.feature_data?.lose_turn_count)
       setLoseChangeMethodAfterLoseStreak(selectedPlan?.method_data?.feature_data?.lose_change_method_after_lose_streak)
       setLoseChangeMethodAfterWinStreak(selectedPlan?.method_data?.feature_data?.lose_change_method_after_win_streak)
-     
+      setTelegramToken(selectedPlan?.telegram_token)
+      setTelegramChatId(selectedPlan?.telegram_chatId)
+      setTelegramUrl(selectedPlan?.telegram_url)
+
     }
     else {
       setIdPlan();
@@ -428,6 +470,9 @@ const NewPlanDrawer = ({
       setLoseTurnCount(0)
       setLoseChangeMethodAfterLoseStreak(0)
       setLoseChangeMethodAfterWinStreak(0)
+      setTelegramChatId("")
+      setTelegramToken("")
+      setTelegramUrl("")
       // e dang lam a co gi khong a xem ti
       // a oi ba cai sau thi chua co api ha a, lam 3 cai la stop start va remove thoi e oke a
     }
@@ -620,9 +665,9 @@ const NewPlanDrawer = ({
                     </Typography>
                   </Toolbar>
                 </AppBar>
-                { (
+                { !isEdit && (
                   <Box display="flex" mt={2}>
-                    {["Bot AI", "Follow Leader"].map((tab) => (
+                    {["Bot AI", "Follow Leader", "Telegram Signal"].map((tab) => (
                       <Button
                         key={tab}
                         variant={selectedTab === tab ? "contained" : "outlined"}
@@ -641,7 +686,7 @@ const NewPlanDrawer = ({
                 )}
               </Box>
               <Box className="aslawkalw" sx={{display: "flex", alignItems: "start", gap: 1}}>
-                {selectedTab === "Bot AI" && (
+                {(selectedTab === "Bot AI" || selectedTab=== "Telegram Signal") && (
                   <Box sx={{width: "100%"}} mt={2}>
                     <Typography variant="subtitle1">
                       Tính năng sử dụng
@@ -653,11 +698,18 @@ const NewPlanDrawer = ({
                         size="medium"
                       >
                         {Object.entries(SignalFeatureTypes).map(
-                          ([item, key]) => (
-                            <MenuItem key={key} value={item}>
-                              {SignalFeatureTypesTitle[item]}
-                            </MenuItem>
-                          )
+                          ([item, key]) => 
+                            {
+                              if(selectedTab === "Bot AI" && SignalFeatureTypes[item]=== SignalFeatureTypes.WAIT_SIGNALS) {
+                                return <></>
+                              }
+                              else {
+                                return <MenuItem key={key} value={item}>
+                                  {SignalFeatureTypesTitle[item]}
+                                </MenuItem>
+                              }
+                            }
+                          
                         )}
                       </Select>
                     </FormControl>
@@ -718,7 +770,7 @@ const NewPlanDrawer = ({
                 </Box>
               </Box>
               {/*  */}
-              {isChooseBot === true && (
+              {isChooseBot === true && selectedTab=== "Bot AI" && (
                 <>
                   {" "}
                   <Box mt={1}>
@@ -738,6 +790,49 @@ const NewPlanDrawer = ({
                       </Select>
                     </FormControl>
                   </Box>
+                  {
+                    autoType=== AutoTypes.TELEBOT && 
+                    <Box >
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={4}>
+                        <TextField
+                          fullWidth
+                          label="Telegram token"
+                          variant="outlined"
+                          value={telegramToken}
+                          onChange={(e) =>
+                            setTelegramToken(e.target.value)
+                          }
+                          margin="normal"
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                        <TextField
+                          fullWidth
+                          label="Telegram chatid"
+                          variant="outlined"
+                          value={telegramChatId}
+                          onChange={(e) =>
+                            setTelegramChatId(e.target.value)
+                          }
+                          margin="normal"
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                        <TextField
+                          fullWidth
+                          label="Telegram url"
+                          variant="outlined"
+                          value={telegramUrl}
+                          onChange={(e) =>
+                            setTelegramUrl(e.target.value)
+                          }
+                          margin="normal"
+                        />
+                      </Grid>
+                    </Grid>
+                    </Box>
+                  }
                 </>
               )}
               {/*  */}
@@ -769,7 +864,8 @@ const NewPlanDrawer = ({
                 )}
                 <Box sx={{ width: "100%" }}>
                   <Typography variant="subtitle1">
-                    {selectedTab === "Bot AI" ? "Signal*" : "Leader username"}
+                    {selectedTab === "Bot AI" && "Signal*"}
+                    {selectedTab === "Follow Leader" && "Leader username*"}
                   </Typography>
                   {selectedTab === "Bot AI" && (
                     <FormControl variant="outlined" fullWidth margin="normal">
@@ -1201,7 +1297,7 @@ const NewPlanDrawer = ({
                   />
                 </Box>
               )} */}
-
+          
               <Box mt={1}>
                 <Typography variant="h6">
                   Take-Profit/Stop-Loss Conditions

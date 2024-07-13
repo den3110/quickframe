@@ -2,6 +2,7 @@ import { alpha } from "@mui/material/styles";
 import config from '../config/config.json';
 import hexToRgb from "util/hexToRgba";
 import rgbToRgba from "util/rgbTorgba";
+import lightenColor from "util/lightenColor";
 
 const grey = {
   25: "#F9FAFB",
@@ -28,7 +29,8 @@ export const primary = {
   700: "#4317CA",
   800: "#33129C",
   900: "#240C6E",
-  main: config.theme.primaryColor
+  main: config.theme.primaryColor,
+  secondary: lightenColor(config.theme.primaryColor, 75, 60 ),
 };
 export const success = {
   25: "#F1FEF5",
@@ -149,9 +151,12 @@ export const lightPalette = {
   text: textLight,
   divider: grey[200],
   action: actionLight,
+  border: "#eeeff2",
   background: {
     default: "#fdfdff",
-    paper: "#ffffff"
+    paper: "#ffffff",
+    cell: "#f9f9fa",
+    fcell: ""
   }
 };
 
@@ -162,8 +167,11 @@ export const darkPalette = {
   text: textDark,
   divider: grey[700],
   action: actionDark,
+  border: "#323b49",
   background: {
     default: grey[900],
-    paper: grey[800]
+    paper: grey[800],
+    cell: "#111827",
+    fcell: "#323b49"
   }
 };

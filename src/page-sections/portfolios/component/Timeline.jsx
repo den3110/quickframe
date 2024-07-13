@@ -33,6 +33,15 @@ import { SocketContext } from "contexts/SocketContext";
 import { useParams } from "react-router-dom";
 import CountDownIcon from "icons/duotone/CountDown";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import SignalDisconnected from "icons/duotone/SignalDisconnected";
+import TrendingUp from "icons/duotone/TrendingUp";
+import TrendingDown from "icons/duotone/TrendingDown";
+import FlagCircle from "icons/duotone/FlagCircle";
+import AutoStop from "icons/duotone/Autostop";
+import Logout2 from "icons/duotone/Logout2";
+import TaskAlt from "icons/duotone/TaskAlt";
+import Dangeous from "icons/duotone/Dangeous";
+import ContactSupport from "icons/duotone/ContactSupport";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -119,13 +128,17 @@ const CustomTimeline = () => {
   const handleChangePage = (event, value) => {
     setPage(value);
   };
-
+  //  e co ghi day a
   const renderBetType = (type) => {
     switch (type) {
       case "started_bot":
         return "Khởi động bot";
       case "stopped_bot":
         return "Dừng bot";
+      case "resume_bot":
+        return "Tiếp tục bot";
+      case "pause_bot":
+        return "Tạm ngưng bot";
       case "stop_plan_take_profit_target":
         return "Đạt mục tiêu lợi nhuận";
       case "stop_plan_stop_loss_target":
@@ -146,12 +159,79 @@ const CustomTimeline = () => {
         break;
     }
   };
-  
+
+  const renderTypeIcon = (data) => {
+    switch (true) {
+      case data?.message === "success" && data?.betType === "UP":
+        return (
+          <TrendingUp fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+      case data?.message === "success" && data?.betType === "DOWN":
+        return (
+          <TrendingDown fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+      case data?.message === "started_bot":
+        return (
+          <FlagCircle fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+      case data?.message === "stopped_bot":
+        return (
+          <AutoStop fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+        case data?.message === "resume_bot":
+        return (
+          <FlagCircle fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+        case data?.message === "pause_bot":
+          return (
+            <AutoStop fontSize={"24px"} sx={{ color: "white !important" }} />
+          );
+        case data?.message ==="unauthorized":
+        return (
+          <Logout2 fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+        case data?.message ==="network_error":
+        return (
+          <SignalDisconnected fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+        case data?.message ==="stop_plan_take_profit_target" || data?.message ==="stop_plan_win_total_target" || data?.message ==="stop_plan_win_streak_target":
+        return (
+          <TaskAlt fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+        case data?.message ==="stop_plan_stop_loss_target" || data?.message ==="stop_plan_lose_total_target" || data?.message ==="stop_plan_lose_streak_target":
+        return (
+          <Dangeous fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+       
+      default:
+        return (
+          <ContactSupport fontSize={"24px"} sx={{ color: "white !important" }} />
+        );
+    }
+  };
+
+  const renderBackgroundTypeIcon = (data) => {
+    switch (true) {
+      case data?.message === "success" && data?.betType === "UP":
+        return (
+          theme.palette.success.main
+        );
+      case data?.message === "success" && data?.betType === "DOWN":
+        return (
+          theme.palette.error.main
+        );
+      
+      default:
+        return (
+          theme.palette.success.buy
+        );
+    }
+  };
+
   useEffect(() => {
     if (isConnected && dataProps && dataStatProps) {
-      console.log(dataStatProps)
       let dataTemp = dataProps;
-      let dataStatTemp= dataStatProps
+      let dataStatTemp = dataStatProps;
       socket.on("ADD_CLOSE_ORDER", (data) => {
         const index = dataTemp?.findIndex(
           (item) => item.betTime === data.betTime && item.botId === data.botId
@@ -161,8 +241,7 @@ const CustomTimeline = () => {
         } else {
           dataTemp[index] = data;
         }
-        
-        console.log('dataStat', dataStatTemp);
+
         const newObjData = {
           ...dataStatTemp,
           win_day: data?.runningData?.win_day,
@@ -199,6 +278,27 @@ const CustomTimeline = () => {
         } else {
           dataTemp[index] = data;
         }
+        const newObjData = {
+          ...dataStatTemp,
+          win_day: data?.runningData?.win_day,
+          lose_day: data?.runningData?.lose_day,
+          day_profit: data?.runningData?.day_profit,
+          week_profit: data?.runningData?.week_profit,
+          week_volume: data?.runningData?.week_volume,
+          longestWinStreak: data?.runningData?.longestWinStreak,
+          longestLoseStreak: data?.runningData?.longestLoseStreak,
+          lastData: {
+            ...dataStatTemp.lastData,
+            budgetStrategy: {
+              ...dataStatTemp.lastData.budgetStrategy,
+              bs: {
+                ...dataStatTemp.lastData.budgetStrategy.bs,
+                method_data: data?.runningData?.budgetStrategy?.method_data,
+              },
+            },
+          },
+        };
+        setDataStat(newObjData);
         setData(dataTemp);
       });
     }
@@ -249,12 +349,9 @@ const CustomTimeline = () => {
               >
                 <TimelineSeparator>
                   <TimelineDot
-                    style={{ backgroundColor: theme.palette.success.buy }}
+                    style={{ backgroundColor: renderBackgroundTypeIcon(item) }}
                   >
-                    <CheckCircleIcon
-                      fontSize={"16px"}
-                      sx={{ color: "white !important" }}
-                    />
+                    {renderTypeIcon(item)}
                   </TimelineDot>
                   {index < dataProps.length - 1 && <TimelineConnector />}
                 </TimelineSeparator>
@@ -264,11 +361,15 @@ const CustomTimeline = () => {
                       sx={{
                         display: "flex",
                         alignItems: "center",
-                        padding: 2.5,
+                        padding: downLg ? 1 : 2.5,
+                        flexWrap: downLg ? "wrap" : "",
                       }}
                     >
                       {/* row 1 */}
-                      <Box sx={{ width: "20%" }}>
+                      <Box
+                        mb={downLg ? 1.5 : 0}
+                        sx={{ width: downLg ? "calc(100% * 2 / 3)" : "20%" }}
+                      >
                         <Typography fontSize={12} fontWeight={600} mb={1}>
                           {moment(item.createdAt).format(
                             "DD/MM/YYYY, HH:mm:ss"
@@ -301,7 +402,10 @@ const CustomTimeline = () => {
                         </Box>
                       </Box>
                       {/* row 2 */}
-                      <Box sx={{ width: "20%" }}>
+                      <Box
+                        mb={downLg ? 1.5 : 0}
+                        sx={{ width: downLg ? "calc(100% * 1 / 3)" : "20%" }}
+                      >
                         {item?.message === "success" && (
                           <Typography
                             fontSize={12}
@@ -324,7 +428,12 @@ const CustomTimeline = () => {
                         <Typography fontSize={12}>Loại</Typography>
                       </Box>
                       {/* row 3 */}
-                      <Box sx={{ width: "20%" }}>
+                      <Box
+                        sx={{
+                          width: downLg ? "aaa" : "20%",
+                          flex: downLg ? 1 : "aaa",
+                        }}
+                      >
                         <Typography fontSize={12} fontWeight={600} mb={1}>
                           {item.profit}
                         </Typography>
@@ -353,7 +462,12 @@ const CustomTimeline = () => {
                           )}
                       </Box>
                       {/* row 4 */}
-                      <Box sx={{ width: "20%" }}>
+                      <Box
+                        sx={{
+                          width: downLg ? "aaa" : "20%",
+                          flex: downLg ? 1 : "aaa",
+                        }}
+                      >
                         {(item?.betType === "UP" ||
                           item?.betType === "DOWN") && (
                           <>
@@ -383,7 +497,12 @@ const CustomTimeline = () => {
                           )}
                       </Box>
                       {/* row 5 */}
-                      <Box sx={{ width: "20%" }}>
+                      <Box
+                        sx={{
+                          width: downLg ? "aaa" : "20%",
+                          flex: downLg ? 1 : "aaa",
+                        }}
+                      >
                         {(item?.betType === "UP" || item?.betType === "DOWN") &&
                           item.result &&
                           item.message === "success" && (
