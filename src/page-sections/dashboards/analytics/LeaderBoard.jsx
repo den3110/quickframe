@@ -81,14 +81,17 @@ const LeaderBoard = () => {
 
   const fetchDataUser = useCallback(async () => {
     try {
-      const result = await exchangeApi.userExchangeLinkAccountLeaderboard();
+      await new Promise((res)=> {setTimeout(res, 2000)})
+      const response = await exchangeApi.userExchangeLinkAccountLeaderboard();
+      setDataUser(response?.data?.d)
     } catch (error) {}
   }, []);
   const fetchDataBot = useCallback(async () => {
     try {
-      const result = await exchangeApi.userBotLeaderboard();
+      const response = await exchangeApi.userBotLeaderboard();
+      setDataBot(response?.data?.d)
     } catch (error) {}
-  });
+  }, []);
   useEffect(() => {
     fetchDataUser();
   }, [fetchDataUser]);
@@ -110,7 +113,7 @@ const LeaderBoard = () => {
   };
 
   return (
-    <RefreshProvider functionProps={()=> {fetchDataBot();fetchDataUser()}}>
+    <RefreshProvider functionProps={async ()=> {await fetchDataBot(); await fetchDataUser()}}>
       <Box sx={{ width: "100%", padding: "2px 10px 24px 10px" }}>
         <Box
           display={"flex"}

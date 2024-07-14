@@ -31,7 +31,7 @@ const DashboardHeader = () => {
   // const [openSearchBar, setSearchBar] = useState(false);
   const { settings, saveSettings } = useContext(SettingsContext);
   // const upSm = useMediaQuery((theme) => theme.breakpoints.up("sm"));
-  const downMd = useMediaQuery((theme) => theme.breakpoints.down(1200));
+  const downMd = useMediaQuery((theme) => theme.breakpoints.down(974));
   const handleChangeDirection = (value) => {
     saveSettings({
       ...settings,

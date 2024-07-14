@@ -133,7 +133,7 @@ const PortfolioDetail = () => {
   }, [isConnected, socket, dataSignal]);
 
   return (
-    <RefreshProvider functionProps={()=> {fetchUserBotInfo();fetchUserBotHistory();fetchGlobalLastResult()}}>
+    <RefreshProvider functionProps={async ()=> {await fetchUserBotInfo();await fetchUserBotHistory();await fetchGlobalLastResult()}}>
       <PortfolioDetailContext.Provider
         value={{
           loading,

@@ -29,7 +29,7 @@ export const SignalStrategyProvider = ({ children }) => {
   }, [change]);
 
   return (
-    <RefreshProvider functionProps={getSpotBalanceUser}>
+    <RefreshProvider functionProps={async ()=> await getSpotBalanceUser()}>
       <SignalStrategyContext.Provider
         value={{ data, change, setChange, setData, loading }}
       >

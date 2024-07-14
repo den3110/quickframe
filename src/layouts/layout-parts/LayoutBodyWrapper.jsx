@@ -9,7 +9,7 @@ const RootBox = styled(Box)(({
 }) => ({
   marginLeft: compact ? 86 : 280,
   transition: "margin-left 0.3s ease-in-out",
-  [theme.breakpoints.down(1200)]: {
+  [theme.breakpoints.down(974)]: {
     marginLeft: 0
   }
 }));

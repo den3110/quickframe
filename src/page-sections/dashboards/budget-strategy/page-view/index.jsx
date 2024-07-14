@@ -133,7 +133,7 @@ const BudgetStrategyPage = () => {
   }, [change, fetchUserBudgetStrategy]);
 
   return (
-    <RefreshProvider functionProps={fetchUserBudgetStrategy}>
+    <RefreshProvider functionProps={async ()=> await fetchUserBudgetStrategy()}>
       <Box
         pt={2}
         pb={4}

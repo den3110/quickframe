@@ -36,7 +36,7 @@ export const PortfoliosProvider = ({ children }) => {
   }, [walletMode, change]);
 
   return (
-    <RefreshProvider functionProps={()=> getSpotBalanceUser()}>
+    <RefreshProvider functionProps={async ()=> await getSpotBalanceUser()}>
       <PortfoliosContext.Provider
         value={{ data, change, setChange, setData, loading }}
       >
