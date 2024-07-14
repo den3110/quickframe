@@ -17,7 +17,6 @@ import { SocketContext } from "contexts/SocketContext";
 import sessionApi from "api/session/sessionApi";
 import RefreshProvider from "contexts/RefreshContext";
 import { showToast } from "components/toast/toast";
-import { usePullingState } from "react-pull-to-refresh";
 
 const TabPanel = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));

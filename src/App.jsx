@@ -23,6 +23,7 @@ import { SpotBalanceProvider } from "contexts/SpotBalanceContext";
 import JwtProvider from "contexts/jwtContext";
 import GlobalProvider from "contexts/GlobalContext";
 import SocketProvider from "contexts/SocketContext";
+
 const App = () => {
   const { settings } = useSettings();
   const theme = createCustomTheme(settings);

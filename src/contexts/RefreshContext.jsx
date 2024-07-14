@@ -1,9 +1,7 @@
 // src/context/SocketContext.js
 
-import { CircularProgress, Typography } from "@mui/material";
 import React, { createContext, useCallback, useState } from "react";
-import ReactPullToRefresh from "react-pull-to-refresh";
-
+import PullToRefresh from "pull-to-refresh-react";
 export const RefreshContext = createContext();
 
 const RefreshProvider = ({ children, functionProps }) => {
@@ -21,10 +19,13 @@ const RefreshProvider = ({ children, functionProps }) => {
   }, [functionProps]);
 
   return (
-    <RefreshContext.Provider value={{ handleRefresh, refresh }}>
-      <ReactPullToRefresh onRefresh={handleRefresh} loading={refresh ? <Typography align="center"><CircularProgress /></Typography> : null}>
+    <RefreshContext.Provider value={{ refresh }}>
+      <PullToRefresh
+        options={{ pullDownHeight: 200 }}
+        onRefresh={handleRefresh}
+      >
         {children}
-      </ReactPullToRefresh>
+      </PullToRefresh>
     </RefreshContext.Provider>
   );
 };
