@@ -4,6 +4,7 @@ import { Box, Grid, useMediaQuery } from "@mui/material";
 import MultiplyIndex from "./section/MultiplyIndex";
 import HistoryTable from "./section/HistoryTable";
 import Statistics from "./section/Statistics";
+import BubbleHistory from "./section/BubbleHistory";
 
 const ManualTradePage = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -18,7 +19,8 @@ const ManualTradePage = () => {
               <Statistics />
             </Grid>
             <Grid item xs={12} md={8}>
-              <HistoryTable />
+                <BubbleHistory />
+                <HistoryTable />
             </Grid>
             <Grid item xs={12}></Grid>
           </Grid>

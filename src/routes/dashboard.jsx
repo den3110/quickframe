@@ -136,6 +136,10 @@ export const DashboardRoutes = [
         element: <Dashboard />,
       },
       {
+        path: "",
+        element: <Dashboard />,
+      },
+      {
         path: "crm",
         element: <CRM />,
       },

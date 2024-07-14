@@ -20,12 +20,7 @@ const RefreshProvider = ({ children, functionProps }) => {
 
   return (
     <RefreshContext.Provider value={{ refresh }}>
-      <PullToRefresh
-        options={{ pullDownHeight: 200 }}
-        onRefresh={handleRefresh}
-      >
-        {children}
-      </PullToRefresh>
+      {children}
     </RefreshContext.Provider>
   );
 };

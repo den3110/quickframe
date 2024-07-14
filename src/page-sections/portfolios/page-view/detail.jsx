@@ -60,7 +60,7 @@ const PortfolioDetail = () => {
   const mergeAndSortData = (data) => {
     const { open, close } = data;
     const combined = [...open, ...close];
-    combined.sort((a, b) => b.sessionId - a.sessionId);
+    combined.sort((a, b) => b.betTime - a.betTime);
     return combined;
   };
   const handleChange = (event, newValue) => {

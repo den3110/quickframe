@@ -15,15 +15,10 @@ export const PortfoliosProvider = ({ children }) => {
   const getSpotBalanceUser = async () => {
     try {
       setLoading(true);
-      console.log(walletMode, "hihihi1")
       const response= await portfolioApi.userBotList({params: {type: JSON.parse(localStorage.getItem("walletMode")) ? "LIVE" : "DEMO"}})
       if(response?.data?.ok=== true) {
         setData(response?.data?.d)
       }
-      //   const response = await signalStrategyApi.const [anchorEls, setAnchorEls] = useState({});userBudgetSignalList();
-      //   if (response?.data?.ok === true) {
-      //     setData(response.data?.d);
-      //   }
     } catch (error) {
       console.error("Failed to load user profile", error);
     } finally {

@@ -21,17 +21,10 @@ import {
   TimelineContent,
   TimelineDot,
 } from "@mui/lab";
-import { green, yellow, red } from "@mui/material/colors";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import { PortfolioDetailContext } from "../page-view/detail";
 import moment from "moment";
 import formatCurrency from "util/formatCurrency";
 import { SocketContext } from "contexts/SocketContext";
 import { useParams } from "react-router-dom";
-import CountDownIcon from "icons/duotone/CountDown";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SignalDisconnected from "icons/duotone/SignalDisconnected";
 import TrendingUp from "icons/duotone/TrendingUp";
@@ -43,6 +36,7 @@ import TaskAlt from "icons/duotone/TaskAlt";
 import Dangeous from "icons/duotone/Dangeous";
 import ContactSupport from "icons/duotone/ContactSupport";
 import InsufficientBetBalance from "icons/duotone/InsufficientBetBalance";
+import { ManualTradeContext } from "contexts/ManualTradeContext";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -52,8 +46,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-const CustomTimeline = () => {
-  const { id } = useParams();
+const TableDetailTrade = () => {
   const theme = useTheme();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [countDown, setCountDown] = useState();
@@ -62,10 +55,9 @@ const CustomTimeline = () => {
   const {
     data: dataProps,
     dataStat: dataStatProps,
-    loading,
     setData,
-    setDataStat,
-  } = useContext(PortfolioDetailContext);
+    setDataStat
+  } = useContext(ManualTradeContext);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
 
@@ -187,105 +179,108 @@ const CustomTimeline = () => {
   };
 
   useEffect(() => {
+    console.log();
+    // a hinh nhu la cai nay a
     if (isConnected && dataProps && dataStatProps) {
       let dataTemp = dataProps;
       let dataStatTemp = dataStatProps;
       socket.on("ADD_CLOSE_ORDER", (data) => {
         const index = dataTemp?.findIndex(
-          (item) =>
-            item.betTime === data.betTime &&
-            item.botId === data.botId &&
-            item.botId === id
+          (item) => item.betTime === data.betTime && data.autoType === 4
         );
+        console.log("index", index)
         if (index !== -1) {
           dataTemp[index] = data;
         } else {
           const index = dataTemp?.find(
-            (item) =>
-              item.betTime !== data.betTime &&
-              item.botId === data.botId &&
-              item.botId === id
+            (item) => item.betTime !== data.betTime && data.autoType === 4
           );
           if (index) {
             dataTemp = [data, ...dataTemp];
           }
         }
-        const newObjData = {
-          ...dataStatTemp,
-          win_day: data?.runningData?.win_day,
-          lose_day: data?.runningData?.lose_day,
-          day_profit: data?.runningData?.day_profit,
-          week_profit: data?.runningData?.week_profit,
-          week_volume: data?.runningData?.week_volume,
-          longestWinStreak: data?.runningData?.longestWinStreak,
-          longestLoseStreak: data?.runningData?.longestLoseStreak,
-          // take_profit_target: data?.runningData?.take_profit_target,
-          // stop_loss_target: data?.runningData?.stop_loss_target,
-          lastData: {
-            ...dataStatTemp.lastData,
-            profit: data?.runningData?.profit,
-            budgetStrategy: {
-              ...dataStatTemp.lastData.budgetStrategy,
-              bs: {
-                ...dataStatTemp.lastData.budgetStrategy?.bs, // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
-                method_data: data?.runningData?.budgetStrategy?.method_data,
-              },
-            },
-          },
-        };
-        setDataStat(newObjData);
+
+        if(data.autoType === 4){
+            const newObjData = {
+                ...dataStatTemp,
+              //   win_day: data?.runningData?.win_day,
+              //   lose_day: data?.runningData?.lose_day,
+              //   day_profit: data?.runningData?.day_profit,
+              //   week_profit: data?.runningData?.week_profit,
+              //   week_volume: data?.runningData?.week_volume,
+              //   longestWinStreak: data?.runningData?.longestWinStreak,
+              //   longestLoseStreak: data?.runningData?.longestLoseStreak,
+                lastData: {
+                  ...dataStatTemp.lastData,
+                  ...data?.runningData
+                  // budgetStrategy: {
+                  //   ...dataStatTemp.lastData.budgetStrategy,
+                  //   bs: {
+                  //     ...dataStatTemp.lastData.budgetStrategy?.bs, // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
+                  //     method_data: data?.runningData?.budgetStrategy?.method_data,
+                  //   },
+                  // },
+                },
+              };
+      
+              const newData = {total_followers : dataStatProps.total_followers, ...data.runningData}
+              console.log('newData', newData);
+              setDataStat(newData);// coi di e :))) ua sai dau a
         setData(dataTemp);
+
+        }
+      
       });
 
       socket.on("ADD_OPEN_ORDER", (data) => {
+        console.log(data)
         const index = dataTemp?.findIndex(
-          (item) =>
-            item.betTime === data.betTime &&
-            item.botId === data.botId &&
-            item.botId === id
+          (item) => item.betTime === data.betTime && data.autoType === 4
+          // uh oke a
         );
+        console.log("index", index)
         if (index !== -1) {
           dataTemp[index] = data;
         } else {
           const index = dataTemp?.find(
-            (item) =>
-              item.betTime !== data.betTime &&
-              item.botId === data.botId &&
-              item.botId === id
+            (item) => item.betTime !== data.betTime && data.autoType === 4
           );
           if (index) {
             dataTemp = [data, ...dataTemp];
           }
         }
-        const newObjData = {
-          ...dataStatTemp,
-          win_day: data?.runningData?.win_day,
-          lose_day: data?.runningData?.lose_day,
-          day_profit: data?.runningData?.day_profit,
-          week_profit: data?.runningData?.week_profit,
-          week_volume: data?.runningData?.week_volume,
-          longestWinStreak: data?.runningData?.longestWinStreak,
-          longestLoseStreak: data?.runningData?.longestLoseStreak,
-          // take_profit_target: data?.runningData?.take_profit_target,
-          // stop_loss_target: data?.runningData?.stop_loss_target,
-          lastData: {
-            ...dataStatTemp.lastData,
-            profit: data?.runningData?.profit,
-
-            budgetStrategy: {
-              ...dataStatTemp.lastData.budgetStrategy,
-              bs: {
-                ...dataStatTemp.lastData.budgetStrategy.bs,
-                method_data: data?.runningData?.budgetStrategy?.method_data,
-              },
-            },
-          },
-        };
-        setDataStat(newObjData);
+        if(data.autoType === 4){
+            
+            const newObjData = {
+                ...dataStatTemp,
+              //   win_day: data?.runningData?.win_day,
+              //   lose_day: data?.runningData?.lose_day,
+              //   day_profit: data?.runningData?.day_profit,
+              //   week_profit: data?.runningData?.week_profit,
+              //   week_volume: data?.runningData?.week_volume,
+              //   longestWinStreak: data?.runningData?.longestWinStreak,
+              //   longestLoseStreak: data?.runningData?.longestLoseStreak,
+                lastData: {
+                  ...dataStatTemp.lastData,
+                  ...data?.runningData
+                  // budgetStrategy: {
+                  //   ...dataStatTemp.lastData.budgetStrategy,
+                  //   bs: {
+                  //     ...dataStatTemp.lastData.budgetStrategy?.bs, // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
+                  //     method_data: data?.runningData?.budgetStrategy?.method_data,
+                  //   },
+                  // },
+                },
+              };
+      
+              const newData = {total_followers : dataStatProps.total_followers, ...data.runningData}
+              console.log('newData', newData);
+              setDataStat(newData);// coi di e :))) ua sai dau a
         setData(dataTemp);
+            }
       });
     }
-  }, [isConnected, dataProps, dataStatProps, id, socket]);
+  }, [isConnected, dataProps, dataStatProps, socket]);
 
   useEffect(() => {
     if (isConnected) {
@@ -570,4 +565,4 @@ const CustomTimeline = () => {
   );
 };
 
-export default CustomTimeline;
+export default TableDetailTrade;

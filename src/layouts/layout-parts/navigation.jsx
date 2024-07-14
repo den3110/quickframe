@@ -15,7 +15,7 @@ export const navigations = [
   },
   {
     name: "Dashboard",
-    path: "/dashboard",
+    path: "/dashboard/",
     icon: duotone.DashboardIcon,
   },
   {

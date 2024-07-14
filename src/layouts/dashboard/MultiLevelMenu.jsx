@@ -35,7 +35,13 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
   const { handleCloseMobileSidebar } = useLayout();
 
   // HANDLE ACTIVE CURRENT PAGE
-  const activeRoute = (path) => (pathname === path ? 1 : 0);
+  const activeRoute = (path) => {
+    // Check if the current pathname matches the path exactly or starts with the path followed by a '/'
+    if(path=== "/dashboard/" && window.location.pathname==="/dashboard") {
+      return 1
+    }
+    return pathname === path || pathname.startsWith(path + '/') ? 1 : 0;
+  };
 
   // HANDLE NAVIGATE TO ANOTHER PAGE
   const handleNavigation = (path) => {

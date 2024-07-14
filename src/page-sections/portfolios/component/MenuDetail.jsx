@@ -61,6 +61,7 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
       // setIsRunning(ActionBotTypeStatus[action]);
       setIsPause(!isPause)
       showToast(ActionBotTypeMessageSucces[action], "success");
+      setDataStat({...dataStat, lastData: {...dataStat.lastData, isPause: !isPause}})
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }

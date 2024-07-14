@@ -59,29 +59,34 @@ const Statistics = () => {
                     <StatisticCard
                       title="Thắng/Thua hôm nay"
                       value={`${dataStat?.win_day}/${dataStat?.lose_day}`}
-                      percentage="100% Tỉ lệ thắng"
+                      percentage={`${parseFloat(dataStat?.win_day / dataStat?.lose_day * 100).toFixed(2)}% Tỉ lệ thắng`}
                     />
                     <StatisticCard
                       title="Lợi nhuận hôm nay"
                       value={formatCurrency(dataStat?.day_profit)}
                       percentage="Lợi nhuận hôm nay"
+                      color={dataStat?.day_profit > 0 ? "success.main" : "error.main"}
                       hidden={true}
                     />
                     <StatisticCard
                       title="KLGD 7N"
                       value={`${formatCurrency(dataStat?.week_volume)}`}
+                      color={dataStat?.week_volume > 0 ? "success.main" : "error.main"}
                     />
                     <StatisticCard
                       title="Lợi nhuận 7N"
                       value={formatCurrency(dataStat?.week_profit)}
+                      color={dataStat?.week_profit > 0 ? "success.main" : "error.main"}
                     />
                     <StatisticCard
                       title="Chuỗi thắng tối đa"
                       value={dataStat?.lastData?.longestWinStreak || 0}
+                      color="success.main"
                     />
                     <StatisticCard
                       title="Chuỗi thua tối đa"
                       value={dataStat?.lastData?.longestLoseStreak || 0}
+                      color="error.main"
                     />
                   </Grid>
                 </Box>
@@ -108,7 +113,7 @@ const TabPanel = ({ children }) => {
   return <Box sx={{ p: 1.5 }}>{children}</Box>;
 };
 
-const StatisticCard = ({ title, value, percentage, hidden }) => {
+const StatisticCard = ({ title, value, percentage, hidden, color }) => {
   // const theme= useTheme()
   return (
     <Grid item xs={6} variant="outlined">
@@ -116,7 +121,7 @@ const StatisticCard = ({ title, value, percentage, hidden }) => {
         sx={{ border: theme=> isDark(theme) ? `1px solid ${theme.palette.border}` : `1px solid ${theme.palette.border}`, borderRadius: "10px" }}
       >
         <Typography fontSize={10}>{title}</Typography>
-        <Typography fontSize={14} fontWeight={600}>
+        <Typography color={color} fontSize={14} fontWeight={600}>
           {value}
         </Typography>
         {percentage && (
