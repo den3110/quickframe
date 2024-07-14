@@ -42,6 +42,7 @@ import Logout2 from "icons/duotone/Logout2";
 import TaskAlt from "icons/duotone/TaskAlt";
 import Dangeous from "icons/duotone/Dangeous";
 import ContactSupport from "icons/duotone/ContactSupport";
+import InsufficientBetBalance from "icons/duotone/InsufficientBetBalance";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -155,12 +156,15 @@ const CustomTimeline = () => {
         return "Mạng lỗi";
       case "unauthorized":
         return "Tài khoản chưa đăng nhập";
+      case "insufficient_bet_balance":
+        return "Không đủ tiền cược";
       default:
-        break;
+        return type;
     }
   };
 
   const renderTypeIcon = (data) => {
+    console.log(data?.message);
     switch (true) {
       case data?.message === "success" && data?.betType === "UP":
         return (
@@ -178,34 +182,47 @@ const CustomTimeline = () => {
         return (
           <AutoStop fontSize={"24px"} sx={{ color: "white !important" }} />
         );
-        case data?.message === "resume_bot":
+      case data?.message === "resume_bot":
         return (
           <FlagCircle fontSize={"24px"} sx={{ color: "white !important" }} />
         );
-        case data?.message === "pause_bot":
-          return (
-            <AutoStop fontSize={"24px"} sx={{ color: "white !important" }} />
-          );
-        case data?.message ==="unauthorized":
+      case data?.message === "pause_bot":
         return (
-          <Logout2 fontSize={"24px"} sx={{ color: "white !important" }} />
+          <AutoStop fontSize={"24px"} sx={{ color: "white !important" }} />
         );
-        case data?.message ==="network_error":
+      case data?.message === "unauthorized":
+        return <Logout2 fontSize={"24px"} sx={{ color: "white !important" }} />;
+      case data?.message === "network_error":
         return (
-          <SignalDisconnected fontSize={"24px"} sx={{ color: "white !important" }} />
+          <SignalDisconnected
+            fontSize={"24px"}
+            sx={{ color: "white !important" }}
+          />
         );
-        case data?.message ==="stop_plan_take_profit_target" || data?.message ==="stop_plan_win_total_target" || data?.message ==="stop_plan_win_streak_target":
+      case data?.message === "insufficient_bet_balance":
         return (
-          <TaskAlt fontSize={"24px"} sx={{ color: "white !important" }} />
+          <InsufficientBetBalance
+            fontSize={"24px"}
+            sx={{ color: "white !important" }}
+          />
         );
-        case data?.message ==="stop_plan_stop_loss_target" || data?.message ==="stop_plan_lose_total_target" || data?.message ==="stop_plan_lose_streak_target":
+      case data?.message === "stop_plan_take_profit_target" ||
+        data?.message === "stop_plan_win_total_target" ||
+        data?.message === "stop_plan_win_streak_target":
+        return <TaskAlt fontSize={"24px"} sx={{ color: "white !important" }} />;
+      case data?.message === "stop_plan_stop_loss_target" ||
+        data?.message === "stop_plan_lose_total_target" ||
+        data?.message === "stop_plan_lose_streak_target":
         return (
           <Dangeous fontSize={"24px"} sx={{ color: "white !important" }} />
         );
-       
+
       default:
         return (
-          <ContactSupport fontSize={"24px"} sx={{ color: "white !important" }} />
+          <ContactSupport
+            fontSize={"24px"}
+            sx={{ color: "white !important" }}
+          />
         );
     }
   };
@@ -213,18 +230,13 @@ const CustomTimeline = () => {
   const renderBackgroundTypeIcon = (data) => {
     switch (true) {
       case data?.message === "success" && data?.betType === "UP":
-        return (
-          theme.palette.success.main
-        );
+        return theme.palette.success.main;
       case data?.message === "success" && data?.betType === "DOWN":
-        return (
-          theme.palette.error.main
-        );
-      
+        return theme.palette.error.main;
+      case data?.message === "insufficient_bet_balance":
+        return theme.palette.error.main;
       default:
-        return (
-          theme.palette.success.buy
-        );
+        return theme.palette.success.buy;
     }
   };
 
@@ -234,14 +246,24 @@ const CustomTimeline = () => {
       let dataStatTemp = dataStatProps;
       socket.on("ADD_CLOSE_ORDER", (data) => {
         const index = dataTemp?.findIndex(
-          (item) => item.betTime === data.betTime && item.botId === data.botId
+          (item) =>
+            item.betTime === data.betTime &&
+            item.botId === data.botId &&
+            item.botId === id
         );
-        if (index === -1) {
-          dataTemp = [data, ...dataTemp];
-        } else {
+        if (index !== -1) {
           dataTemp[index] = data;
+        } else {
+          const index = dataTemp?.find(
+            (item) =>
+              item.sessionId !== data.sessionId &&
+              item.botId === data.botId &&
+              item.botId === id
+          );
+          if (index) {
+            dataTemp = [data, ...dataTemp];
+          }
         }
-
         const newObjData = {
           ...dataStatTemp,
           win_day: data?.runningData?.win_day,
@@ -253,10 +275,11 @@ const CustomTimeline = () => {
           longestLoseStreak: data?.runningData?.longestLoseStreak,
           lastData: {
             ...dataStatTemp.lastData,
+            profit: data?.runningData?.profit,
             budgetStrategy: {
               ...dataStatTemp.lastData.budgetStrategy,
               bs: {
-                ...dataStatTemp.lastData.budgetStrategy.bs,
+                ...dataStatTemp.lastData.budgetStrategy?.bs, // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
                 method_data: data?.runningData?.budgetStrategy?.method_data,
               },
             },
@@ -273,10 +296,18 @@ const CustomTimeline = () => {
             item.botId === data.botId &&
             item.botId === id
         );
-        if (index === -1) {
-          dataTemp = [data, ...dataTemp];
-        } else {
+        if (index !== -1) {
           dataTemp[index] = data;
+        } else {
+          const index = dataTemp?.find(
+            (item) =>
+              item.sessionId !== data.sessionId &&
+              item.botId === data.botId &&
+              item.botId === id
+          );
+          if (index) {
+            dataTemp = [data, ...dataTemp];
+          }
         }
         const newObjData = {
           ...dataStatTemp,
@@ -289,6 +320,8 @@ const CustomTimeline = () => {
           longestLoseStreak: data?.runningData?.longestLoseStreak,
           lastData: {
             ...dataStatTemp.lastData,
+            profit: data?.runningData?.profit,
+
             budgetStrategy: {
               ...dataStatTemp.lastData.budgetStrategy,
               bs: {
@@ -371,34 +404,32 @@ const CustomTimeline = () => {
                         sx={{ width: downLg ? "calc(100% * 2 / 3)" : "20%" }}
                       >
                         <Typography fontSize={12} fontWeight={600} mb={1}>
-                          {moment(item.createdAt).format(
-                            "DD/MM/YYYY, HH:mm:ss"
-                          )}
+                          {moment(item.betTime).format("DD/MM/YYYY, HH:mm:ss")}
                         </Typography>
                         <Box sx={{ display: "flex", alignItems: "center" }}>
                           <Typography fontSize={12}>
                             Thời gian (UTC + 7){" "}
                           </Typography>
-                          {(item?.betType === "UP" ||
-                            item?.betType === "DOWN") && (
-                            <Box
-                              display={"flex"}
-                              alignItems="center"
-                              gap={0.5}
-                              ml={0.5}
-                            >
-                              <AccessTimeIcon
-                                fontSize="16"
-                                sx={{ color: theme.palette.success.main }}
-                              />
-                              <Typography
-                                fontSize={12}
-                                sx={{ color: theme.palette.success.main }}
+                          {item?.message === "success" &&
+                            item?.bet_second > 0 && (
+                              <Box
+                                display={"flex"}
+                                alignItems="center"
+                                gap={0.5}
+                                ml={0.5}
                               >
-                                {dataStatProps?.bet_second}
-                              </Typography>
-                            </Box>
-                          )}
+                                <AccessTimeIcon
+                                  fontSize="16"
+                                  sx={{ color: theme.palette.success.main }}
+                                />
+                                <Typography
+                                  fontSize={12}
+                                  sx={{ color: theme.palette.success.main }}
+                                >
+                                  {item?.bet_second}
+                                </Typography>
+                              </Box>
+                            )}
                         </Box>
                       </Box>
                       {/* row 2 */}
@@ -421,10 +452,26 @@ const CustomTimeline = () => {
                           </Typography>
                         )}
                         {item?.result === "ACTION_BOT" && (
-                          <Typography fontSize={12} fontWeight={600} mb={1}>
+                          <Typography
+                            fontSize={12}
+                            fontWeight={600}
+                            mb={1}
+                            sx={{ color: theme.palette.primary.main }}
+                          >
                             {renderBetType(item.message)}
                           </Typography>
                         )}
+                        {item?.result === "ERROR" && (
+                          <Typography
+                            fontSize={12}
+                            fontWeight={600}
+                            mb={1}
+                            sx={{ color: "error.main" }}
+                          >
+                            {renderBetType(item.message)}
+                          </Typography>
+                        )}
+                        {/* a no */}
                         <Typography fontSize={12}>Loại</Typography>
                       </Box>
                       {/* row 3 */}

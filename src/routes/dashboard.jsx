@@ -15,15 +15,14 @@ import SignalStrategyList from "page-sections/signal-strategy/page-view/all";
 import PortfoliosList from "page-sections/portfolios/page-view/all";
 import { PortfoliosProvider } from "contexts/PortfoliosContext";
 import PortfolioDetail from "page-sections/portfolios/page-view/detail";
+import Dashboard from "pages/dashboard/dashboard";
 // ALL DASHBOARD PAGES
 const CRM = Loadable(lazy(() => import("pages/dashboard/crm")));
 const Finance = Loadable(lazy(() => import("pages/dashboard/finance")));
-const Analytics = Loadable(lazy(() => import("pages/dashboard/analytics")));
 const FinanceV2 = Loadable(lazy(() => import("pages/dashboard/finance-2")));
 const BudgetStrategy = Loadable(lazy(() => import("pages/dashboard/budget-strategy")));
 const Logistics = Loadable(lazy(() => import("pages/dashboard/logistics")));
 const Marketing = Loadable(lazy(() => import("pages/dashboard/marketing")));
-const Portfolios = Loadable(lazy(() => import("pages/dashboard/analytics-2")));
 
 // USER LIST PAGES
 const AddNewUser = Loadable(
@@ -129,7 +128,7 @@ export const DashboardRoutes = [
     children: [
       {
         index: true,
-        element: <Analytics />,
+        element: <Dashboard />,
       },
       {
         path: "crm",

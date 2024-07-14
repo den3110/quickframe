@@ -68,6 +68,7 @@ const WalletPopover = () => {
   };
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("walletMode"))) {
+      console.log(JSON.parse(localStorage.getItem("walletMode")))
       setMode(JSON.parse(localStorage.getItem("walletMode")));
       setWalletMode(JSON.parse(localStorage.getItem("walletMode")))
     } else {

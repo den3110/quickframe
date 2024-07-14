@@ -1,5 +1,5 @@
-import EcommercePageView from "page-sections/dashboards/budget-strategy/page-view";
-const EcommercePage = () => {
-  return <EcommercePageView />;
+import BudgetStrategyView from "page-sections/dashboards/budget-strategy/page-view";
+const BudgetStrategy = () => {
+  return <BudgetStrategyView />;
 };
-export default EcommercePage;
+export default BudgetStrategy;

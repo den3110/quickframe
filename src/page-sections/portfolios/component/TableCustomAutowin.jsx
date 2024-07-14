@@ -25,7 +25,8 @@ import {
 } from "type/BudgetStrategyType";
 import FlickAnimate from "icons/FlickAnimate";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper";
+// import { Navigation } from "swiper";
+import isNumber from "util/isNumber";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -46,6 +47,7 @@ const CustomAutowinTable = () => {
     display: "block",
     maxWidth: "20%",
     width: "20%",
+    minWidth: "20%",
     "&.MuiTableCell-root": {
       borderLeft: `1px solid ${theme.palette.border}`,
       borderTop: `2px solid ${theme.palette.border}`,
@@ -57,6 +59,7 @@ const CustomAutowinTable = () => {
     display: "block",
     maxWidth: `calc(80% / ${itemColumnTable})`,
     width: `calc(80% / ${itemColumnTable})`,
+    minWidth: `calc(80% / ${itemColumnTable})`,
     "&.MuiTableCell-root": {
       borderLeft: `1px solid ${theme.palette.border}`,
       borderTop: `2px solid ${theme.palette.border}`,
@@ -104,13 +107,20 @@ const CustomAutowinTable = () => {
               },
             }}
           >
+            {/* {console.log(dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                    "-"
+                  )?.length, itemColumnTable)} */}
             {Array.from(
               Array(
-                Math.ceil(
+                isNumber(Math.ceil(
                   dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
                     "-"
                   )?.length / itemColumnTable
-                )
+                )) ? Math.ceil(
+                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                    "-"
+                  )?.length / itemColumnTable
+                ) : 0
               ).keys()
             )?.map((item, keyParent) => (
               <SwiperSlide key={keyParent}>

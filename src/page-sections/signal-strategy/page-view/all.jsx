@@ -35,6 +35,7 @@ import NewBotAIStringMethod from "../NewBotAIStringMethod";
 import DeleteSignalStrategy from "../DeleteSignalStrategy";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import sortData from "util/sortData";
+import RefreshProvider from "contexts/RefreshContext";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",

@@ -1,5 +1,11 @@
 // src/components/Dashboard.js
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Grid, Box, Tabs, Tab, Typography, useMediaQuery } from "@mui/material";
 import InvestmentOverview from "../component/InvestmentOverview";
 import Timeline from "../component/Timeline";
@@ -9,6 +15,9 @@ import { useParams } from "react-router-dom";
 import MenuComponent from "../component/MenuDetail";
 import { SocketContext } from "contexts/SocketContext";
 import sessionApi from "api/session/sessionApi";
+import RefreshProvider from "contexts/RefreshContext";
+import { showToast } from "components/toast/toast";
+import { usePullingState } from "react-pull-to-refresh";
 
 const TabPanel = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -39,13 +48,15 @@ const a11yProps = (index) => {
 export const PortfolioDetailContext = createContext();
 const PortfolioDetail = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const {isConnected,  socket}= useContext(SocketContext)
+  const { isConnected, socket } = useContext(SocketContext);
   const [value, setValue] = React.useState(0);
   const { id } = useParams();
   const [loading, setLoading] = useState();
   const [data, setData] = useState([]);
-  const [dataStat, setDataStat] = useState();
-  const [dataSignal, setDataSignal]= useState()
+  const [dataStat, setDataStat] = useState({
+    lastData: { budgetStrategy: { bs: {} } },
+  });
+  const [dataSignal, setDataSignal] = useState();
 
   const mergeAndSortData = (data) => {
     const { open, close } = data;
@@ -57,90 +68,107 @@ const PortfolioDetail = () => {
     setValue(newValue);
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const response = await portfolioApi.userBotHistory(id);
-        if (response?.data?.ok === true) {
-          const dataResult = mergeAndSortData(response?.data);
-          setData(dataResult);
-        } else {
-        }
-      } catch (error) {
-      } finally {
-        setLoading(false);
+  const fetchUserBotHistory = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await portfolioApi.userBotHistory(id);
+      if (response?.data?.ok === true) {
+        const dataResult = mergeAndSortData(response?.data);
+        setData(dataResult);
+      } else {
       }
-    })();
-  }, [id]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const response = await portfolioApi.userBotInfo(id);
-        if (response?.data?.ok === true) {
-          setDataStat(response?.data?.d);
-        } else {
-        }
-      } catch (error) {
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [id]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const response = await sessionApi.getGlobalLastResults();
-        if (response?.data?.ok === true) {
-          setDataSignal(response?.data?.d);
-        } else {
-        }
-      } catch (error) {
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [id]);
-
-  useEffect(()=> {
-    if(isConnected) {
-      socket.on("LAST_RESULTS", data=> {
-        setDataSignal(data)
-      })
+    } catch (error) {
+      showToast(error?.response?.data?.m, "error");
+    } finally {
+      setLoading(false);
     }
-  }, [isConnected, socket, dataSignal])
+  }, [id]);
+
+  const fetchUserBotInfo = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await portfolioApi.userBotInfo(id);
+      if (response?.data?.ok === true) {
+        setDataStat(response?.data?.d);
+      } else {
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
+
+  const fetchGlobalLastResult = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await sessionApi.getGlobalLastResults();
+      if (response?.data?.ok === true) {
+        setDataSignal(response?.data?.d);
+      } else {
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUserBotHistory();
+  }, [fetchUserBotHistory]);
+
+  useEffect(() => {
+    fetchUserBotInfo();
+  }, [fetchUserBotInfo]);
+
+  useEffect(() => {
+    fetchGlobalLastResult();
+  }, [fetchGlobalLastResult]);
+
+  useEffect(() => {
+    if (isConnected) {
+      socket.on("LAST_RESULTS", (data) => {
+        setDataSignal(data);
+      });
+    }
+  }, [isConnected, socket, dataSignal]);
 
   return (
-    <PortfolioDetailContext.Provider
-      value={{ loading, data, setData, dataStat, setDataStat, dataSignal, setDataSignal }}
-    >
-      <Box padding={downLg ? 1 : 2}>
-        <MenuComponent dataStat={dataStat} setDataStat={setDataStat} />
-        <Tabs value={value} onChange={handleChange} aria-label="tabs example">
-          <Tab label="Quá trình đầu tư" {...a11yProps(0)} />
-          <Tab label="Chiến Lược Lợi Nhuận" {...a11yProps(1)} />
-          <Tab label="Thống kê" {...a11yProps(2)} />
-        </Tabs>
-        <TabPanel value={value} index={0}>
-          <Box sx={{ pt: 4 }}>
-            <Grid container spacing={4}>
-              <Grid item xs={12} md={4}>
-                <InvestmentOverview />
-                <Statistics />
+    <RefreshProvider functionProps={()=> {fetchUserBotInfo();fetchUserBotHistory();fetchGlobalLastResult()}}>
+      <PortfolioDetailContext.Provider
+        value={{
+          loading,
+          data,
+          setData,
+          dataStat,
+          setDataStat,
+          dataSignal,
+          setDataSignal,
+        }}
+      >
+        <Box padding={downLg ? 1 : 2}>
+          <MenuComponent dataStat={dataStat} setDataStat={setDataStat} />
+          <Tabs value={value} onChange={handleChange} aria-label="tabs example">
+            <Tab label="Quá trình đầu tư" {...a11yProps(0)} />
+            <Tab label="Chiến Lược Lợi Nhuận" {...a11yProps(1)} />
+            <Tab label="Thống kê" {...a11yProps(2)} />
+          </Tabs>
+          <TabPanel value={value} index={0}>
+            <Box sx={{ pt: 4 }}>
+              <Grid container spacing={4}>
+                <Grid item xs={12} md={4}>
+                  <InvestmentOverview />
+                  <Statistics />
+                </Grid>
+                <Grid item xs={12} md={8}>
+                  <Timeline />
+                </Grid>
+                <Grid item xs={12}></Grid>
               </Grid>
-              <Grid item xs={12} md={8}>
-                <Timeline />
-              </Grid>
-              <Grid item xs={12}></Grid>
-            </Grid>
-          </Box>
-        </TabPanel>
-      </Box>
-    </PortfolioDetailContext.Provider>
+            </Box>
+          </TabPanel>
+        </Box>
+      </PortfolioDetailContext.Provider>
+    </RefreshProvider>
   );
 };
 
