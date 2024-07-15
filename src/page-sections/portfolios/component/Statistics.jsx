@@ -59,7 +59,7 @@ const Statistics = () => {
                     <StatisticCard
                       title="Thắng/Thua hôm nay"
                       value={`${dataStat?.win_day}/${dataStat?.lose_day}`}
-                      percentage={`${parseFloat(dataStat?.win_day / dataStat?.lose_day * 100).toFixed(2)}% Tỉ lệ thắng`}
+                      percentage={`${parseFloat(dataStat?.win_day / (dataStat?.lose_day  + dataStat?.win_day) * 100).toFixed(2)}% Tỉ lệ thắng`}
                     />
                     <StatisticCard
                       title="Lợi nhuận hôm nay"

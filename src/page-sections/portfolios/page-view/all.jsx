@@ -474,17 +474,26 @@ const PortfoliosList = () => {
                     : dailyTarget?.stop_loss_target === 0 &&
                       dailyTarget?.take_profit_target === 0 &&
                       "Mục tiêu ngày"}
-                  <Typography
-                    color="success.main"
-                    fontSize={14}
-                    fontWeight={600}
-                  >
-                    {formatCurrency(dailyTarget?.take_profit_target)}
-                  </Typography>
-                  &nbsp;/&nbsp;
-                  <Typography color="error.main" fontSize={14} fontWeight={600}>
-                    {formatCurrency(-dailyTarget?.stop_loss_target)}
-                  </Typography>
+                  {dailyTarget?.stop_loss_target !== 0 ||
+                    (dailyTarget?.take_profit_target !== 0 && (
+                      <>
+                        <Typography
+                          color="success.main"
+                          fontSize={14}
+                          fontWeight={600}
+                        >
+                          {formatCurrency(dailyTarget?.take_profit_target)}
+                        </Typography>
+                        &nbsp;/&nbsp;
+                        <Typography
+                          color="error.main"
+                          fontSize={14}
+                          fontWeight={600}
+                        >
+                          {formatCurrency(-dailyTarget?.stop_loss_target)}
+                        </Typography>
+                      </>
+                    ))}
                 </Button>
                 <Button
                   variant="outlined"

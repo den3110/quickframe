@@ -10,10 +10,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 const BottomMenuDialog = (props) => {
-  const { open, setOpen } = props;
+  const { open, setOpen, onClose } = props;
   const navigate= useNavigate()
   const handleNavigate= (link)=> {
     navigate(link)
+    onClose()
   }
   const handleClickOpen = () => {
     setOpen(true);

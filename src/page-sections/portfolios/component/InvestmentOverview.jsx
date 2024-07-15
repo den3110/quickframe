@@ -8,6 +8,7 @@ import { isDark } from "utils/constants";
 const InvestmentOverview = () => {
   const {dataStat }= useContext(PortfolioDetailContext)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  
   return (
     <Box position={"relative"} overflow={"hidden"}>
       <Card sx={{background: theme=> isDark(theme) ? "" : "#eeeff2"}}>
@@ -43,7 +44,7 @@ const InvestmentOverview = () => {
             </Box>
             <Box>
               <Typography textAlign={"center"} variant="h6" color={parseFloat(dataStat?.lastData?.profit) < 0 ? "error" : "success.main"}>
-                {parseFloat(dataStat?.lastData?.profit) < 0 ? "-" : "+"}${dataStat?.lastData?.profit?.toFixed(2)?.replaceAll("-", "").replaceAll("+", "")}
+                {formatCurrency(dataStat?.lastData?.profit)}
               </Typography>
               <Typography textAlign={"center"} variant="body2" sx={{color: "rgba(255, 255, 255, 0.46)"}} fontSize={12}>Lợi nhuận ({parseFloat(dataStat?.lastData?.profit) < 0 ? "-" : "+"}{dataStat?.lastData?.profit?.toFixed(2)?.replaceAll("-", "").replaceAll("+", "")}%)</Typography>
             </Box>

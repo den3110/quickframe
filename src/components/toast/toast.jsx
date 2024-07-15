@@ -3,7 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Toast = () => {
-  return <ToastContainer autoClose={3000} />;
+  return <ToastContainer autoClose={3000} style={{ marginTop: '74px' }} />;
 };
 
 export const showToast = (message, type) => {

@@ -20,6 +20,10 @@ export default function BottomMenu() {
     setOpenBottomMenuDialog(true);
   };
 
+  const handleCloseBottomMenuDialog = () => {
+    setOpenBottomMenuDialog(false);
+  };
+
   const handleNavigate = (link) => {
     setOpenBottomMenuDialog(false);
     navigate(link);
@@ -79,7 +83,7 @@ export default function BottomMenu() {
           />
         </BottomNavigation>
       </Box>
-      <BottomMenuDialog open={openBottomMenuDialog} setOpen={setOpenBottomMenuDialog} />
+      <BottomMenuDialog open={openBottomMenuDialog} setOpen={setOpenBottomMenuDialog} onClose={handleCloseBottomMenuDialog} />
     </Paper>
   );
 }

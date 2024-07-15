@@ -62,7 +62,7 @@ const CustomTimeline = () => {
   const {
     data: dataProps,
     dataStat: dataStatProps,
-    loading,
+    // loading,
     setData,
     setDataStat,
   } = useContext(PortfolioDetailContext);
@@ -199,6 +199,30 @@ const CustomTimeline = () => {
         );
         if (index !== -1) {
           dataTemp[index] = data;
+          const newObjData = {
+            ...dataStatTemp,
+            win_day: data?.runningData?.win_day,
+            lose_day: data?.runningData?.lose_day,
+            day_profit: data?.runningData?.day_profit,
+            week_profit: data?.runningData?.week_profit,
+            week_volume: data?.runningData?.week_volume,
+            longestWinStreak: data?.runningData?.longestWinStreak,
+            longestLoseStreak: data?.runningData?.longestLoseStreak,
+            // take_profit_target: data?.runningData?.take_profit_target,
+            // stop_loss_target: data?.runningData?.stop_loss_target,
+            lastData: {
+              ...dataStatTemp.lastData,
+              profit: data?.runningData?.profit,
+              budgetStrategy: {
+                ...dataStatTemp.lastData.budgetStrategy,
+                bs: {
+                  ...dataStatTemp.lastData.budgetStrategy?.bs, // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
+                  method_data: data?.runningData?.budgetStrategy?.method_data,
+                },
+              },
+            },
+          };
+          setDataStat(newObjData);
         } else {
           const index = dataTemp?.find(
             (item) =>
@@ -210,30 +234,6 @@ const CustomTimeline = () => {
             dataTemp = [data, ...dataTemp];
           }
         }
-        const newObjData = {
-          ...dataStatTemp,
-          win_day: data?.runningData?.win_day,
-          lose_day: data?.runningData?.lose_day,
-          day_profit: data?.runningData?.day_profit,
-          week_profit: data?.runningData?.week_profit,
-          week_volume: data?.runningData?.week_volume,
-          longestWinStreak: data?.runningData?.longestWinStreak,
-          longestLoseStreak: data?.runningData?.longestLoseStreak,
-          // take_profit_target: data?.runningData?.take_profit_target,
-          // stop_loss_target: data?.runningData?.stop_loss_target,
-          lastData: {
-            ...dataStatTemp.lastData,
-            profit: data?.runningData?.profit,
-            budgetStrategy: {
-              ...dataStatTemp.lastData.budgetStrategy,
-              bs: {
-                ...dataStatTemp.lastData.budgetStrategy?.bs, // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
-                method_data: data?.runningData?.budgetStrategy?.method_data,
-              },
-            },
-          },
-        };
-        setDataStat(newObjData);
         setData(dataTemp);
       });
 
@@ -246,6 +246,31 @@ const CustomTimeline = () => {
         );
         if (index !== -1) {
           dataTemp[index] = data;
+          const newObjData = {
+            ...dataStatTemp,
+            win_day: data?.runningData?.win_day,
+            lose_day: data?.runningData?.lose_day,
+            day_profit: data?.runningData?.day_profit,
+            week_profit: data?.runningData?.week_profit,
+            week_volume: data?.runningData?.week_volume,
+            longestWinStreak: data?.runningData?.longestWinStreak,
+            longestLoseStreak: data?.runningData?.longestLoseStreak,
+            // take_profit_target: data?.runningData?.take_profit_target,
+            // stop_loss_target: data?.runningData?.stop_loss_target,
+            lastData: {
+              ...dataStatTemp.lastData,
+              profit: data?.runningData?.profit,
+  
+              budgetStrategy: {
+                ...dataStatTemp.lastData.budgetStrategy,
+                bs: {
+                  ...dataStatTemp.lastData.budgetStrategy.bs,
+                  method_data: data?.runningData?.budgetStrategy?.method_data,
+                },
+              },
+            },
+          };
+          setDataStat(newObjData);
         } else {
           const index = dataTemp?.find(
             (item) =>
@@ -257,41 +282,16 @@ const CustomTimeline = () => {
             dataTemp = [data, ...dataTemp];
           }
         }
-        const newObjData = {
-          ...dataStatTemp,
-          win_day: data?.runningData?.win_day,
-          lose_day: data?.runningData?.lose_day,
-          day_profit: data?.runningData?.day_profit,
-          week_profit: data?.runningData?.week_profit,
-          week_volume: data?.runningData?.week_volume,
-          longestWinStreak: data?.runningData?.longestWinStreak,
-          longestLoseStreak: data?.runningData?.longestLoseStreak,
-          // take_profit_target: data?.runningData?.take_profit_target,
-          // stop_loss_target: data?.runningData?.stop_loss_target,
-          lastData: {
-            ...dataStatTemp.lastData,
-            profit: data?.runningData?.profit,
-
-            budgetStrategy: {
-              ...dataStatTemp.lastData.budgetStrategy,
-              bs: {
-                ...dataStatTemp.lastData.budgetStrategy.bs,
-                method_data: data?.runningData?.budgetStrategy?.method_data,
-              },
-            },
-          },
-        };
-        setDataStat(newObjData);
+        
         setData(dataTemp);
       });
     }
-  }, [isConnected, dataProps, dataStatProps, id, socket]);
+  }, [isConnected, dataProps, dataStatProps, id, socket, setData, setDataStat]);
 
   useEffect(() => {
     if (isConnected) {
       socket.emit("CURRENT_SESSION_SUBCRIBE");
       socket.on("CURRENT_SESSION", (data) => {
-        // console.log("CURRENT_SESSION", data);
         if (data?.ss_t === "WAIT") {
           setCountDown(data?.r_second);
         } else if (data?.ss_t === "TRADE") {
@@ -307,7 +307,7 @@ const CustomTimeline = () => {
         socket.emit("LAST_RESULTS_UNSUBCRIBE");
       };
     }
-  }, [isConnected]);
+  }, [isConnected, socket]);
 
   return (
     <Box>

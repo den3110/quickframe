@@ -134,7 +134,7 @@ const SignalBubble = () => {
         style={{ paddingBottom: "20px", overflowY: "unset" }}
         className="waa"
         // navigation
-        initialSlide={1}
+        initialSlide={2}
         onBeforeInit={(swiper) => {
             sliderRef.current = swiper;
         }}
