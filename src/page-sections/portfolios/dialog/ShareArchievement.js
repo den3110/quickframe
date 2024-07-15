@@ -6,6 +6,8 @@ import logo_dark from "../../../assets/logo_dark.png"
 import moment from "moment";
 import numberToWords from "util/numToWord";
 import DownloadIcon from "icons/DownloadIcon";
+import round2number from "util/round2number";
+import formatCurrency from "util/formatCurrency";
 
 const ShareArchievement = forwardRef(
   ({ open, handleClose, selectedPlan }, canvasRef) => {
@@ -39,10 +41,14 @@ const ShareArchievement = forwardRef(
         img4.src = logo_dark;
 
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height - 80);
-
-        ctx.fillStyle = "#41ae60";
+        if (selectedPlan?.total_profit >= 0 ) {
+          ctx.fillStyle = "#41ae60";
+        }
+        else {
+          ctx.fillStyle = "#ef4770";
+        }
         ctx.font = "bold 64px Manrope"; 
-        ctx.fillText("+0%", 40, 140);
+        ctx.fillText(formatCurrency(selectedPlan?.total_profit)?.replace("$", "")+ "%", 40, 140);
 
         ctx.fillStyle = "#ffffff";
         ctx.font = "20px Manrope";

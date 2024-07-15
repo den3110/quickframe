@@ -11,6 +11,7 @@ import useNavigate from "hooks/useNavigate";
 // CUSTOM UTILS METHOD
 import { isDark } from "utils/constants";
 import AuthContext from "contexts/AuthContext";
+import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 
 // STYLED COMPONENTS
 const StyledButtonBase = styled(ButtonBase)(({ theme }) => ({
@@ -32,6 +33,8 @@ const StyledSmall = styled(Paragraph)(({ theme }) => ({
 }));
 const ProfilePopover = () => {
   const {user}= useContext(AuthContext)
+  const {linked }= useContext(ConnectExchangeContext)
+  
   const anchorRef = useRef(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -72,7 +75,7 @@ const ProfilePopover = () => {
             />
 
             <Box>
-              <H6 fontSize={14}>{user?.email}</H6>
+              <H6 fontSize={14}>{linked?.d?.nn || "Unset"}</H6>
               <Small color="text.secondary" display="block">
                 {user?.email}
               </Small>

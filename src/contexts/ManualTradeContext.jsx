@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { createContext } from 'react'
 import { SocketContext } from './SocketContext'
 import { showToast } from 'components/toast/toast'
-import portfolioApi from 'api/portfolios/portfolioApi'
+// import portfolioApi from 'api/portfolios/portfolioApi'
 import copytradeApi from 'api/copytrade/copytradeApi'
 
 export const ManualTradeContext= createContext()

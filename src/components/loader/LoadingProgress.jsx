@@ -11,6 +11,6 @@ const LoadingProgress = () => {
       NProgress.done();
     };
   }, []);
-  return <Box minHeight="100vh" />;
+  return <Box minHeight="100vh"></Box>;
 };
 export default LoadingProgress;

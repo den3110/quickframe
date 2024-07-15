@@ -233,7 +233,6 @@ const TableDetailTrade = () => {
       });
 
       socket.on("ADD_OPEN_ORDER", (data) => {
-        console.log(data)
         const index = dataTemp?.findIndex(
           (item) => item.betTime === data.betTime && data.autoType === 4
           // uh oke a

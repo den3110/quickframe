@@ -1,5 +1,5 @@
 // Statistics.js
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Typography,
@@ -14,21 +14,111 @@ import { SettingsContext } from "contexts/settingsContext";
 import { ManualTradeContext } from "contexts/ManualTradeContext";
 import round2number from "util/round2number";
 import formatCurrency from "util/formatCurrency";
+import CountUp from "react-countup";
 
 const Statistics = () => {
   const { walletMode } = useContext(SettingsContext);
   const { dataStat } = useContext(ManualTradeContext);
-  const [percent, setPercent] = useState();
-  const [rate, setRate] = useState();
+  const dayWinLiveRef = useRef(0);
+  const dayLoseLiveRef = useRef(0);
+  const dayWinDemoRef = useRef(0);
+  const dayLoseDemoRef = useRef(0);
+  // const [percent, setPercent] = useState();
+  // const [rate, setRate] = useState();
+
+  useEffect(()=> {
+    dayWinLiveRef.current= dataStat?.day_win_live
+    dayLoseLiveRef.current= dataStat?.day_lose_live
+    dayWinDemoRef.current= dataStat?.day_win_demo
+    dayLoseDemoRef.current= dataStat?.day_lose_demo
+  }, [dataStat])
 
   const renderWinLoseRate = (rate) => {
     /// do có số = 0 nên setPercent nó lỗi oke a
     if (rate) {
       switch (walletMode) {
         case true:
-          return dataStat?.day_win_live + "/" + dataStat?.day_lose_live;
+          return (
+            <Box display={"flex"} alignItems={"center"}>
+              <Typography
+                fontWeight={600}
+                fontSize={14}
+                color={dataStat?.day_win_live !== 0 && "success.main"}
+              >
+                <CountUp
+                  start={dayWinLiveRef.current }
+                  end={dataStat?.day_win_live}
+                  duration={2}
+                  decimals={0}
+                  delay={0}
+                >
+                  {({ countUpRef }) => (
+                    <span ref={countUpRef} />
+                  )}
+                </CountUp>
+              </Typography>
+              /
+              <Typography
+                fontWeight={600}
+                fontSize={14}
+                color={dataStat?.day_lose_live !== 0 && "warning.main"}
+              >
+                <CountUp
+                 start={dayLoseLiveRef.current }
+                  end={dataStat?.day_lose_live}
+                  duration={2}
+                  decimals={0}
+                  delay={0}
+                >
+                  {({ countUpRef }) => (
+                    <span ref={countUpRef} />
+                  )}
+                </CountUp>
+              </Typography>
+            </Box>
+          );
         case false:
-          return dataStat?.day_win_demo + "/" + dataStat?.day_lose_demo;
+          return (
+            <Box display={"flex"} alignItems={"center"}>
+              <Typography
+                fontWeight={600}
+                fontSize={14}
+                color={dataStat?.day_win_demo !== 0 && "success.main"}
+              >
+                <CountUp
+                
+                 start={dayWinDemoRef.current}
+                  end={dataStat?.day_win_demo}
+                  duration={2}
+                  decimals={0}
+                  delay={0}
+                  
+                >
+                  {({ countUpRef }) => (
+                    <span ref={countUpRef} />
+                  )}
+                </CountUp>
+              </Typography>
+              /
+              <Typography
+                fontWeight={600}
+                fontSize={14}
+                color={dataStat?.day_lose_demo !== 0 && "warning.main"}
+              >
+                <CountUp
+                start={dayLoseDemoRef.current }
+                  end={dataStat?.day_lose_demo}
+                  duration={2}
+                  decimals={0}
+                  delay={0}
+                >
+                  {({ countUpRef }) => (
+                    <span ref={countUpRef} />
+                  )}
+                </CountUp>
+              </Typography>
+            </Box>
+          );
         default:
           return;
       }
@@ -36,11 +126,15 @@ const Statistics = () => {
       switch (walletMode) {
         case true:
           return round2number(
-            (dataStat?.day_win_live / (dataStat?.day_lose_live + dataStat?.day_win_live)) * 100
+            (dataStat?.day_win_live /
+              (dataStat?.day_lose_live + dataStat?.day_win_live)) *
+              100
           );
         case false:
           return round2number(
-            (dataStat?.day_win_demo / (dataStat?.day_lose_demo + dataStat?.day_win_demo)) * 100
+            (dataStat?.day_win_demo /
+              (dataStat?.day_lose_demo + dataStat?.day_win_demo)) *
+              100
           );
         default:
           return;
@@ -48,10 +142,10 @@ const Statistics = () => {
     }
   };
 
-  const renderProfitDay = () => {
+  const renderDayProfit = () => {
     switch (walletMode) {
       case true:
-        return  formatCurrency(dataStat?.day_profit_live);
+        return formatCurrency(dataStat?.day_profit_live);
       case false:
         return formatCurrency(dataStat?.day_profit_demo);
       default:
@@ -73,9 +167,42 @@ const Statistics = () => {
   const renderWeekProfit = () => {
     switch (walletMode) {
       case true:
-        return formatCurrency(dataStat?.week_lose_live);
+        return formatCurrency(dataStat?.week_profit_live);
       case false:
         return formatCurrency(dataStat?.week_profit_demo);
+      default:
+        return;
+    }
+  };
+
+  const renderColorDayProfit = () => {
+    switch (walletMode) {
+      case true:
+        return dataStat?.day_profit_live >= 0 ? "success.main" : "error.main";
+      case false:
+        return dataStat?.day_profit_demo >= 0 ? "success.main" : "error.main";
+      default:
+        return;
+    }
+  };
+
+  const renderColorWeekProfitVolume = () => {
+    switch (walletMode) {
+      case true:
+        return dataStat?.week_volume_live >= 0 ? "success.main" : "error.main";
+      case false:
+        return dataStat?.week_volume_demo >= 0 ? "success.main" : "error.main";
+      default:
+        return;
+    }
+  };
+
+  const renderColorWeekProfit = () => {
+    switch (walletMode) {
+      case true:
+        return dataStat?.week_profit_live >= 0 ? "success.main" : "error.main";
+      case false:
+        return dataStat?.week_profit_demo >= 0 ? "success.main" : "error.main";
       default:
         return;
     }
@@ -95,12 +222,21 @@ const Statistics = () => {
               />
               <StatisticCard
                 title="Lợi nhuận hôm nay"
-                value={renderProfitDay()}
+                value={renderDayProfit()}
                 percentage="Lợi nhuận hôm nay"
                 hidden={true}
+                color={renderColorDayProfit()}
               />
-              <StatisticCard title="KLGD 7N" value={renderWeekVolume()} />
-              <StatisticCard title="Lợi nhuận 7N" value={renderWeekProfit()} />
+              <StatisticCard
+                title="KLGD 7N"
+                value={renderWeekVolume()}
+                color={renderColorWeekProfitVolume()}
+              />
+              <StatisticCard
+                title="Lợi nhuận 7N"
+                value={renderWeekProfit()}
+                color={renderColorWeekProfit()}
+              />
             </Grid>
           </Box>
         </CardContent>
@@ -109,7 +245,7 @@ const Statistics = () => {
   );
 };
 
-const StatisticCard = ({ title, value, percentage, hidden }) => {
+const StatisticCard = ({ title, value, percentage, hidden, color }) => {
   // const theme= useTheme()
   return (
     <Grid item xs={6} variant="outlined">
@@ -123,7 +259,7 @@ const StatisticCard = ({ title, value, percentage, hidden }) => {
         }}
       >
         <Typography fontSize={10}>{title}</Typography>
-        <Typography fontSize={14} fontWeight={600}>
+        <Typography color={color} fontSize={14} fontWeight={600}>
           {value}
         </Typography>
         {percentage && (

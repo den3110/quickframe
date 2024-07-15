@@ -23,7 +23,7 @@ export const SpotBalanceProvider = ({ children }) => {
   }, [change]);
 
   return (
-    <SpotBalanceContext.Provider value={{ spotBalance, change, setChange }}>
+    <SpotBalanceContext.Provider value={{ spotBalance, change, setChange, setSpotBalance }}>
       {children}
     </SpotBalanceContext.Provider>
   );

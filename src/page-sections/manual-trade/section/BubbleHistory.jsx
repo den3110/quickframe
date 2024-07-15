@@ -1,3 +1,4 @@
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import {
   Box,
   Card,
@@ -14,6 +15,8 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { Navigation, Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { isDark } from "utils/constants";
 
 const colors = [
@@ -85,9 +88,8 @@ const GridBallButton = ({
 const BubbleHistory = () => {
   const theme = useTheme();
   const sliderRef = useRef(null);
-    const { dataSignal: dataSignalProps, setDataSignal } = useContext(
-      ManualTradeContext
-    );
+  const { dataSignal: dataSignalProps, setDataSignal } =
+    useContext(ManualTradeContext);
   const [gridBallStates, setGridBallStates] = useState(
     Array(5)
       .fill()
@@ -105,60 +107,110 @@ const BubbleHistory = () => {
   }, []);
 
   return (
-    <Card variant="outlined" sx={{mb: 1}}>
-      <Box sx={{padding: "16px 6px"}}>
+    <Card variant="outlined" sx={{ mb: 1 }}>
+      <Box sx={{ padding: "16px 6px" }}>
         <Box position={"relative"} display={"flex"} gap={3}>
-          {[1, 2, 3, 4, 5].map((table, tableIndex) => (
-            <Box key={tableIndex} sx={{ mb: 2, padding: "10px" }}>
-              <Typography
-                variant="body2"
-                mb={1.5}
-                fontWeight={600}
-                sx={{ fontSize: "0.7em" }}
-              >
-                Bảng {table}
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(5, 18px)",
-                    gap: "5px",
-                    justifyItems: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  {gridBallStates?.[tableIndex].map((state, ballIndex) => (
-                    <GridBallButton
-                      key={ballIndex}
-                      state={state}
-                      number={
-                        ballIndex % 5 === 0
-                          ? ballIndex / 5 + 1 + tableIndex * 20
-                          : Math.floor(ballIndex / 5) +
-                            4 * ballIndex +
-                            1 -
-                            Math.floor(ballIndex / 5) * 5 * 4 +
-                            tableIndex * 20
-                      }
-                        resultIndex={dataSignalProps[0]}
-                      handleGridBallStates={setGridBallStates}
-                      tableIndex={tableIndex}
-                      index={ballIndex}
-                        dataSignal={dataSignalProps}
-                      gridBallStates={gridBallStates}
-                    />
-                  ))}
+          <Swiper
+            // ref={sliderRef}
+            spaceBetween={20}
+            pagination={{ clickable: true }}
+            modules={[Navigation, Pagination]}
+            style={{ paddingBottom: "20px", overflowY: "unset" }}
+            className="waa"
+            // navigation
+            initialSlide={1}
+            onBeforeInit={(swiper) => {
+              sliderRef.current = swiper;
+            }}
+            breakpoints={{
+              // when window width is >= 640px
+              300: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+              },
+              // when window width is >= 768px
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+              },
+              1400: {
+                slidesPerView: 4,
+                spaceBetween: 20,
+              },
+            }}
+          >
+            {[1, 2, 3, 4, 5].map((table, tableIndex) => (
+              <SwiperSlide key={tableIndex}>
+                <Box sx={{ mb: 2, padding: "10px" }}>
+                  <Typography
+                    variant="body2"
+                    mb={1.5}
+                    fontWeight={600}
+                    sx={{ fontSize: "0.7em" }}
+                  >
+                    Bảng {table}
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(5, 18px)",
+                        gap: "5px",
+                        justifyItems: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {gridBallStates?.[tableIndex].map((state, ballIndex) => (
+                        <GridBallButton
+                          key={ballIndex}
+                          state={state}
+                          number={
+                            ballIndex % 5 === 0
+                              ? ballIndex / 5 + 1 + tableIndex * 20
+                              : Math.floor(ballIndex / 5) +
+                                4 * ballIndex +
+                                1 -
+                                Math.floor(ballIndex / 5) * 5 * 4 +
+                                tableIndex * 20
+                          }
+                          resultIndex={dataSignalProps[0]}
+                          handleGridBallStates={setGridBallStates}
+                          tableIndex={tableIndex}
+                          index={ballIndex}
+                          dataSignal={dataSignalProps}
+                          gridBallStates={gridBallStates}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
                 </Box>
-              </Box>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <Box
+            position={"absolute"}
+            sx={{ bottom: 0, right: 0 }}
+            display={"flex"}
+            gap={1}
+            zIndex={99}
+          >
+            <Box>
+              <IconButton color="primary" onClick={handlePrev}>
+                <ArrowBackIos />
+              </IconButton>
             </Box>
-          ))}
+            <Box>
+              <IconButton color="primary">
+                <ArrowForwardIos onClick={handleNext} />
+              </IconButton>
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Card>

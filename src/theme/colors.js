@@ -26,7 +26,7 @@ export const primary = {
   400: "#907AF1",
   500: "#6950E8",
   600: config.theme.primaryColorHover,
-  700: "#4317CA",
+  700: rgbToRgba(hexToRgb(config.theme.primaryColor), 0.5),
   800: "#33129C",
   900: "#240C6E",
   main: config.theme.primaryColor,

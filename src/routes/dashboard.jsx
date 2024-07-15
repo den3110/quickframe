@@ -19,6 +19,9 @@ import ManualTradeProvider from "contexts/ManualTradeContext";
 import Portfolio from "page-sections/profile/overview/Portfolio";
 import PortfoliosList from "page-sections/portfolios/page-view/all";
 import ManualTradePage from "page-sections/manual-trade";
+import ManageFollowerPage from "page-sections/manage-follower";
+import ManualFollowerProvider from "contexts/ManageFollowerContext";
+import ManageFollowerProvider from "contexts/ManageFollowerContext";
 // ALL DASHBOARD PAGES
 const CRM = Loadable(lazy(() => import("pages/dashboard/crm")));
 const Finance = Loadable(lazy(() => import("pages/dashboard/finance")));
@@ -359,6 +362,20 @@ export const DashboardRoutes = [
           {
             path: "",
             element: <ManualTradePage />,
+          },
+        ],
+      },
+      {
+        path: "manage-follower",
+        element: (
+          <ManageFollowerProvider>
+            <Outlet />
+          </ManageFollowerProvider>
+        ),
+        children: [
+          {
+            path: "",
+            element: <ManageFollowerPage />,
           },
         ],
       },

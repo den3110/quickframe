@@ -24,6 +24,7 @@ import FlickAnimate from "icons/FlickAnimate";
 import { Swiper, SwiperSlide } from "swiper/react";
 // import { Navigation } from "swiper";
 import isNumber from "util/isNumber";
+import round2number from "util/round2number";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -198,7 +199,7 @@ const CustomAutowinTable = () => {
                                             : "",
                                       }}
                                     >
-                                      {item2}
+                                      {round2number(item2)}
                                     </StyledTypography>
                                   </StyledTableCell>
                                 </Fragment>

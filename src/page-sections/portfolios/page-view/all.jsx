@@ -55,6 +55,9 @@ import { ActionBotType } from "type/ActionBotType";
 import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 import sortData from "util/sortData";
 import { useNavigate } from "react-router-dom";
+import formatCurrency from "util/formatCurrency";
+import DuplicatePlan from "../dialog/DuplicatePlan";
+import SharePlan from "../dialog/SharePlan";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -84,7 +87,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 
 const PortfoliosList = () => {
   const { data, setData, loading } = useContext(PortfoliosContext);
-  const navigate= useNavigate()
+  const navigate = useNavigate();
   const { walletMode } = useContext(SettingsContext);
   const [dailyTarget, setDailyTarget] = useState({
     profit: 0,
@@ -112,6 +115,21 @@ const PortfoliosList = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [checkedRows, setCheckedRows] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
+  const [duplicateOpen, setDuplicateOpen] = useState(false);
+  const [sharePlanOpen, setSharePlanOpen] = useState(false);
+  const handleDuplicateClose = () => {
+    setDuplicateOpen(false);
+  };
+  const handleDuplicateOpen = () => {
+    setDuplicateOpen(true);
+  };
+
+  const handleSharePlanClose = () => {
+    setSharePlanOpen(false);
+  };
+  const handleSharePlanOpen = () => {
+    setSharePlanOpen(true);
+  };
 
   const handleToggleAllRows = (event) => {
     const checked = event.target.checked;
@@ -379,7 +397,9 @@ const PortfoliosList = () => {
       // setData();
       showToast("Xoá các gói đã chọn thành công", "success");
       setData(
-        data?.filter((item, key) => !selectedPlans.find(a=> a._id === item._id))
+        data?.filter(
+          (item, key) => !selectedPlans.find((a) => a._id === item._id)
+        )
       );
     } catch (error) {
       console.error("Error sending requests:", error);
@@ -449,7 +469,22 @@ const PortfoliosList = () => {
                   endIcon={<SettingIcon />}
                   onClick={handleOpenSetDailyGoal}
                 >
-                  {downLg ? "" : "Mục tiêu ngày"}
+                  {downLg
+                    ? ""
+                    : dailyTarget?.stop_loss_target === 0 &&
+                      dailyTarget?.take_profit_target === 0 &&
+                      "Mục tiêu ngày"}
+                  <Typography
+                    color="success.main"
+                    fontSize={14}
+                    fontWeight={600}
+                  >
+                    {formatCurrency(dailyTarget?.take_profit_target)}
+                  </Typography>
+                  &nbsp;/&nbsp;
+                  <Typography color="error.main" fontSize={14} fontWeight={600}>
+                    {formatCurrency(-dailyTarget?.stop_loss_target)}
+                  </Typography>
                 </Button>
                 <Button
                   variant="outlined"
@@ -530,8 +565,16 @@ const PortfoliosList = () => {
                         <StyledTableCell>Lợi nhuận 7N</StyledTableCell>
                         <StyledTableCell>
                           <Typography>Lợi nhuận</Typography>
-                          <Typography>
-                            ${dailyTarget?.profit?.toFixed(2)}
+                          <Typography
+                            fontWeight={600}
+                            fontSize={14}
+                            color={
+                              dailyTarget?.profit >= 0
+                                ? "success.main"
+                                : "error.main"
+                            }
+                          >
+                            {formatCurrency(dailyTarget?.profit)}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell>Thao tác</StyledTableCell>
@@ -594,12 +637,12 @@ const PortfoliosList = () => {
                                   )}
                                   <Box>
                                     <Typography
-                                      onClick={()=> {
-                                        navigate(plan._id)
+                                      onClick={() => {
+                                        navigate(plan._id);
                                       }}
                                       variant="body1"
                                       fontWeight={"600"}
-                                      sx={{cursor: "pointer"}}
+                                      sx={{ cursor: "pointer" }}
                                     >
                                       {plan.name}
                                     </Typography>
@@ -658,18 +701,31 @@ const PortfoliosList = () => {
                                   >
                                     Edit Plan
                                   </MenuItem>
-                                  <MenuItem onClick={() => handleClose(index)}>
+                                  <MenuItem
+                                    onClick={() => {
+                                      handleDuplicateOpen();
+                                      setSelectedPlan(plan);
+                                      handleClose(index);
+                                    }}
+                                  >
                                     Duplicate Plan
                                   </MenuItem>
                                   <MenuItem
                                     onClick={() => {
                                       handleDialogOpen(plan);
+                                      setSelectedPlan(plan);
                                       handleClose(index);
                                     }}
                                   >
                                     Share Achievement
                                   </MenuItem>
-                                  <MenuItem onClick={() => handleClose(index)}>
+                                  <MenuItem
+                                    onClick={() => {
+                                      handleSharePlanOpen();
+                                      setSelectedPlan(plan);
+                                      handleClose(index);
+                                    }}
+                                  >
                                     Share Plan
                                   </MenuItem>
                                   <MenuItem onClick={() => handleClose(index)}>
@@ -690,8 +746,7 @@ const PortfoliosList = () => {
                                   }}
                                   onClick={() => handleRowClick(index)}
                                 >
-                                  <IconButton
-                                  >
+                                  <IconButton>
                                     {openRows[index] ? (
                                       <KeyboardArrowUpIcon />
                                     ) : (
@@ -748,7 +803,11 @@ const PortfoliosList = () => {
                                           variant="body1"
                                           component="div"
                                         >
-                                          {SignalFeatureTypesTitle[plan.signal_feature]}
+                                          {
+                                            SignalFeatureTypesTitle[
+                                              plan.signal_feature
+                                            ]
+                                          }
                                         </Typography>
                                         <Typography fontSize={12}>
                                           Chiến lược tín hiệu
@@ -886,6 +945,18 @@ const PortfoliosList = () => {
           handleClose={handleDialogClose}
           selectedPlan={selectedPlan}
           ref={canvasRef}
+        />
+        <DuplicatePlan
+          open={duplicateOpen}
+          onClose={handleDuplicateClose}
+          selectedPlan={selectedPlan}
+          setData={setData}
+        />
+        <SharePlan
+          open={sharePlanOpen}
+          onClose={handleSharePlanClose}
+          selectedPlan={selectedPlan}
+          setData={setData}
         />
       </Box>
     </Layout>

@@ -148,7 +148,6 @@ const PortfolioDetail = () => {
           <MenuComponent dataStat={dataStat} setDataStat={setDataStat} />
           <Tabs value={value} onChange={handleChange} aria-label="tabs example">
             <Tab label="Quá trình đầu tư" {...a11yProps(0)} />
-            <Tab label="Chiến Lược Lợi Nhuận" {...a11yProps(1)} />
             <Tab label="Thống kê" {...a11yProps(2)} />
           </Tabs>
           <TabPanel value={value} index={0}>

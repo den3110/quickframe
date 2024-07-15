@@ -29,7 +29,7 @@ const MultiplyIndex = () => {
   const [betType, setBetType] = useState("");
   const [isBrokerMode, setIsBrokerMode] = useState(false);
   const [customMultiplier, setCustomMultiplier] = useState("");
-  const isDisableButtonTrade = statusTrade === "WAIT";
+  const isDisableButtonTrade = statusTrade === "WAIT" || !statusTrade;
   const isErrorBetAmount =
     betAmount.toString().length <= 0 || betAmount > 1000000 || betAmount <= 0;
   const handleMultiplier = (event, newMultiplier) => {

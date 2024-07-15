@@ -11,7 +11,6 @@ export const PortfoliosProvider = ({ children }) => {
   const [loading, setLoading] = useState();
   const [change, setChange] = useState(false);
   // Load user profile from localStorage and check if the user is authenticated
-  console.log(JSON.parse(localStorage.getItem("walletMode")))
   const getSpotBalanceUser = async () => {
     try {
       setLoading(true);
