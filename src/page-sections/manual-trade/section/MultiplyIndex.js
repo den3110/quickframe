@@ -43,7 +43,10 @@ const MultiplyIndex = () => {
   };
 
   const handleCustomMultiplierChange = (event) => {
-    setCustomMultiplier(event.target.value);
+    const value = event.target.value;
+    if (value === '' || /^\d+$/.test(value)) {
+      setCustomMultiplier(value);
+    }
     // setMultiplier(event.target.value);
   };
 
@@ -61,7 +64,7 @@ const MultiplyIndex = () => {
     try {
       const data = {
         betType,
-        amount: parseFloat(betAmount) * parseInt(multiplier),
+        amount: parseFloat(betAmount) * parseInt(multiplier === "Khác" ? parseInt(customMultiplier) : multiplier),
         isBrokerMode,
         accountType: walletMode ? "LIVE" : "DEMO",
       };

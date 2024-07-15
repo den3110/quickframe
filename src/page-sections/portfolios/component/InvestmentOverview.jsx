@@ -43,10 +43,10 @@ const InvestmentOverview = () => {
               </Typography>
             </Box>
             <Box>
-              <Typography textAlign={"center"} variant="h6" color={parseFloat(dataStat?.lastData?.profit) < 0 ? "error" : "success.main"}>
+              <Typography textAlign={"right"} variant="h6" color={parseFloat(dataStat?.lastData?.profit) < 0 ? "error" : "success.main"}>
                 {formatCurrency(dataStat?.lastData?.profit)}
               </Typography>
-              <Typography textAlign={"center"} variant="body2" sx={{color: "rgba(255, 255, 255, 0.46)"}} fontSize={12}>Lợi nhuận ({parseFloat(dataStat?.lastData?.profit) < 0 ? "-" : "+"}{dataStat?.lastData?.profit?.toFixed(2)?.replaceAll("-", "").replaceAll("+", "")}%)</Typography>
+              <Typography textAlign={"center"} variant="body2" sx={{color: "rgba(255, 255, 255, 0.46)"}} fontSize={12}>Lợi nhuận ({formatCurrency(dataStat?.lastData?.profit)?.replaceAll("$", "")}%)</Typography>
             </Box>
           </Box>
         </CardContent>

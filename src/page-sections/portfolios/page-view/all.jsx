@@ -58,6 +58,7 @@ import { useNavigate } from "react-router-dom";
 import formatCurrency from "util/formatCurrency";
 import DuplicatePlan from "../dialog/DuplicatePlan";
 import SharePlan from "../dialog/SharePlan";
+import FilterIcon from "icons/duotone/FilterIcon";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -446,36 +447,87 @@ const PortfoliosList = () => {
                 flexDirection: downLg ? "column" : "row",
               }}
             >
-              <TextField
-                variant="outlined"
-                placeholder="Search Plan..."
-                InputProps={{
-                  startAdornment: (
-                    <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
-                  ),
-                }}
-              />
-              <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "block"}>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    mr: 2,
-                    "& .MuiButton-endIcon": {
-                      margin: downLg ? 0 : "",
-                    },
-                  }}
-                  size={downLg ? "large" : "medium"}
-                  fullWidth={downLg ? true : false}
-                  endIcon={<SettingIcon />}
-                  onClick={handleOpenSetDailyGoal}
+              <Box sx={{ width: downLg ? "100%" : "auto" }} display={"flex"}>
+                <Box
+                  sx={{ width: downLg ? "100%" : "60%", paddingRight: "10px" }}
                 >
-                  {downLg
-                    ? ""
-                    : dailyTarget?.stop_loss_target === 0 &&
+                  <TextField
+                    variant="outlined"
+                    placeholder="Search Plan..."
+                    InputProps={{
+                      startAdornment: (
+                        <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
+                      ),
+                    }}
+                    inputProps={{
+                      style: {
+                        height: "24px",
+                      },
+                    }}
+                  />
+                </Box>
+                {downLg && (
+                  <Box sx={{ width: "40%" }}>
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        mr: 2,
+                        "& .MuiButton-endIcon": {
+                          margin: downLg ? 0 : "",
+                        },
+                      }}
+                      size={downLg ? "large" : "medium"}
+                      fullWidth={downLg ? true : false}
+                      endIcon={<SettingIcon width={16} />}
+                      onClick={handleOpenSetDailyGoal}
+                    >
+                      {dailyTarget?.stop_loss_target === 0 &&
+                        dailyTarget?.take_profit_target === 0 &&
+                        "Mục tiêu ngày"}
+                      {(dailyTarget?.stop_loss_target !== 0 ||
+                        dailyTarget?.take_profit_target !== 0) && (
+                        <Box display={"flex"} alignItems={"center"} mr={.5}>
+                          <Typography
+                            color="success.main"
+                            fontSize={12}
+                            fontWeight={600}
+                          >
+                            {formatCurrency(dailyTarget?.take_profit_target)}
+                          </Typography>
+                          &nbsp;/&nbsp;
+                          <Typography
+                            color="error.main"
+                            fontSize={12}
+                            fontWeight={600}
+                          >
+                            {formatCurrency(-dailyTarget?.stop_loss_target)}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Button>
+                  </Box>
+                )}
+              </Box>
+              <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "block"}>
+                {!downLg && (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      mr: 2,
+                      "& .MuiButton-endIcon": {
+                        margin: downLg ? 0 : "",
+                      },
+                    }}
+                    size={downLg ? "large" : "medium"}
+                    fullWidth={downLg ? true : false}
+                    endIcon={<SettingIcon />}
+                    onClick={handleOpenSetDailyGoal}
+                  >
+                    {dailyTarget?.stop_loss_target === 0 &&
                       dailyTarget?.take_profit_target === 0 &&
                       "Mục tiêu ngày"}
-                  {dailyTarget?.stop_loss_target !== 0 ||
-                    (dailyTarget?.take_profit_target !== 0 && (
+                    {(dailyTarget?.stop_loss_target !== 0 ||
+                      dailyTarget?.take_profit_target !== 0) && (
                       <>
                         <Typography
                           color="success.main"
@@ -493,8 +545,26 @@ const PortfoliosList = () => {
                           {formatCurrency(-dailyTarget?.stop_loss_target)}
                         </Typography>
                       </>
-                    ))}
-                </Button>
+                    )}
+                  </Button>
+                )}
+                {downLg && 
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      mr: 2,
+                      "& .MuiButton-endIcon": {
+                        margin: downLg ? 0 : "",
+                      },
+                    }}
+                    size={downLg ? "large" : "medium"}
+                    fullWidth={downLg ? true : false}
+                    endIcon={<FilterIcon />}
+                    // onClick={handleDialogOpen}
+                  >
+                    {downLg ? "" : "Filter"}
+                  </Button>
+                }
                 <Button
                   variant="outlined"
                   sx={{
@@ -669,14 +739,14 @@ const PortfoliosList = () => {
                               </StyledTableCell>
                               <StyledTableCell
                                 sx={{ width: downLg ? "50%" : "aaa" }}
-                              >{`$${plan?.week_profit?.toFixed(
-                                2
-                              )}`}</StyledTableCell>
+                              >
+                                {formatCurrency(plan?.week_profit)}
+                              </StyledTableCell>
                               <StyledTableCell
                                 sx={{ width: downLg ? "50%" : "aaa" }}
-                              >{`$${plan?.total_profit?.toFixed(
-                                2
-                              )}`}</StyledTableCell>
+                              >
+                                {formatCurrency(plan?.total_profit)}
+                              </StyledTableCell>
                               <StyledTableCell
                                 sx={{
                                   width: downLg ? "100%" : "aaa",

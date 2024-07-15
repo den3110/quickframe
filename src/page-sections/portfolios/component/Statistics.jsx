@@ -33,11 +33,11 @@ const Statistics = () => {
         padding={1}
       >
         <Tabs value={selectedTab} onChange={handleChange} aria-label="tabs">
-          <Tab label="Thống kê" />
+          <Tab value={0} label="Thống kê" />
           {dataStat?.autoType !== 1 && dataStat?.isCopy === false && (
-            <Tab label="Quản lý vốn" />
+            <Tab value={1} label="Quản lý vốn" />
           )}
-          <Tab label="Tín hiệu" />
+          <Tab value={2} label="Tín hiệu" />
         </Tabs>
       </Box>
       <Box
@@ -59,7 +59,7 @@ const Statistics = () => {
                     <StatisticCard
                       title="Thắng/Thua hôm nay"
                       value={`${dataStat?.win_day}/${dataStat?.lose_day}`}
-                      percentage={`${parseFloat(dataStat?.win_day / (dataStat?.lose_day  + dataStat?.win_day) * 100).toFixed(2)}% Tỉ lệ thắng`}
+                      percentage={`${formatCurrency(dataStat?.win_day / (dataStat?.lose_day  + dataStat?.win_day) * 100)?.replaceAll("$", "")}% Tỉ lệ thắng`}
                     />
                     <StatisticCard
                       title="Lợi nhuận hôm nay"

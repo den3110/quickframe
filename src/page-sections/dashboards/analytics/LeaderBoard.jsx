@@ -114,7 +114,7 @@ const LeaderBoard = () => {
 
   return (
     <RefreshProvider functionProps={async ()=> {await fetchDataBot(); await fetchDataUser()}}>
-      <Box sx={{ width: "100%", padding: "2px 10px 24px 10px" }}>
+      <Box sx={{ width: "100%", padding: "2px 10px 50px 10px" }}>
         <Box
           display={"flex"}
           justifyContent={"space-between"}

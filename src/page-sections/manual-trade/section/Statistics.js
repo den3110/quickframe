@@ -123,6 +123,12 @@ const Statistics = () => {
           return;
       }
     } else {
+      if(dataStat?.day_lose_live + dataStat?.day_win_live === 0) {
+        return 0
+      }
+      if(dataStat?.day_lose_demo + dataStat?.day_win_demo === 0) {
+        return 0
+      }
       switch (walletMode) {
         case true:
           return round2number(
