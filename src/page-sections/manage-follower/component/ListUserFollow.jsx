@@ -64,7 +64,6 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
               <TableRow>
                 <StyledTableCell>Biệt danh</StyledTableCell>
                 {/* <StyledTableCell>Loại tài khoản</StyledTableCell> */}
-                <StyledTableCell>Trạng thái</StyledTableCell>
                 <StyledTableCell>Lợi nhuận ngày </StyledTableCell>
                 <StyledTableCell>VOL ngày</StyledTableCell>
                 <StyledTableCell>Action</StyledTableCell>
@@ -97,19 +96,6 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
                     <Typography>{item?.nickName}</Typography>
                     {!downLg && <Typography fontSize={14} sx={{textDecoration: "underline", cursor: "pointer"}}>Gói: {item?.count || 0}</Typography>}
                   </Box>
-                </StyledTableCell>
-                <StyledTableCell
-                  sx={{
-                    width: downLg ? "100%" : "",
-                    display: downLg ? "flex" : "",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  {downLg && <Typography>Trạng thái</Typography>}
-                  <Typography>
-                    {item?.isRunning ? "Đang chạy" : "Đã dừng"}
-                  </Typography>
                 </StyledTableCell>
                 <StyledTableCell
                   sx={{

@@ -198,7 +198,7 @@ function ManageFollowerPage() {
                           <InfoCard title="Tổng người theo dõi" value={_.uniqBy(data?.followList, 'nickName')?.length || 0} tooltip={"Số lượng người dùng đã theo dõi gói đầu tư của bạn"} />
                         </Grid>
                         <Grid item xs={6}>
-                          <InfoCard title="Tổng số gói đang chạy" value={data?.followList?.length || 0} tooltip={"Tổng số gói đang chạy trên tài khoản của bạn (Bao gồm cả Live và Demo)"} />
+                          <InfoCard title="Tổng số gói đang chạy" value={data?.total_plans_running  || 0} tooltip={"Tổng số gói đang chạy trên tài khoản của bạn (Bao gồm cả Live và Demo)"} />
                         </Grid>
                       </Grid>
                     </Box>
