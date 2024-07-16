@@ -54,7 +54,7 @@ const EmptyPage = ({ title, subTitle, titleButton, actionClick, disableButton })
       <Typography mt={2} mb={2} variant="body1" className={classes.subtitle}>
         {subTitle}
       </Typography>
-      {disableButton && (
+      {!disableButton && (
         <>
           <Button
             variant="contained"

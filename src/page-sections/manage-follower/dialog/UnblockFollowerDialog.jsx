@@ -5,11 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import {
-  Box,
-  IconButton,
-  styled,
-} from "@mui/material";
+import { Box, IconButton, styled } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { showToast } from "components/toast/toast";
 import copytradeApi from "api/copytrade/copytradeApi";
@@ -20,27 +16,42 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   alignItems: "center",
 }));
 
-export default function UnblockFollowerDialog({ open, onClose, selectedProps }) {
-
-  const handleDeletBudgetStrategy= async ()=> {
+export default function UnblockFollowerDialog({
+  open,
+  onClose,
+  selectedProps,
+  setData,
+  dataProps,
+  setChange
+}) {
+  const handleDeletBudgetStrategy = async () => {
     try {
-        const data= {
-            params: {
-                id: selectedProps?._id
-            }
-        }
-        const response= await copytradeApi.postUserCopytradeUnblock(data)
-      if(response?.data?.ok=== true) {
-        showToast("Đã bỏ chặn thành công", "success")
-        onClose()
-      }
-      else if(response?.data?.ok=== false) {
-        showToast(response?.data?.m, "error")
+      const data = {
+        params: {
+          id: selectedProps?._id,
+        },
+      };
+      const response = await copytradeApi.postUserCopytradeUnblock(data);
+      console.log(response?.data?.ok)
+      if (response?.data?.ok === true) {
+        // setData(prev=> ({
+        //   ...prev,
+        //   blockList: dataProps?.blockList?.filter(
+        //     (item) => item?._id !== selectedProps?._id
+        //   ),
+        //   followList: [...dataProps?.followList, selectedProps],
+        // }));
+        setChange(prev=> !prev)
+        showToast("Đã bỏ chặn thành công", "success");
+        onClose();
+      } else if (response?.data?.ok === false) {
+        showToast(response?.data?.m, "error");
       }
     } catch (error) {
-      showToast(error?.response?.data?.m, "error")
+      console.log(error);
+      showToast(error?.response?.data?.m, "error");
     }
-  }
+  };
   return (
     <React.Fragment>
       <Dialog
@@ -63,7 +74,7 @@ export default function UnblockFollowerDialog({ open, onClose, selectedProps }) 
         <DialogContent>
           <Box display="flex" justifyContent="center">
             <img
-              src="	https://quickinvest.ai/img/strategy/img_1.png" 
+              src="	https://quickinvest.ai/img/strategy/img_1.png"
               alt="Illustration"
             />
           </Box>
@@ -89,7 +100,7 @@ export default function UnblockFollowerDialog({ open, onClose, selectedProps }) 
             variant="contained"
             sx={{ textTransform: "none" }}
           >
-            Xác nhận & chặn
+            Xác nhận & huỷ chặn
           </Button>
         </DialogActions>
       </Dialog>

@@ -20,7 +20,7 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   alignItems: "center",
 }));
 
-export default function BlockFollowerDialog({ open, onClose, selectedProps }) {
+export default function BlockFollowerDialog({ open, onClose, selectedProps, setData, dataProps, setChange }) {
 
   const handleDeletBudgetStrategy= async ()=> {
     try {
@@ -30,6 +30,8 @@ export default function BlockFollowerDialog({ open, onClose, selectedProps }) {
         }
         const response= await copytradeApi.postUserCopytradeBlock(data)
       if(response?.data?.ok=== true) {
+        // setData(prev=> ({...prev, followList: dataProps?.followList?.filter(item=> item?._id !== selectedProps?._id), blockList: [...dataProps?.blockList, selectedProps]}))
+        setChange(prev=> !prev)
         showToast("Đã chặn thành công", "success")
         onClose()
       }

@@ -8,8 +8,9 @@ import copytradeApi from 'api/copytrade/copytradeApi'
 
 export const ManageFollowerContext= createContext()
 const ManageFollowerProvider = ({children}) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({followList: [], blockList: []});
   const [loading, setLoading]= useState()
+  const [change, setChange]= useState(false)
   const { isConnected, socket } = useContext(SocketContext);
   const fetchGlobalLastResult = useCallback(async () => {
     try {
@@ -34,10 +35,10 @@ const ManageFollowerProvider = ({children}) => {
 
   useEffect(() => {
     fetchGlobalLastResult();
-  }, [fetchGlobalLastResult]);
+  }, [fetchGlobalLastResult, change]);
 
   return (
-    <ManageFollowerContext.Provider value={{ data, setData, loading }}>
+    <ManageFollowerContext.Provider value={{ data, setData, loading, setChange }}>
       {children}
     </ManageFollowerContext.Provider>
   )
