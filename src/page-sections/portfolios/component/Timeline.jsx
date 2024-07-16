@@ -220,6 +220,8 @@ const CustomTimeline = () => {
                 bs: {
                   ...dataStatTemp.lastData.budgetStrategy?.bs, // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
                   method_data: data?.runningData?.budgetStrategy?.method_data,
+                  row: data?.runningData?.budgetStrategy?.row,
+                  index: data?.runningData?.budgetStrategy?.index,
                 },
               },
             },
@@ -271,6 +273,8 @@ const CustomTimeline = () => {
                 bs: {
                   ...dataStatTemp.lastData.budgetStrategy.bs,
                   method_data: data?.runningData?.budgetStrategy?.method_data,
+                  row: data?.runningData?.budgetStrategy?.row,
+                  index: data?.runningData?.budgetStrategy?.index,
                 },
               },
             },

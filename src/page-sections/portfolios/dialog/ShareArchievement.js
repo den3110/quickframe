@@ -1,8 +1,9 @@
 import { Box, Button, Dialog } from "@mui/material";
 import React, { forwardRef, useEffect, useState } from "react";
-import share_plan_01 from "../../../assets/share_plan_01.png"
-import share_plan_02 from "../../../assets/share_plan_02.png"
-import logo_dark from "../../../assets/logo_dark.png"
+import share_plan_01 from "../../../assets/share_plan_01.png";
+import share_plan_02 from "../../../assets/share_plan_02.png";
+import logo_dark from "../../../assets/logo_dark.png";
+import logo2 from "../../../assets/logo2.png";
 import moment from "moment";
 import numberToWords from "util/numToWord";
 import DownloadIcon from "icons/DownloadIcon";
@@ -41,21 +42,30 @@ const ShareArchievement = forwardRef(
         img4.src = logo_dark;
 
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height - 80);
-        if (selectedPlan?.total_profit >= 0 ) {
+        if (selectedPlan?.total_profit >= 0) {
           ctx.fillStyle = "#41ae60";
-        }
-        else {
+        } else {
           ctx.fillStyle = "#ef4770";
         }
-        ctx.font = "bold 64px Manrope"; 
-        ctx.fillText(formatCurrency(selectedPlan?.total_profit)?.replace("$", "")+ "%", 40, 140);
+        ctx.font = "bold 64px Manrope";
+        ctx.fillText(
+          formatCurrency(selectedPlan?.total_profit)?.replace("$", "") + "%",
+          40,
+          140
+        );
 
         ctx.fillStyle = "#ffffff";
         ctx.font = "20px Manrope";
         ctx.fillText(`${selectedPlan?.name} | Bot AI | Custom Autowin`, 40, 70);
         ctx.fillStyle = "#9fabbc";
         ctx.font = "18px Manrope";
-        ctx.fillText(`Trong ${numberToWords(moment(new Date()).diff(moment(selectedPlan?.createdAt), "days"))} ngày`, 40, 170);
+        ctx.fillText(
+          `Trong ${(
+            moment(selectedPlan?.lastStartTime ).diff(moment(selectedPlan?.updatedAt), "hours")
+          )} giờ`,
+          40,
+          170
+        );
         ctx.drawImage(
           img2,
           canvas.width - img2.width,
@@ -76,7 +86,7 @@ const ShareArchievement = forwardRef(
         ctx.fillStyle = "#9fabbc";
         ctx.font = "bold 14px Manrope";
         ctx.fillText(
-          "BotTrading",
+          moment(new Date()).format("DD/MM/YYYY HH:mm:ss"),
           40,
           canvas.height + img4.height / 2 - 100 + 20
         );
@@ -101,7 +111,7 @@ const ShareArchievement = forwardRef(
 
     return (
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
-        <Box style={{position: "relative", height: 507, overflow: "hidden"}}>
+        <Box style={{ position: "relative", height: 507, overflow: "hidden" }}>
           <canvas
             style={{ background: "#121927" }}
             crossOrigin="anonymous"
@@ -109,7 +119,15 @@ const ShareArchievement = forwardRef(
             width={730}
             height={507}
           ></canvas>
-          <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 2 }}>
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 2,
+            }}
+          >
             <Button
               variant="contained"
               color="primary"

@@ -1,8 +1,8 @@
 {
   "siteId": "coinbuck.net",
   "theme": {
-    "primaryColor": "#2e89ff", 
+    "primaryColor": "#cf9f4a", 
     "textColor": "#000000",
-    "primaryColorHover": "#2e89ff"
+    "primaryColorHover": "#cf9f4a"
   }
 }

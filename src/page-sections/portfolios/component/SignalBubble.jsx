@@ -153,6 +153,10 @@ const SignalBubble = () => {
             slidesPerView: 4,
             spaceBetween: 20,
           },
+          2000: {
+            slidesPerView: 5,
+            spaceBetween: 20,
+          },
         }}
       >
         {[1, 2, 3, 4, 5].map((table, tableIndex) => (
