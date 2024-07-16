@@ -112,7 +112,7 @@ const BudgetStrategyPage = () => {
     setPage(value);
   };
 
-  const fetchUserBudgetStrategy= useCallback(async () => {
+  const fetchUserBudgetStrategy = useCallback(async () => {
     try {
       setLoading(true);
       const response = await budgetStrategyApi.userBudgetStrategyList();
@@ -126,14 +126,16 @@ const BudgetStrategyPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    fetchUserBudgetStrategy()
+    fetchUserBudgetStrategy();
   }, [change, fetchUserBudgetStrategy]);
 
   return (
-    <RefreshProvider functionProps={async ()=> await fetchUserBudgetStrategy()}>
+    <RefreshProvider
+      functionProps={async () => await fetchUserBudgetStrategy()}
+    >
       <Box
         pt={2}
         pb={4}
@@ -308,20 +310,20 @@ const BudgetStrategyPage = () => {
                         </StyledTableRow>
                       ))}
                 </TableBody>
-                {loading === false && data?.length <= 0 && (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <EmptyPage />
-                  </Box>
-                )}
               </Table>
             </TableContainer>
+            {loading === false && data?.length <= 0 && (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <EmptyPage title={"Danh mục vốn đang trống"} subTitle={"Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."} titleButton={"Tạo chiến lược mới"} actionClick={handleOpenNewBudgetStrategy} />
+              </Box>
+            )}
             <PaginationContainer>
               <Box
                 display={"flex"}

@@ -105,6 +105,7 @@ const BubbleHistory = () => {
     if (!sliderRef.current) return;
     sliderRef.current?.slideNext();
   }, []);
+  console.log(sliderRef.current?.params?.slidesPerView)
 
   return (
     <Card variant="outlined" sx={{ mb: 1 }}>
@@ -193,24 +194,27 @@ const BubbleHistory = () => {
               </SwiperSlide>
             ))}
           </Swiper>
-          <Box
-            position={"absolute"}
-            sx={{ bottom: 0, right: 0 }}
-            display={"flex"}
-            gap={1}
-            zIndex={99}
-          >
-            <Box>
-              <IconButton color="primary" onClick={handlePrev}>
-                <ArrowBackIos />
-              </IconButton>
+          {
+            sliderRef.current?.params?.slidesPerView < 5 &&
+            <Box
+              position={"absolute"}
+              sx={{ bottom: 0, right: 0 }}
+              display={"flex"}
+              gap={1}
+              zIndex={99}
+            >
+              <Box>
+                <IconButton color="primary" onClick={handlePrev}>
+                  <ArrowBackIos />
+                </IconButton>
+              </Box>
+              <Box>
+                <IconButton color="primary">
+                  <ArrowForwardIos onClick={handleNext} />
+                </IconButton>
+              </Box>
             </Box>
-            <Box>
-              <IconButton color="primary">
-                <ArrowForwardIos onClick={handleNext} />
-              </IconButton>
-            </Box>
-          </Box>
+          }
         </Box>
       </Box>
     </Card>

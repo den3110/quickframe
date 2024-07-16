@@ -25,7 +25,7 @@ import {
 } from "@mui/material";
 import Layout from "../Layout";
 import { isDark } from "utils/constants";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 import { Fragment, useContext, useState } from "react";
 import { MoreVert, Add, InsertChart } from "@mui/icons-material";
 import moment from "moment";
@@ -68,23 +68,24 @@ const SignalStrategyList = () => {
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
-  const [isEditStringMethod, setIsEditStringMethod]= useState(false)
-  const [isDeleteBot, setIsDeleteBot]= useState(false)
+  const [isEditStringMethod, setIsEditStringMethod] = useState(false);
+  const [isDeleteBot, setIsDeleteBot] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [anchorEls, setAnchorEls] = useState({});
   const [page, setPage] = useState(1);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [openNewBotAI, setOpenNewBotAI] = useState(false);
-  const [openNewBotAIStringMethod, setOpenNewBotAIStringMethod]= useState(false)
+  const [openNewBotAIStringMethod, setOpenNewBotAIStringMethod] =
+    useState(false);
   const [anchorElMenu, setAnchorElMenu] = useState(null);
   // const [loading, setLoading]= useState(false)
 
-  const handleOpenDeleteBot= ()=> {
-    setIsDeleteBot(true)
-  }
-  const handleCloseDeleteBot= ()=> {
-    setIsDeleteBot(false)
-  }
+  const handleOpenDeleteBot = () => {
+    setIsDeleteBot(true);
+  };
+  const handleCloseDeleteBot = () => {
+    setIsDeleteBot(false);
+  };
   const handleCloseNewBotAI = () => {
     setOpenNewBotAI(false);
   };
@@ -174,13 +175,13 @@ const SignalStrategyList = () => {
                   onClose={handleMenuClose}
                   // anchorPosition={""}
                   anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
+                    vertical: "bottom",
+                    horizontal: "right",
                   }}
                 >
                   <MenuItem
                     onClick={() => {
-                      handleOpenNewBotAIStringMethod()
+                      handleOpenNewBotAIStringMethod();
                       handleMenuClose();
                     }}
                   >
@@ -212,120 +213,138 @@ const SignalStrategyList = () => {
                   </TableHead>
                 )}
                 <TableBody>
-                  {loading=== true && <TableRow>
-                      <TableCell rowSpan={10} colSpan={3} align="center" sx={{height: 200}}>
+                  {loading === true && (
+                    <TableRow>
+                      <TableCell
+                        rowSpan={10}
+                        colSpan={3}
+                        align="center"
+                        sx={{ height: 200 }}
+                      >
                         <CircularProgress />
                       </TableCell>
-                    </TableRow>}
-                  {loading=== false && sortData(data, "createdAt", "desc")
-                    .slice(
-                      rowsPerPage * (page - 1),
-                      rowsPerPage * (page - 1) + rowsPerPage
-                    )
-                    .map((row, index) => (
-                      <Fragment key={index}>
-                        <StyledTableRow
-                          sx={{
-                            display: downLg ? "flex" : "",
-                            flexWrap: "wrap",
-                            borderBottom: downLg ? "" : "none",
-                          }}
-                        >
-                          <StyledTableCell
+                    </TableRow>
+                  )}
+                  {loading === false &&
+                    sortData(data, "createdAt", "desc")
+                      .slice(
+                        rowsPerPage * (page - 1),
+                        rowsPerPage * (page - 1) + rowsPerPage
+                      )
+                      .map((row, index) => (
+                        <Fragment key={index}>
+                          <StyledTableRow
                             sx={{
-                              order: downLg ? 1 : 1,
-                              borderBottom: downLg ? "none" : "",
-                            }}
-                          >
-                            <Typography variant="body1" fontWeight={"600"}>
-                              {row.name}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              Created:{" "}
-                              {moment(row.createdAt).format(
-                                "DD-MM-YYYY, HH:mm:ss"
-                              )}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell
-                            sx={{
-                              order: downLg ? 3 : 2,
-                              borderBottom: downLg ? "none" : "",
-                            }}
-                          >
-                            {/* {BudgetStrategyTypeTitle[row.type]} */}
-                            {row?.type}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            sx={{
-                              order: downLg ? 2 : 4,
                               display: downLg ? "flex" : "",
-                              flexDirection: "row-reverse",
-                              borderBottom: downLg ? "none" : "",
+                              flexWrap: "wrap",
+                              borderBottom: downLg ? "" : "none",
                             }}
                           >
-                            <IconButton onClick={(e) => handleClick(e, index)}>
-                              <MoreVert />
-                            </IconButton>
-                            <Menu
-                              disableScrollLock
-                              anchorEl={anchorEls[index]}
-                              open={Boolean(anchorEls[index])}
-                              onClose={() => handleClose(index)}
-                              anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "left",
-                              }}
-                              transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
+                            <StyledTableCell
+                              sx={{
+                                order: downLg ? 1 : 1,
+                                borderBottom: downLg ? "none" : "",
                               }}
                             >
-                              <StyledMenuItem
-                                onClick={() => {
-                                  if(row.type=== "STRING_METHOD") {
-                                    handleOpenNewBotAIStringMethod()
-                                    setIsEditStringMethod(true)
-                                    setSelectedBot(row);
-                                    handleClose(index);
-
-                                  }
-                                  else if(row.type=== "BUBBLE_METHOD") {
-                                    handleOpenNewBotAI();
-                                    handleClose(index);
-                                    setIsEdit(true);
-                                    setSelectedBot(row);
-                                    setInitState(true);
-                                  }
+                              <Typography variant="body1" fontWeight={"600"}>
+                                {row.name}
+                              </Typography>
+                              <Typography variant="body2" color="textSecondary">
+                                Created:{" "}
+                                {moment(row.createdAt).format(
+                                  "DD-MM-YYYY, HH:mm:ss"
+                                )}
+                              </Typography>
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{
+                                order: downLg ? 3 : 2,
+                                borderBottom: downLg ? "none" : "",
+                              }}
+                            >
+                              {/* {BudgetStrategyTypeTitle[row.type]} */}
+                              {row?.type}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{
+                                order: downLg ? 2 : 4,
+                                display: downLg ? "flex" : "",
+                                flexDirection: "row-reverse",
+                                borderBottom: downLg ? "none" : "",
+                              }}
+                            >
+                              <IconButton
+                                onClick={(e) => handleClick(e, index)}
+                              >
+                                <MoreVert />
+                              </IconButton>
+                              <Menu
+                                disableScrollLock
+                                anchorEl={anchorEls[index]}
+                                open={Boolean(anchorEls[index])}
+                                onClose={() => handleClose(index)}
+                                anchorOrigin={{
+                                  vertical: "top",
+                                  horizontal: "left",
+                                }}
+                                transformOrigin={{
+                                  vertical: "top",
+                                  horizontal: "right",
                                 }}
                               >
-                                Edit Bot
-                              </StyledMenuItem>
-                              <StyledMenuItem>
-                                Share Bot
-                              </StyledMenuItem>
-                              <StyledMenuItem
-                                onClick={() => {
-                                  handleClose(index);
-                                  setSelectedBot(row)
-                                  handleOpenDeleteBot()
-                                }}
-                              >
-                                Delete Bot
-                              </StyledMenuItem>
-                            </Menu>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      </Fragment>
-                    ))}
+                                <StyledMenuItem
+                                  onClick={() => {
+                                    if (row.type === "STRING_METHOD") {
+                                      handleOpenNewBotAIStringMethod();
+                                      setIsEditStringMethod(true);
+                                      setSelectedBot(row);
+                                      handleClose(index);
+                                    } else if (row.type === "BUBBLE_METHOD") {
+                                      handleOpenNewBotAI();
+                                      handleClose(index);
+                                      setIsEdit(true);
+                                      setSelectedBot(row);
+                                      setInitState(true);
+                                    }
+                                  }}
+                                >
+                                  Edit Bot
+                                </StyledMenuItem>
+                                <StyledMenuItem>Share Bot</StyledMenuItem>
+                                <StyledMenuItem
+                                  onClick={() => {
+                                    handleClose(index);
+                                    setSelectedBot(row);
+                                    handleOpenDeleteBot();
+                                  }}
+                                >
+                                  Delete Bot
+                                </StyledMenuItem>
+                              </Menu>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        </Fragment>
+                      ))}
                 </TableBody>
-                {loading=== false && data?.length <= 0 &&
-                  <TableBody>
-                    <TableCell colSpan={5} rowSpan={5} sx={{width: "100%" }}>
-                      <EmptyPage />
-                    </TableCell>
-                  </TableBody>
-                }
+                {loading === false && data?.length <= 0 && (
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <EmptyPage
+                      title={"Danh mục tín hiệu đang trống"}
+                      subTitle={
+                        "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
+                      }
+                      titleButton={"Tạo chiến lược mới"}
+                      actionClick={handleMenuClick}
+                    />
+                  </Box>
+                )}
               </Table>
             </TableContainer>
             <PaginationContainer>
@@ -365,8 +384,20 @@ const SignalStrategyList = () => {
           is_edit={isEdit}
           setIsEdit={setIsEdit}
         />
-        <NewBotAIStringMethod open={openNewBotAIStringMethod} onClose={handleCloseNewBotAIStringMethod} is_edit={isEditStringMethod} setIsEdit={setIsEditStringMethod} selectedBot={selectedBot} />
-        <DeleteSignalStrategy open={isDeleteBot} onClose={handleCloseDeleteBot} selectedBot={selectedBot} setData={setData} data={data} />
+        <NewBotAIStringMethod
+          open={openNewBotAIStringMethod}
+          onClose={handleCloseNewBotAIStringMethod}
+          is_edit={isEditStringMethod}
+          setIsEdit={setIsEditStringMethod}
+          selectedBot={selectedBot}
+        />
+        <DeleteSignalStrategy
+          open={isDeleteBot}
+          onClose={handleCloseDeleteBot}
+          selectedBot={selectedBot}
+          setData={setData}
+          data={data}
+        />
       </Box>
     </Layout>
   );

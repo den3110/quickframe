@@ -21,12 +21,16 @@ import {
   MenuItem,
   Pagination,
   CircularProgress,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { ManageFollowerContext } from "contexts/ManageFollowerContext";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
-import ListUser from "./component/ListUser";
+import ListUserFollow from "./component/ListUserFollow";
+import ListUserBlock from "./component/ListUserBlock";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const Content = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
@@ -49,7 +53,7 @@ const HistoryTable = styled(Box)(({ theme }) => ({}));
 
 const NoData = styled(Box)(({ theme }) => ({
   textAlign: "center",
-  padding: theme.spacing(4),
+  // padding: theme.spacing(4),
 }));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -67,8 +71,34 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
+const InfoCard = ({ title, value, tooltip }) => {
+  return (
+    <Card variant="outlined" style={{ borderRadius: 16 }}>
+      <Box sx={{ padding: 1 }}>
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Typography variant="body2" fontSize={12} color="textSecondary">
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Tooltip placement={"top"} title={tooltip}>
+              <IconButton size="small">
+                <InfoOutlinedIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
+        <Typography variant="body1" fontSize={14}>
+          {value}
+        </Typography>
+      </Box>
+    </Card>
+  );
+};
+
 function ManageFollowerPage() {
-    const { data, setData, loading } = useContext(ManageFollowerContext);
+  const { data, setData, loading } = useContext(ManageFollowerContext);
   const [tabValue, setTabValue] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
@@ -87,6 +117,93 @@ function ManageFollowerPage() {
 
   return (
     <Box>
+      <Box
+        sx={{
+          backgroundImage:
+            'url("https://quickinvest.ai/static/media/banner-img.46bb8c00534e137faed8.png")',
+          backgroundSize: "cover",
+          position: "relative",
+          marginBottom: "88px"
+        }}
+      >
+        <Box sx={{ minHeight: "468px" }}>
+          <Box sx={{
+            "&::before": {
+              bottom: "-42px",
+              background: "url(https://quickinvest.ai/static/media/img-1.7803fbb2ae80371d2726.png) 100% 100% no-repeat",
+              content: '""',
+              display: "block",
+              height: "230px",
+              left: "-9px",
+              position: "absolute", 
+              width: "388px"
+            }
+          }}>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "130px 70px",
+                marginBottom: "118px",
+                flexDirection: "row",
+              }}
+            >
+              <Box>
+                <Typography fontSize={40} color="white" fontWeight={600}>
+                  Thống kê người theo
+                  <br />
+                  Cùng nhau phát triển
+                </Typography>
+              </Box>
+              <Box mb={2} sx={{ width: 442 }}>
+                <Card
+                  sx={{
+                    position: "relative",
+                    "&::before": {
+                      position: "absolute",
+                      content: '""',
+                      display: "block",
+                      height: 107,
+                      top: -101,
+                      width: 129,
+                      right: 20,
+                      background:
+                        "url(https://quickinvest.ai/static/media/img-2.2bebcb16ef4c97ea99a9.png) 100% 100% no-repeat",
+                      zIndex: 9999,
+                      overflow: "visible"
+                    },
+                    overflow: "visible"
+                  }}
+                  className="alslqas"
+                >
+                  <Box className="aklsmkaws" sx={{ padding: 2 }}>
+                    <Box>
+                      <Typography
+                        variant="body1"
+                        fontSize={18}
+                        fontWeight={600}
+                      >
+                        Số liệu thống kê
+                      </Typography>
+                    </Box>
+                    <Box className="aksmwaaw" sx={{ width: "100" }} mt={2}>
+                      <Grid container spacing={1}>
+                        <Grid item xs={6}>
+                          <InfoCard title="Tổng người theo dõi" value={0} tooltip={"Số lượng người dùng đã theo dõi gói đầu tư của bạn"} />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <InfoCard title="Tổng số gói đang chạy" value={0} tooltip={"Tổng số gói đang chạy trên tài khoản của bạn (Bao gồm cả Live và Demo)"} />
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </Box>
+                </Card>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
       <Box>
         <Content>
           <Card>
@@ -132,18 +249,32 @@ function ManageFollowerPage() {
                 <Box>
                   <NoData>
                     {loading === true && <CircularProgress />}
-                    {loading === false && data?.followList?.length <=0  && <EmptyPage />}
+                    {loading === false && data?.followList?.length <= 0 && (
+                      <EmptyPage
+                        title={"Không có dữ liệu"}
+                        disableButton={true}
+                      />
+                    )}
                   </NoData>
-                  {loading === false && data?.followList?.length > 0  && <ListUser data={data?.followList} />}
+                  {loading === false && data?.followList?.length > 0 && (
+                    <ListUserFollow data={data?.followList} setData={setData} />
+                  )}
                 </Box>
               )}
               {tabValue === 1 && (
                 <Box>
                   <NoData>
                     {loading === true && <CircularProgress />}
-                    {loading === false && data?.blockList?.length <=0  && <EmptyPage />}
+                    {loading === false && data?.blockList?.length <= 0 && (
+                      <EmptyPage
+                        title={"Không có dữ liệu"}
+                        disableButton={true}
+                      />
+                    )}
                   </NoData>
-                  {loading === false && data?.blockList?.length > 0  && <ListUser data={data?.blockList} />}
+                  {loading === false && data?.blockList?.length > 0 && (
+                    <ListUserBlock data={data?.blockList} setData={setData} />
+                  )}
                 </Box>
               )}
             </TabPanel>

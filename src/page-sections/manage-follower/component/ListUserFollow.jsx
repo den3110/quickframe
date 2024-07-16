@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   MenuItem,
   Pagination,
@@ -15,6 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import formatCurrency from "util/formatCurrency";
+import BlockFollowerDialog from "../dialog/BlockFollowerDialog";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "16px",
@@ -31,9 +34,11 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-const ListUser = ({ data }) => {
+const ListUserFollow = ({ data, setData }) => {
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [selected, setSelected]= useState()
   const [page, setPage] = useState(1);
+  const [blockFollower, setBlockFollower]= useState(false)
   //   const [data, set]
 
   const handleChangeRowsPerPage = (event) => {
@@ -49,23 +54,34 @@ const ListUser = ({ data }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Thời gian</StyledTableCell>
-              <StyledTableCell>Số lệnh</StyledTableCell>
-              <StyledTableCell>KLGD</StyledTableCell>
-              <StyledTableCell>Người theo dõi</StyledTableCell>
-              <StyledTableCell>Số lệnh theo</StyledTableCell>
-              <StyledTableCell>KLGD người theo</StyledTableCell>
+              <StyledTableCell>Biệt danh</StyledTableCell>
+              <StyledTableCell>Loại tài khoản</StyledTableCell>
+              <StyledTableCell>Trạng thái</StyledTableCell>
+              <StyledTableCell>Lợi nhuận ngày </StyledTableCell>
+              <StyledTableCell>Action</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <StyledTableCell>15/07/2024 03:24 SA</StyledTableCell>
-              <StyledTableCell>1</StyledTableCell>
-              <StyledTableCell>$111.00</StyledTableCell>
-              <StyledTableCell>0</StyledTableCell>
-              <StyledTableCell>0</StyledTableCell>
-              <StyledTableCell>0</StyledTableCell>
-            </TableRow>
+            {data?.map((item, key) => (
+              <TableRow key={key}>
+                <StyledTableCell>{item?.nickName}</StyledTableCell>
+                <StyledTableCell>{item?.accountType}</StyledTableCell>
+                <StyledTableCell>
+                  {item?.isRunning ? "Đang chạy" : "Đã dừng"}
+                </StyledTableCell>
+                <StyledTableCell>
+                  <Typography fontWeight={600} fontSize={14} color={item?.day_profit >= 0 ? "success.main": "error.main"}>{formatCurrency(item?.day_profit)}</Typography>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <Button onClick={()=> {
+                    setSelected(item)
+                    setBlockFollower(true)
+                  }} variant="contained" color="primary">
+                    Block
+                  </Button>
+                </StyledTableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -92,8 +108,9 @@ const ListUser = ({ data }) => {
           shape="rounded"
         />
       </PaginationContainer>
+      <BlockFollowerDialog open={blockFollower} onClose={()=> setBlockFollower(false)} selectedProps={selected} setData={setData} />
     </Box>
   );
 };
 
-export default ListUser;
+export default ListUserFollow;

@@ -17,6 +17,10 @@ const signalStrategyApi = {
     const url= `/users/budget-signal/delete/${id}`
     return axiosClient.delete(url, data)
   },
+  userBudgetTelegramSignal(data) {
+    const url= `/users/budget-signal/telegram-signals`
+    return axiosClient.get(url, data)
+  }
   
 };
 

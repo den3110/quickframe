@@ -85,6 +85,10 @@ const NewPlanDrawer = ({
   const [expanded, setExpanded] = useState(true);
   const [dataBudgetStrategy, setDataBudgetStrategy] = useState([]);
   const [dataSignalStrategy, setDataSignalStrategy] = useState([]);
+  const [
+    dataSignalStrategyTelegramSignal,
+    setDataSignalStrategyTelegramSignal,
+  ] = useState([]);
   const [isChooseBot, setIsChooseBot] = useState(false);
   const [takeProfitTarget, setTakeProfitTarget] = useState(0);
   const [stopLossTarget, setStopLossTarget] = useState(0);
@@ -154,7 +158,7 @@ const NewPlanDrawer = ({
       let response;
       let data;
       // switch(selectedTab)
-      if(selectedTab=== "Follow Leader") {
+      if (selectedTab === "Follow Leader") {
         data = {
           autoType: autoType,
           name: planName,
@@ -181,10 +185,9 @@ const NewPlanDrawer = ({
           isPrivate: privateMode,
           is_reverse: reserveSignal,
           signal_feature: featureType,
+          enabled_tpsl: takeProfit,
         };
-
-      }
-      else {
+      } else {
         switch (featureType) {
           case SignalFeatureTypes.SINGLE_METHOD:
             data = {
@@ -213,8 +216,9 @@ const NewPlanDrawer = ({
               isPrivate: privateMode,
               is_reverse: reserveSignal,
               signal_feature: featureType,
+              enabled_tpsl: takeProfit,
             };
-  
+
             break;
           case SignalFeatureTypes.MIX_METHODS:
             data = {
@@ -243,6 +247,7 @@ const NewPlanDrawer = ({
               isPrivate: privateMode,
               is_reverse: reserveSignal,
               signal_feature: featureType,
+              enabled_tpsl: takeProfit,
             };
             break;
           case SignalFeatureTypes.AUTO_CHANGE_METHODS:
@@ -279,6 +284,7 @@ const NewPlanDrawer = ({
               isPrivate: privateMode,
               is_reverse: reserveSignal,
               signal_feature: featureType,
+              enabled_tpsl: takeProfit,
             };
             break;
           case SignalFeatureTypes.WAIT_SIGNALS:
@@ -306,7 +312,7 @@ const NewPlanDrawer = ({
                     winChangeMethodAfterLoseStreak,
                   win_change_method_after_win_streak:
                     winChangeMethodAfterWinStreak,
-  
+
                   lose_enabled: loseEnabled,
                   lose_reverse_signal: loseReverseSignal,
                   lose_end_lose_streak: loseEndLoseStreak,
@@ -332,9 +338,10 @@ const NewPlanDrawer = ({
               isPrivate: privateMode,
               is_reverse: reserveSignal,
               signal_feature: featureType,
+              enabled_tpsl: takeProfit,
             };
             break;
-  
+
           default:
             break;
         }
@@ -353,14 +360,14 @@ const NewPlanDrawer = ({
           );
           dataTemp[indexData] = data;
           setData(dataTemp);
-        }
-        else {
-          setData(prev=> [response?.data?.d, ...prev])
+        } else {
+          setData((prev) => [response?.data?.d, ...prev]);
         }
         showToast(
           isEdit ? "Cập nhật bot thành công" : "Tạo bot thành công",
           "success"
         );
+        setIsEdit(false)
         onClose();
       } else {
         showToast(response?.data?.m);
@@ -376,6 +383,7 @@ const NewPlanDrawer = ({
       try {
         const response1 = await budgetStrategyApi.userBudgetStrategyList();
         const response2 = await signalStrategyApi.userBudgetSignalList();
+        const response3 = await signalStrategyApi.userBudgetTelegramSignal();
         if (response1?.data?.ok === true) {
           setBudgetStrategy(response1?.data?.d?.[0]?._id);
           setDataBudgetStrategy(response1?.data?.d);
@@ -384,9 +392,19 @@ const NewPlanDrawer = ({
           setSignalStrategy(response2?.data?.d?.[0]?._id);
           setDataSignalStrategy(response2?.data?.d);
         }
+        if (response3?.data?.ok === true) {
+          setSignalStrategy(response2?.data?.d?.[0]?._id);
+          setDataSignalStrategyTelegramSignal(response3?.data?.d);
+        }
       } catch (error) {}
     })();
   }, []);
+
+  useEffect(() => {
+    if (selectedTab === "Telegram Signal") {
+      // s
+    }
+  }, [selectedTab]);
 
   useEffect(() => {
     if (decodedData) {
@@ -403,7 +421,7 @@ const NewPlanDrawer = ({
       setInvestmentFund(selectedPlan?.budget_amount);
       setBetSecond(selectedPlan?.bet_second);
       setAutoType(selectedPlan?.autoType);
-      setSelectedTab(selectedPlan?.autoType=== 1 ? "Follow Leader" : "Bot AI")
+      setSelectedTab(selectedPlan?.autoType === 1 ? "Follow Leader" : "Bot AI");
       setFeatureType(selectedPlan?.signal_feature);
       setBudgetStrategy(selectedPlan?.budgetStrategyId);
       setBaseAmount(selectedPlan?.margin_dense);
@@ -412,37 +430,69 @@ const NewPlanDrawer = ({
       setPrivateMode(selectedPlan?.isPrivate);
       setReserveSignal(selectedPlan?.is_reverse);
       setArraySignalStrategy(selectedPlan?.method_data?.method_list);
-      setShuffleMethodsOrder(selectedPlan?.method_data?.feature_data?.shuffle_methods_order);
-      setNoRepeatMethodsNextTurn(selectedPlan?.method_data?.feature_data?.no_repeat_methods_next_turn);
+      setShuffleMethodsOrder(
+        selectedPlan?.method_data?.feature_data?.shuffle_methods_order
+      );
+      setNoRepeatMethodsNextTurn(
+        selectedPlan?.method_data?.feature_data?.no_repeat_methods_next_turn
+      );
       setWinEnabled(selectedPlan?.method_data?.feature_data?.win_enabled);
-      setWinReverseSignal(selectedPlan?.method_data?.feature_data?.win_reverse_signal)
-      setWinEndWinStreak(selectedPlan?.method_data?.feature_data?.win_end_win_streak)
-      setWinExactlyWinStreak(selectedPlan?.method_data?.feature_data?.win_exactly_win_streak)
-      setWinStreakEntryTarget(selectedPlan?.method_data?.feature_data?.win_streak_entry_target)
-      setWinTurnCount(selectedPlan?.method_data?.feature_data?.win_turn_count)
-      setWinChangeMethodAfterWinStreak(selectedPlan?.method_data?.feature_data?.win_change_method_after_win_streak)
-      setWinChangeMethodAfterLoseStreak(selectedPlan?.method_data?.feature_data?.win_change_method_after_lose_streak)
+      setWinReverseSignal(
+        selectedPlan?.method_data?.feature_data?.win_reverse_signal
+      );
+      setWinEndWinStreak(
+        selectedPlan?.method_data?.feature_data?.win_end_win_streak
+      );
+      setWinExactlyWinStreak(
+        selectedPlan?.method_data?.feature_data?.win_exactly_win_streak
+      );
+      setWinStreakEntryTarget(
+        selectedPlan?.method_data?.feature_data?.win_streak_entry_target
+      );
+      setWinTurnCount(selectedPlan?.method_data?.feature_data?.win_turn_count);
+      setWinChangeMethodAfterWinStreak(
+        selectedPlan?.method_data?.feature_data
+          ?.win_change_method_after_win_streak
+      );
+      setWinChangeMethodAfterLoseStreak(
+        selectedPlan?.method_data?.feature_data
+          ?.win_change_method_after_lose_streak
+      );
 
-      setLoseEnabled(selectedPlan?.method_data?.feature_data?.lose_enabled)
-      setLoseReverseSignal(selectedPlan?.method_data?.feature_data?.lose_reverse_signal)
-      setLoseEndLoseStreak(selectedPlan?.method_data?.feature_data?.lose_end_lose_streak)
-      setLoseExactlyLoseStreak(selectedPlan?.method_data?.feature_data?.lose_exactly_lose_streak)
-      setLoseStreakEntryTarget(selectedPlan?.method_data?.feature_data?.lose_streak_entry_target)
-      setLoseTurnCount(selectedPlan?.method_data?.feature_data?.lose_turn_count)
-      setLoseChangeMethodAfterLoseStreak(selectedPlan?.method_data?.feature_data?.lose_change_method_after_lose_streak)
-      setLoseChangeMethodAfterWinStreak(selectedPlan?.method_data?.feature_data?.lose_change_method_after_win_streak)
-      setTelegramToken(selectedPlan?.telegram_token)
-      setTelegramChatId(selectedPlan?.telegram_chatId)
-      setTelegramUrl(selectedPlan?.telegram_url)
-
-    }
-    else {
+      setLoseEnabled(selectedPlan?.method_data?.feature_data?.lose_enabled);
+      setLoseReverseSignal(
+        selectedPlan?.method_data?.feature_data?.lose_reverse_signal
+      );
+      setLoseEndLoseStreak(
+        selectedPlan?.method_data?.feature_data?.lose_end_lose_streak
+      );
+      setLoseExactlyLoseStreak(
+        selectedPlan?.method_data?.feature_data?.lose_exactly_lose_streak
+      );
+      setLoseStreakEntryTarget(
+        selectedPlan?.method_data?.feature_data?.lose_streak_entry_target
+      );
+      setLoseTurnCount(
+        selectedPlan?.method_data?.feature_data?.lose_turn_count
+      );
+      setLoseChangeMethodAfterLoseStreak(
+        selectedPlan?.method_data?.feature_data
+          ?.lose_change_method_after_lose_streak
+      );
+      setLoseChangeMethodAfterWinStreak(
+        selectedPlan?.method_data?.feature_data
+          ?.lose_change_method_after_win_streak
+      );
+      setTelegramToken(selectedPlan?.telegram_token);
+      setTelegramChatId(selectedPlan?.telegram_chatId);
+      setTelegramUrl(selectedPlan?.telegram_url);
+    } else {
       setIdPlan();
       setPlanName("");
       setInvestmentFund(100);
       setBetSecond(1);
       setAutoType(AutoTypes.BOT);
-      setSelectedTab("Bot AI")
+      setSelectedTab("Bot AI");
       setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
       setBudgetStrategy(dataBudgetStrategy?.[0]?._id);
       setBaseAmount(1);
@@ -454,35 +504,35 @@ const NewPlanDrawer = ({
       setShuffleMethodsOrder(false);
       setNoRepeatMethodsNextTurn(false);
       setWinEnabled(false);
-      setWinReverseSignal(false)
-      setWinEndWinStreak(false)
-      setWinExactlyWinStreak(false)
-      setWinStreakEntryTarget(0)
-      setWinTurnCount(0)
-      setWinChangeMethodAfterWinStreak(0)
-      setWinChangeMethodAfterLoseStreak(0)
+      setWinReverseSignal(false);
+      setWinEndWinStreak(false);
+      setWinExactlyWinStreak(false);
+      setWinStreakEntryTarget(0);
+      setWinTurnCount(0);
+      setWinChangeMethodAfterWinStreak(0);
+      setWinChangeMethodAfterLoseStreak(0);
 
-      setLoseEnabled(false)
-      setLoseReverseSignal(false)
-      setLoseEndLoseStreak(false)
-      setLoseExactlyLoseStreak(false)
-      setLoseStreakEntryTarget(0)
-      setLoseTurnCount(0)
-      setLoseChangeMethodAfterLoseStreak(0)
-      setLoseChangeMethodAfterWinStreak(0)
-      setTelegramChatId("")
-      setTelegramToken("")
-      setTelegramUrl("")
+      setLoseEnabled(false);
+      setLoseReverseSignal(false);
+      setLoseEndLoseStreak(false);
+      setLoseExactlyLoseStreak(false);
+      setLoseStreakEntryTarget(0);
+      setLoseTurnCount(0);
+      setLoseChangeMethodAfterLoseStreak(0);
+      setLoseChangeMethodAfterWinStreak(0);
+      setTelegramChatId("");
+      setTelegramToken("");
+      setTelegramUrl("");
       // e dang lam a co gi khong a xem ti
       // a oi ba cai sau thi chua co api ha a, lam 3 cai la stop start va remove thoi e oke a
     }
-  }, [isEdit, selectedPlan]);
+  }, [isEdit, selectedPlan, dataBudgetStrategy]);
 
   useEffect(() => {
     if (inView === false) {
       setIsEdit(false);
     }
-  }, [inView]);
+  }, [inView, setIsEdit]);
 
   return (
     <Drawer
@@ -542,8 +592,19 @@ const NewPlanDrawer = ({
                   value={planName}
                   onChange={(e) => setPlanName(e.target.value)}
                 />
-                <Box sx={{display: "flex", alignItems: "center", gap: 1, flexDirection: downLg ? "column" : "row"}}>
-                  <Box sx={{width: "100%"}} display="flex" alignItems="center">
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    flexDirection: downLg ? "column" : "row",
+                  }}
+                >
+                  <Box
+                    sx={{ width: "100%" }}
+                    display="flex"
+                    alignItems="center"
+                  >
                     <Typography variant="subtitle1">Investment fund</Typography>
                     <Box ml={2} display="flex" alignItems="center">
                       <Button
@@ -600,7 +661,12 @@ const NewPlanDrawer = ({
                       </Button>
                     </Box>
                   </Box>
-                  <Box sx={{width: "100%"}} display="flex" alignItems="center" mt={2}>
+                  <Box
+                    sx={{ width: "100%" }}
+                    display="flex"
+                    alignItems="center"
+                    mt={2}
+                  >
                     <Typography variant="subtitle1">
                       Thời gian vào lệnh
                     </Typography>
@@ -665,29 +731,37 @@ const NewPlanDrawer = ({
                     </Typography>
                   </Toolbar>
                 </AppBar>
-                { !isEdit && (
+                {!isEdit && (
                   <Box display="flex" mt={2}>
-                    {["Bot AI", "Follow Leader", "Telegram Signal"].map((tab) => (
-                      <Button
-                        key={tab}
-                        variant={selectedTab === tab ? "contained" : "outlined"}
-                        color={selectedTab === tab ? "primary" : "secondary"}
-                        style={{ marginRight: 8 }}
-                        onClick={() => {
-                          setSelectedTab(tab);
-                          setAutoType(tab=== "Follow Leader" ? 1 : 0)
-                          setArraySignalStrategy([]);
-                        }}
-                      >
-                        {tab}
-                      </Button>
-                    ))}
+                    {["Bot AI", "Follow Leader", "Telegram Signal"].map(
+                      (tab) => (
+                        <Button
+                          key={tab}
+                          variant={
+                            selectedTab === tab ? "contained" : "outlined"
+                          }
+                          color={selectedTab === tab ? "primary" : "secondary"}
+                          style={{ marginRight: 8 }}
+                          onClick={() => {
+                            setSelectedTab(tab);
+                            setAutoType(tab === "Follow Leader" ? 1 : 0);
+                            setArraySignalStrategy([]);
+                          }}
+                        >
+                          {tab}
+                        </Button>
+                      )
+                    )}
                   </Box>
                 )}
               </Box>
-              <Box className="aslawkalw" sx={{display: "flex", alignItems: "start", gap: 1}}>
-                {(selectedTab === "Bot AI" || selectedTab=== "Telegram Signal") && (
-                  <Box sx={{width: "100%"}} mt={2}>
+              <Box
+                className="aslawkalw"
+                sx={{ display: "flex", alignItems: "start", gap: 1 }}
+              >
+                {(selectedTab === "Bot AI" ||
+                  selectedTab === "Telegram Signal") && (
+                  <Box sx={{ width: "100%" }} mt={2}>
                     <Typography variant="subtitle1">
                       Tính năng sử dụng
                     </Typography>
@@ -698,24 +772,27 @@ const NewPlanDrawer = ({
                         size="medium"
                       >
                         {Object.entries(SignalFeatureTypes).map(
-                          ([item, key]) => 
-                            {
-                              if(selectedTab === "Bot AI" && SignalFeatureTypes[item]=== SignalFeatureTypes.WAIT_SIGNALS) {
-                                return <></>
-                              }
-                              else {
-                                return <MenuItem key={key} value={item}>
+                          ([item, key]) => {
+                            if (
+                              selectedTab === "Bot AI" &&
+                              SignalFeatureTypes[item] ===
+                                SignalFeatureTypes.WAIT_SIGNALS
+                            ) {
+                              return <></>;
+                            } else {
+                              return (
+                                <MenuItem key={key} value={item}>
                                   {SignalFeatureTypesTitle[item]}
                                 </MenuItem>
-                              }
+                              );
                             }
-                          
+                          }
                         )}
                       </Select>
                     </FormControl>
                   </Box>
                 )}
-                <Box sx={{width: "100%"}}  mt={2}>
+                <Box sx={{ width: "100%" }} mt={2}>
                   <Typography variant="subtitle1">Set base amount</Typography>
                   <Box mt={2} display="flex" alignItems="center" height={56}>
                     <Button
@@ -770,7 +847,7 @@ const NewPlanDrawer = ({
                 </Box>
               </Box>
               {/*  */}
-              {isChooseBot === true && selectedTab=== "Bot AI" && (
+              {isChooseBot === true && selectedTab === "Bot AI" && (
                 <>
                   {" "}
                   <Box mt={1}>
@@ -790,49 +867,42 @@ const NewPlanDrawer = ({
                       </Select>
                     </FormControl>
                   </Box>
-                  {
-                    autoType=== AutoTypes.TELEBOT && 
-                    <Box >
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={4}>
-                        <TextField
-                          fullWidth
-                          label="Telegram token"
-                          variant="outlined"
-                          value={telegramToken}
-                          onChange={(e) =>
-                            setTelegramToken(e.target.value)
-                          }
-                          margin="normal"
-                        />
+                  {autoType === AutoTypes.TELEBOT && (
+                    <Box>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sm={4}>
+                          <TextField
+                            fullWidth
+                            label="Telegram token"
+                            variant="outlined"
+                            value={telegramToken}
+                            onChange={(e) => setTelegramToken(e.target.value)}
+                            margin="normal"
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <TextField
+                            fullWidth
+                            label="Telegram chatid"
+                            variant="outlined"
+                            value={telegramChatId}
+                            onChange={(e) => setTelegramChatId(e.target.value)}
+                            margin="normal"
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <TextField
+                            fullWidth
+                            label="Telegram url"
+                            variant="outlined"
+                            value={telegramUrl}
+                            onChange={(e) => setTelegramUrl(e.target.value)}
+                            margin="normal"
+                          />
+                        </Grid>
                       </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <TextField
-                          fullWidth
-                          label="Telegram chatid"
-                          variant="outlined"
-                          value={telegramChatId}
-                          onChange={(e) =>
-                            setTelegramChatId(e.target.value)
-                          }
-                          margin="normal"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <TextField
-                          fullWidth
-                          label="Telegram url"
-                          variant="outlined"
-                          value={telegramUrl}
-                          onChange={(e) =>
-                            setTelegramUrl(e.target.value)
-                          }
-                          margin="normal"
-                        />
-                      </Grid>
-                    </Grid>
                     </Box>
-                  }
+                  )}
                 </>
               )}
               {/*  */}
@@ -841,7 +911,8 @@ const NewPlanDrawer = ({
                 sx={{ display: "flex", gap: 1, alignItems: "center" }}
                 // mt={1}
               >
-                {selectedTab === "Bot AI" && (
+                {(selectedTab === "Bot AI" ||
+                  selectedTab === "Telegram Signal") && (
                   <Box sx={{ width: "100%" }} fullWidth>
                     <Typography variant="subtitle1">
                       Budget strategy*
@@ -866,6 +937,7 @@ const NewPlanDrawer = ({
                   <Typography variant="subtitle1">
                     {selectedTab === "Bot AI" && "Signal*"}
                     {selectedTab === "Follow Leader" && "Leader username*"}
+                    {selectedTab === "Telegram Signal" && "Signal*"}
                   </Typography>
                   {selectedTab === "Bot AI" && (
                     <FormControl variant="outlined" fullWidth margin="normal">
@@ -936,268 +1008,335 @@ const NewPlanDrawer = ({
                         onChange={(value) => setArraySignalStrategy(value)}
                         placeholder="Nhấn enter để thêm"
                         sx={{ width: "100%" }}
+                        size={"medium"}
                       />
                     </Box>
                   )}
                   {/*  */}
+                  {selectedTab === "Telegram Signal" && (
+                    <Box sx={{ width: "100%" }} mt={2} mb={1}>
+                      {featureType === SignalFeatureTypes.SINGLE_METHOD ? (
+                        <Select
+                          fullWidth
+                          value={signalStrategy}
+                          onChange={(e) => setSignalStrategy(e.target.value)}
+                          size="medium"
+                        >
+                          {dataSignalStrategyTelegramSignal?.map((item, key) => (
+                            <MenuItem key={key} value={item?._id}>
+                              {item?.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) : (
+                        <Select
+                          fullWidth
+                          multiple
+                          value={arraySignalStrategy}
+                          onChange={(e) =>
+                            setArraySignalStrategy(e.target.value)
+                          }
+                          size="medium"
+                          renderValue={(selected) => (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 0.5,
+                              }}
+                            >
+                              {selected.map((value) => (
+                                <Chip
+                                  key={value}
+                                  label={
+                                    dataSignalStrategyTelegramSignal.find(
+                                      (item) => item._id === value
+                                    )?.name
+                                  }
+                                />
+                              ))}
+                            </Box>
+                          )}
+                        >
+                          {dataSignalStrategyTelegramSignal?.map(
+                            (item, key) => (
+                              <MenuItem key={key} value={item?._id}>
+                                <Checkbox
+                                  checked={
+                                    arraySignalStrategy.indexOf(item._id) > -1
+                                  }
+                                />
+                                <ListItemText primary={item.name} />
+                              </MenuItem>
+                            )
+                          )}
+                        </Select>
+                      )}
+                    </Box>
+                  )}
                 </Box>
               </Box>
               <Box mt={2}>
-                {featureType === SignalFeatureTypes.WAIT_SIGNALS && (
-                  <>
-                    <Box>
-                      <Paper elevation={3} style={{ padding: "16px" }}>
-                        <FormControl component="fieldset">
-                          <FormGroup>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={shuffleMethodsOrder}
-                                  onChange={(e) =>
-                                    setShuffleMethodsOrder(e.target.checked)
-                                  }
-                                />
-                              }
-                              label="Xáo trộn thứ tự phương pháp"
-                            />
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={noRepeatMethodsNextTurn}
-                                  onChange={(e) =>
-                                    setNoRepeatMethodsNextTurn(e.target.checked)
-                                  }
-                                />
-                              }
-                              label="Không lặp lại phương pháp ở lượt sau"
-                            />
-                          </FormGroup>
-
-                          <Tabs
-                            value={selectedTab1}
-                            onChange={handleTabChange}
-                            variant="fullWidth"
-                          >
-                            <Tab label="Win.S" />
-                            <Tab label="Lose.S" />
-                          </Tabs>
-
-                          <Box hidden={selectedTab1 !== 0}>
+                {featureType === SignalFeatureTypes.WAIT_SIGNALS &&
+                  selectedTab === "Telegram Signal" && (
+                    <>
+                      <Box>
+                        <Paper elevation={3} style={{ padding: "16px" }}>
+                          <FormControl component="fieldset">
                             <FormGroup>
                               <FormControlLabel
                                 control={
                                   <Checkbox
-                                    checked={winEnabled}
+                                    checked={shuffleMethodsOrder}
                                     onChange={(e) =>
-                                      setWinEnabled(e.target.checked)
+                                      setShuffleMethodsOrder(e.target.checked)
                                     }
                                   />
                                 }
-                                label="Kích hoạt Win Signal"
+                                label="Xáo trộn thứ tự phương pháp"
                               />
                               <FormControlLabel
                                 control={
                                   <Checkbox
-                                    checked={winReverseSignal}
+                                    checked={noRepeatMethodsNextTurn}
                                     onChange={(e) =>
-                                      setWinReverseSignal(e.target.checked)
-                                    }
-                                  />
-                                }
-                                label="Đảo lệnh"
-                              />
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={winEndWinStreak}
-                                    onChange={(e) =>
-                                      setWinEndWinStreak(e.target.checked)
-                                    }
-                                  />
-                                }
-                                label="Vào lệnh khi kết thúc chuỗi thắng"
-                              />
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={winExactlyWinStreak}
-                                    onChange={(e) =>
-                                      setWinExactlyWinStreak(e.target.checked)
-                                    }
-                                  />
-                                }
-                                label="Vào lệnh khi đạt chính xác lượt thắng LT"
-                              />
-
-                              <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    fullWidth
-                                    label="Vào lệnh khi lượt thắng LT đạt"
-                                    variant="outlined"
-                                    value={winStreakEntryTarget}
-                                    onChange={(e) =>
-                                      setWinStreakEntryTarget(e.target.value)
-                                    }
-                                    margin="normal"
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    fullWidth
-                                    label="Số lượt vào (1 Thắng = 1 Lượt)"
-                                    variant="outlined"
-                                    value={winTurnCount}
-                                    onChange={(e) =>
-                                      setWinTurnCount(e.target.value)
-                                    }
-                                    margin="normal"
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    fullWidth
-                                    label="Đổi phương pháp khi thua liên tiếp"
-                                    variant="outlined"
-                                    value={winChangeMethodAfterLoseStreak}
-                                    onChange={(e) =>
-                                      setWinChangeMethodAfterLoseStreak(
-                                        e.target.value
+                                      setNoRepeatMethodsNextTurn(
+                                        e.target.checked
                                       )
                                     }
-                                    margin="normal"
                                   />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    fullWidth
-                                    label="Đổi phương pháp khi thắng liên tiếp"
-                                    variant="outlined"
-                                    value={winChangeMethodAfterWinStreak}
-                                    onChange={(e) =>
-                                      setWinChangeMethodAfterWinStreak(
-                                        e.target.value
-                                      )
-                                    }
-                                    margin="normal"
-                                  />
-                                </Grid>
-                              </Grid>
+                                }
+                                label="Không lặp lại phương pháp ở lượt sau"
+                              />
                             </FormGroup>
-                          </Box>
 
-                          <Box hidden={selectedTab1 !== 1}>
-                            <FormGroup>
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={loseEnabled}
-                                    onChange={(e) =>
-                                      setLoseEnabled(e.target.checked)
-                                    }
-                                  />
-                                }
-                                label="Kích hoạt Lose Signal"
-                              />
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={loseReverseSignal}
-                                    onChange={(e) =>
-                                      setLoseReverseSignal(e.target.checked)
-                                    }
-                                  />
-                                }
-                                label="Đảo lệnh"
-                              />
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={loseEndLoseStreak}
-                                    onChange={(e) =>
-                                      setLoseEndLoseStreak(e.target.checked)
-                                    }
-                                  />
-                                }
-                                label="Vào lệnh khi kết thúc chuỗi thua"
-                              />
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={loseExactlyLoseStreak}
-                                    onChange={(e) =>
-                                      setLoseExactlyLoseStreak(e.target.checked)
-                                    }
-                                  />
-                                }
-                                label="Vào lệnh khi đạt chính xác lượt thua LT"
-                              />
+                            <Tabs
+                              value={selectedTab1}
+                              onChange={handleTabChange}
+                              variant="fullWidth"
+                            >
+                              <Tab label="Win.S" />
+                              <Tab label="Lose.S" />
+                            </Tabs>
 
-                              <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    fullWidth
-                                    label="Vào lệnh khi lượt thua LT đạt"
-                                    variant="outlined"
-                                    value={loseStreakEntryTarget}
-                                    onChange={(e) =>
-                                      setLoseStreakEntryTarget(e.target.value)
-                                    }
-                                    margin="normal"
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    fullWidth
-                                    label="Số lượt vào (1 Thắng = 1 Lượt)"
-                                    variant="outlined"
-                                    value={loseTurnCount}
-                                    onChange={(e) =>
-                                      setLoseTurnCount(e.target.value)
-                                    }
-                                    margin="normal"
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    fullWidth
-                                    label="Đổi phương pháp khi thua liên tiếp"
-                                    variant="outlined"
-                                    value={loseChangeMethodAfterLoseStreak}
-                                    onChange={(e) =>
-                                      setLoseChangeMethodAfterLoseStreak(
-                                        e.target.value
-                                      )
-                                    }
-                                    margin="normal"
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                  <TextField
-                                    fullWidth
-                                    label="Đổi phương pháp khi thắng liên tiếp"
-                                    variant="outlined"
-                                    value={loseChangeMethodAfterWinStreak}
-                                    onChange={(e) =>
-                                      setLoseChangeMethodAfterWinStreak(
-                                        e.target.value
-                                      )
-                                    }
-                                    margin="normal"
-                                  />
-                                </Grid>
-                              </Grid>
-                            </FormGroup>
-                          </Box>
+                            <Box hidden={selectedTab1 !== 0}>
+                              <FormGroup>
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={winEnabled}
+                                      onChange={(e) =>
+                                        setWinEnabled(e.target.checked)
+                                      }
+                                    />
+                                  }
+                                  label="Kích hoạt Win Signal"
+                                />
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={winReverseSignal}
+                                      onChange={(e) =>
+                                        setWinReverseSignal(e.target.checked)
+                                      }
+                                    />
+                                  }
+                                  label="Đảo lệnh"
+                                />
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={winEndWinStreak}
+                                      onChange={(e) =>
+                                        setWinEndWinStreak(e.target.checked)
+                                      }
+                                    />
+                                  }
+                                  label="Vào lệnh khi kết thúc chuỗi thắng"
+                                />
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={winExactlyWinStreak}
+                                      onChange={(e) =>
+                                        setWinExactlyWinStreak(e.target.checked)
+                                      }
+                                    />
+                                  }
+                                  label="Vào lệnh khi đạt chính xác lượt thắng LT"
+                                />
 
-                          <Box hidden={selectedTab1 !== 2}>
-                            {/* Nội dung của tab Victor.S */}
-                          </Box>
-                        </FormControl>
-                      </Paper>
-                    </Box>
-                  </>
-                )}
+                                <Grid container spacing={2}>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      fullWidth
+                                      label="Vào lệnh khi lượt thắng LT đạt"
+                                      variant="outlined"
+                                      value={winStreakEntryTarget}
+                                      onChange={(e) =>
+                                        setWinStreakEntryTarget(e.target.value)
+                                      }
+                                      margin="normal"
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      fullWidth
+                                      label="Số lượt vào (1 Thắng = 1 Lượt)"
+                                      variant="outlined"
+                                      value={winTurnCount}
+                                      onChange={(e) =>
+                                        setWinTurnCount(e.target.value)
+                                      }
+                                      margin="normal"
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      fullWidth
+                                      label="Đổi phương pháp khi thua liên tiếp"
+                                      variant="outlined"
+                                      value={winChangeMethodAfterLoseStreak}
+                                      onChange={(e) =>
+                                        setWinChangeMethodAfterLoseStreak(
+                                          e.target.value
+                                        )
+                                      }
+                                      margin="normal"
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      fullWidth
+                                      label="Đổi phương pháp khi thắng liên tiếp"
+                                      variant="outlined"
+                                      value={winChangeMethodAfterWinStreak}
+                                      onChange={(e) =>
+                                        setWinChangeMethodAfterWinStreak(
+                                          e.target.value
+                                        )
+                                      }
+                                      margin="normal"
+                                    />
+                                  </Grid>
+                                </Grid>
+                              </FormGroup>
+                            </Box>
+
+                            <Box hidden={selectedTab1 !== 1}>
+                              <FormGroup>
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={loseEnabled}
+                                      onChange={(e) =>
+                                        setLoseEnabled(e.target.checked)
+                                      }
+                                    />
+                                  }
+                                  label="Kích hoạt Lose Signal"
+                                />
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={loseReverseSignal}
+                                      onChange={(e) =>
+                                        setLoseReverseSignal(e.target.checked)
+                                      }
+                                    />
+                                  }
+                                  label="Đảo lệnh"
+                                />
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={loseEndLoseStreak}
+                                      onChange={(e) =>
+                                        setLoseEndLoseStreak(e.target.checked)
+                                      }
+                                    />
+                                  }
+                                  label="Vào lệnh khi kết thúc chuỗi thua"
+                                />
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={loseExactlyLoseStreak}
+                                      onChange={(e) =>
+                                        setLoseExactlyLoseStreak(
+                                          e.target.checked
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label="Vào lệnh khi đạt chính xác lượt thua LT"
+                                />
+
+                                <Grid container spacing={2}>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      fullWidth
+                                      label="Vào lệnh khi lượt thua LT đạt"
+                                      variant="outlined"
+                                      value={loseStreakEntryTarget}
+                                      onChange={(e) =>
+                                        setLoseStreakEntryTarget(e.target.value)
+                                      }
+                                      margin="normal"
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      fullWidth
+                                      label="Số lượt vào (1 Thắng = 1 Lượt)"
+                                      variant="outlined"
+                                      value={loseTurnCount}
+                                      onChange={(e) =>
+                                        setLoseTurnCount(e.target.value)
+                                      }
+                                      margin="normal"
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      fullWidth
+                                      label="Đổi phương pháp khi thua liên tiếp"
+                                      variant="outlined"
+                                      value={loseChangeMethodAfterLoseStreak}
+                                      onChange={(e) =>
+                                        setLoseChangeMethodAfterLoseStreak(
+                                          e.target.value
+                                        )
+                                      }
+                                      margin="normal"
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <TextField
+                                      fullWidth
+                                      label="Đổi phương pháp khi thắng liên tiếp"
+                                      variant="outlined"
+                                      value={loseChangeMethodAfterWinStreak}
+                                      onChange={(e) =>
+                                        setLoseChangeMethodAfterWinStreak(
+                                          e.target.value
+                                        )
+                                      }
+                                      margin="normal"
+                                    />
+                                  </Grid>
+                                </Grid>
+                              </FormGroup>
+                            </Box>
+
+                            <Box hidden={selectedTab1 !== 2}>
+                              {/* Nội dung của tab Victor.S */}
+                            </Box>
+                          </FormControl>
+                        </Paper>
+                      </Box>
+                    </>
+                  )}
                 {featureType === SignalFeatureTypes.AUTO_CHANGE_METHODS && (
                   <Box mt={2} component="form" noValidate autoComplete="off">
                     <Grid container spacing={2}>
@@ -1297,7 +1436,7 @@ const NewPlanDrawer = ({
                   />
                 </Box>
               )} */}
-          
+
               <Box mt={1}>
                 <Typography variant="h6">
                   Take-Profit/Stop-Loss Conditions
@@ -1311,7 +1450,7 @@ const NewPlanDrawer = ({
                   control={
                     <Switch
                       checked={takeProfit}
-                      onChange={() => setTakeProfit(!takeProfit)}
+                      onChange={(e) => setTakeProfit(e.target.checked)}
                     />
                   }
                   label="Enable TP/SL"
@@ -1472,7 +1611,11 @@ const NewPlanDrawer = ({
               bgcolor={theme.palette.background.paper}
               py={2}
             >
-              <Button variant="outlined" sx={{ padding: "10px" }} fullWidth={downLg ? true : false}>
+              <Button
+                variant="outlined"
+                sx={{ padding: "10px" }}
+                fullWidth={downLg ? true : false}
+              >
                 Test Plan (0/40)
               </Button>
               <Button

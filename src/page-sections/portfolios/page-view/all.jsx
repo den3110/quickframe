@@ -486,7 +486,7 @@ const PortfoliosList = () => {
                         "Mục tiêu ngày"}
                       {(dailyTarget?.stop_loss_target !== 0 ||
                         dailyTarget?.take_profit_target !== 0) && (
-                        <Box display={"flex"} alignItems={"center"} mr={.5}>
+                        <Box display={"flex"} alignItems={"center"} mr={0.5}>
                           <Typography
                             color="success.main"
                             fontSize={12}
@@ -548,7 +548,7 @@ const PortfoliosList = () => {
                     )}
                   </Button>
                 )}
-                {downLg && 
+                {downLg && (
                   <Button
                     variant="outlined"
                     sx={{
@@ -564,7 +564,7 @@ const PortfoliosList = () => {
                   >
                     {downLg ? "" : "Filter"}
                   </Button>
-                }
+                )}
                 <Button
                   variant="outlined"
                   sx={{
@@ -942,15 +942,27 @@ const PortfoliosList = () => {
                           </Fragment>
                         ))}
                   </TableBody>
-                  {loading === false && data?.length <= 0 && (
-                    <TableBody>
-                      <TableCell colSpan={5} rowSpan={5} sx={{ width: "100%" }}>
-                        <EmptyPage />
-                      </TableCell>
-                    </TableBody>
-                  )}
                 </Table>
               </TableContainer>
+              {loading === false && data?.length <= 0 && (
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <EmptyPage
+                    title={"Danh mục đầu tư đang trống"}
+                    subTitle={
+                      "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
+                    }
+                    titleButton={"Tạo chiến lược mới"}
+                    actionClick={handleOpenPlanDrawer}
+                  />
+                </Box>
+              )}
               {showPopup === true && (
                 <PopupControll
                   onClickStop={handlePausePlan}

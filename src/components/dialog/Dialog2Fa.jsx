@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
@@ -28,6 +29,7 @@ const CustomDialogContent = styled(DialogContent)(({ theme }) => ({
 }));
 
 const Dialog2Fa = (props) => {
+  const theme= useTheme()
   const navigate = useNavigate();
   const { open, setOpen, dataExchangeUrl, token } = props;
   const [otp, setOtp] = useState("");
@@ -104,7 +106,8 @@ const Dialog2Fa = (props) => {
                     flexBasis: 70,
                     borderRadius: 2,
                     fontWeight: 600,
-                    background: "rgb(238, 239, 242)",
+                    // background: "rgb(238, 239, 242)",
+                    background: theme.palette.background.cell,
                     input: {
                       textAlign: "center",
                     },

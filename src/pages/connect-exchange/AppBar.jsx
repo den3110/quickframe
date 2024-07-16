@@ -3,18 +3,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const AppBarSection = () => {
-  const handleLogout= (e)=> {
-    e.preventDefault()
-    localStorage.removeItem("accessToken")
-    localStorage.removeItem("refreshToken")
-    window.location.reload()
-  }
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    window.location.reload();
+  };
   return (
     <AppBar
       position="fixed"
       color="transparent"
       elevation={0}
-      style={{ backgroundColor: "#fff" }}
+      style={{ backgroundColor: "" }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -28,10 +28,12 @@ const AppBarSection = () => {
             Quickframe
           </Typography>
         </Box>
-        <Box>
-          <Link href="#" color="inherit" sx={{ marginRight: 2 }}>
-            English
-          </Link>
+        <Box display={"flex"} alignItems={"center"}>
+          <Box sx={{ marginRight: 2 }}>
+            <Link href="#" color="inherit">
+              English
+            </Link>
+          </Box>
           <Link onClick={handleLogout} href="#" color="inherit">
             Logout
           </Link>

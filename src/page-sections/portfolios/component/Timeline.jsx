@@ -4,7 +4,7 @@ import {
   Box,
   Typography,
   Card,
-  CardContent,
+  // CardContent,
   useMediaQuery,
   useTheme,
   styled,
@@ -21,17 +21,17 @@ import {
   TimelineContent,
   TimelineDot,
 } from "@mui/lab";
-import { green, yellow, red } from "@mui/material/colors";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+// import { green, yellow, red } from "@mui/material/colors";
+// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+// import CancelIcon from "@mui/icons-material/Cancel";
+// import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+// import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { PortfolioDetailContext } from "../page-view/detail";
 import moment from "moment";
 import formatCurrency from "util/formatCurrency";
 import { SocketContext } from "contexts/SocketContext";
 import { useParams } from "react-router-dom";
-import CountDownIcon from "icons/duotone/CountDown";
+// import CountDownIcon from "icons/duotone/CountDown";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SignalDisconnected from "icons/duotone/SignalDisconnected";
 import TrendingUp from "icons/duotone/TrendingUp";
@@ -43,6 +43,7 @@ import TaskAlt from "icons/duotone/TaskAlt";
 import Dangeous from "icons/duotone/Dangeous";
 import ContactSupport from "icons/duotone/ContactSupport";
 import InsufficientBetBalance from "icons/duotone/InsufficientBetBalance";
+import round2number from "util/round2number";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -438,7 +439,7 @@ const CustomTimeline = () => {
                           item?.betType === "DOWN") && (
                           <>
                             <Typography fontSize={12} fontWeight={600} mb={1}>
-                              ${item.betAmount?.toFixed(2)}
+                              ${round2number(item.betAmount)}
                             </Typography>
                             <Typography fontSize={12}>
                               Số tiền vào lệnh
