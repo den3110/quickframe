@@ -174,7 +174,7 @@ function ManageFollowerPage() {
                       right: 20,
                       background:
                         "url(https://quickinvest.ai/static/media/img-2.2bebcb16ef4c97ea99a9.png) 100% 100% no-repeat",
-                      zIndex: 9999,
+                      zIndex: 2,
                       overflow: "visible",
                       display: downLg ? "none" : "",
                     },

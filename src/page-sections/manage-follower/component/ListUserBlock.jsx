@@ -66,12 +66,33 @@ const ListUserBlock = ({ data, setData, dataProps, setChange }) => {
           <TableBody>
             {data?.map((item, key) => (
               <TableRow key={key} sx={{display: downLg ? "flex" : "", flexWrap: "wrap"}}>
-                <StyledTableCell sx={{width: downLg ? "50%" : ""}}>{item?.nickName}</StyledTableCell>
-                <StyledTableCell sx={{width: downLg ? "100%" : "", order: 2}}>
-                  {moment(item?.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+              <StyledTableCell
+                  sx={{
+                    width: downLg ? "100%" : "",
+                    display: downLg ? "flex" : "",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  {downLg && <Typography>Nick name</Typography>}
+                  <Typography>{item?.nickName}</Typography>
                 </StyledTableCell>
-                <StyledTableCell sx={{width: downLg ? "50%" : "", order: 1}}>
+                <StyledTableCell
+                  sx={{
+                    width: downLg ? "100%" : "",
+                    display: downLg ? "flex" : "",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  {downLg && <Typography>Thời gian tạo</Typography>}
+                  <Typography>
+                  {moment(item?.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                  </Typography>
+                </StyledTableCell>
+                <StyledTableCell sx={{width: downLg ? "100%" : "", order: 1}}>
                   <Button
+                  fullWidth={downLg ? true : false}
                     onClick={() => {
                       setSelected(item);
                       setBlockFollower(true);

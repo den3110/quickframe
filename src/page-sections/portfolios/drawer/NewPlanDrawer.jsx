@@ -367,7 +367,7 @@ const NewPlanDrawer = ({
           isEdit ? "Cập nhật bot thành công" : "Tạo bot thành công",
           "success"
         );
-        setIsEdit(false)
+        setIsEdit(false);
         onClose();
       } else {
         showToast(response?.data?.m);
@@ -908,7 +908,7 @@ const NewPlanDrawer = ({
               {/*  */}
               <Box
                 className="asklawa"
-                sx={{ display: "flex", gap: 1, alignItems: "center" }}
+                sx={{ display: "flex", gap: 1, alignItems: "start" }}
                 // mt={1}
               >
                 {(selectedTab === "Bot AI" ||
@@ -1022,11 +1022,13 @@ const NewPlanDrawer = ({
                           onChange={(e) => setSignalStrategy(e.target.value)}
                           size="medium"
                         >
-                          {dataSignalStrategyTelegramSignal?.map((item, key) => (
-                            <MenuItem key={key} value={item?._id}>
-                              {item?.name}
-                            </MenuItem>
-                          ))}
+                          {dataSignalStrategyTelegramSignal?.map(
+                            (item, key) => (
+                              <MenuItem key={key} value={item?._id}>
+                                {item?.name}
+                              </MenuItem>
+                            )
+                          )}
                         </Select>
                       ) : (
                         <Select
@@ -1047,11 +1049,25 @@ const NewPlanDrawer = ({
                             >
                               {selected.map((value) => (
                                 <Chip
+                                  sx={{height: 60}}
                                   key={value}
                                   label={
-                                    dataSignalStrategyTelegramSignal.find(
-                                      (item) => item._id === value
-                                    )?.name
+                                    <Box>
+                                      <Box>
+                                        {
+                                          dataSignalStrategyTelegramSignal.find(
+                                            (item) => item._id === value
+                                          )?.name
+                                        }
+                                      </Box>
+                                      <Box fontSize={12}>
+                                        {
+                                          dataSignalStrategyTelegramSignal.find(
+                                            (item) => item._id === value
+                                          )?.url
+                                        }
+                                      </Box>
+                                    </Box>
                                   }
                                 />
                               ))}

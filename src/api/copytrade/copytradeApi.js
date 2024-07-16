@@ -24,6 +24,10 @@ const copytradeApi = {
   postUserCopytradeUnblock(data) {
     const url= "/users/copy-trade/unblock"
     return axiosClient.delete(url, data)
+  },
+  getUserCopytradeFollowerPlan(data) {
+    const url= `/users/copy-trade/follower/plans`
+    return axiosClient.get(url, data)
   }
 
 };

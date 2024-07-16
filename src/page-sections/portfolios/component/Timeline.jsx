@@ -66,6 +66,7 @@ const CustomTimeline = () => {
     // loading,
     setData,
     setDataStat,
+    setChange
   } = useContext(PortfolioDetailContext);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
@@ -235,6 +236,9 @@ const CustomTimeline = () => {
             dataTemp = [data, ...dataTemp];
           }
         }
+        if(data?.result=== "ACTION_BOT" ) {
+          setChange(prev=> !prev)
+        }
         setData(dataTemp);
       });
 
@@ -283,11 +287,14 @@ const CustomTimeline = () => {
             dataTemp = [data, ...dataTemp];
           }
         }
+        if(data?.result=== "ACTION_BOT" ) {
+          setChange(prev=> !prev)
+        }
         
         setData(dataTemp);
       });
     }
-  }, [isConnected, dataProps, dataStatProps, id, socket, setData, setDataStat]);
+  }, [isConnected, dataProps, dataStatProps, id, socket, setData, setDataStat, setChange]);
 
   useEffect(() => {
     if (isConnected) {

@@ -47,6 +47,7 @@ const a11yProps = (index) => {
 export const PortfolioDetailContext = createContext();
 const PortfolioDetail = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const [change, setChange]= useState(false)
   const { isConnected, socket } = useContext(SocketContext);
   const [value, setValue] = React.useState(0);
   const { id } = useParams();
@@ -117,7 +118,7 @@ const PortfolioDetail = () => {
 
   useEffect(() => {
     fetchUserBotInfo();
-  }, [fetchUserBotInfo]);
+  }, [fetchUserBotInfo, change]);
 
   useEffect(() => {
     fetchGlobalLastResult();
@@ -142,6 +143,7 @@ const PortfolioDetail = () => {
           setDataStat,
           dataSignal,
           setDataSignal,
+          setChange
         }}
       >
         <Box padding={downLg ? 1 : 2}>

@@ -289,6 +289,7 @@ const CandleShadow = ({
       );
       setSelectedBall(1);
       setSelectedGridBall([]);
+      // setLongShort()
     }
   }, [is_edit]);
 
@@ -296,6 +297,7 @@ const CandleShadow = ({
     if (selectedCandle && is_new === false) {
       setSelectedBall(selectedCandle?.betIndex);
       setSelectedGridBall(selectedCandle?.conditions);
+      setLongShort(selectedCandle?.betType=== "UP" ? "UP" : "DOWN")
     }
   }, [selectedCandle, inView, is_new]);
 
@@ -364,7 +366,7 @@ const CandleShadow = ({
                 <MenuItem value="DOWN">Sell</MenuItem>
               </Select>
             </FormControl>
-            cho bóng số {selectedBall - 80}
+            Lợi nhuậnố {selectedBall - 80}
           </Typography>
           {/* <Box sx={{ display: "flex", flexWrap: "wrap", maxWidth: 300 }}>
             <Box

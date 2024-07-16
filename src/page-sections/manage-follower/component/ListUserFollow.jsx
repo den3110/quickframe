@@ -19,6 +19,8 @@ import {
 import React, { useState } from "react";
 import formatCurrency from "util/formatCurrency";
 import BlockFollowerDialog from "../dialog/BlockFollowerDialog";
+import FollowerPlanDialog from "../dialog/FollowerPlanDialog";
+import BlockIcon from '@mui/icons-material/Block';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "16px",
@@ -38,9 +40,11 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [selected, setSelected]= useState()
+  const [selected, setSelected] = useState();
   const [page, setPage] = useState(1);
-  const [blockFollower, setBlockFollower]= useState(false)
+  const [blockFollower, setBlockFollower] = useState(false);
+  const [openFollowerPlan, setOpenFollowerPlan] = useState(false);
+  // const [selected, setSelected]=
   //   const [data, set]
 
   const handleChangeRowsPerPage = (event) => {
@@ -52,36 +56,123 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
   };
 
   return (
-    <Box sx={{ padding: "16px" }}>
+    <Box sx={{ padding: downLg ? 0 : "16px" }}>
       <TableContainer component={Paper}>
         <Table>
-          {!downLg &&
+          {!downLg && (
             <TableHead>
               <TableRow>
                 <StyledTableCell>Biệt danh</StyledTableCell>
-                <StyledTableCell>Loại tài khoản</StyledTableCell>
+                {/* <StyledTableCell>Loại tài khoản</StyledTableCell> */}
                 <StyledTableCell>Trạng thái</StyledTableCell>
                 <StyledTableCell>Lợi nhuận ngày </StyledTableCell>
+                <StyledTableCell>VOL ngày</StyledTableCell>
                 <StyledTableCell>Action</StyledTableCell>
               </TableRow>
             </TableHead>
-          }
+          )}
           <TableBody>
             {data?.map((item, key) => (
-              <TableRow key={key} sx={{display: downLg ? "flex" : "", flexWrap: "wrap"}}>
-                <StyledTableCell sx={{width: downLg ? "50%" : ""}}>{item?.nickName}</StyledTableCell>
-                <StyledTableCell sx={{width: downLg ? "50%" : ""}}>{item?.accountType}</StyledTableCell>
-                <StyledTableCell sx={{width: downLg ? "calc(100% / 3)" : "", display: downLg ? "flex" : "", justifyContent: "center", alignItems: "center"}}>
-                  {item?.isRunning ? "Đang chạy" : "Đã dừng"}
+              <TableRow
+                onClick={() => {
+                  setSelected(item)
+                  setOpenFollowerPlan(true);
+                }}
+                key={key}
+                sx={{ display: downLg ? "flex" : "", flexWrap: "wrap" }}
+              >
+                <StyledTableCell
+                  sx={{
+                    width: downLg ? "100%" : "",
+                    display: downLg ? "flex" : "",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box>
+                    {downLg && <Typography>Nick name</Typography>}
+                    {downLg && <Typography fontSize={14} sx={{textDecoration: "underline", cursor: "pointer"}}>Gói: {item?.count || 0}</Typography>}
+                  </Box>
+                  <Box>
+                    <Typography>{item?.nickName}</Typography>
+                    {!downLg && <Typography fontSize={14} sx={{textDecoration: "underline", cursor: "pointer"}}>Gói: {item?.count || 0}</Typography>}
+                  </Box>
                 </StyledTableCell>
-                <StyledTableCell sx={{width: downLg ? "calc(100% / 3)" : "", display: downLg ? "flex" : "", justifyContent: "center", alignItems: "center"}}>
-                  <Typography fontWeight={600} fontSize={14} color={parseFloat(item?.day_profit) >= 0 ? "success.main": "error.main"}>{formatCurrency(item?.day_profit)}</Typography>
+                <StyledTableCell
+                  sx={{
+                    width: downLg ? "100%" : "",
+                    display: downLg ? "flex" : "",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  {downLg && <Typography>Trạng thái</Typography>}
+                  <Typography>
+                    {item?.isRunning ? "Đang chạy" : "Đã dừng"}
+                  </Typography>
                 </StyledTableCell>
-                <StyledTableCell sx={{width: downLg ? "calc(100% / 3)" : "", display: downLg ? "flex" : "", justifyContent: "center", alignItems: "center"}}>
-                  <Button onClick={()=> {
-                    setSelected(item)
-                    setBlockFollower(true)
-                  }} variant="contained" color="primary">
+                <StyledTableCell
+                  sx={{
+                    width: downLg ? "100%" : "",
+                    display: downLg ? "flex" : "",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  {downLg && <Typography>Lợi nhuận:</Typography>}
+                  <Typography
+                    fontWeight={600}
+                    fontSize={14}
+                    color={
+                      parseFloat(item?.day_profit) >= 0
+                        ? "success.main"
+                        : "error.main"
+                    }
+                  >
+                    {formatCurrency(item?.day_profit)}
+                  </Typography>
+                  
+                </StyledTableCell>
+                <StyledTableCell
+                  sx={{
+                    width: downLg ? "100%" : "",
+                    display: downLg ? "flex" : "",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  {downLg && <Typography>VOL:</Typography>}
+                  <Typography
+                    fontWeight={600}
+                    fontSize={14}
+                    color={
+                      parseFloat(item?.day_volume) >= 0
+                        ? "success.main"
+                        : "error.main"
+                    }
+                  >
+                    {formatCurrency(item?.day_volume)}
+                  </Typography>
+                </StyledTableCell>
+                <StyledTableCell
+                  sx={{
+                    width: downLg ? "100%" : "",
+                    display: downLg ? "flex" : "",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    startIcon={<BlockIcon />}
+                    fullWidth={downLg ? true : false}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelected(item);
+                      setBlockFollower(true);
+                    }}
+                    variant="contained"
+                    color="primary"
+                  >
                     Block
                   </Button>
                 </StyledTableCell>
@@ -113,7 +204,22 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
           shape="rounded"
         />
       </PaginationContainer>
-      <BlockFollowerDialog setChange={setChange} dataProps={dataProps} open={blockFollower} data={data} onClose={()=> setBlockFollower(false)} selectedProps={selected} setData={setData} />
+      <BlockFollowerDialog
+        setChange={setChange}
+        dataProps={dataProps}
+        open={blockFollower}
+        data={data}
+        onClose={() => setBlockFollower(false)}
+        selectedProps={selected}
+        setData={setData}
+      />
+      <FollowerPlanDialog
+        open={openFollowerPlan}
+        onClose={() => {
+          setOpenFollowerPlan(false);
+        }}
+        selected={selected}
+      />
     </Box>
   );
 };
