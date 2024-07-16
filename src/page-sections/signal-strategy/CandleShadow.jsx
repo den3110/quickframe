@@ -366,7 +366,7 @@ const CandleShadow = ({
                 <MenuItem value="DOWN">Sell</MenuItem>
               </Select>
             </FormControl>
-            Lợi nhuậnố {selectedBall - 80}
+            cho bóng số {selectedBall - 80}
           </Typography>
           {/* <Box sx={{ display: "flex", flexWrap: "wrap", maxWidth: 300 }}>
             <Box
