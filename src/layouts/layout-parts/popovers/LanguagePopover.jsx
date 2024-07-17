@@ -1,5 +1,5 @@
 import { Fragment, useRef, useState } from "react";
-import { Box, IconButton, MenuItem, Popover, styled } from "@mui/material";
+import { Box, IconButton, MenuItem, Popover, styled, Typography, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 // ==============================================================
@@ -22,6 +22,7 @@ const IconWrapper = styled(Box)({
 });
 const LanguagePopover = () => {
   const {t }= useTranslation()
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const {
@@ -38,10 +39,6 @@ const LanguagePopover = () => {
       icon: "/static/flags/usa-round.png",
       label: t("English")
     },
-    es: {
-      icon: "/static/flags/spain-round.png",
-      label: "Spanish"
-    },
     vi: {
       icon: "/static/flags/vn-round.png",
       label: t("Vietnamese")
@@ -52,6 +49,7 @@ const LanguagePopover = () => {
       <IconButton onClick={handleOpen} ref={anchorRef}>
         <IconWrapper>
           <img alt={selectedLanguage.label} src={selectedLanguage.icon} />
+          {downLg && <Typography fontSize={13} ml={1} whiteSpace={"nowrap"}>{selectedLanguage.label}</Typography>}
         </IconWrapper>
       </IconButton>
 

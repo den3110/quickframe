@@ -96,7 +96,7 @@ const WalletPopover = () => {
           </Badge>
         </IconButton>
         <Box>
-          <Typography>
+          <Typography fontSize={downLg ? 14  : 16}>
             $
             {mode === true
               ? spotBalance?.availableBalance?.toFixed(2)

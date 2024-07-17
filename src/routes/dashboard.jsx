@@ -22,6 +22,8 @@ import ManualTradePage from "page-sections/manual-trade";
 import ManageFollowerPage from "page-sections/manage-follower";
 import ManualFollowerProvider from "contexts/ManageFollowerContext";
 import ManageFollowerProvider from "contexts/ManageFollowerContext";
+import TopSignal from "pages/dashboard/signal-strategy/inbox";
+import TelegramChannelPage from "pages/dashboard/signal-strategy/sent";
 // ALL DASHBOARD PAGES
 const CRM = Loadable(lazy(() => import("pages/dashboard/crm")));
 const Finance = Loadable(lazy(() => import("pages/dashboard/finance")));
@@ -317,11 +319,15 @@ export const DashboardRoutes = [
           },
           {
             path: "top-signal",
-            element: <InboxPage />,
+            element: <TopSignal />,
           },
           {
             path: "telegram-channel",
-            element: <Sent />,
+            element: <TelegramChannelPage />,
+          },
+          {
+            path: ":id",
+            element: <PortfolioDetail />,
           },
         ],
       },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Drawer,
   Box,
@@ -17,8 +17,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
+import { JwtContext } from "contexts/jwtContext";
 
 const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot,  setChange }) => {
+  const {decodedData }= useContext(JwtContext)
   const theme= useTheme()
   const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
   const [idBotAI, setIdBotAI]= useState()
@@ -26,6 +28,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot, 
   const [strategy, setStrategy] = useState("STRING_METHOD");
   const [chainSignal, setChainSignal] = useState([]);
   const [allResults, setAllResults] = useState(false);
+  const [readOnly, setReadOnly]= useState(false)
   const isDisableButton = name?.length <= 0 || chainSignal?.length <= 0;
   const handleChangeChainSignal = (value) => {
     setChainSignal(value);
@@ -86,6 +89,19 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot, 
     }
   }, [is_edit, selectedBot])
 
+  useEffect(()=> {
+    if(is_edit=== true && selectedBot?.userId !== decodedData?.data?._id) {
+      setReadOnly(true)
+
+    }
+    else if(is_edit=== true && selectedBot?.userId === decodedData?.data?._id) {
+      setReadOnly(false)
+    }
+    else if(is_edit!== true) {
+      setReadOnly(false)
+    }
+  }, [is_edit,selectedBot,decodedData  ])
+
   return (
     <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={handleClose} sx={{zIndex: ""}}>
       <Box
@@ -117,6 +133,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot, 
 
           <Typography variant="subtitle1">1. Tên bot*</Typography>
           <TextField
+            inputProps={{ readOnly: readOnly }}
             placeholder="Nhập tên bot"
             fullWidth
             value={name}
@@ -125,6 +142,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot, 
 
           <Typography variant="subtitle1">2. Chiến lược*</Typography>
           <Select
+            disabled={readOnly}
             value={strategy}
             onChange={(e) => setStrategy(e.target.value)}
             fullWidth
@@ -137,13 +155,14 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot, 
             value={chainSignal}
             onChange={handleChangeChainSignal}
             placeholder="Nhấn enter để thêm"
+            disabled={readOnly}
           />
           <Typography variant="subtitle1">
             4. Sử dụng cả nến chờ và kết quả
           </Typography>
           <FormControlLabel
             control={
-              <Checkbox checked={allResults} onChange={handleChangeAllResult} />
+              <Checkbox disabled={readOnly} checked={allResults} onChange={handleChangeAllResult} />
             }
             label="All results"
           />
@@ -182,11 +201,11 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot, 
             Đóng
           </Button>
           <Button
-            variant="contained"
+            variant="contained"     
             color="primary"
             fullWidth
             sx={{ padding: "10px" }}
-            disabled={isDisableButton}
+            disabled={(isDisableButton!== true && readOnly!== true) ? false : true}
             onClick={handleSubmit}
           >
             {is_edit=== true ? "Lưu bot" : "Tạo bot"}

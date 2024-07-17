@@ -18,6 +18,7 @@ import ProfilePopover from "../layout-parts/popovers/ProfilePopover";
 import ServicePopover from "../layout-parts/popovers/ServicePopover";
 import LanguagePopover from "../layout-parts/popovers/LanguagePopover";
 import NotificationsPopover from "../layout-parts/popovers/NotificationsPopover";
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 // STYLED COMPONENTS
 import {
   DashboardHeaderRoot,
@@ -108,7 +109,7 @@ const DashboardHeader = () => {
                 );
               }}
             >
-              <ThemeIcon />
+              {settings.theme === "light" ? <DarkModeIcon /> : <ThemeIcon />}
             </IconButton>
             <LanguagePopover />
           </>

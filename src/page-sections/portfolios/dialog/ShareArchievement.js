@@ -64,7 +64,7 @@ const ShareArchievement = forwardRef(
         ctx.font = "18px Manrope";
         ctx.fillText(
           `Trong ${(
-            moment(selectedPlan?.lastStartTime ).diff(moment(selectedPlan?.updatedAt), "hours")
+            moment(selectedPlan?.updatedAt ).diff(moment(selectedPlan?.lastStartTime), "hours")
           )} giờ`,
           40,
           170
@@ -137,7 +137,7 @@ const ShareArchievement = forwardRef(
         ctx.font = "12px Manrope";
         ctx.fillText(
           `Trong ${(
-            moment(selectedPlan?.lastStartTime ).diff(moment(selectedPlan?.updatedAt), "hours")
+            moment(selectedPlan?.updatedAt ).diff(moment(selectedPlan?.lastStartTime), "hours") 
           )} giờ`,
           20,
           110

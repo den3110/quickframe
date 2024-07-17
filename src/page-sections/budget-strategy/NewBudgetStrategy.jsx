@@ -297,15 +297,18 @@ const NewBudgetStrategy = ({
   useEffect(() => {
     (() => {
       if (
-        is_edit === true &&
-        decodedData?.data?._id !== selectedStrategy?.userId
-      ) {
+        is_edit === true && decodedData?.data?._id !== selectedStrategy?.userId) {
         setDisableButton(true);
         setReadOnly(true);
         return;
-      } else {
+      } else if(is_edit=== true && decodedData?.data?._id=== selectedStrategy?.userId) {
         setDisableButton(false);
         setReadOnly(false);
+        return 
+      }
+      else {
+        setDisableButton(false)
+        setReadOnly(false)
       }
       handleDisable();
     })();
@@ -449,6 +452,7 @@ const NewBudgetStrategy = ({
                     Phương pháp vốn
                   </InputLabel>
                   <Select
+                    disabled={readOnly}
                     value={type}
                     onChange={(e) => handleSetType(e)}
                     size={"small"}
@@ -467,6 +471,7 @@ const NewBudgetStrategy = ({
                 <>
                   <ListItem>
                     <TextField
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrorInputAmount === true ? true : false}
                       helperText={
                         isErrorInputAmount === true
@@ -494,6 +499,7 @@ const NewBudgetStrategy = ({
                 <>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
@@ -510,6 +516,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
@@ -526,6 +533,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
@@ -550,6 +558,7 @@ const NewBudgetStrategy = ({
                   >
                     <ListItem>
                       <TextField
+                      inputProps={{ readOnly: readOnly }}
                         error={isErrormethod1 === true ? true : false}
                         helperText={
                           isErrormethod1 === true
@@ -601,6 +610,7 @@ const NewBudgetStrategy = ({
                     <ListItem sx={{ order: downLg ? 2 : 1 }}>
                       <FormControl fullWidth>
                         <InputLabel
+                        
                           sx={{
                             background: (theme) =>
                               isDark(theme) ? "#1f2937" : "white",
@@ -612,6 +622,7 @@ const NewBudgetStrategy = ({
                           value={increaseValueType}
                           onChange={(e) => setIncreaseValueType(e.target.value)}
                           size="small"
+                          disabled={readOnly}
                         >
                           {Object.entries(IncreaseValueType)
                             .slice(0, 2)
@@ -659,6 +670,7 @@ const NewBudgetStrategy = ({
                   <Box display={"flex"}>
                     <ListItem>
                       <TextField
+                      inputProps={{ readOnly: readOnly }}
                         error={isErrormethod1 === true ? true : false}
                         helperText={
                           isErrormethod1 === true
@@ -684,6 +696,7 @@ const NewBudgetStrategy = ({
                           Option
                         </InputLabel>
                         <Select
+                          disabled={readOnly}
                           value={increaseValueType}
                           onChange={(e) => setIncreaseValueType(e.target.value)}
                           size="small"
@@ -705,6 +718,7 @@ const NewBudgetStrategy = ({
                 <>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
@@ -721,6 +735,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
@@ -741,6 +756,7 @@ const NewBudgetStrategy = ({
                 <>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
@@ -757,6 +773,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
@@ -773,6 +790,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
@@ -793,6 +811,7 @@ const NewBudgetStrategy = ({
                 <>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
@@ -809,6 +828,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
@@ -825,6 +845,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
@@ -841,6 +862,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
+                    inputProps={{ readOnly: readOnly }}
                       error={isErrormethod4 === true ? true : false}
                       helperText={
                         isErrormethod4 === true
@@ -881,6 +903,7 @@ const NewBudgetStrategy = ({
                   <FormControlLabel
                     control={
                       <Switch
+                        disabled={readOnly}
                         checked={isDefaultStrategy}
                         onChange={(e) => setIsDefaultStrategy(e.target.checked)}
                         name="gilad"
@@ -1067,7 +1090,6 @@ const NewBudgetStrategy = ({
           >
             Đóng
           </Button>
-          {console.log(disableButton)}
           <Button
             sx={{ padding: "10px 16px" }}
             fullWidth

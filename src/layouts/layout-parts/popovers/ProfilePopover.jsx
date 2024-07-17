@@ -1,5 +1,15 @@
 import { Fragment, useContext, useRef, useState } from "react";
-import { Box, styled, Avatar, Divider, ButtonBase } from "@mui/material";
+import {
+  Box,
+  styled,
+  Avatar,
+  Divider,
+  ButtonBase,
+  useMediaQuery,
+  Typography,
+  Switch,
+  useTheme,
+} from "@mui/material";
 // CUSTOM COMPONENTS
 import PopoverLayout from "./PopoverLayout";
 import { FlexBox } from "components/flexbox";
@@ -12,6 +22,8 @@ import useNavigate from "hooks/useNavigate";
 import { isDark } from "utils/constants";
 import AuthContext from "contexts/AuthContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
+import { SettingsContext } from "contexts/settingsContext";
+import LanguagePopover from "./LanguagePopover";
 
 // STYLED COMPONENTS
 const StyledButtonBase = styled(ButtonBase)(({ theme }) => ({
@@ -32,17 +44,27 @@ const StyledSmall = styled(Paragraph)(({ theme }) => ({
   },
 }));
 const ProfilePopover = () => {
-  const {user}= useContext(AuthContext)
-  const {linked }= useContext(ConnectExchangeContext)
-  
+  const theme= useTheme()
+  const { user } = useContext(AuthContext);
+  const { linked } = useContext(ConnectExchangeContext);
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const anchorRef = useRef(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { settings, saveSettings } = useContext(SettingsContext);
   const [open, setOpen] = useState(false);
   const handleMenuItem = (path) => () => {
     navigate(path);
     setOpen(false);
   };
+
+  const handleChangeTheme = (value) => {
+    saveSettings({
+      ...settings,
+      theme: value,
+    });
+  };
+
   return (
     <Fragment>
       <StyledButtonBase ref={anchorRef} onClick={() => setOpen(true)}>
@@ -95,7 +117,25 @@ const ProfilePopover = () => {
           </StyledSmall>
           <StyledSmall onClick={handleMenuItem("/dashboard/profile")}>
             Manage Team
-          </StyledSmall>
+          </StyledSmall>  
+          {downLg &&
+            <StyledSmall onClick={()=> {}}>
+              <Box display="flex" alignItems="center">
+                <Typography fontSize={13}>Light</Typography>
+                <Switch checked={theme.palette.mode=== "dark" ? true : false} onChange={()=> {
+                  handleChangeTheme(
+                    settings.theme === "light" ? "dark" : "light"
+                  );
+                }} />
+                <Typography fontSize={13} >Dark</Typography>
+              </Box>
+            </StyledSmall>
+          }
+          {downLg && 
+            <StyledSmall onClick={()=> {}}> 
+              <LanguagePopover />
+            </StyledSmall>
+          }
           <Divider
             sx={{
               my: 1,

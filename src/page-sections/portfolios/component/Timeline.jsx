@@ -321,6 +321,15 @@ const CustomTimeline = () => {
     }
   }, [isConnected, socket]);
 
+  useEffect(()=> {
+    if(isConnected) {
+      socket.emit("PLAN_HISTORY_SUBCRIBE", id)
+      return ()=> {
+        socket.emit("PLAN_HISTORY_UNSUBCRIBE", id)
+      }
+    }
+  }, [isConnected, id, socket])
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>

@@ -7,15 +7,6 @@ import {
   FormControlLabel,
   Button,
   IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Menu,
   useMediaQuery,
   CardContent,
   Grid,
@@ -34,6 +25,7 @@ import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
 import DeleteIcon from "icons/DeleteIcon";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
+import { JwtContext } from "contexts/jwtContext";
 
 const shapeStyles = { width: 40, height: 40 };
 const shapeCircleStyles = { borderRadius: "50%" };
@@ -61,6 +53,7 @@ const NewBotAI = ({
     { type: "lose_streak", count: 1 },
   ]);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const {decodedData }= useContext(JwtContext)
   const theme= useTheme()
   const [idBotAI, setIdBotAI] = useState();
   const [name, setName] = useState("");
@@ -71,7 +64,7 @@ const NewBotAI = ({
   const [selectedBallProps, setSelectedBallProps] = useState();
   // const [conditions, setConditions] = useState([]);
   const [anchorEls, setAnchorEls] = useState([]);
-
+  const [readOnly, setReadOnly]= useState(false)
   const [isNew, setIsNew] = useState(false);
   const handleDeleteAllTargetCondition = () => {
     setTargetConditions([]);
@@ -230,6 +223,19 @@ const NewBotAI = ({
     }
   }, [initState, selectedBot]);
 
+  useEffect(()=> {
+    if(is_edit=== true && selectedBot?.userId !== decodedData?.data?._id) {
+      setReadOnly(true)
+
+    }
+    else if(is_edit=== true && selectedBot?.userId === decodedData?.data?._id) {
+      setReadOnly(false)
+    }
+    else if(is_edit!== true) {
+      setReadOnly(false)
+    }
+  }, [is_edit,selectedBot,decodedData ])
+
   return (
     <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose} sx={{zIndex: ""}}>
       <Box
@@ -266,6 +272,7 @@ const NewBotAI = ({
             <Typography variant="h6">Thiết lập mô hình nến của bạn</Typography>
           </Box>
           <TextField
+            inputProps={{ readOnly: readOnly }}
             fullWidth
             label="Tên bot"
             variant="outlined"
@@ -295,7 +302,7 @@ const NewBotAI = ({
                     }
                   }}
                   control={
-                    <Checkbox checked={goal.count <= 0 ? false : true} />
+                    <Checkbox disabled={readOnly} checked={goal.count <= 0 ? false : true} />
                   }
                   label={`Đạt mục tiêu bằng 5 sau khi ${
                     goal.type === "win_streak" ? "Chuỗi thắng" : "Chuỗi thua"
@@ -303,6 +310,7 @@ const NewBotAI = ({
                 />
                 <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
                   <IconButton
+                    disabled={readOnly}
                     onClick={() => handleDecrementGoal(index)}
                     sx={{
                       backgroundColor: (theme) =>
@@ -312,6 +320,8 @@ const NewBotAI = ({
                     <Remove />
                   </IconButton>
                   <TextField
+                    inputProps={{ readOnly: readOnly }}
+
                     type="number"
                     value={goal.count}
                     onChange={(e) =>
@@ -324,6 +334,7 @@ const NewBotAI = ({
                     sx={{ width: 50, mx: 1 }}
                   />
                   <IconButton
+                  disabled={readOnly}
                     onClick={() => handleIncrementGoal(index)}
                     sx={{
                       backgroundColor: (theme) =>
@@ -358,6 +369,7 @@ const NewBotAI = ({
                 <Grid container spacing={3} sx={{justifyContent: "center"}}>
                   <Grid item xs={2} md={2}>
                     <IconButton
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -385,6 +397,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
+                    disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -412,6 +425,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
+                    disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -439,6 +453,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
+                    disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -466,6 +481,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
+                    disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -537,6 +553,7 @@ const NewBotAI = ({
                   <Grid item xs={2} md={2}>
                     <IconButton
                       aria-label="cart"
+                      disabled={readOnly}
                       onClick={() => {
                         // addBubbleOption(1);
                         setSelectedBallProps(83);
@@ -563,6 +580,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
+                    disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -590,6 +608,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
+                    disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -617,6 +636,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
+                    disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -644,6 +664,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
+                    disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -720,6 +741,7 @@ const NewBotAI = ({
               action={
                 <Stack spacing={1} direction="row">
                   <Button
+                  disabled={readOnly}
                     startIcon={<DeleteIcon icon={"entypo:trash"} />}
                     onClick={handleDeleteAllTargetCondition}
                     size="small"
@@ -747,6 +769,7 @@ const NewBotAI = ({
                 return (
                   <Grid item xs={3} md={1} key={index}>
                     <IconButton
+                    disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         setSelectedCandle({ ...value, key: index });
@@ -841,7 +864,7 @@ const NewBotAI = ({
           </Button>
           <Button
             onClick={handleCreateBot}
-            disabled={isDisableButton}
+            disabled={(isDisableButton !== true && readOnly !== true) ? false : true}
             fullWidth
             variant="contained"
             color="primary"

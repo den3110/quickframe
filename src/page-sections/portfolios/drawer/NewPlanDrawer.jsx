@@ -53,6 +53,8 @@ const NewPlanDrawer = ({
   setData,
   dataProps,
   setIsEdit,
+  allowSelectedTab,
+  selectedSignal
 }) => {
   const { ref, inView } = useInView({
     /* Optional options */
@@ -67,7 +69,7 @@ const NewPlanDrawer = ({
   const [planName, setPlanName] = useState("");
   const [autoType, setAutoType] = useState(AutoTypes.BOT);
   const [investmentFund, setInvestmentFund] = useState(100);
-  const [betSecond, setBetSecond] = useState(1);
+  const [betSecond, setBetSecond] = useState(25);
   const [baseAmount, setBaseAmount] = useState(1);
   const [isBrokerMode, setIsBrokerMode] = useState(false);
   const [budgetStrategy, setBudgetStrategy] = useState("");
@@ -75,7 +77,7 @@ const NewPlanDrawer = ({
   const [arraySignalStrategy, setArraySignalStrategy] = useState([]);
   const [takeProfit, setTakeProfit] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Bot AI");
-  const [leaderUserName, setLeaderUserName] = useState([]);
+  // const [leaderUserName, setLeaderUserName] = useState([]);
   const [privateMode, setPrivateMode] = useState(false);
   const [reserveSignal, setReserveSignal] = useState(false);
 
@@ -84,6 +86,7 @@ const NewPlanDrawer = ({
   ); // signal feature
   const [expanded, setExpanded] = useState(true);
   const [dataBudgetStrategy, setDataBudgetStrategy] = useState([]);
+  const [dataBudgetStrategyDefault, setDataBudgetStrategyDefault] = useState([]);
   const [dataSignalStrategy, setDataSignalStrategy] = useState([]);
   const [
     dataSignalStrategyTelegramSignal,
@@ -106,7 +109,7 @@ const NewPlanDrawer = ({
   const [whenProfit, setWhenProfit] = useState(0);
   const [whenLosing, setWhenLosing] = useState(0);
   // const [selectedTab, setSelectedTab] = useState(0);
-  const isDisableButton = planName?.length <= 0;
+  const isDisableButton = planName?.length <= 0 ;
   const [selectedTab1, setSelectedTab1] = useState(0);
   const [shuffleMethodsOrder, setShuffleMethodsOrder] = useState(false);
   const [noRepeatMethodsNextTurn, setNoRepeatMethodsNextTurn] = useState(false);
@@ -353,7 +356,16 @@ const NewPlanDrawer = ({
         response = await portfolioApi.usersBotCreate(data);
       }
       if (response?.data?.ok === true) {
-        if (isEdit === true) {
+        if(allowSelectedTab) {
+          showToast(
+           "Tạo bot thành công",
+            "success"
+          );
+          setIsEdit(false);
+          onClose();
+          return 
+        }
+        else if (isEdit === true) {
           let dataTemp = dataProps;
           const indexData = dataTemp?.findIndex(
             (item) => item?._id === selectedPlan?._id
@@ -387,6 +399,7 @@ const NewPlanDrawer = ({
         if (response1?.data?.ok === true) {
           setBudgetStrategy(response1?.data?.d?.[0]?._id);
           setDataBudgetStrategy(response1?.data?.d);
+          setDataBudgetStrategyDefault(response1?.data?.d)
         }
         if (response2?.data?.ok === true) {
           setSignalStrategy(response2?.data?.d?.[0]?._id);
@@ -421,15 +434,23 @@ const NewPlanDrawer = ({
       setInvestmentFund(selectedPlan?.budget_amount);
       setBetSecond(selectedPlan?.bet_second);
       setAutoType(selectedPlan?.autoType);
-      setSelectedTab(selectedPlan?.autoType === 1 ? "Follow Leader" : "Bot AI");
+      setSelectedTab(selectedPlan?.autoType === 1 ? "Follow Leader" : (selectedPlan?.autoType=== 0 ? "Bot AI" : "Telegram Signal"));
       setFeatureType(selectedPlan?.signal_feature);
-      setBudgetStrategy(selectedPlan?.budgetStrategyId);
+      if(!allowSelectedTab) {
+        setBudgetStrategy(selectedPlan?.budgetStrategyId);
+      }  
       setBaseAmount(selectedPlan?.margin_dense);
       setTakeProfit(selectedPlan?.enabled_tpsl);
       setIsBrokerMode(selectedPlan?.isBrokerMode);
       setPrivateMode(selectedPlan?.isPrivate);
       setReserveSignal(selectedPlan?.is_reverse);
-      setArraySignalStrategy(selectedPlan?.method_data?.method_list);
+      if(allowSelectedTab) {
+        setArraySignalStrategy(selectedSignal)
+        setSignalStrategy(selectedSignal[0])
+      }
+      else {
+        setArraySignalStrategy(selectedPlan?.method_data?.method_list);
+      }
       setShuffleMethodsOrder(
         selectedPlan?.method_data?.feature_data?.shuffle_methods_order
       );
@@ -523,8 +544,7 @@ const NewPlanDrawer = ({
       setTelegramChatId("");
       setTelegramToken("");
       setTelegramUrl("");
-      // e dang lam a co gi khong a xem ti
-      // a oi ba cai sau thi chua co api ha a, lam 3 cai la stop start va remove thoi e oke a
+     
     }
   }, [isEdit, selectedPlan, dataBudgetStrategy]);
 
@@ -692,6 +712,7 @@ const NewPlanDrawer = ({
                           }}
                           inputProps={{
                             min: 0,
+                            max: 25,
                             style: {
                               padding: 5,
                             },
@@ -731,7 +752,7 @@ const NewPlanDrawer = ({
                     </Typography>
                   </Toolbar>
                 </AppBar>
-                {!isEdit && (
+                {(!isEdit || allowSelectedTab) && (
                   <Box display="flex" mt={2}>
                     {["Bot AI", "Follow Leader", "Telegram Signal"].map(
                       (tab) => (
@@ -744,7 +765,7 @@ const NewPlanDrawer = ({
                           style={{ marginRight: 8 }}
                           onClick={() => {
                             setSelectedTab(tab);
-                            setAutoType(tab === "Follow Leader" ? 1 : 0);
+                            setAutoType(tab === "Follow Leader" ? 1 : (tab=== "Bot AI" ? 0 : 2));
                             setArraySignalStrategy([]);
                           }}
                         >
@@ -768,7 +789,11 @@ const NewPlanDrawer = ({
                     <FormControl variant="outlined" fullWidth margin="normal">
                       <Select
                         value={featureType}
-                        onChange={(e) => setFeatureType(e.target.value)}
+                        onChange={(e) => {
+                          setFeatureType(e.target.value)
+                          setSignalStrategy("")
+                          setArraySignalStrategy([])
+                        }}
                         size="medium"
                       >
                         {Object.entries(SignalFeatureTypes).map(
@@ -1012,6 +1037,8 @@ const NewPlanDrawer = ({
                       />
                     </Box>
                   )}
+                  {/*  */}
+                  {console.log(arraySignalStrategy)}
                   {/*  */}
                   {selectedTab === "Telegram Signal" && (
                     <Box sx={{ width: "100%" }} mt={2} mb={1}>
@@ -1668,7 +1695,7 @@ const NewPlanDrawer = ({
                   <Box sx={{ width: "calc(100% / 3)" }}>
                     <Typography variant="body2">Allocated Budget</Typography>
                     <Typography variant="subtitle1">
-                      ${investmentFund.toFixed(2)}
+                      ${investmentFund?.toFixed(2)}
                     </Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
@@ -1688,7 +1715,7 @@ const NewPlanDrawer = ({
                       Take Profit/Stoploss
                     </Typography>
                     <Typography variant="subtitle1">
-                      ${investmentFund.toFixed(2)}
+                      ${investmentFund?.toFixed(2)}
                     </Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
