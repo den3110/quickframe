@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   Drawer,
   List,
@@ -12,6 +12,9 @@ import {
   Box,
   Typography,
   useMediaQuery,
+  FormGroup,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { isDark } from "utils/constants";
 import AddIcon from "@mui/icons-material/Add";
@@ -27,6 +30,7 @@ import {
 } from "type/IncreaseValueType";
 import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import { showToast } from "components/toast/toast";
+import { JwtContext } from "contexts/jwtContext";
 
 const NewBudgetStrategy = ({
   open,
@@ -34,9 +38,10 @@ const NewBudgetStrategy = ({
   is_edit,
   selectedStrategy,
   setData,
+  data: dataProps,
 }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-
+  const { decodedData } = useContext(JwtContext);
   const [idBudegetStrategy, setIdBudgetStrategy] = useState();
   const [strategyName, setStrategyName] = useState("");
   // const [method, setMethod] = useState("All orders");
@@ -49,10 +54,12 @@ const NewBudgetStrategy = ({
   const [method2, setMethod2] = useState("1-2-4-8-17-35");
   const [method3, setMethod3] = useState("2-3-4-5-6-1");
   const [method4, setMethod4] = useState("2-3-4-5-6-1");
+  const [readOnly, setReadOnly] = useState(false);
   const [count, setCount] = useState(0);
   const [count2, setCount2] = useState(0);
   const [seeMore, setSeeMore] = useState(false);
-
+  const [disableButton, setDisableButton] = useState();
+  const [isDefaultStrategy, setIsDefaultStrategy] = useState(false);
   const handleIncrement = () => {
     setCount(count + 1);
   };
@@ -95,6 +102,7 @@ const NewBudgetStrategy = ({
           method_data: methodData,
           increaseValueType,
           type,
+          is_default: isDefaultStrategy,
         };
         break;
       case BudgetStrategyType.CUSTOM_AUTOWIN:
@@ -104,6 +112,7 @@ const NewBudgetStrategy = ({
           method_data: methodData,
           increaseValueType,
           type,
+          is_default: isDefaultStrategy,
         };
         break;
       case BudgetStrategyType.FIBO_X_STEP:
@@ -113,6 +122,7 @@ const NewBudgetStrategy = ({
           method_data: methodData,
           // increaseValueType,
           type,
+          is_default: isDefaultStrategy,
         };
         break;
       case BudgetStrategyType.MARTINGALE:
@@ -122,6 +132,7 @@ const NewBudgetStrategy = ({
           method_data: methodData,
           increaseValueType,
           type,
+          is_default: isDefaultStrategy,
         };
         break;
       case BudgetStrategyType.VICTOR_2:
@@ -131,6 +142,7 @@ const NewBudgetStrategy = ({
           method_data: methodData,
           increaseValueType,
           type,
+          is_default: isDefaultStrategy,
         };
         break;
       case BudgetStrategyType.VICTOR_3:
@@ -140,6 +152,7 @@ const NewBudgetStrategy = ({
           method_data: methodData,
           increaseValueType,
           type,
+          is_default: isDefaultStrategy,
         };
         break;
       case BudgetStrategyType.VICTOR_4:
@@ -149,6 +162,7 @@ const NewBudgetStrategy = ({
           method_data: methodData,
           increaseValueType,
           type,
+          is_default: isDefaultStrategy,
         };
         break;
       default:
@@ -166,19 +180,28 @@ const NewBudgetStrategy = ({
       if (response?.data?.ok === true) {
         if (is_edit !== true) {
           setData(response?.data?.d);
+          showToast("Tạo chiến lược vốn thành công", "success");
+          setStrategyName("");
+          setAmount("1");
+          setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
+          setType(BudgetStrategyType.ALL_ORDERS);
+          setMethod1("1-1-2-6-4-3");
+          setMethod2("1-2-4-8-17-35");
+          setMethod3("2-3-4-5-6-1");
+          setMethod4("2-3-4-5-6-1");
+          setCount(0);
+          setCount2(0);
+          onClose();
+        } else if (is_edit === true) {
+          showToast("Cập nhật chiến vốn thành công", "success");
+          const dataTemp = dataProps;
+          const index = dataTemp?.findIndex(
+            (item) => item?._id === selectedStrategy?._id
+          );
+          dataTemp[index] = { ...selectedStrategy, ...data };
+          setData(dataTemp);
+          onClose();
         }
-        showToast("Tạo chiến lược vốn thành công", "success");
-        setStrategyName("");
-        setAmount("1");
-        setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
-        setType(BudgetStrategyType.ALL_ORDERS);
-        setMethod1("1-1-2-6-4-3");
-        setMethod2("1-2-4-8-17-35");
-        setMethod3("2-3-4-5-6-1");
-        setMethod4("2-3-4-5-6-1");
-        setCount(0);
-        setCount2(0);
-        onClose();
       } else if (response?.data?.ok === false) {
         showToast(response?.data?.m, "error");
       }
@@ -187,7 +210,7 @@ const NewBudgetStrategy = ({
     }
   };
 
-  const disableButton = () => {
+  const handleDisable = useCallback(() => {
     let disable;
     switch (type) {
       case BudgetStrategyType.ALL_ORDERS:
@@ -256,8 +279,37 @@ const NewBudgetStrategy = ({
         disable = false;
         break;
     }
-    return disable;
-  };
+    setDisableButton(disable);
+  }, [
+    amount,
+    isErrormethod1,
+    isErrormethod2,
+    isErrormethod3,
+    isErrormethod4,
+    method1?.length,
+    method2?.length,
+    method3?.length,
+    method4?.length,
+    strategyName?.length,
+    type,
+  ]);
+
+  useEffect(() => {
+    (() => {
+      if (
+        is_edit === true &&
+        decodedData?.data?._id !== selectedStrategy?.userId
+      ) {
+        setDisableButton(true);
+        setReadOnly(true);
+        return;
+      } else {
+        setDisableButton(false);
+        setReadOnly(false);
+      }
+      handleDisable();
+    })();
+  }, [is_edit, decodedData, selectedStrategy, handleDisable]);
 
   useEffect(() => {
     if (is_edit === true) {
@@ -271,6 +323,7 @@ const NewBudgetStrategy = ({
       setMethod4(selectedStrategy?.method_data?.[3]);
       setCount(selectedStrategy?.method_data?.[1]);
       setCount2(selectedStrategy?.method_data?.[2]);
+      setIsDefaultStrategy(selectedStrategy?.is_default);
       setIncreaseValueType(selectedStrategy?.increaseValueType);
     }
   }, [is_edit, selectedStrategy]);
@@ -285,6 +338,7 @@ const NewBudgetStrategy = ({
     setMethod4("2-3-4-5-6-1");
     setCount(0);
     setCount2(0);
+    setIsDefaultStrategy(false);
     setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
     setType(BudgetStrategyType.ALL_ORDERS);
   };
@@ -314,12 +368,12 @@ const NewBudgetStrategy = ({
         case BudgetStrategyType.VICTOR_2:
           setMethod1("1-1-2-6-4-3");
           setMethod2("1-2-4-8-17-35");
-          break
+          break;
         case BudgetStrategyType.VICTOR_3:
           setMethod1("1-1-2-6-4-3");
           setMethod2("1-2-4-8-17-35");
           setMethod3("2-3-4-5-6-1");
-          break
+          break;
         case BudgetStrategyType.VICTOR_4:
           setMethod1("1-1-2-6-4-3");
           setMethod2("1-2-4-8-17-35");
@@ -337,7 +391,7 @@ const NewBudgetStrategy = ({
       anchor={downLg ? "bottom" : "right"}
       open={open}
       onClose={handleClose}
-      sx={{zIndex: ""}}
+      sx={{ zIndex: "" }}
     >
       <Box
         className="mawkwr"
@@ -377,6 +431,7 @@ const NewBudgetStrategy = ({
             >
               <ListItem>
                 <TextField
+                  inputProps={{ readOnly: readOnly }}
                   label="Tên chiến lược"
                   fullWidth
                   value={strategyName}
@@ -820,6 +875,22 @@ const NewBudgetStrategy = ({
                 </Accordion>
               </Box>
             </ListItem> */}
+            {decodedData?.data?.levelStaff >= 3 && (
+              <Box sx={{ padding: "8px 16px" }}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isDefaultStrategy}
+                        onChange={(e) => setIsDefaultStrategy(e.target.checked)}
+                        name="gilad"
+                      />
+                    }
+                    label="Chiến lược mặc định"
+                  />
+                </FormGroup>
+              </Box>
+            )}
             {type !== BudgetStrategyType.ALL_ORDERS &&
               type !== BudgetStrategyType.FIBO_X_STEP && (
                 <ListItem>
@@ -996,13 +1067,14 @@ const NewBudgetStrategy = ({
           >
             Đóng
           </Button>
+          {console.log(disableButton)}
           <Button
             sx={{ padding: "10px 16px" }}
             fullWidth
             variant="contained"
             color="primary"
             onClick={handleSave}
-            disabled={disableButton()}
+            disabled={disableButton}
           >
             Lưu chiến lược
           </Button>

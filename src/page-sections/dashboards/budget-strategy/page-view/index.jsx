@@ -362,6 +362,7 @@ const BudgetStrategyPage = () => {
             setIsEditStrategy(false);
           }}
           selectedStrategy={selectedStrategy}
+          data={data}
         />
         <DeleteBudgetStrategy
           open={isDeleteStrategy}

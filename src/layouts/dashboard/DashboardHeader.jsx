@@ -54,7 +54,7 @@ const DashboardHeader = () => {
               component="img"
               src="/static/logo/logo-svg.svg"
               alt="logo"
-              width={30}
+              width={60}
             />
           </Link>
         )}

@@ -18,7 +18,7 @@ import { MuiChipsInput } from "mui-chips-input";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
 
-const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }) => {
+const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot,  setChange }) => {
   const theme= useTheme()
   const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
   const [idBotAI, setIdBotAI]= useState()
@@ -63,6 +63,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
         setChainSignal([])
         setAllResults(false)
         handleClose()
+        setChange(prev=> !prev)
       } else if (response?.data?.ok === false) {
         showToast(response?.data?.m, "error");
       }

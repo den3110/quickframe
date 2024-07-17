@@ -36,6 +36,8 @@ import DeleteSignalStrategy from "../DeleteSignalStrategy";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import sortData from "util/sortData";
 import RefreshProvider from "contexts/RefreshContext";
+import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
+import { SignalMethodUsingTypesTitle } from "type/SignalMethodUsing";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -64,7 +66,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const SignalStrategyList = () => {
-  const { data, setData, loading } = useContext(SignalStrategyContext);
+  const { data, setData, loading, setChange } = useContext(SignalStrategyContext);
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
@@ -263,7 +265,7 @@ const SignalStrategyList = () => {
                               }}
                             >
                               {/* {BudgetStrategyTypeTitle[row.type]} */}
-                              {row?.type}
+                              {SignalMethodUsingTypesTitle[row?.type]}
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{
@@ -390,6 +392,7 @@ const SignalStrategyList = () => {
           is_edit={isEditStringMethod}
           setIsEdit={setIsEditStringMethod}
           selectedBot={selectedBot}
+          setChange={setChange}
         />
         <DeleteSignalStrategy
           open={isDeleteBot}

@@ -6,7 +6,7 @@ export const JwtContext= createContext()
 
 const JwtProvider = ({children}) => {
   const [decodedData, setDecodedData] = useState(null);
-
+  
   useEffect(()=> {
     try {
       const accessToken= localStorage.getItem("accessToken")
