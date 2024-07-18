@@ -96,6 +96,7 @@ const TopSignalPageView = () => {
       (_, index) => checkedRows[index] === true
     );
     setSelectedSignal(selectedPlans?.map((item) => item._id));
+    setIsEdit(true);
     setOpenDrawer(true);
   };
 
@@ -487,10 +488,11 @@ const TopSignalPageView = () => {
           selectedPlan={{
             ...selected,
             autoType: 2,
-            signal_feature: SignalFeatureTypes.SINGLE_METHOD,
+            signal_feature: selectedSignal?.length > 1 ? SignalFeatureTypes.AUTO_CHANGE_METHODS : SignalFeatureTypes.SINGLE_METHOD,
             budget_amount: 100,
             name: "",
             bet_second: 25,
+            margin_dense: 100,
           }}
           dataProps={data}
           setIsEdit={setIsEdit}

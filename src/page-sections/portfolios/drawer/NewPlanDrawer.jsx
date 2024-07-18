@@ -138,7 +138,10 @@ const NewPlanDrawer = ({
     setSelectedTab1(newValue);
   };
 
-  const handleIncrement = (setFunc, value) => setFunc(value + 1);
+  const handleIncrement = (setFunc, value) => {
+    console.log(value)
+    setFunc(parseInt(value) + 1);
+  };
   const handleDecrement = (setFunc, value) =>
     setFunc(value > 0 ? value - 1 : 0);
 
@@ -411,7 +414,7 @@ const NewPlanDrawer = ({
         }
       } catch (error) {}
     })();
-  }, []);
+  }, [isEdit]);
 
   useEffect(() => {
     if (selectedTab === "Telegram Signal") {
@@ -546,7 +549,7 @@ const NewPlanDrawer = ({
       setTelegramUrl("");
      
     }
-  }, [isEdit, selectedPlan, dataBudgetStrategy]);
+  }, [isEdit, selectedPlan, dataBudgetStrategy,allowSelectedTab, selectedSignal]);
 
   useEffect(() => {
     if (inView === false) {
@@ -817,6 +820,7 @@ const NewPlanDrawer = ({
                     </FormControl>
                   </Box>
                 )}
+                { console.log(baseAmount)}
                 <Box sx={{ width: "100%" }} mt={2}>
                   <Typography variant="subtitle1">Set base amount</Typography>
                   <Box mt={2} display="flex" alignItems="center" height={56}>
@@ -1076,7 +1080,7 @@ const NewPlanDrawer = ({
                             >
                               {selected.map((value) => (
                                 <Chip
-                                  sx={{height: 60}}
+                                  sx={{height: allowSelectedTab ? "" : 50}}
                                   key={value}
                                   label={
                                     <Box>
@@ -1087,13 +1091,15 @@ const NewPlanDrawer = ({
                                           )?.name
                                         }
                                       </Box>
-                                      <Box fontSize={12}>
-                                        {
-                                          dataSignalStrategyTelegramSignal.find(
-                                            (item) => item._id === value
-                                          )?.url
-                                        }
-                                      </Box>
+                                      {!allowSelectedTab &&
+                                        <Box fontSize={12}>
+                                          {
+                                            dataSignalStrategyTelegramSignal.find(
+                                              (item) => item._id === value
+                                            )?.url
+                                          }
+                                        </Box>
+                                      }
                                     </Box>
                                   }
                                 />
