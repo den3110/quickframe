@@ -453,6 +453,7 @@ const NewPlanDrawer = ({
       }
       else {
         setArraySignalStrategy(selectedPlan?.method_data?.method_list);
+        setSignalStrategy(selectedPlan?.method_data?.method_list[0])
       }
       setShuffleMethodsOrder(
         selectedPlan?.method_data?.feature_data?.shuffle_methods_order
@@ -1043,6 +1044,8 @@ const NewPlanDrawer = ({
                   )}
                   {/*  */}
                   {console.log(arraySignalStrategy)}
+                  {console.log("signalStrategy", signalStrategy)}
+                  {console.log(dataSignalStrategyTelegramSignal)}
                   {/*  */}
                   {selectedTab === "Telegram Signal" && (
                     <Box sx={{ width: "100%" }} mt={2} mb={1}>
