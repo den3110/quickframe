@@ -19,31 +19,7 @@ moment.locale("ko", {
   },
 });
 
-const events = [
-  {
-    title: "Event 1",
-    start: new Date(2024, 6, 8, 9, 0), // Thêm thời gian cụ thể
-    end: new Date(2024, 6, 8, 10, 0),
-    desc: "Profit: $0.95, Volume: $1.00",
-    color: "#FF1654", // Màu sắc của sự kiện
-  },
-  {
-    title: "Event 2",
-    start: new Date(2024, 6, 8, 11, 0),
-    end: new Date(2024, 6, 8, 12, 0),
-    desc: "Profit: $44.25, Volume: $570.00",
-    color: "#00E396", // Màu sắc của sự kiện
-  },
 
-  {
-    title: "Event 4",
-    start: new Date(2024, 6, 9, 9, 0),
-    end: new Date(2024, 6, 9, 10, 0),
-    desc: "Event on the next day",
-    color: "#FFB800",
-  },
-  // Add more events as needed
-];
 
 const monthNames = [
   "tháng 1",
@@ -223,7 +199,7 @@ const CustomDaySlot = ({ children }) => (
   </div>
 );
 
-const CalendarComponent = () => {
+const CalendarComponent = ({data= []}) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [mode, setMode] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -232,6 +208,27 @@ const CalendarComponent = () => {
     setSelectedEvent(event);
   };
 
+  const events = data.flatMap((item, index) => {
+    // Tạo sự kiện cho profit
+    const profitEvent = {
+      title: `Event ${index + 1} - Profit`,
+      start: new Date(item.createdAt),
+      end: new Date(item.createdAt), 
+      desc: `Profit: $${Math.abs(item.profit).toFixed(2)}`,
+      color: item.profit >= 0 ? "#00E396" : "#FF1654" 
+    };
+  
+    // Tạo sự kiện cho volume
+    const volumeEvent = {
+      title: `Event ${index + 1} - Volume`, // Title theo mẫu Event 1, Event 2, ...
+      start: new Date(item.createdAt), // Lấy ngày từ createdAt
+      end: new Date(item.createdAt), // Lấy ngày từ createdAt
+      desc: `Volume: ${item.volume}`, // Tạo desc từ volume
+      color: "#8c62ff"  // Màu sắc dựa trên dấu của volume
+    };
+  
+    return [profitEvent, volumeEvent]; // Trả về mảng chứa cả profitEvent và volumeEvent
+  });
   const handleNavigate = (action) => {
     if (action === "PREV") {
       setCurrentDate(moment(currentDate).subtract(1, "month").toDate());

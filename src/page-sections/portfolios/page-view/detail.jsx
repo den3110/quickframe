@@ -17,6 +17,7 @@ import { SocketContext } from "contexts/SocketContext";
 import sessionApi from "api/session/sessionApi";
 import RefreshProvider from "contexts/RefreshContext";
 import { showToast } from "components/toast/toast";
+import StatPortfolio from "./stat";
 
 const TabPanel = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -150,7 +151,7 @@ const PortfolioDetail = () => {
           <MenuComponent dataStat={dataStat} setDataStat={setDataStat} />
           <Tabs value={value} onChange={handleChange} aria-label="tabs example">
             <Tab label="Quá trình đầu tư" {...a11yProps(0)} />
-            <Tab label="Thống kê" {...a11yProps(2)} />
+            <Tab label="Thống kê" {...a11yProps(1)} />
           </Tabs>
           <TabPanel value={value} index={0}>
             <Box sx={{ pt: 4 }}>
@@ -164,6 +165,11 @@ const PortfolioDetail = () => {
                 </Grid>
                 <Grid item xs={12}></Grid>
               </Grid>
+            </Box>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Box>
+             <StatPortfolio isSubPage={true} dataStat={dataStat} />
             </Box>
           </TabPanel>
         </Box>

@@ -42,7 +42,7 @@ const LoginPageView = () => {
       .required("Email is required"),
     password: Yup.string()
       .min(6, "Password should be of minimum 6 characters length")
-      .required("Password is required"),
+      .required("Password is required"),  
   });
 
   const { errors, values, touched, handleBlur, handleChange, handleSubmit } =

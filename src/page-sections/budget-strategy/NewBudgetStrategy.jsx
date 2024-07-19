@@ -432,7 +432,7 @@ const NewBudgetStrategy = ({
                 alignItems: "center",
               }}
             >
-              <ListItem>
+              <ListItem sx={{width: "100%"}}>
                 <TextField
                   inputProps={{ readOnly: readOnly }}
                   label="Tên chiến lược"
@@ -685,7 +685,7 @@ const NewBudgetStrategy = ({
                         onChange={(e) => setMethod1(e.target.value)}
                       />
                     </ListItem>
-                    <ListItem>
+                    <ListItem sx={{width: "100%", overflow: "hidden"}}>
                       <FormControl fullWidth>
                         <InputLabel
                           sx={{

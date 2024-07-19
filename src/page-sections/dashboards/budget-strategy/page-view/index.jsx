@@ -38,11 +38,14 @@ import DeleteBudgetStrategyIcon from "icons/budget-strategy/DeleteBudgetStrategy
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import sortData from "util/sortData";
 import RefreshProvider from "contexts/RefreshContext";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
-  width: useMediaQuery((theme) => theme.breakpoints.down("lg")) ? "50%" : "auto",
+  width: useMediaQuery((theme) => theme.breakpoints.down("lg"))
+    ? "50%"
+    : "auto",
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -78,6 +81,7 @@ const BudgetStrategyPage = () => {
   const [isEditStrategy, setIsEditStrategy] = useState(false);
   const [isDeleteStrategy, setIsDeleteStrategy] = useState(false);
   const [selectedStrategy, setSelectedStrategy] = useState();
+  const [onlyView, setOnlyView]= useState(false)
   const [change, setChange] = useState(false);
   const handleOpenDeleteStrategy = () => {
     setIsDeleteStrategy(true);
@@ -165,20 +169,25 @@ const BudgetStrategyPage = () => {
               <TextField
                 variant="outlined"
                 placeholder="Search Strategy..."
-                sx={{width: downLg ? "aaa" : 450}}
+                sx={{ width: downLg ? "100%" : 450 }}
                 InputProps={{
                   startAdornment: (
                     <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
                   ),
                 }}
               />
-              <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "block"}>
+              <Box
+                mt={downLg ? 2 : 0}
+                display={downLg ? "flex" : "block"}
+                sx={{ width: downLg ? "100%" : "aaa" }}
+              >
                 <Button
                   variant="outlined"
                   sx={{ mr: 2 }}
                   size={downLg ? "large" : "medium"}
                   fullWidth={downLg ? true : false}
                   onClick={handleDialogOpen}
+                  startIcon={<ContentCopyIcon />}
                 >
                   Copy
                 </Button>
@@ -263,7 +272,9 @@ const BudgetStrategyPage = () => {
                               borderBottom: downLg ? "none" : "",
                             }}
                           >
-                            {row?.is_default=== true ? "Chiến lược mặc định" : "Chiến lược tuỳ chỉnh"}
+                            {row?.is_default === true
+                              ? "Chiến lược mặc định"
+                              : "Chiến lược tuỳ chỉnh"}
                           </StyledTableCell>
                           <StyledTableCell
                             sx={{
@@ -290,31 +301,50 @@ const BudgetStrategyPage = () => {
                                 horizontal: "right",
                               }}
                             >
-                              <StyledMenuItem
-                                onClick={() => {
-                                  setSelectedStrategy(row);
-                                  setIsEditStrategy(true);
-                                  handleClose(index);
-                                  handleOpenNewBudgetStrategy();
-                                }}
-                              >
-                                <EditBudgetStrategy />
-                                Edit Strategy
-                              </StyledMenuItem>
-                              <StyledMenuItem>
-                                <ShareBudgetStrategy />
-                                Share Strategy
-                              </StyledMenuItem>
-                              <StyledMenuItem
-                                onClick={() => {
-                                  setSelectedStrategy(row);
-                                  handleOpenDeleteStrategy();
-                                  handleClose(index);
-                                }}
-                              >
-                                <DeleteBudgetStrategyIcon />
-                                Delete Strategy
-                              </StyledMenuItem>
+                              {row?.is_default === false && (
+                                <>
+                                  <StyledMenuItem
+                                    onClick={() => {
+                                      setSelectedStrategy(row);
+                                      setIsEditStrategy(true);
+                                      handleClose(index);
+                                      handleOpenNewBudgetStrategy();
+                                    }}
+                                  >
+                                    <EditBudgetStrategy />
+                                    Edit Strategy
+                                  </StyledMenuItem>
+                                  <StyledMenuItem>
+                                    <ShareBudgetStrategy />
+                                    Share Strategy
+                                  </StyledMenuItem>
+                                  <StyledMenuItem
+                                    onClick={() => {
+                                      setSelectedStrategy(row);
+                                      handleOpenDeleteStrategy();
+                                      handleClose(index);
+                                    }}
+                                  >
+                                    <DeleteBudgetStrategyIcon />
+                                    Delete Strategy
+                                  </StyledMenuItem>
+                                </>
+                              )}
+                              {
+                                row?.is_default=== true && <>
+                                  <StyledMenuItem
+                                    onClick={() => {
+                                      setSelectedStrategy(row);
+                                      setIsEditStrategy(true);
+                                      handleClose(index);
+                                      handleOpenNewBudgetStrategy();
+                                    }}
+                                  >
+                                    <EditBudgetStrategy />
+                                    View Strategy
+                                  </StyledMenuItem>
+                                </>
+                              }
                             </Menu>
                           </StyledTableCell>
                         </StyledTableRow>
@@ -331,7 +361,14 @@ const BudgetStrategyPage = () => {
                   alignItems: "center",
                 }}
               >
-                <EmptyPage title={"Danh mục vốn đang trống"} subTitle={"Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."} titleButton={"Tạo chiến lược mới"} actionClick={handleOpenNewBudgetStrategy} />
+                <EmptyPage
+                  title={"Danh mục vốn đang trống"}
+                  subTitle={
+                    "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
+                  }
+                  titleButton={"Tạo chiến lược mới"}
+                  actionClick={handleOpenNewBudgetStrategy}
+                />
               </Box>
             )}
             <PaginationContainer>
