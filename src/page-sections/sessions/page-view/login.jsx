@@ -30,8 +30,8 @@ const LoginPageView = () => {
   }, []);
 
   const initialValues = {
-    email: "example@gmail.com",
-    password: "Your password",
+    email: "", // Đã thay đổi từ "example@gmail.com" thành "" để trường email không có giá trị mặc định
+    password: "",
     remember: true,
   };
 

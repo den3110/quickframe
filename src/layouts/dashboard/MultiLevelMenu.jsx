@@ -17,6 +17,7 @@ import {
   ICON_STYLE,
   ExternalLink,
   NavItemButton,
+  InternalLink,
 } from "../layout-parts/styles/sidebar";
 import { Box, Divider, Badge, useMediaQuery } from "@mui/material";
 import { GlobalContext } from "contexts/GlobalContext";
@@ -26,7 +27,7 @@ import { GlobalContext } from "contexts/GlobalContext";
 // ===========================================================================
 
 const MultiLevelMenu = ({ sidebarCompact }) => {
-  const {botTotal }= useContext(GlobalContext)
+  const { botTotal } = useContext(GlobalContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { user } = useAuth();
   const { t } = useTranslation();
@@ -37,10 +38,10 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
   // HANDLE ACTIVE CURRENT PAGE
   const activeRoute = (path) => {
     // Check if the current pathname matches the path exactly or starts with the path followed by a '/'
-    if(path=== "/dashboard/" && window.location.pathname==="/dashboard") {
-      return 1
+    if (path === "/dashboard/" && window.location.pathname === "/dashboard") {
+      return 1;
     }
-    return pathname === path || pathname.startsWith(path + '/') ? 1 : 0;
+    return pathname === path || pathname.startsWith(path + "/") ? 1 : 0;
   };
 
   // HANDLE NAVIGATE TO ANOTHER PAGE
@@ -113,15 +114,64 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
           </ExternalLink>
         );
       }
+      if (item.type === "intLink") {
+        return (
+          <InternalLink
+            key={index}
+            href={item.path}
+            rel="noopener noreferrer"
+            target="_blank"
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <NavItemButton
+              key={index}
+              disabled={item.disabled}
+              active={activeRoute(item.path)}
+              onClick={() => handleNavigation(item.path)}
+              sx={{ justifyContent: "space-between" }}
+            >
+              <Box
+                className="asklaskaw"
+                sx={{ width: COMPACT === 1 ? "100%" : "aaa" }}
+              >
+                {item?.icon ? (
+                  <item.icon sx={ICON_STYLE(activeRoute(item.path))} />
+                ) : (
+                  <BulletIcon active={activeRoute(item.path)} />
+                )}
+
+                <ItemText compact={COMPACT} active={activeRoute(item.path)}>
+                  {t(item.name)}
+                </ItemText>
+              </Box>
+              {index === 2 && (
+                <Badge
+                  badgeContent={botTotal?.toString()}
+                  color="primary"
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                />
+              )}
+            </NavItemButton>
+          </InternalLink>
+        );
+      }
       return (
         <NavItemButton
           key={index}
           disabled={item.disabled}
           active={activeRoute(item.path)}
           onClick={() => handleNavigation(item.path)}
-          sx={{justifyContent: "space-between"}}
+          sx={{ justifyContent: "space-between" }}
         >
-          <Box className="asklaskaw" sx={{width: COMPACT=== 1 ? "100%" : "aaa"}}>
+          <Box
+            className="asklaskaw"
+            sx={{ width: COMPACT === 1 ? "100%" : "aaa" }}
+          >
             {item?.icon ? (
               <item.icon sx={ICON_STYLE(activeRoute(item.path))} />
             ) : (
@@ -132,7 +182,7 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
               {t(item.name)}
             </ItemText>
           </Box>
-          {index=== 2 && 
+          {index === 2 && (
             <Badge
               badgeContent={botTotal?.toString()}
               color="primary"
@@ -141,7 +191,7 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
                 horizontal: "right",
               }}
             />
-          }
+          )}
         </NavItemButton>
       );
     });

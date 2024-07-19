@@ -32,6 +32,10 @@ const portfolioApi = {
   userBotStatics(id, data) {
     const url= `/users/bot/statics/${id}`
     return axiosClient.get(url, data)
+  },
+  userExchangeLinkAccounStatics(data, params) {
+    const url= `/users/exchange/link-account/statics`
+    return axiosClient.post(url, data, params)
   }
 };  
 

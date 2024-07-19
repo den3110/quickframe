@@ -10,6 +10,7 @@ import {
   IconButton,
   TextField,
   InputAdornment,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
@@ -41,6 +42,7 @@ const DialogOtpForgotPassword = (props) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const theme= useTheme()
 
   const handleClose = () => {
     setOpen(false)
@@ -138,7 +140,7 @@ const DialogOtpForgotPassword = (props) => {
                   flexBasis: 70,
                   borderRadius: 2,
                   fontWeight: 600,
-                  background: "rgb(238, 239, 242)",
+                  background: theme.palette.background.t1,
                   input: {
                     textAlign: "center",
                   },

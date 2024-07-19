@@ -1,23 +1,36 @@
-import Card from "@mui/material/Card";
-// CUSTOM COMPONENTS
+import React, { useContext, useState } from "react";
+import {
+  Card,
+  Button,
+} from "@mui/material";
 import { MoreButton } from "components/more-button";
 import { H6, Paragraph } from "components/typography";
 import FlexBetween from "components/flexbox/FlexBetween";
-const Summery = () => {
-  return <Card sx={{
-    padding: 3
-  }}>
+import DialogOtpForgotPassword from "components/dialog/DialogOtpForgotPassword";
+import AuthContext from "contexts/AuthContext";
+
+const ChangePassword = () => {
+  const {user }= useContext(AuthContext)
+  const [openOtpDialog, setOpenOtpDialog] = useState(false);
+  const handleOpenOtpDialog = () => setOpenOtpDialog(true);
+
+
+  return (
+    <Card sx={{ padding: 3 }}>
       <FlexBetween>
-        <H6 fontSize={16}>Summary</H6>
-        <MoreButton size="small" />
+        <H6 fontSize={16}>Change Password</H6>
       </FlexBetween>
 
-      <Paragraph color="text.secondary" mt={2} fontWeight={400}>
-        The new iPad combines the power and capability of a computer with the ease of use and
-        versatility you’d never expect from one. <br /> <br /> And now it’s even more versatile,
-        with a larger 10.2‑inch Retina display, support he new iPad combines the power and
-        capability of a computer with the ease of use and versatility you’d never expect
+      <Paragraph color="text.secondary" mt={2} fontWeight={400} mb={2}>
+        Click the button below to initiate the password change process. You will need to verify your email and set a new password.
       </Paragraph>
-    </Card>;
+
+      <Button variant="contained" color="primary" onClick={handleOpenOtpDialog}>
+        Change Password
+      </Button>
+      <DialogOtpForgotPassword open={openOtpDialog} setOpen={setOpenOtpDialog} email={user?.email} />
+    </Card>
+  );
 };
-export default Summery;
+
+export default ChangePassword;

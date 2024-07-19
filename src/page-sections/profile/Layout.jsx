@@ -155,24 +155,6 @@ const Layout = ({ children, handleTabList }) => {
               <ListItem title="Joined March 17" Icon={DateRange} />
             </StyledFlexBetween>
           </Box>
-
-          <StyledFlexBetween paddingTop={4} maxWidth={400}>
-            <BoxItem
-              amount={`$${format(4550, "0,00")}`}
-              title="Earnings"
-              color="primary.main"
-            />
-            <BoxItem
-              amount={format(60, "0,00")}
-              title="Projects"
-              color="success.600"
-            />
-            <BoxItem
-              amount={`$${format(2800, "0,00")}`}
-              title="Success Rate"
-              color="warning.600"
-            />
-          </StyledFlexBetween>
         </ContentWrapper>
 
         <StyledTabList variant="scrollable" onChange={handleTabList}>

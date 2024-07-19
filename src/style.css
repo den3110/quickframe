@@ -1,8 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
+* {
+    font-family: "Manrope", "Roboto", sans-serif;
+}
+
 :root {
     --swiper-navigation-size: 24px !important;
 }
 .custom-calendar .rbc-month-row {
     min-height: 139px;
+}
+
+@media screen and (max-width: 974px) {
+    .custom-calendar .rbc-month-row {
+        min-height: 100px;
+    }
+    .custom-calendar .rbc-button-link {
+        font-size: 10px;
+    }
+    .rbc-event {
+        padding: 2px !important;
+    }
 }

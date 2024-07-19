@@ -25,7 +25,8 @@ export const resources = {
       "English": "English",
       "Vietnamese": "Vietnamese",
       "Trade History & Profit": "Trade History & Profit",
-      "Session": "Session"
+      "Session": "Session",
+      "Monday": "Monday"
     }
   },
   vi: {
@@ -54,7 +55,8 @@ export const resources = {
       "English": "Tiếng Anh",
       "Vietnamese": "Tiếng Việt",
       "Trade History & Profit": "Lịch Sử KLGD & Lợi Nhuận",
-      "Session": "Phiên"
+      "Session": "Phiên",
+      "Monday": "Thứ 2"
     }
   }
 };

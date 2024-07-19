@@ -546,7 +546,7 @@ const TopSignalPageView = () => {
           allowSelectedTab={true}
           selectedPlan={{
             ...selected,
-            autoType: 2,
+            autoType: 3,
             signal_feature:
               selectedSignal?.length > 1
                 ? SignalFeatureTypes.AUTO_CHANGE_METHODS

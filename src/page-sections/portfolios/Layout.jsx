@@ -49,7 +49,7 @@ const Layout = ({ children }) => {
           }}
           sx={{ textDecoration: "none", color: "inherit" }}
         >
-          <Typography
+          <Typography 
             variant="h6"
             fontWeight={"600"}
             sx={{ "&:hover": { color: theme.palette.primary },  "&:active": { color: theme.palette.primary } }}
