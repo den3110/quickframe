@@ -10,7 +10,7 @@ import UserDetails from "../UserDetails";
 // CUSTOM DEFINED HOOK
 import useMuiTable, { getComparator, stableSort } from "hooks/useMuiTable";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 // CUSTOM DUMMY DATA
 import { USER_LIST } from "__fakeData__/users";
 

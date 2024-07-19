@@ -4,7 +4,7 @@ import { H6 } from "components/typography";
 import { FlexBetween } from "components/flexbox";
 import { MoreButton } from "components/more-button";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // STYLED COMPONENTS
 const ButtonOne = styled(ButtonBase)(({

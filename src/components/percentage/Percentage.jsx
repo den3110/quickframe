@@ -2,7 +2,7 @@ import { styled } from "@mui/material";
 // CUSTOM COMPONENT
 import { Span } from "../typography";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 // STYLED COMPONENT
 const StyledSpan = styled(Span)(({
   theme,

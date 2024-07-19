@@ -4,7 +4,7 @@ import GppGoodOutlined from "@mui/icons-material/GppGoodOutlined";
 import { H6, Paragraph } from "components/typography";
 import { FlexBetween } from "components/flexbox";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 const Summery = () => {
   return <Card sx={{
     padding: 4,

@@ -9,7 +9,7 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import { SettingsContext } from "contexts/settingsContext";
 import { ManualTradeContext } from "contexts/ManualTradeContext";
 import round2number from "util/round2number";

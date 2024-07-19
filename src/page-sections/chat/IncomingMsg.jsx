@@ -3,7 +3,7 @@ import { Avatar, Box, useTheme } from "@mui/material";
 import FlexBox from "components/flexbox/FlexBox";
 import { Paragraph, Span } from "components/typography";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 const IncomingMsg = () => {
   const theme = useTheme();
   return <Box maxWidth={{

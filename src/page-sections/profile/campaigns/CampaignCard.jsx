@@ -5,7 +5,7 @@ import { FlexBetween, FlexBox, FlexRowAlign } from "components/flexbox";
 // CUSTOM ICON COMPONENT
 import MoreHorizontal from "icons/MoreHorizontal";
 // CUSTOM UTILS METHOD
-import { numberFormat } from "utils/numberFormat";
+import { numberFormat } from "util/numberFormat";
 
 // ====================================================================
 

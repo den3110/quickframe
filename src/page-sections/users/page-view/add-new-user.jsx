@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import { Paragraph, Small } from "components/typography";
 import { FlexBetween, FlexRowAlign } from "components/flexbox";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // STYLED COMPONENTS
 const SwitchWrapper = styled(FlexBetween)({

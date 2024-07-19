@@ -19,7 +19,7 @@ import { H6, Paragraph, Small } from "components/typography";
 import useAuth from "hooks/useAuth";
 import useNavigate from "hooks/useNavigate";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import AuthContext from "contexts/AuthContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 import { SettingsContext } from "contexts/settingsContext";

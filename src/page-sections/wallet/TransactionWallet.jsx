@@ -15,7 +15,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import userApi from "api/user/userApi";
 import NoTransactionIcon from "icons/wallet/NoTransaction";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import { showToast } from "components/toast/toast";
 
 const useStyles = makeStyles(() => ({

@@ -4,7 +4,7 @@ import { Percentage } from "components/percentage";
 import { H6, Paragraph } from "components/typography";
 import { FlexBetween, FlexBox } from "components/flexbox";
 // CUSTOM UTILS METHOD
-import { numberFormat } from "utils/numberFormat";
+import { numberFormat } from "util/numberFormat";
 const Order = () => {
   return <Card sx={{
     padding: 3,

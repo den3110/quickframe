@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Fade, IconButton, Menu, MenuItem, styled } from "@mui/material";
 import MoreVert from "@mui/icons-material/MoreVert";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // STYLED COMPONENT
 const StyledIconButton = styled(IconButton)(({

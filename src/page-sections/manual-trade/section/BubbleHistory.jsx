@@ -17,7 +17,7 @@ import React, {
 } from "react";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 const colors = [
   (theme) => (isDark(theme) ? "#565d67" : "#d9d9d9"),

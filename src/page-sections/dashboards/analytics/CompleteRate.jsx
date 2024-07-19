@@ -4,7 +4,7 @@ import Chart from "react-apexcharts";
 // CUSTOM COMPONENT
 import { Title } from "components/title";
 // CUSTOM UTILS METHODS
-import { baseChartOptions } from "utils/baseChartOptions";
+import { baseChartOptions } from "util/baseChartOptions";
 const CompleteRate = () => {
   const theme = useTheme();
 

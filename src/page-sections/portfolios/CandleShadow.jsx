@@ -15,7 +15,7 @@ import { Close } from "@mui/icons-material";
 import { random } from "lodash";
 import { useInView } from "react-intersection-observer";
 // import { v4 } from "uuid";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 

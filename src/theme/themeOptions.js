@@ -1,4 +1,4 @@
-import { THEMES } from "utils/constants";
+import { THEMES } from "util/constants";
 import { darkPalette, lightPalette } from "./colors";
 const themesOptions = {
   [THEMES.LIGHT]: {

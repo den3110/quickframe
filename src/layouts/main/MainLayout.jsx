@@ -3,7 +3,7 @@ import { Box, Container, useTheme } from "@mui/material";
 import Footer from "./Footer";
 import Header from "./Header";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 const MainLayout = ({
   children
 }) => {

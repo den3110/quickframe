@@ -25,7 +25,7 @@ import CheckBoxIcon from "icons/CheckBoxIcon";
 import BlankCheckBoxIcon from "icons/BlankCheckBoxIcon";
 import CheckboxIndeterminateIcon from "icons/CheckboxIndeterminateIcon";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 const componentsOverride = theme => {
   const {
     primary,

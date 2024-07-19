@@ -15,7 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { SettingsContext } from "contexts/settingsContext";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 const DailyGoalDialog = ({ open, handleClose, dailyTarget, setDailyTarget }) => {
   const { walletMode } = useContext(SettingsContext);

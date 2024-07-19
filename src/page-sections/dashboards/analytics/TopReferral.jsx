@@ -10,8 +10,8 @@ import { MoreButton } from "components/more-button";
 import { FlexBetween, FlexBox } from "components/flexbox";
 import { Paragraph, Small } from "components/typography";
 // CUSTOM UTILS METHODS
-import { numberFormat } from "utils/numberFormat";
-import { baseChartOptions } from "utils/baseChartOptions";
+import { numberFormat } from "util/numberFormat";
+import { baseChartOptions } from "util/baseChartOptions";
 // COMMON STYLED COMPONENTS
 import { HeadTableCell } from "./styles";
 

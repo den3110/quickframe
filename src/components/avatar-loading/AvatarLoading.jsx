@@ -1,5 +1,5 @@
 import { Avatar, useTheme } from "@mui/material";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // ==============================================================
 

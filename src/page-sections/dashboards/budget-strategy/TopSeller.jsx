@@ -5,8 +5,8 @@ import { MoreButton } from "components/more-button";
 import { Paragraph, Small } from "components/typography";
 import { FlexBetween, FlexBox } from "components/flexbox";
 // CUSTOM UTILS METHODS
-import { format } from "utils/currency";
-import { numberFormat } from "utils/numberFormat";
+import { format } from "util/currency";
+import { numberFormat } from "util/numberFormat";
 
 // CUSTOM DUMMY DATA
 const DATA = [{

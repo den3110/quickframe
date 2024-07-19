@@ -4,7 +4,7 @@ import { Button, Card, CardMedia, Grid, styled, Box, IconButton, CardContent, Ch
 import { FlexBox, FlexBetween } from "components/flexbox";
 import { H6, Small } from "components/typography";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 const StyledIconButton = styled(IconButton)(({
   theme
 }) => ({

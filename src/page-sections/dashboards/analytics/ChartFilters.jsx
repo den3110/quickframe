@@ -9,9 +9,9 @@ import { FlexBetween } from "components/flexbox";
 import { Paragraph } from "components/typography";
 import { MoreButton } from "components/more-button";
 // CUSTOM UTILS METHODS
-import { format } from "utils/currency";
-import { numberFormat } from "utils/numberFormat";
-import { baseChartOptions } from "utils/baseChartOptions";
+import { format } from "util/currency";
+import { numberFormat } from "util/numberFormat";
+import { baseChartOptions } from "util/baseChartOptions";
 
 // STYLED COMPONENTS
 const ChartWrapper = styled(Box)({

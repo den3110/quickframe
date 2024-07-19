@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { THEMES } from "utils/constants";
+import { THEMES } from "util/constants";
 import useLocalStorage from "hooks/useLocalStorage";
 const initialSettings = {
   direction: "ltr",

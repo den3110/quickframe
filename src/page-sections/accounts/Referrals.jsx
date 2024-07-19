@@ -14,7 +14,7 @@ import CheckMarkCircleOutlined from "icons/CheckMarkCircleOutlined";
 // COMMON STYLED COMPONENTS
 import { BodyTableCellV2, BodyTableRow, HeadTableCell } from "./common/styles";
 // CUSTOM UTILS METHOD
-import { format } from "utils/currency";
+import { format } from "util/currency";
 
 // STYLED COMPONENT
 const EarningBox = styled(Box)(({

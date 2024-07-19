@@ -16,7 +16,7 @@ import {
   FormControlLabel,
   Switch,
 } from "@mui/material";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseIcon from "@mui/icons-material/Close";

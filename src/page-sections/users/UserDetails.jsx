@@ -23,7 +23,7 @@ import Whatsapp from "icons/Whatsapp";
 import Messenger from "icons/Messenger";
 import MoreHorizontal from "icons/MoreHorizontal";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // ==============================================================
 

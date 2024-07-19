@@ -1,7 +1,7 @@
 import { Box, Button, Divider, useMediaQuery } from "@mui/material";
 import React from "react";
 import AddIcon from "@mui/icons-material/Add"
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 const PopupControllSignalStategy = ({ onClickNewPlan }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));

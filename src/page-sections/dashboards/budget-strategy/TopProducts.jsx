@@ -7,7 +7,7 @@ import { MoreButton } from "components/more-button";
 import { Paragraph, Small } from "components/typography";
 import { FlexBetween, FlexBox } from "components/flexbox";
 // CUSTOM UTILS METHODS
-import { numberFormat } from "utils/numberFormat";
+import { numberFormat } from "util/numberFormat";
 // COMMON DASHBOARD RELATED COMPONENT
 import { BodyTableCell, HeadTableCell } from "../_common";
 

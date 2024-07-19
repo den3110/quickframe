@@ -6,7 +6,7 @@ import { FlexBetween } from "components/flexbox";
 import { MoreButton } from "components/more-button";
 import { Paragraph, Span } from "components/typography";
 // CUSTOM UTILS METHOD
-import { numberFormat } from "utils/numberFormat";
+import { numberFormat } from "util/numberFormat";
 // STYLED COMPONENTS
 import { HeadTableCell, BodyTableCell } from "./styles";
 

@@ -9,7 +9,7 @@ import { MoreButton } from "components/more-button";
 // WORLD MAP DATA
 import worldMap from "__fakeData__/map/worldMap.json";
 // CUSTOM UTILS METHOD
-import { baseChartOptions } from "utils/baseChartOptions";
+import { baseChartOptions } from "util/baseChartOptions";
 
 // STYLED COMPONENTS
 const MapWrapper = styled(Box)(({

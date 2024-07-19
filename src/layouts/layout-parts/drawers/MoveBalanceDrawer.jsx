@@ -8,7 +8,7 @@ import { makeStyles } from "@mui/styles";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import { SwapHoriz } from "@mui/icons-material";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 

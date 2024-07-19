@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import { PortfolioDetailContext } from "../page-view/detail";
 import { ref } from "yup";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";

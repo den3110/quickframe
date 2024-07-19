@@ -12,7 +12,7 @@ import Trash from "icons/duotone/Trash";
 import Archive from "icons/duotone/Archive";
 import UnreadMail from "icons/duotone/UnreadMail";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // STYLED COMPONENTS
 const MailActionWrapper = styled(Box)(({

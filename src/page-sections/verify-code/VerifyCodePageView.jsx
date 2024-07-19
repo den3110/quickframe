@@ -5,7 +5,7 @@ import OtpInput from "react-otp-input";
 import { H1, Paragraph, Span } from "components/typography";
 import ChevronLeft from "icons/ChevronLeft";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 const VerifyCodePageView = () => {
   const [otp, setOtp] = useState("5");
   return <Container>

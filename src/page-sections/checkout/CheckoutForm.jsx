@@ -6,7 +6,7 @@ import { FlexBetween, FlexBox } from "components/flexbox";
 import CircleOutlined from "icons/CircleOutlined";
 import CheckCircleOutline from "icons/CheckCircleOutline";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // STYLED COMPONENTS
 const StyledCard = styled(Card)(({

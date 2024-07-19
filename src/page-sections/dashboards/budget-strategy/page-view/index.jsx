@@ -23,7 +23,7 @@ import {
 import SearchIcon from "icons/SearchIcon";
 import { useCallback, useEffect, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import EditBudgetStrategy from "icons/budget-strategy/EditBudgetStrategy";
 import ShareBudgetStrategy from "icons/budget-strategy/ShareBudgetStrategy";
 import CopyBudgteStrategy from "page-sections/budget-strategy/CopyBudgetStrategy";

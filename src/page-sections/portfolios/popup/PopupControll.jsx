@@ -5,7 +5,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CachedIcon from "@mui/icons-material/Cached";
 import ReplayIcon from "@mui/icons-material/Replay";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));

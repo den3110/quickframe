@@ -9,7 +9,7 @@ import UserDetails from "../UserDetails";
 // CUSTOM ICON COMPONENT
 import MoreVertical from "icons/MoreVertical";
 // CUSTOM UTILS METHOD
-import { paginate } from "utils/paginate";
+import { paginate } from "util/paginate";
 // CUSTOM DUMMY DATA
 import { USER_LIST } from "__fakeData__/users";
 const UserGrid2PageView = () => {

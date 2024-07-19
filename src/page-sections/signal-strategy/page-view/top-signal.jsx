@@ -24,7 +24,7 @@ import {
 import StarBorder from "@mui/icons-material/StarBorder";
 import useNavigate from "hooks/useNavigate";
 import Layout from "../Layout";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import formatCurrency from "util/formatCurrency";
 import { useEffect, useState } from "react";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";

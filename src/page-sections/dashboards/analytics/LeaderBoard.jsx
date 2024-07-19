@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import exchangeApi from "api/exchange/exchangeApi";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import { Swiper, SwiperSlide } from "swiper/react";
 import BunnyStar from "icons/BunnyStar";
 import FlickAnimate from "icons/FlickAnimate";

@@ -13,7 +13,7 @@ import { PortfolioDetailContext } from "../page-view/detail";
 import formatCurrency from "util/formatCurrency";
 import CustomAutowinTable from "./TableCustomAutowin";
 import SignalBubble from "./SignalBubble";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 const Statistics = () => {
   const [selectedTab, setSelectedTab] = useState(0);

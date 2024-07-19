@@ -1,4 +1,4 @@
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 export const Tab = theme => ({
   defaultProps: {
     disableRipple: true

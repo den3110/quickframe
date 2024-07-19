@@ -4,7 +4,7 @@ import { FlexBox } from "../flexbox";
 import { Percentage } from "../percentage";
 import { H6, Paragraph, Span } from "../typography";
 // CUSTOM UTILS METHOD
-import { numberFormat } from "utils/numberFormat";
+import { numberFormat } from "util/numberFormat";
 
 // ==============================================================
 

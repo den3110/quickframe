@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { Card, CardContent, Typography, Box, Divider, useMediaQuery } from "@mui/material";
 import { PortfolioDetailContext } from "../page-view/detail";
 import formatCurrency from "util/formatCurrency";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 const InvestmentOverview = () => {
   const {dataStat }= useContext(PortfolioDetailContext)

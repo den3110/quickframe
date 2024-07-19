@@ -2,7 +2,7 @@ import { Box, Button, Card, Chip, Container, Grid, Stack, styled } from "@mui/ma
 // CUSTOM COMPONENTS
 import { H1, H6, Paragraph } from "components/typography";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 // CUSTOM DUMMY DATA
 import { JOBS } from "./data";
 

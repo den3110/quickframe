@@ -8,7 +8,7 @@ import { makeStyles } from "@mui/styles";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import QRCode from "react-qr-code";
 import { QrCode } from "@mui/icons-material";
 const useStyles = makeStyles((theme) => ({

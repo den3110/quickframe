@@ -4,7 +4,7 @@ import { Paragraph, Span } from "components/typography";
 // CUSTOM ICON COMPONENT
 import ChevronRight from "icons/ChevronRight";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // ==============================================================
 

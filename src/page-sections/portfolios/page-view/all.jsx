@@ -26,7 +26,7 @@ import {
   Collapse,
 } from "@mui/material";
 import Layout from "../Layout";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import SearchIcon from "@mui/icons-material/Search";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { MoreVert, Add, InsertChart } from "@mui/icons-material";

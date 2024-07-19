@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 // CUSTOM COMPONENTS
 import { Paragraph } from "../typography";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 // STYLED COMPONENT
 const Status = styled(Paragraph)(({
   theme,

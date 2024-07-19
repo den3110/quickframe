@@ -17,7 +17,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { Add, Remove, Edit, MoreVert, Close } from "@mui/icons-material";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import CandleShadow from "./CandleShadow";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";

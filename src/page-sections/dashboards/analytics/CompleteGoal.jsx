@@ -4,7 +4,7 @@ import Chart from "react-apexcharts";
 // CUSTOM COMPONENTS
 import { Title } from "components/title";
 // CUSTOM UTILS METHODS
-import { baseChartOptions } from "utils/baseChartOptions";
+import { baseChartOptions } from "util/baseChartOptions";
 
 // ==============================================================
 

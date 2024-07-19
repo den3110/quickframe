@@ -11,7 +11,7 @@ import ChartDonut from "icons/sidebar/ChartDonutIcon";
 // COMMON STYLED COMPONENTS
 import { BodyTableCellV2, BodyTableRow, HeadTableCell } from "./common/styles";
 // CUSTOM UTILS METHOD
-import { format } from "utils/currency";
+import { format } from "util/currency";
 
 // STYLED COMPONENTS
 const EarningBoxWrapper = styled(FlexBetween)(({

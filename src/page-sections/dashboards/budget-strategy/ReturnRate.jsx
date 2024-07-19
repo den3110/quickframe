@@ -6,7 +6,7 @@ import { FlexBetween } from "components/flexbox";
 import { MoreButton } from "components/more-button";
 import { H6, Paragraph, Span } from "components/typography";
 // CUSTOM UTILS METHOD
-import { baseChartOptions } from "utils/baseChartOptions";
+import { baseChartOptions } from "util/baseChartOptions";
 const ReturnRate = () => {
   const theme = useTheme();
 

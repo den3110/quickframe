@@ -13,7 +13,7 @@ import DateRange from "icons/DateRange";
 import Bratislava from "icons/Bratislava";
 import MapMarkerIcon from "icons/MapMarkerIcon";
 // CUSTOM UTILS METHOD
-import { format } from "utils/currency";
+import { format } from "util/currency";
 import { AvatarLoading } from "components/avatar-loading";
 import AuthContext from "contexts/AuthContext";
 import userApi from "api/user/userApi";

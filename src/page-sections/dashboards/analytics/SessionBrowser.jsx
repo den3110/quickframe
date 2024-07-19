@@ -8,7 +8,7 @@ import { Paragraph } from "components/typography";
 import { MoreButton } from "components/more-button";
 import { FlexBetween, FlexBox, FlexRowAlign } from "components/flexbox";
 // CUSTOM UTILS METHOD
-import { baseChartOptions } from "utils/baseChartOptions";
+import { baseChartOptions } from "util/baseChartOptions";
 
 // STYLED COMPONENT
 const StyledChart = styled(Chart)({

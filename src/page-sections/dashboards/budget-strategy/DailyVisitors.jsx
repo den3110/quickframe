@@ -4,7 +4,7 @@ import { FlexBox } from "components/flexbox";
 import { Percentage } from "components/percentage";
 import { H6, Paragraph } from "components/typography";
 // CUSTOM UTILS METHOD
-import { numberFormat } from "utils/numberFormat";
+import { numberFormat } from "util/numberFormat";
 const DailyVisitors = () => {
   return <Card sx={{
     p: 3

@@ -3,7 +3,7 @@ import { visuallyHidden } from "@mui/utils";
 // CUSTOM COMPONENT
 import { Span } from "components/typography";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // ==============================================================
 

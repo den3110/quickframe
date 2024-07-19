@@ -24,7 +24,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Layout from "../Layout";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import SearchIcon from "@mui/icons-material/Search";
 import { Fragment, useContext, useState } from "react";
 import { MoreVert, Add, InsertChart } from "@mui/icons-material";

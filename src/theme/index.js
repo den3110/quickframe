@@ -1,7 +1,7 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
 import merge from "lodash.merge";
 import { shadows } from "./shadows";
-import { THEMES } from "utils/constants";
+import { THEMES } from "util/constants";
 import themesOptions from "./themeOptions";
 import componentsOverride from "./components";
 

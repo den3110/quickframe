@@ -1,5 +1,5 @@
 import { Info, CheckCircle, Warning, Error } from "@mui/icons-material";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 const standardStyle = color => ({
   color: color.main,
   backgroundColor: color[50]

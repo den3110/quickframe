@@ -6,7 +6,7 @@ import { Title } from "components/title";
 import { FlexBetween } from "components/flexbox";
 import { MoreButton } from "components/more-button";
 // CUSTOM UTILS METHOD
-import { baseChartOptions } from "utils/baseChartOptions";
+import { baseChartOptions } from "util/baseChartOptions";
 const AveragePosition = () => {
   const theme = useTheme();
 

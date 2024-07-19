@@ -14,7 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { makeStyles } from "@mui/styles";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
 

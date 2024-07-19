@@ -4,7 +4,7 @@ import { Percentage } from "components/percentage";
 import { FlexBetween, FlexBox } from "components/flexbox";
 import { H6, Paragraph, Span } from "components/typography";
 // CUSTOM UTILS METHOD
-import { numberFormat } from "utils/numberFormat";
+import { numberFormat } from "util/numberFormat";
 const Earnings = () => {
   return <Card sx={{
     padding: 3,

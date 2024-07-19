@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Add, Remove } from "@mui/icons-material";
 import { IconButton, InputBase, styled } from "@mui/material";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // ==============================================================
 

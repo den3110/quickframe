@@ -2,7 +2,7 @@ import { Card, styled } from "@mui/material";
 // CUSTOM COMPONENT
 import { Paragraph } from "../typography";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // STYLED COMPONENT
 const StyledCard = styled(Card)(({

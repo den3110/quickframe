@@ -9,7 +9,7 @@ import { H6 } from "components/typography";
 import { FlexBetween } from "components/flexbox";
 import { SearchInput } from "components/search-input";
 // CUSTOM UTIL METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 
 // STYLED COMPONENTS
 const StyledSearchInput = styled(SearchInput)(({

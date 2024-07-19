@@ -6,7 +6,7 @@ import FlexBetween from "components/flexbox/FlexBetween";
 // CUSTOM ICON COMPONENTS
 import ChartBar4 from "icons/ChartBar4";
 import DollarOutlined from "icons/DollarOutlined";
-import { numberFormat } from "utils/numberFormat";
+import { numberFormat } from "util/numberFormat";
 
 // ====================================================================
 

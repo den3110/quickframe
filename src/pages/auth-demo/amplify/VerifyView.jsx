@@ -9,7 +9,7 @@ import useNavigate from "hooks/useNavigate";
 import { H1, Paragraph, Span } from "components/typography";
 import ChevronLeft from "icons/ChevronLeft";
 // CUSTOM UTILS METHOD
-import { isDark } from "utils/constants";
+import { isDark } from "util/constants";
 // AMPLIFY CONTEXT FILE
 import { AuthContext } from "contexts/amplifyContext";
 const VerifyView = () => {
