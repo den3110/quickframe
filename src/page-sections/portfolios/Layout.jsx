@@ -3,12 +3,12 @@ import { Box, Card, styled, Typography, useMediaQuery, useTheme } from "@mui/mat
 import { NavLink } from "react-router-dom";
 import PortfoliosContext from "contexts/PortfoliosContext";
 
-const StyledNavLink = styled(NavLink)`
-  &.active {
-    font-weight: bold;
-    color: ${props => props.theme.palette.primary} !important;
+const StyledNavLink = styled(NavLink)(({ theme }) => ({
+  "&.active": {
+    fontWeight: 600,
+    color: theme.palette.primary.main
   }
-`;
+}));
 
 const Layout = ({ children }) => {
   const theme= useTheme()
@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
             color: theme.palette.primary,
             fontWeight: "bold",
           }}
-          style={{ textDecoration: "none", color: "inherit" }}
+          sx={{ textDecoration: "none", color: "inherit",  "&:active": { color: theme.palette.primary + "!important" }}}
         >
           <Typography
             variant="h6"
@@ -47,29 +47,29 @@ const Layout = ({ children }) => {
             color: theme.palette.primary,
             fontWeight: "bold",
           }}
-          style={{ textDecoration: "none", color: "inherit" }}
+          sx={{ textDecoration: "none", color: "inherit" }}
         >
           <Typography
             variant="h6"
             fontWeight={"600"}
-            sx={{ "&:hover": { color: theme.palette.primary } }}
+            sx={{ "&:hover": { color: theme.palette.primary },  "&:active": { color: theme.palette.primary } }}
           >
             Thống kê
           </Typography>
         </StyledNavLink>
         <StyledNavLink
           theme={theme}
-          to="/portfolios/schedule  "
+          to="/portfolios/schedule"
           activeStyle={{
             color: theme.palette.primary,
             fontWeight: "bold",
           }}
-          style={{ textDecoration: "none", color: "inherit" }}
+          sx={{ textDecoration: "none", color: "inherit" }}
         >
           <Typography
             variant="h6"
             fontWeight={"600"}
-            sx={{ "&:hover": { color: theme.palette.primary } }}
+            sx={{ "&:hover": { color: theme.palette.primary },  "&:active": { color: theme.palette.primary } }}
           >
             Hẹn giờ
           </Typography>

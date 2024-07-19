@@ -7,6 +7,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
   Box,
+  Checkbox,
+  FormControlLabel,
   // Checkbox,
   // FormControlLabel,
   IconButton,
@@ -23,25 +25,49 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   alignItems: "center",
 }));
 
-export default function DeleteSignalStrategy({ open, onClose, selectedBot, setChange, setData, data }) {
-
-  const handleDeletBudgetStrategy= async ()=> {
+export default function DeleteSignalStrategy({
+  open,
+  onClose,
+  selectedBot,
+  setChange,
+  setData,
+  data,
+}) {
+  const [deletePackages, setDeletePackages] = React.useState(false);
+  const handleCheckboxChange = (event) => {
+    setDeletePackages(event.target.checked);
+  };
+  const handleDeletBudgetStrategy = async () => {
     try {
-    const response= await signalStrategyApi.userBudgetSignalDelete(selectedBot?._id)
-    console.log(response?.data)
-      if(response?.data?.ok=== true) {
-        showToast("Đã xoá phuơng pháp thành công", "success")
-        onClose()
-        // setChange(prev=> !prev)
-        setData(data?.filter(item=> item?._id !== selectedBot?._id))
+      let isDeletePlans;
+      let response;
+      if (selectedBot?.total_plans >= 2) {
+        if (deletePackages === true) {
+          isDeletePlans = true;
+        } else {
+          isDeletePlans = false;
+        }
+        response = await signalStrategyApi.userBudgetSignalDelete(
+          selectedBot?._id,
+          { params: { isDeletePlans } }
+        );
+      } else {
+        response = await signalStrategyApi.userBudgetSignalDelete(
+          selectedBot?._id
+        );
       }
-      else if(response?.data?.ok=== false) {
-        showToast(response?.data?.m, "error")
+      if (response?.data?.ok === true) {
+        showToast("Đã xoá phuơng pháp thành công", "success");
+        onClose();
+        // setChange(prev=> !prev)
+        setData(data?.filter((item) => item?._id !== selectedBot?._id));
+      } else if (response?.data?.ok === false) {
+        showToast(response?.data?.m, "error");
       }
     } catch (error) {
-      showToast(error?.response?.data?.m, "error")
+      showToast(error?.response?.data?.m, "error");
     }
-  }
+  };
   return (
     <React.Fragment>
       <Dialog
@@ -64,7 +90,7 @@ export default function DeleteSignalStrategy({ open, onClose, selectedBot, setCh
         <DialogContent>
           <Box display="flex" justifyContent="center">
             <img
-              src="	https://quickinvest.ai/img/strategy/img_1.png" 
+              src="	https://quickinvest.ai/img/strategy/img_1.png"
               alt="Illustration"
             />
           </Box>
@@ -80,9 +106,23 @@ export default function DeleteSignalStrategy({ open, onClose, selectedBot, setCh
             id="confirm-delete-dialog-description"
             align="center"
           >
-           Bot AI này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành
-            động này.
+            Bot AI này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành động
+            này.
           </DialogContentText>
+          {selectedBot?.total_plans >= 2 && (
+            <Box display="flex" justifyContent="center">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={deletePackages}
+                    onChange={handleCheckboxChange}
+                    color="primary"
+                  />
+                }
+                label={`Xóa ${selectedBot?.total_plans} gói sử dụng chiến lược này`}
+              />
+            </Box>
+          )}
         </DialogContent>
         <DialogActions>
           <Button

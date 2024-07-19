@@ -24,33 +24,8 @@ export const resources = {
       "View Details": "View Details",
       "English": "English",
       "Vietnamese": "Vietnamese",
-    }
-  },
-  es: {
-    translation: {
-      Dashboard: "Panel",
-      Profiles: "Perfiles",
-      Management: "Gestión",
-      Logistics: "Logística",
-      Ecommerce: "Comercio electrónico",
-      "Analytics 1": "Analítica 1",
-      "Analytics 2": "Analítica 2",
-      "Finance 1": "Finanzas 1",
-      "Finance 2": "Finanzas 2",
-      Accounts: "Cuentas",
-      "User & Contact": "Usuario y Contacto",
-      Invoice: "Factura",
-      Users: "Usuarias",
-      Sessions: "Sesiones",
-      "Bounce Rate": "Porcentaje",
-      "Session Duration": "Duración de la sesión",
-      "Live Online User": "Usuario en línea en vivo",
-      "Page views": "Visitas a la página",
-      "Visits by Top Referral Source": "Visitas por principal fuente de referencia",
-      "Session by browser": "Sesión por navegador",
-      "View Details": "Ver detalles",
-      "English": "Inglesa",
-      "Vietnamese": "Vietnamita",
+      "Trade History & Profit": "Trade History & Profit",
+      "Session": "Session"
     }
   },
   vi: {
@@ -77,7 +52,9 @@ export const resources = {
       "Session by browser": "Phiên theo trình duyệt",
       "View Details": "Xem chi tiết",
       "English": "Tiếng Anh",
-      "Vietnamese": "Tiếng Việt"
+      "Vietnamese": "Tiếng Việt",
+      "Trade History & Profit": "Lịch Sử KLGD & Lợi Nhuận",
+      "Session": "Phiên"
     }
   }
 };

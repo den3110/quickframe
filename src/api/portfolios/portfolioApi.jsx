@@ -28,6 +28,10 @@ const portfolioApi = {
   userBotInfo(id, data) {
     const url= `/users/bot/info/${id}`
     return axiosClient.get(url, data)
+  },
+  userBotStatics(id, data) {
+    const url= `/users/bot/statics/${id}`
+    return axiosClient.get(url, data)
   }
 };  
 

@@ -19,6 +19,7 @@ import {
   useTheme,
   TextField,
   CircularProgress,
+  InputLabel,
 } from "@mui/material";
 import StarBorder from "@mui/icons-material/StarBorder";
 import useNavigate from "hooks/useNavigate";
@@ -69,6 +70,11 @@ const TopSignalPageView = () => {
   const [checkedRows, setCheckedRows] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedSignal, setSelectedSignal] = useState([]);
+  const [selection, setSelection] = useState(1);
+
+  const handleChange = (event) => {
+    setSelection(event.target.value);
+  };
   // const [selected, setSelected]=
   //   const [data, set]
   const handleChangeRowsPerPage = (event) => {
@@ -141,13 +147,14 @@ const TopSignalPageView = () => {
               flexDirection: downLg ? "column" : "row",
             }}
           >
-            <Box sx={{ width: downLg ? "100%" : "auto" }} display={"flex"}>
+            <Box sx={{ width: downLg ? "100%" : "100%" }} display={"flex"} justifyContent={"space-between"}>
               <Box
-                sx={{ width: downLg ? "100%" : "60%", paddingRight: "10px" }}
+                sx={{ width: "100%", paddingRight: "10px" }}
               >
                 <TextField
                   fullWidth
                   variant="outlined"
+                  sx={{ width: downLg ? "aaa" : 450 }}
                   placeholder="Search Strategy..."
                   InputProps={{
                     startAdornment: (
@@ -160,6 +167,30 @@ const TopSignalPageView = () => {
                     },
                   }}
                 />
+              </Box>
+              <Box>
+                <Box sx={{width: 200}}>
+                  <FormControl fullWidth variant="outlined">
+                    <InputLabel id="demo-simple-select-outlined-label">
+                      Bộ lọc
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-outlined-label"
+                      id="demo-simple-select-outlined"
+                      value={selection}
+                      onChange={handleChange}
+                      label="Bộ lọc"
+                    >
+                      <MenuItem value={1}>
+                        Tỷ lệ thắng cao nhất
+                      </MenuItem>
+                      <MenuItem value={2}>
+                        Chuỗi thắng nhiều nhất
+                      </MenuItem>
+                      <MenuItem value={3}>KLGD hàng đầu</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
               </Box>
             </Box>
             <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "block"}></Box>
@@ -176,12 +207,14 @@ const TopSignalPageView = () => {
                         onChange={handleToggleAllRows}
                       />
                     </StyledTableCell> */}
-                      {!downLg && <StyledTableCell>
-                        <Checkbox
-                          checked={checkedRows.every(Boolean)}
-                          onChange={handleToggleAllRows}
-                        />
-                      </StyledTableCell>}
+                      {!downLg && (
+                        <StyledTableCell>
+                          <Checkbox
+                            checked={checkedRows.every(Boolean)}
+                            onChange={handleToggleAllRows}
+                          />
+                        </StyledTableCell>
+                      )}
                       <StyledTableCell>Tên bot</StyledTableCell>
                       {/* <StyledTableCell>Loại tài khoản</StyledTableCell> */}
                       <StyledTableCell>Thắng/Thua</StyledTableCell>
@@ -206,224 +239,250 @@ const TopSignalPageView = () => {
                       </TableCell>
                     </TableRow>
                   )}
-                  {loading === false && sortData(data, "createdAt", "desc")
+                  {loading === false &&
+                    sortData(data, "createdAt", "desc")
                       .slice(
                         rowsPerPage * (page - 1),
                         rowsPerPage * (page - 1) + rowsPerPage
                       )
                       ?.map((item, key) => (
-                    <TableRow
-                      onClick={() => {
-                        setOpenFollowerPlan(true);
-                      }}
-                      key={key}
-                      sx={{ display: downLg ? "flex" : "", flexWrap: "wrap" }}
-                    >
-                      {/* <StyledTableCell  >
+                        <TableRow
+                          onClick={() => {
+                            setOpenFollowerPlan(true);
+                          }}
+                          key={key}
+                          sx={{
+                            display: downLg ? "flex" : "",
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          {/* <StyledTableCell  >
                       <Checkbox
                         checked={checkedRows[key] ? true : false}
                         onChange={() => handleToggleRow(key)}
                       />
                     </StyledTableCell> */}
-                      {!downLg && <StyledTableCell
-                        sx={{
-                          width: downLg ? "100%" : "",
-                          display: downLg ? "flex" : "",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                          <Checkbox
-                            checked={checkedRows[key] ? true : false}
-                            onChange={() => handleToggleRow(key)}
-                          />
-                      </StyledTableCell>}
-                      <StyledTableCell
-                        sx={{
-                          width: downLg ? "100%" : "",
-                          display: downLg ? "flex" : "",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box sx={{display: "flex", alignItems: "center"}}>
-                          {downLg && <Checkbox
-                            checked={checkedRows[key] ? true : false}
-                            onChange={() => handleToggleRow(key)}
-                          />}
-                          {downLg && <Typography>Tên bot</Typography>}
-                          {/* {downLg && (
-                          <Typography
-                            fontSize={14}
-                            sx={{
-                              textDecoration: "underline",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Gói: {item?.count || 0}
-                          </Typography>
-                        )} */}
-                        </Box>
-                        <Box sx={{cursor: "pointer"}} onClick={()=> {
-                          navigate("/dashboard/signal-strategies/" +  item?._id)
-                        }}>
-                          <Typography>{item?.name}</Typography>
-                          {/* {!downLg && (
-                          <Typography
-                            fontSize={14}
-                            sx={{
-                              textDecoration: "underline",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Gói: {item?.count || 0}
-                          </Typography>
-                        )} */}
-                        </Box>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        sx={{
-                          width: downLg ? "100%" : "",
-                          display: downLg ? "flex" : "",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        {downLg && <Typography>Thắng/Thua:</Typography>}
-                        <Typography fontWeight={600} fontSize={14}>
-                          {item.win_day}/{item.lose_day}
-                        </Typography>
-                        {!downLg && (
-                          <Box display={"flex"} alignItems={"center"}>
-                            <Typography fontSize={12}>Tỉ lệ thắng:</Typography>
-                            <Typography
-                              fontSize={12}
-                              fontWeight={600}
+                          {!downLg && (
+                            <StyledTableCell
                               sx={{
-                                cursor: "pointer",
+                                width: downLg ? "100%" : "",
+                                display: downLg ? "flex" : "",
+                                justifyContent: "space-between",
+                                alignItems: "center",
                               }}
+                            >
+                              <Checkbox
+                                checked={checkedRows[key] ? true : false}
+                                onChange={() => handleToggleRow(key)}
+                              />
+                            </StyledTableCell>
+                          )}
+                          <StyledTableCell
+                            sx={{
+                              width: downLg ? "100%" : "",
+                              display: downLg ? "flex" : "",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                              {downLg && (
+                                <Checkbox
+                                  checked={checkedRows[key] ? true : false}
+                                  onChange={() => handleToggleRow(key)}
+                                />
+                              )}
+                              {downLg && <Typography>Tên bot</Typography>}
+                              {/* {downLg && (
+                          <Typography
+                            fontSize={14}
+                            sx={{
+                              textDecoration: "underline",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Gói: {item?.count || 0}
+                          </Typography>
+                        )} */}
+                            </Box>
+                            <Box
+                              sx={{ cursor: "pointer" }}
+                              onClick={() => {
+                                navigate(
+                                  "/dashboard/signal-strategies/" + item?._id
+                                );
+                              }}
+                            >
+                              <Typography>{item?.name}</Typography>
+                              {/* {!downLg && (
+                          <Typography
+                            fontSize={14}
+                            sx={{
+                              textDecoration: "underline",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Gói: {item?.count || 0}
+                          </Typography>
+                        )} */}
+                            </Box>
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              width: downLg ? "100%" : "",
+                              display: downLg ? "flex" : "",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            {downLg && <Typography>Thắng/Thua:</Typography>}
+                            <Typography fontWeight={600} fontSize={14}>
+                              {item.win_day}/{item.lose_day}
+                            </Typography>
+                            {!downLg && (
+                              <Box display={"flex"} alignItems={"center"}>
+                                <Typography fontSize={12}>
+                                  Tỉ lệ thắng:
+                                </Typography>
+                                <Typography
+                                  fontSize={12}
+                                  fontWeight={600}
+                                  sx={{
+                                    cursor: "pointer",
+                                  }}
+                                  color={
+                                    (item.win_day /
+                                      (item.win_day + item.lose_day)) *
+                                      100 >=
+                                    50
+                                      ? "success.main"
+                                      : "error.main"
+                                  }
+                                >
+                                  {round2number(
+                                    (item.win_day /
+                                      (item.win_day + item.lose_day)) *
+                                      100
+                                  )}
+                                  %
+                                </Typography>
+                              </Box>
+                            )}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              width: downLg ? "100%" : "",
+                              display: downLg ? "flex" : "",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            {downLg && <Typography>Chuỗi thắng:</Typography>}
+                            <Typography
+                              fontWeight={600}
+                              fontSize={14}
                               color={
-                                (item.win_day /
-                                  (item.win_day + item.lose_day)) *
-                                  100 >=
-                                50
+                                parseFloat(item?.win_streak) >= 0
                                   ? "success.main"
                                   : "error.main"
                               }
                             >
-                              {round2number(
-                                (item.win_day /
-                                  (item.win_day + item.lose_day)) *
-                                  100
-                              )}
-                              %
+                              {item?.win_streak}
                             </Typography>
-                          </Box>
-                        )}
-                      </StyledTableCell>
-                      <StyledTableCell
-                        sx={{
-                          width: downLg ? "100%" : "",
-                          display: downLg ? "flex" : "",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        {downLg && <Typography>Chuỗi thắng:</Typography>}
-                        <Typography
-                          fontWeight={600}
-                          fontSize={14}
-                          color={
-                            parseFloat(item?.win_streak) >= 0
-                              ? "success.main"
-                              : "error.main"
-                          }
-                        >
-                          {item?.win_streak}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        sx={{
-                          width: downLg ? "100%" : "",
-                          display: downLg ? "flex" : "",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        {downLg && <Typography>Chuỗi thua:</Typography>}
-                        <Typography
-                          fontWeight={600}
-                          fontSize={14}
-                          color={
-                            parseFloat(item?.lose_streak) >= 0
-                              ? "success.main"
-                              : "error.main"
-                          }
-                        >
-                          {item?.lose_streak}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        sx={{
-                          width: downLg ? "100%" : "",
-                          display: downLg ? "flex" : "",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        {downLg && <Typography>Chuỗi vòng thắng:</Typography>}
-                        <Typography fontWeight={600} fontSize={14}>
-                          {item?.longest_win_streak}/{item?.longest_lose_streak}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell
-                        sx={{
-                          width: downLg ? "100%" : "",
-                          display: downLg ? "flex" : "",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        {downLg && <Typography>VOL:</Typography>}
-                        <Typography fontWeight={600} fontSize={14}>
-                          {formatCurrency(item?.volume)}
-                        </Typography>   
-                      </StyledTableCell>
-                      <StyledTableCell
-                        sx={{
-                          width: downLg ? "100%" : "",
-                          display: downLg ? "flex" : "",
-                          justifyContent: downLg ? "center" : "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: downLg ? "center" : "" }}>
-                          <Box sx={{ mr: 1, }}>
-                            <IconButton
-                              fullWidth={downLg ? true : false}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelected(item);
-                                setSelectedSignal([item?._id]);
-                                setIsEdit(true);
-                                setOpenDrawer(true);
-                                // setSelected(item);
-                                // setBlockFollower(true);
-                              }}
-                              variant="contained"
-                              color="primary"
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              width: downLg ? "100%" : "",
+                              display: downLg ? "flex" : "",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            {downLg && <Typography>Chuỗi thua:</Typography>}
+                            <Typography
+                              fontWeight={600}
+                              fontSize={14}
+                              color={
+                                parseFloat(item?.lose_streak) >= 0
+                                  ? "success.main"
+                                  : "error.main"
+                              }
+                            >
+                              {item?.lose_streak}
+                            </Typography>
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              width: downLg ? "100%" : "",
+                              display: downLg ? "flex" : "",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            {downLg && (
+                              <Typography>Chuỗi vòng thắng:</Typography>
+                            )}
+                            <Typography fontWeight={600} fontSize={14}>
+                              {item?.longest_win_streak}/
+                              {item?.longest_lose_streak}
+                            </Typography>
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              width: downLg ? "100%" : "",
+                              display: downLg ? "flex" : "",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            {downLg && <Typography>VOL:</Typography>}
+                            <Typography fontWeight={600} fontSize={14}>
+                              {formatCurrency(item?.volume)}
+                            </Typography>
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              width: downLg ? "100%" : "",
+                              display: downLg ? "flex" : "",
+                              justifyContent: downLg
+                                ? "center"
+                                : "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Box
                               sx={{
-                                border: `1px solid ${theme.palette.border}`,
-                                borderRadius: 2,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: downLg ? "center" : "",
                               }}
                             >
-                              <AddIcon />
-                            </IconButton>
-                          </Box>
-                        </Box>
-                      </StyledTableCell>
-                    </TableRow>
-                  ))}
+                              <Box sx={{ mr: 1 }}>
+                                <IconButton
+                                  fullWidth={downLg ? true : false}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelected(item);
+                                    setSelectedSignal([item?._id]);
+                                    setIsEdit(true);
+                                    setOpenDrawer(true);
+                                    // setSelected(item);
+                                    // setBlockFollower(true);
+                                  }}
+                                  variant="contained"
+                                  color="primary"
+                                  sx={{
+                                    border: `1px solid ${theme.palette.border}`,
+                                    borderRadius: 2,
+                                  }}
+                                >
+                                  <AddIcon />
+                                </IconButton>
+                              </Box>
+                            </Box>
+                          </StyledTableCell>
+                        </TableRow>
+                      ))}
                 </TableBody>
                 {loading === false && data?.length <= 0 && (
                   <Box
@@ -433,7 +492,7 @@ const TopSignalPageView = () => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                  >     
+                  >
                     <EmptyPage
                       title={"Danh mục tín hiệu đang trống"}
                       subTitle={
@@ -488,7 +547,10 @@ const TopSignalPageView = () => {
           selectedPlan={{
             ...selected,
             autoType: 2,
-            signal_feature: selectedSignal?.length > 1 ? SignalFeatureTypes.AUTO_CHANGE_METHODS : SignalFeatureTypes.SINGLE_METHOD,
+            signal_feature:
+              selectedSignal?.length > 1
+                ? SignalFeatureTypes.AUTO_CHANGE_METHODS
+                : SignalFeatureTypes.SINGLE_METHOD,
             budget_amount: 100,
             name: "",
             bet_second: 25,
@@ -497,7 +559,7 @@ const TopSignalPageView = () => {
           dataProps={data}
           setIsEdit={setIsEdit}
           selectedSignal={selectedSignal}
-        />  
+        />
       </Box>
     </Layout>
   );

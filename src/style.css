@@ -3,3 +3,6 @@
 :root {
     --swiper-navigation-size: 24px !important;
 }
+.custom-calendar .rbc-month-row {
+    min-height: 139px;
+}

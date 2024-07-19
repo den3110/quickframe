@@ -24,6 +24,7 @@ import ManualFollowerProvider from "contexts/ManageFollowerContext";
 import ManageFollowerProvider from "contexts/ManageFollowerContext";
 import TopSignal from "pages/dashboard/signal-strategy/inbox";
 import TelegramChannelPage from "pages/dashboard/signal-strategy/sent";
+import StatPortfolio from "page-sections/portfolios/page-view/stat";
 // ALL DASHBOARD PAGES
 const CRM = Loadable(lazy(() => import("pages/dashboard/crm")));
 const Finance = Loadable(lazy(() => import("pages/dashboard/finance")));
@@ -345,11 +346,7 @@ export const DashboardRoutes = [
           },
           {
             path: "statistic",
-            element: <InboxPage />,
-          },
-          {
-            path: "schedule",
-            element: <Sent />,
+            element: <StatPortfolio />,
           },
           {
             path: ":id",

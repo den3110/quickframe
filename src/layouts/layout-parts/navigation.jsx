@@ -31,7 +31,7 @@ export const navigations = [
   },
   {
     name: "Signal Strategy",
-    path: "/dashboard/signal-strategies/",
+    path: "/dashboard/signal-strategies",
     icon: duotone.SignalStrategy,
   },
   {
@@ -47,14 +47,14 @@ export const navigations = [
     icon: duotone.ManualTrade,
     path: "/dashboard/manual-trade",
   },
-  {
-    name: "Referral",
-    icon: duotone.Introduction,
-    path: "/dashboard/referral",
-  },
-  {
-    name: "Vip Member",
-    icon: duotone.VipMember,
-    path: "/dashboard/account",
-  },
+  // {
+  //   name: "Referral",
+  //   icon: duotone.Introduction,
+  //   path: "/dashboard/referral",
+  // },
+  // {
+  //   name: "Vip Member",
+  //   icon: duotone.VipMember,
+  //   path: "/dashboard/account",
+  // },
 ];

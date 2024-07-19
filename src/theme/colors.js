@@ -37,6 +37,7 @@ export const success = {
   50: "#E3FDEB",
   100: "#CDFBDB",
   101: rgbToRgba(hexToRgb(config.theme.primaryColor), 0.25),
+  102: rgbToRgba(hexToRgb(config.theme.primaryColor), 0.35),
   200: "#9DF7C2",
   300: "#6AE9AA",
   400: "#43D49A",
@@ -46,6 +47,7 @@ export const success = {
   800: "#056A6A",
   900: "#035058",
   main: "#11b886",
+  bg: rgbToRgba(hexToRgb("#11b886"), 0.35),
   buy: rgbToRgba(hexToRgb(config.theme.primaryColor), 0.8)
 };
 export const warning = {
@@ -156,7 +158,8 @@ export const lightPalette = {
     default: "#fdfdff",
     paper: "#ffffff",
     cell: "#f9f9fa",
-    fcell: ""
+    fcell: "",
+    t1: "#eeeff2"
   }
 };
 
@@ -172,6 +175,7 @@ export const darkPalette = {
     default: grey[900],
     paper: grey[800],
     cell: "#111827",
-    fcell: "#323b49"
+    fcell: "#323b49",
+    t1: "#323b49"
   }
 };

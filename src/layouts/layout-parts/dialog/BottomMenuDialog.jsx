@@ -70,7 +70,7 @@ const BottomMenuDialog = (props) => {
             </ListItemSecondaryAction>
           </ListItem>
           <Divider />
-          <ListItem onClick={()=> handleNavigate("/dashboard/referral")} button>
+          {/* <ListItem onClick={()=> handleNavigate("/dashboard/referral")} button>
             <ListItemText
               primary="Giới thiệu"
               secondary="Quản lý lượt giới thiệu trên QuickInvest"
@@ -94,7 +94,7 @@ const BottomMenuDialog = (props) => {
                 <ArrowForwardIosIcon fontSize="small" />
               </IconButton>
             </ListItemSecondaryAction>
-          </ListItem>
+          </ListItem> */}
         </List>
       </DialogContent>
     </Dialog>

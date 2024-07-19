@@ -24,7 +24,7 @@ const MobileSidebar = () => {
       height: "100%"
     }}>
         <NavWrapper>
-          <Box pl={1} pt={3} alt="logo" maxWidth={45} component="img" src="/static/logo/logo-svg.svg" />
+          <Box pl={1} pt={3} alt="logo" maxWidth={45} component="img" src="/static/logo/luxcoin.png" />
 
           {/* NAVIGATION ITEMS */}
           <MultiLevelMenu sidebarCompact={false} />

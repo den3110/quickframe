@@ -72,7 +72,7 @@ const Header = () => {
             <ListItem sx={{
             mb: 1
           }}>
-              <img src="/static/logo/logo-svg.svg" alt="logo" width={40} height={40} />
+              <img src="/static/logo/luxcoin.png" alt="logo" width={40} height={40} />
             </ListItem>
 
             <ListItem disablePadding>
@@ -139,7 +139,7 @@ const Header = () => {
   return <FlexBetween component="header" py={2}>
       {/* QUICKFRAME LOGO */}
       <Box display="flex" component={Link} href="/" alignItems="center" gap={0.5}>
-        <img src="/static/logo/logo-svg.svg" alt="logo" width={35} height={35} />
+        <img src="/static/logo/luxcoin.png" alt="logo" width={35} height={35} />
         <Paragraph fontSize={20} fontWeight={600} color="text.primary">
           QuickFrame
         </Paragraph>

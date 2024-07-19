@@ -42,7 +42,7 @@ import RefreshProvider from "contexts/RefreshContext";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
-  width: theme.breakpoints.down("lg") ? "50%" : "auto",
+  width: useMediaQuery((theme) => theme.breakpoints.down("lg")) ? "50%" : "auto",
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -165,6 +165,7 @@ const BudgetStrategyPage = () => {
               <TextField
                 variant="outlined"
                 placeholder="Search Strategy..."
+                sx={{width: downLg ? "aaa" : 450}}
                 InputProps={{
                   startAdornment: (
                     <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
@@ -199,6 +200,7 @@ const BudgetStrategyPage = () => {
                     <TableRow>
                       <StyledTableCell>Strategy name</StyledTableCell>
                       <StyledTableCell>Method Using</StyledTableCell>
+                      <StyledTableCell>Loại chiến lược</StyledTableCell>
                       <StyledTableCell>Actions</StyledTableCell>
                     </TableRow>
                   </TableHead>
@@ -254,6 +256,14 @@ const BudgetStrategyPage = () => {
                             }}
                           >
                             {BudgetStrategyTypeTitle[row.type]}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              order: downLg ? 3 : 2,
+                              borderBottom: downLg ? "none" : "",
+                            }}
+                          >
+                            {row?.is_default=== true ? "Chiến lược mặc định" : "Chiến lược tuỳ chỉnh"}
                           </StyledTableCell>
                           <StyledTableCell
                             sx={{

@@ -35,14 +35,14 @@ import NewBotAIStringMethod from "../NewBotAIStringMethod";
 import DeleteSignalStrategy from "../DeleteSignalStrategy";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import sortData from "util/sortData";
-import RefreshProvider from "contexts/RefreshContext";
-import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
+// import RefreshProvider from "contexts/RefreshContext";
+// import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 import { SignalMethodUsingTypesTitle } from "type/SignalMethodUsing";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
-  width: theme.breakpoints.down("lg") ? "50%" : "auto",
+  width: useMediaQuery((theme) => theme.breakpoints.down("lg")) ? "50%" : "auto",
 }));
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
@@ -144,6 +144,7 @@ const SignalStrategyList = () => {
             >
               <TextField
                 variant="outlined"
+                sx={{width: downLg ? "aaa" : 450}}
                 placeholder="Search Strategy..."
                 InputProps={{
                   startAdornment: (

@@ -437,7 +437,7 @@ const NewPlanDrawer = ({
       setInvestmentFund(selectedPlan?.budget_amount);
       setBetSecond(selectedPlan?.bet_second);
       setAutoType(selectedPlan?.autoType);
-      setSelectedTab(selectedPlan?.autoType === 1 ? "Follow Leader" : (selectedPlan?.autoType=== 0 ? "Bot AI" : "Telegram Signal"));
+      setSelectedTab(selectedPlan?.autoType === 1 ? "Follow Leader" : ((selectedPlan?.autoType=== 0 || selectedPlan?.autoType=== 2) ? "Bot AI" : "Telegram Signal"));
       setFeatureType(selectedPlan?.signal_feature);
       if(!allowSelectedTab) {
         setBudgetStrategy(selectedPlan?.budgetStrategyId);
@@ -756,11 +756,16 @@ const NewPlanDrawer = ({
                     </Typography>
                   </Toolbar>
                 </AppBar>
-                {(!isEdit || allowSelectedTab) && (
+                {(
                   <Box display="flex" mt={2}>
-                    {["Bot AI", "Follow Leader", "Telegram Signal"].map(
-                      (tab) => (
+                    {["Bot AI", "Follow Leader", "", "Telegram Signal"].map(
+                      (tab) => {
+                        if((tab)=== "") {
+                          return <></>
+                        }
+                        return (
                         <Button
+                          disabled={(isEdit || allowSelectedTab)=== true ? true : false}
                           key={tab}
                           variant={
                             selectedTab === tab ? "contained" : "outlined"
@@ -769,13 +774,14 @@ const NewPlanDrawer = ({
                           style={{ marginRight: 8 }}
                           onClick={() => {
                             setSelectedTab(tab);
-                            setAutoType(tab === "Follow Leader" ? 1 : (tab=== "Bot AI" ? 0 : 2));
+                            setAutoType(tab === "Follow Leader" ? 1 : (tab=== "Bot AI" ? 0 : 3));
                             setArraySignalStrategy([]);
                           }}
                         >
                           {tab}
                         </Button>
                       )
+                      }
                     )}
                   </Box>
                 )}
@@ -821,7 +827,6 @@ const NewPlanDrawer = ({
                     </FormControl>
                   </Box>
                 )}
-                { console.log(baseAmount)}
                 <Box sx={{ width: "100%" }} mt={2}>
                   <Typography variant="subtitle1">Set base amount</Typography>
                   <Box mt={2} display="flex" alignItems="center" height={56}>
@@ -963,6 +968,7 @@ const NewPlanDrawer = ({
                     </FormControl>
                   </Box>
                 )}
+                
                 <Box sx={{ width: "100%" }}>
                   <Typography variant="subtitle1">
                     {selectedTab === "Bot AI" && "Signal*"}
@@ -1043,9 +1049,7 @@ const NewPlanDrawer = ({
                     </Box>
                   )}
                   {/*  */}
-                  {console.log(arraySignalStrategy)}
                   {console.log("signalStrategy", signalStrategy)}
-                  {console.log(dataSignalStrategyTelegramSignal)}
                   {/*  */}
                   {selectedTab === "Telegram Signal" && (
                     <Box sx={{ width: "100%" }} mt={2} mb={1}>

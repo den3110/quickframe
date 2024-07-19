@@ -26,8 +26,8 @@ const MultiplyIndex = () => {
   const [betAmount, setBetAmount] = useState(1);
   const [statusTrade, setStatusTrade] = useState();
   const [multiplier, setMultiplier] = useState(1);
-  const [betType, setBetType] = useState("");
   const [isBrokerMode, setIsBrokerMode] = useState(false);
+  const [betType, setBetType] = useState("");
   const [customMultiplier, setCustomMultiplier] = useState("");
   const isDisableButtonTrade = statusTrade === "WAIT" || !statusTrade;
   const isErrorBetAmount =
@@ -52,6 +52,7 @@ const MultiplyIndex = () => {
 
   useEffect(() => {
     if (isConnected) {
+      
       socket.on("CURRENT_SESSION", (data) => {
         // console.log("CURRENT_SESSION", data);
         setCountDown(data?.r_second);
