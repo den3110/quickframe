@@ -95,7 +95,6 @@ const PortfolioSchedule = () => {
           display={"flex"}
           justifyContent={"space-between"}
           alignItems={"center"}
-          gap={1}
         >
           <IconButton onClick={() => {
             toggleDrawer()
