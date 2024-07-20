@@ -68,6 +68,7 @@ const ExchangeAccount = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 gap: 2,
+                flexDirection: downLg ? "column" : "row"
               }}
             >
               <StyledCard sx={{ flex: 1 }}>
