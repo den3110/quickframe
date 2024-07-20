@@ -292,7 +292,7 @@ const TelegramChannelSignalStrategy = () => {
                         phiên giao dịch gần nhất (UTC+7):
                       </Typography>
                       <List>
-                        {transactions?.messages?.[1]?.message?.histories.map(
+                        {transactions?.messages?.[1]?.message?.histories?.map(
                           (transaction, index) => (
                             <Stack key={index} direction="row" spacing={1}>
                               {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}
@@ -426,7 +426,7 @@ const TelegramChannelSignalStrategy = () => {
                             phiên giao dịch gần nhất (UTC+7):
                           </Typography>
                           <List>
-                            {transactions?.messages?.[1]?.message?.histories.map(
+                            {transactions?.messages?.[1]?.message?.histories?.map(
                               (transaction, index) => (
                                 <Stack key={index} direction="row" spacing={1}>
                                   {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}

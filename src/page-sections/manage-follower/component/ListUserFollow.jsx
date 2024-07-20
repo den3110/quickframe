@@ -159,7 +159,7 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
                     variant="contained"
                     color="primary"
                   >
-                    Block
+                    Chặn
                   </Button>
                 </StyledTableCell>
               </TableRow>
@@ -174,7 +174,7 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
           alignItems={"center"}
           gap={1}
         >
-          <Typography>Show result:</Typography>
+          <Typography>Hiển thị kết quả:</Typography>
           <FormControl variant="outlined" sx={{ minWidth: 60 }}>
             <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
               <MenuItem value={6}>6</MenuItem>

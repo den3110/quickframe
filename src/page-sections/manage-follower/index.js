@@ -49,7 +49,7 @@ const History = styled(Box)(({ theme }) => ({}));
 const HistoryHeader = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
-  alignItems: "center"
+  alignItems: "center",
 }));
 
 const HistoryTable = styled(Box)(({ theme }) => ({}));
@@ -102,7 +102,9 @@ const InfoCard = ({ title, value, tooltip }) => {
 
 function ManageFollowerPage() {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const { data, setData, loading, setChange } = useContext(ManageFollowerContext);
+  const { data, setData, loading, setChange } = useContext(
+    ManageFollowerContext
+  );
   const [tabValue, setTabValue] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
@@ -127,22 +129,25 @@ function ManageFollowerPage() {
             'url("https://quickinvest.ai/static/media/banner-img.46bb8c00534e137faed8.png")',
           backgroundSize: "cover",
           position: "relative",
-          marginBottom: "88px"
+          marginBottom: "88px",
         }}
       >
         <Box sx={{ minHeight: "468px" }}>
-          <Box sx={{
-            "&::before": {
-              bottom: "-42px",
-              background: "url(https://quickinvest.ai/static/media/img-1.7803fbb2ae80371d2726.png) 100% 100% no-repeat",
-              content: '""',
-              display: "block",
-              height: "230px",
-              left: "-9px",
-              position: "absolute", 
-              width: "388px",
-            }
-          }}>
+          <Box
+            sx={{
+              "&::before": {
+                bottom: "-42px",
+                background:
+                  "url(https://quickinvest.ai/static/media/img-1.7803fbb2ae80371d2726.png) 100% 100% no-repeat",
+                content: '""',
+                display: "block",
+                height: "230px",
+                left: "-9px",
+                position: "absolute",
+                width: "388px",
+              },
+            }}
+          >
             <Box
               sx={{
                 width: "100%",
@@ -154,13 +159,17 @@ function ManageFollowerPage() {
               }}
             >
               <Box>
-                <Typography fontSize={downLg ? 28 : 40} color="white" fontWeight={600}>
+                <Typography
+                  fontSize={downLg ? 28 : 40}
+                  color="white"
+                  fontWeight={600}
+                >
                   Thống kê người theo
                   <br />
                   Cùng nhau phát triển
                 </Typography>
               </Box>
-              <Box mb={2} sx={{ width: downLg ? '100%' : 442 }}>
+              <Box mb={2} sx={{ width: downLg ? "100%" : 442 }}>
                 <Card
                   sx={{
                     position: "relative",
@@ -178,7 +187,7 @@ function ManageFollowerPage() {
                       overflow: "visible",
                       display: downLg ? "none" : "",
                     },
-                    overflow: "visible"
+                    overflow: "visible",
                   }}
                   className="alslqas"
                 >
@@ -195,10 +204,25 @@ function ManageFollowerPage() {
                     <Box className="aksmwaaw" sx={{ width: "100" }} mt={2}>
                       <Grid container spacing={1}>
                         <Grid item xs={6}>
-                          <InfoCard title="Tổng người theo dõi" value={_.uniqBy(data?.followList, 'nickName')?.length || 0} tooltip={"Số lượng người dùng đã theo dõi gói đầu tư của bạn"} />
+                          <InfoCard
+                            title="Tổng người theo dõi"
+                            value={
+                              _.uniqBy(data?.followList, "nickName")?.length ||
+                              0
+                            }
+                            tooltip={
+                              "Số lượng người dùng đã theo dõi gói đầu tư của bạn"
+                            }
+                          />
                         </Grid>
                         <Grid item xs={6}>
-                          <InfoCard title="Tổng số gói đang chạy" value={data?.total_plans_running  || 0} tooltip={"Tổng số gói đang chạy trên tài khoản của bạn (Bao gồm cả Live và Demo)"} />
+                          <InfoCard
+                            title="Tổng số gói đang chạy"
+                            value={data?.total_plans_running || 0}
+                            tooltip={
+                              "Tổng số gói đang chạy trên tài khoản của bạn (Bao gồm cả Live và Demo)"
+                            }
+                          />
                         </Grid>
                       </Grid>
                     </Box>
@@ -212,7 +236,12 @@ function ManageFollowerPage() {
       <Box>
         <Content>
           <Card>
-            <Box display={"flex"} justifyContent={"space-between"} p={2} flexDirection={downLg ? "column" : "row"}>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              p={2}
+              flexDirection={downLg ? "column" : "row"}
+            >
               <Tabs
                 value={tabValue}
                 onChange={handleTabChange}
@@ -263,7 +292,12 @@ function ManageFollowerPage() {
                     )}
                   </NoData>
                   {loading === false && data?.followList?.length > 0 && (
-                    <ListUserFollow data={data?.followList} setData={setData} dataProps={data} setChange={setChange} />
+                    <ListUserFollow
+                      data={data?.followList}
+                      setData={setData}
+                      dataProps={data}
+                      setChange={setChange}
+                    />
                   )}
                 </Box>
               )}
@@ -279,7 +313,12 @@ function ManageFollowerPage() {
                     )}
                   </NoData>
                   {loading === false && data?.blockList?.length > 0 && (
-                    <ListUserBlock data={data?.blockList} setData={setData} dataProps={data} setChange={setChange} />
+                    <ListUserBlock
+                      data={data?.blockList}
+                      setData={setData}
+                      dataProps={data}
+                      setChange={setChange}
+                    />
                   )}
                 </Box>
               )}
@@ -299,7 +338,7 @@ function ManageFollowerPage() {
                 <Box sx={{ padding: "16px" }}>
                   <TableContainer component={Paper}>
                     <Table>
-                      {!downLg && 
+                      {!downLg && (
                         <TableHead>
                           <TableRow>
                             <StyledTableCell>Thời gian</StyledTableCell>
@@ -310,15 +349,32 @@ function ManageFollowerPage() {
                             <StyledTableCell>KLGD người theo</StyledTableCell>
                           </TableRow>
                         </TableHead>
-                      }
+                      )}
                       <TableBody>
-                        <TableRow sx={{display: downLg ? "flex" : "", flexWrap: "wrap"}}>
-                          <StyledTableCell sx={{width: downLg ? "50%" : ""}}>15/07/2024 03:24 SA</StyledTableCell>
-                          <StyledTableCell sx={{width: downLg ? "50%" : ""}}>1</StyledTableCell>
-                          <StyledTableCell sx={{width: downLg ? "50%" : ""}}>$111.00</StyledTableCell>
-                          <StyledTableCell sx={{width: downLg ? "50%" : ""}}>0</StyledTableCell>
-                          <StyledTableCell sx={{width: downLg ? "50%" : ""}}>0</StyledTableCell>
-                          <StyledTableCell sx={{width: downLg ? "50%" : ""}}>0</StyledTableCell>
+                        <TableRow
+                          sx={{
+                            display: downLg ? "flex" : "",
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
+                            15/07/2024 03:24 SA
+                          </StyledTableCell>
+                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
+                            1
+                          </StyledTableCell>
+                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
+                            $111.00
+                          </StyledTableCell>
+                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
+                            0
+                          </StyledTableCell>
+                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
+                            0
+                          </StyledTableCell>
+                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
+                            0
+                          </StyledTableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -332,7 +388,7 @@ function ManageFollowerPage() {
                   alignItems={"center"}
                   gap={1}
                 >
-                  <Typography>Show result:</Typography>
+                  <Typography>Hiển thị kết quả:</Typography>
                   <FormControl variant="outlined" sx={{ minWidth: 60 }}>
                     <Select
                       value={rowsPerPage}

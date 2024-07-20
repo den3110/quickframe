@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
         <StyledNavLink
           theme={theme}
           exact
-          to="/dashboard/signal-strategies"
+          to="/signal-strategies"
           activeStyle={{
             color: theme.palette.primary,
             fontWeight: "bold",
@@ -42,7 +42,7 @@ const Layout = ({ children }) => {
         </StyledNavLink>
         <StyledNavLink
         theme={theme}
-          to="/dashboard/signal-strategies/top-signal"
+          to="/signal-strategies/top-signal"
           activeStyle={{
             color: theme.palette.primary,
             fontWeight: "bold",
@@ -59,7 +59,7 @@ const Layout = ({ children }) => {
         </StyledNavLink>
         <StyledNavLink
           theme={theme}
-          to="/dashboard/signal-strategies/telegram-channel"
+          to="/signal-strategies/telegram-channel"
           activeStyle={{
             color: theme.palette.primary,
             fontWeight: "bold",

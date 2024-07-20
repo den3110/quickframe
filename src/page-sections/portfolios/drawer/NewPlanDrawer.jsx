@@ -588,7 +588,7 @@ const NewPlanDrawer = ({
                       alignItems: "center",
                     }}
                   >
-                    Step 1: Plan profile
+                    Bước 1 : Thông tin gói đầu tư
                     <Typography
                       color={
                         walletMode ? theme.palette.success.main : "primary"
@@ -607,10 +607,10 @@ const NewPlanDrawer = ({
               </AppBar>
 
               <Box mt={1}>
-                <Typography variant="subtitle1">Plan name</Typography>
+                <Typography variant="subtitle1">Tên gói</Typography>
                 <TextField
                   fullWidth
-                  placeholder="Enter plan name..."
+                  placeholder="Nhập tên gói (VD : Mua xe, mua nhà)..."
                   required
                   margin="normal"
                   value={planName}
@@ -629,7 +629,7 @@ const NewPlanDrawer = ({
                     display="flex"
                     alignItems="center"
                   >
-                    <Typography variant="subtitle1">Investment fund</Typography>
+                    <Typography variant="subtitle1">Ngân sách đầu tư</Typography>
                     <Box ml={2} display="flex" alignItems="center">
                       <Button
                         variant="contained"
@@ -752,7 +752,7 @@ const NewPlanDrawer = ({
                 <AppBar position="static" color="default">
                   <Toolbar>
                     <Typography variant="h6" style={{ flexGrow: 1 }}>
-                      Step 2: Set up your plan
+                      Bước 2 : Thiết lập gói đầu tư
                     </Typography>
                   </Toolbar>
                 </AppBar>
@@ -828,7 +828,7 @@ const NewPlanDrawer = ({
                   </Box>
                 )}
                 <Box sx={{ width: "100%" }} mt={2}>
-                  <Typography variant="subtitle1">Set base amount</Typography>
+                  <Typography variant="subtitle1">Hệ số vào lệnh</Typography>
                   <Box mt={2} display="flex" alignItems="center" height={56}>
                     <Button
                       variant="contained"
@@ -950,7 +950,7 @@ const NewPlanDrawer = ({
                   selectedTab === "Telegram Signal") && (
                   <Box sx={{ width: "100%" }} fullWidth>
                     <Typography variant="subtitle1">
-                      Budget strategy*
+                      Chiến lược vốn*
                     </Typography>
                     <FormControl variant="outlined" fullWidth margin="normal">
                       <Select
@@ -971,9 +971,9 @@ const NewPlanDrawer = ({
                 
                 <Box sx={{ width: "100%" }}>
                   <Typography variant="subtitle1">
-                    {selectedTab === "Bot AI" && "Signal*"}
+                    {selectedTab === "Bot AI" && "Tín hiệu*"}
                     {selectedTab === "Follow Leader" && "Leader username*"}
-                    {selectedTab === "Telegram Signal" && "Signal*"}
+                    {selectedTab === "Telegram Signal" && "Tín hiệu*"}
                   </Typography>
                   {selectedTab === "Bot AI" && (
                     <FormControl variant="outlined" fullWidth margin="normal">
@@ -1495,12 +1495,10 @@ const NewPlanDrawer = ({
 
               <Box mt={1}>
                 <Typography variant="h6">
-                  Take-Profit/Stop-Loss Conditions
+                Điều Kiện Chốt Lời/Cắt Lỗ
                 </Typography>
                 <Typography variant="body2">
-                  A take-profit or stop-loss order will be triggered
-                  automatically for your plan if one of the following conditions
-                  is met. Today's PnL will be reset at 00:00 GMT.
+                Gói của bạn sẽ tự động chốt lời hoặc cắt lỗ khi một trong các điều kiện sau được đáp ứng. Lợi nhuận hàng ngày được cài lại vào 00:00 GMT.
                 </Typography>
                 <FormControlLabel
                   control={
@@ -1509,7 +1507,7 @@ const NewPlanDrawer = ({
                       onChange={(e) => setTakeProfit(e.target.checked)}
                     />
                   }
-                  label="Enable TP/SL"
+                  label="Kích hoạt"
                 />
               </Box>
               {takeProfit === true && (
@@ -1522,7 +1520,6 @@ const NewPlanDrawer = ({
                         label="Mục tiêu chốt lời ($)"
                         variant="outlined"
                         defaultValue="0"
-                        margin="normal"
                         value={takeProfitTarget}
                         onChange={(e) => setTakeProfitTarget(e.target.value)}
                       />
@@ -1534,7 +1531,6 @@ const NewPlanDrawer = ({
                         label="Mục tiêu cắt lỗ ($)"
                         variant="outlined"
                         defaultValue="0"
-                        margin="normal"
                         value={stopLossTarget}
                         onChange={(e) => setStopLossTarget(e.target.value)}
                       />
@@ -1546,7 +1542,6 @@ const NewPlanDrawer = ({
                         label="Dừng khi thắng LT"
                         variant="outlined"
                         defaultValue="0"
-                        margin="normal"
                         value={winStreakTarget}
                         onChange={(e) => setWinStreakTarget(e.target.value)}
                       />
@@ -1558,7 +1553,6 @@ const NewPlanDrawer = ({
                         label="Dừng khi thua LT"
                         variant="outlined"
                         defaultValue="0"
-                        margin="normal"
                         value={loseStreakTarget}
                         onChange={(e) => setLoseStreakTarget(e.target.value)}
                       />
@@ -1570,7 +1564,6 @@ const NewPlanDrawer = ({
                         label="Dừng khi thắng tổng"
                         variant="outlined"
                         defaultValue="0"
-                        margin="normal"
                         value={winTotalTarget}
                         onChange={(e) => setWinTotalTarget(e.target.value)}
                       />
@@ -1582,7 +1575,6 @@ const NewPlanDrawer = ({
                         label="Dừng khi thua tổng"
                         variant="outlined"
                         defaultValue="0"
-                        margin="normal"
                         value={loseTotalTarget}
                         onChange={(e) => setLoseTotalTarget(e.target.value)}
                       />
@@ -1604,7 +1596,7 @@ const NewPlanDrawer = ({
                     id="advanced-header"
                   >
                     <Typography fontWeight={600}>
-                      Advanced (Optional)
+                      Nâng cao (Tùy chọn)
                     </Typography>
                   </AccordionSummary>
                   <Box p={2}>
@@ -1617,14 +1609,15 @@ const NewPlanDrawer = ({
                             onChange={() => setIsBrokerMode(!isBrokerMode)}
                           />
                         }
-                        label="Broker mode"
+                        label="Kích hoạt"
                       />
                     </Box>
                     <Box mt={2}>
-                      <Typography variant="h6">Private Mode</Typography>
+                      <Typography variant="h6">Chế độ riêng tư</Typography>
                       <Typography variant="body2">
-                        Other user will not be able to copy your plan when you
-                        enable Private mode
+                      Người dùng khác sẽ không thể sao chép gói khi bạn bật Chế độ riêng tư
+
+
                       </Typography>
                       <FormControlLabel
                         control={
@@ -1633,14 +1626,14 @@ const NewPlanDrawer = ({
                             onChange={() => setPrivateMode(!privateMode)}
                           />
                         }
-                        label="Private Mode"
+                       label="Kích hoạt"
                       />
                     </Box>
                     <Box mt={2}>
-                      <Typography variant="h6">Reverse Signal</Typography>
+                      <Typography variant="h6">Tín hiệu đảo lệnh</Typography>
                       <Typography variant="body2">
-                        The order you open will be the opposite of the received
-                        signal
+                      Lệnh bạn mở sẽ ngược lại với tín hiệu nhận được
+
                       </Typography>
                       <FormControlLabel
                         control={
@@ -1649,7 +1642,7 @@ const NewPlanDrawer = ({
                             onChange={() => setReserveSignal(!reserveSignal)}
                           />
                         }
-                        label="Reverse Signal"
+                         label="Kích hoạt"
                       />
                     </Box>
                   </Box>
@@ -1667,13 +1660,13 @@ const NewPlanDrawer = ({
               bgcolor={theme.palette.background.paper}
               py={2}
             >
-              <Button
+              {/* <Button
                 variant="outlined"
                 sx={{ padding: "10px" }}
                 fullWidth={downLg ? true : false}
               >
                 Test Plan (0/40)
-              </Button>
+              </Button> */}
               <Button
                 onClick={() => handleStep(2)}
                 disabled={isDisableButton}
@@ -1682,7 +1675,7 @@ const NewPlanDrawer = ({
                 fullWidth
                 sx={{ padding: "10px" }}
               >
-                Next Step
+                Bước tiếp theo
               </Button>
             </Box>
           </>

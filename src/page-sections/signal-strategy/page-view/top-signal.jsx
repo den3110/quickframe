@@ -309,7 +309,7 @@ const TopSignalPageView = () => {
                               sx={{ cursor: "pointer" }}
                               onClick={() => {
                                 navigate(
-                                  "/dashboard/signal-strategies/" + item?._id
+                                  "/signal-strategies/" + item?._id
                                 );
                               }}
                             >
@@ -513,7 +513,7 @@ const TopSignalPageView = () => {
                 alignItems={"center"}
                 gap={1}
               >
-                <Typography>Show result:</Typography>
+                <Typography>Hiển thị kết quả:</Typography>
                 <FormControl variant="outlined" sx={{ minWidth: 60 }}>
                   <Select
                     value={rowsPerPage}

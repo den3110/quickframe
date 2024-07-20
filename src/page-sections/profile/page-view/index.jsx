@@ -18,7 +18,7 @@ const ProfilePageView = () => {
           <TabPanel value="1">
             <Overview />
           </TabPanel>
-          <TabPanel value="2">
+          {/* <TabPanel value="2">
             <Projects />
           </TabPanel>
           <TabPanel value="3">
@@ -32,7 +32,7 @@ const ProfilePageView = () => {
           </TabPanel>
           <TabPanel value="6">
             <Activity />
-          </TabPanel>
+          </TabPanel> */}
         </Layout>
       </TabContext>
     </Box>;

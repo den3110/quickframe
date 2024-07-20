@@ -44,7 +44,7 @@ const BottomMenuDialog = (props) => {
     >
       <DialogContent sx={{ padding: '10px' }}>
         <List>
-          <ListItem onClick={()=> handleNavigate("/dashboard/manage-follower")} button>
+          <ListItem onClick={()=> handleNavigate("/manage-follower")} button>
             <ListItemText
               primary="Thống kê người theo"
               secondary="Quản lý thống kê người theo dõi đầu tư của bạn"
@@ -57,7 +57,7 @@ const BottomMenuDialog = (props) => {
             </ListItemSecondaryAction>
           </ListItem>
           <Divider />
-          <ListItem onClick={()=> handleNavigate("/dashboard/manual-trade")} button>
+          <ListItem onClick={()=> handleNavigate("/manual-trade")} button>
             <ListItemText
               primary="Giao dịch thủ công"
               secondary="Đặt lệnh không cần tín hiệu"

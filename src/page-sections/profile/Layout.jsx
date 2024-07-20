@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Box, Tab, Card, Stack, styled, IconButton } from "@mui/material";
 import CameraAlt from "@mui/icons-material/CameraAlt";
@@ -86,6 +86,10 @@ const Layout = ({ children, handleTabList }) => {
     }
   };
 
+  useEffect(()=>{
+    console.log(user)
+  }, [user])
+
   return (
     <Fragment>
       <Card
@@ -149,21 +153,21 @@ const Layout = ({ children, handleTabList }) => {
               {user?.email}
             </H6>
 
-            <StyledFlexBetween paddingTop={1} maxWidth={340}>
+            {/* <StyledFlexBetween paddingTop={1} maxWidth={340}>
               <ListItem title="Developer" Icon={Bratislava} />
               <ListItem title="New York" Icon={MapMarkerIcon} />
               <ListItem title="Joined March 17" Icon={DateRange} />
-            </StyledFlexBetween>
+            </StyledFlexBetween> */}
           </Box>
         </ContentWrapper>
 
         <StyledTabList variant="scrollable" onChange={handleTabList}>
           <Tab disableRipple label="Overview" value="1" />
-          <Tab disableRipple label="Projects" value="2" />
+          {/* <Tab disableRipple label="Projects" value="2" />
           <Tab disableRipple label="Campaigns" value="3" />
           <Tab disableRipple label="Documents" value="4" />
           <Tab disableRipple label="Connections" value="5" />
-          <Tab disableRipple label="Activity" value="6" />
+          <Tab disableRipple label="Activity" value="6" /> */}
         </StyledTabList>
       </Card>
 

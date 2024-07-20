@@ -51,10 +51,6 @@ export const DashboardRoutes = [
         path: "",
         element: <Dashboard />,
       },
-      {
-        path: "budget-strategies",
-        element: <BudgetStrategy />,
-      },
       // {
       //   path: "portfolios",
       //   element: <Portfolios />,
@@ -67,34 +63,23 @@ export const DashboardRoutes = [
         path: "profile",
         element: <Profile />,
       },
-      {
-        path: "signal-strategies",
-        element: (
-          <SignalStrategyProvider>
+
+   
+    ],
+  },
+  {
+    path: "portfolios",
+    element: (
+      <ProtectedRoute>
+        <CheckConnectExchange>
+          <DashboardLayout>
             <Outlet />
-          </SignalStrategyProvider>
-        ),
-        children: [
-          {
-            path: "",
-            element: <SignalStrategyList />,
-          },
-          {
-            path: "top-signal",
-            element: <TopSignal />,
-          },
-          {
-            path: "telegram-channel",
-            element: <TelegramChannelPage />,
-          },
-          {
-            path: ":id",
-            element: <PortfolioDetail />,
-          },
-        ],
-      },
+          </DashboardLayout>
+        </CheckConnectExchange>
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: "portfolios",
         element: (
           <PortfoliosProvider>
             <Outlet />
@@ -114,35 +99,122 @@ export const DashboardRoutes = [
             element: <PortfolioDetail />,
           },
         ],
-      },
+      },          
+    ],
+  },
+  {
+    path: "budget-strategies",
+    element: (
+      <ProtectedRoute>
+        <CheckConnectExchange>
+          <DashboardLayout>
+            <Outlet />
+          </DashboardLayout>
+        </CheckConnectExchange>
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: "manual-trade",
+        element: (
+          <BudgetStrategy/>
+        ),
+       path : ""
+      },          
+    ],
+  },
+  {
+    path: "signal-strategies",
+    element: (
+      <ProtectedRoute>
+        <CheckConnectExchange>
+          <DashboardLayout>
+            <Outlet />
+          </DashboardLayout>
+        </CheckConnectExchange>
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        element: (
+          <SignalStrategyProvider>
+            <Outlet />
+          </SignalStrategyProvider>
+        ),
+        children:[
+          {
+            path: "",
+            element: <SignalStrategyList />,
+          },
+          {
+            path: "top-signal",
+            element: <TopSignal />,
+          },
+          {
+            path: "telegram-channel",
+            element: <TelegramChannelPage />,
+          },
+          {
+            path: ":id",
+            element: <PortfolioDetail />,
+          },
+        ],
+      },          
+    ],
+  },
+  {
+    path: "manual-trade",
+    element: (
+      <ProtectedRoute>
+        <CheckConnectExchange>
+          <DashboardLayout>
+            <Outlet />
+          </DashboardLayout>
+        </CheckConnectExchange>
+      </ProtectedRoute>
+    ),
+    children: [
+      {
         element: (
           <ManualTradeProvider>
-            <Outlet />
-          </ManualTradeProvider>
+          <Outlet />
+        </ManualTradeProvider>
         ),
         children: [
           {
             path: "",
             element: <ManualTradePage />,
           },
+        
         ],
-      },
+      },          
+    ],
+  },
+  {
+    path: "manage-follower",
+    element: (
+      <ProtectedRoute>
+        <CheckConnectExchange>
+          <DashboardLayout>
+            <Outlet />
+          </DashboardLayout>
+        </CheckConnectExchange>
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: "manage-follower",
         element: (
           <ManageFollowerProvider>
-            <Outlet />
-          </ManageFollowerProvider>
+          <Outlet />
+        </ManageFollowerProvider>
         ),
         children: [
           {
             path: "",
             element: <ManageFollowerPage />,
           },
+        
         ],
-      },
+      },          
     ],
   },
 ];

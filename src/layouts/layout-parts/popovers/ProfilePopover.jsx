@@ -106,18 +106,18 @@ const ProfilePopover = () => {
         }
       >
         <Box pt={1}>
-          <StyledSmall onClick={handleMenuItem("/dashboard/profile")}>
+          {/* <StyledSmall onClick={handleMenuItem("/dashboard/profile")}>
             Set Status
-          </StyledSmall>
+          </StyledSmall> */}
           <StyledSmall onClick={handleMenuItem("/dashboard/profile")}>
             Profile & Account
           </StyledSmall>
-          <StyledSmall onClick={handleMenuItem("/dashboard/account")}>
+          {/* <StyledSmall onClick={handleMenuItem("/dashboard/account")}>
             Settings
           </StyledSmall>
           <StyledSmall onClick={handleMenuItem("/dashboard/profile")}>
             Manage Team
-          </StyledSmall>  
+          </StyledSmall>   */}
           {downLg &&
             <StyledSmall onClick={()=> {}}>
               <Box display="flex" alignItems="center">

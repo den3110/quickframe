@@ -34,11 +34,11 @@ export default function BottomMenu() {
     switch (location.pathname) {
       case "/dashboard":
         return 0;
-      case "/dashboard/portfolios":
+      case "/portfolios":
         return 1;
-      case "/dashboard/budget-strategies":
+      case "/budget-strategies":
         return 2;
-      case "/dashboard/signal-strategies":
+      case "/signal-strategies":
         return 3;
       default:
         return 4; // Assuming the last item is the menu
@@ -62,7 +62,7 @@ export default function BottomMenu() {
             icon={<duotone.DashboardIcon />} 
           />
           <BottomNavigationAction 
-            onClick={() => handleNavigate("/dashboard/portfolios")} 
+            onClick={() => handleNavigate("/portfolios")} 
             icon={
               <Badge badgeContent={botTotal} color="primary">
                 <duotone.Portfolios />
@@ -70,11 +70,11 @@ export default function BottomMenu() {
             }
           />
           <BottomNavigationAction 
-            onClick={() => handleNavigate("/dashboard/budget-strategies")} 
+            onClick={() => handleNavigate("/budget-strategies")} 
             icon={<duotone.BudgetStrategy />} 
           />
           <BottomNavigationAction 
-            onClick={() => handleNavigate("/dashboard/signal-strategies")} 
+            onClick={() => handleNavigate("/signal-strategies")} 
             icon={<duotone.SignalStrategy />} 
           />
           <BottomNavigationAction 

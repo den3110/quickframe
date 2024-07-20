@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
         <StyledNavLink
           theme={theme}
           exact
-          to="/dashboard/portfolios"
+          to="/portfolios"
           activeStyle={{
             color: theme.palette.primary,
             fontWeight: "bold",
@@ -42,7 +42,7 @@ const Layout = ({ children }) => {
         </StyledNavLink>
         <StyledNavLink
           theme={theme}
-          to="/dashboard/portfolios/statistic"
+          to="/portfolios/statistic"
           activeStyle={{
             color: theme.palette.primary,
             fontWeight: "bold",

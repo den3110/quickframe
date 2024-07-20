@@ -449,11 +449,11 @@ const PortfoliosList = () => {
             >
               <Box sx={{ width: downLg ? "100%" : "auto" }} display={"flex"}>
                 <Box
-                  sx={{ width: downLg ? "100%" : "60%", paddingRight: "10px" }}
+                  sx={{ width:  "100%", paddingRight: "10px" }}
                 >
                   <TextField
                     variant="outlined"
-                    placeholder="Search Plan..."
+                    placeholder="Tìm gói đầu tư..."
                     InputProps={{
                       startAdornment: (
                         <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
@@ -778,9 +778,9 @@ const PortfoliosList = () => {
                                       setSelectedPlan(plan);
                                     }}
                                   >
-                                    Edit Plan
+                                    Sửa cấu hình
                                   </MenuItem>
-                                  <MenuItem
+                                  {/* <MenuItem
                                     onClick={() => {
                                       handleDuplicateOpen();
                                       setSelectedPlan(plan);
@@ -788,7 +788,7 @@ const PortfoliosList = () => {
                                     }}
                                   >
                                     Duplicate Plan
-                                  </MenuItem>
+                                  </MenuItem> */}
                                   <MenuItem
                                     onClick={() => {
                                       handleDialogOpen(plan);
@@ -796,9 +796,9 @@ const PortfoliosList = () => {
                                       handleClose(index);
                                     }}
                                   >
-                                    Share Achievement
+                                    Chia sẻ thành tích
                                   </MenuItem>
-                                  <MenuItem
+                                  {/* <MenuItem
                                     onClick={() => {
                                       handleSharePlanOpen();
                                       setSelectedPlan(plan);
@@ -806,10 +806,10 @@ const PortfoliosList = () => {
                                     }}
                                   >
                                     Share Plan
-                                  </MenuItem>
-                                  <MenuItem onClick={() => handleClose(index)}>
+                                  </MenuItem> */}
+                                  {/* <MenuItem onClick={() => handleClose(index)}>
                                     Copy plan to LIVE
-                                  </MenuItem>
+                                  </MenuItem> */}
                                 </Menu>
                               </StyledTableCell>
                               <StyledTableCell
@@ -978,7 +978,7 @@ const PortfoliosList = () => {
                 alignItems={"center"}
                 gap={1}
               >
-                <Typography>Show result:</Typography>
+                <Typography>Hiển thị kết quả:</Typography>
                 <FormControl variant="outlined" sx={{ minWidth: 60 }}>
                   <Select
                     value={rowsPerPage}

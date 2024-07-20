@@ -570,7 +570,7 @@ const CustomTimeline = () => {
             alignItems={"center"}
             gap={1}
           >
-            <Typography>Show result:</Typography>
+            <Typography>Hiển thị kết quả:</Typography>
             <FormControl variant="outlined" sx={{ minWidth: 60 }}>
               <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
                 <MenuItem value={6}>6</MenuItem>
