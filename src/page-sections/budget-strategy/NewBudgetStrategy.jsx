@@ -61,24 +61,24 @@ const NewBudgetStrategy = ({
   const [disableButton, setDisableButton] = useState();
   const [isDefaultStrategy, setIsDefaultStrategy] = useState(false);
   const handleIncrement = () => {
-    setCount(count + 1);
+    setCount(parseInt(count) + 1);
   };
 
   const handleDecrement = () => {
-    setCount(count > 0 ? count - 1 : 0);
+    setCount(parseInt(count) > 0 ? parseInt(count) - 1 : 0);
   };
 
   const handleIncrement2 = () => {
-    setCount2(count2 + 1);
+    setCount2(parseInt(count2) + 1);
   };
 
   const handleDecrement2 = () => {
-    setCount2(count2 > 0 ? count2 - 1 : 0);
+    setCount2(parseInt(count2) > 0 ? parseInt(count2) - 1 : 0);
   };
 
-  const validateInput = (value) => {
+  const validateInput = (value= "") => {
     const pattern = /^(\d+(\.\d+)?)(-(\d+(\.\d+)?))*$/;
-    if (value?.match(pattern)) {
+    if (value?.length > 0 && value?.match(pattern)) {
       return false;
     }
     return true;
@@ -86,10 +86,10 @@ const NewBudgetStrategy = ({
 
   const isErrorInputAmount =
     parseFloat(amount) < 1 || parseFloat(amount) > 1000000;
-  const isErrormethod1 = validateInput(method1);
-  const isErrormethod2 = validateInput(method2);
-  const isErrormethod3 = validateInput(method3);
-  const isErrormethod4 = validateInput(method4);
+  const isErrormethod1 = validateInput(method1 || "");
+  const isErrormethod2 = validateInput(method2 || "");
+  const isErrormethod3 = validateInput(method3 || "");
+  const isErrormethod4 = validateInput(method4 || "");
   const handleSave = async () => {
     let data;
     let methodData;
@@ -120,7 +120,7 @@ const NewBudgetStrategy = ({
         data = {
           name: strategyName,
           method_data: methodData,
-          // increaseValueType,
+          increaseValueType,
           type,
           is_default: isDefaultStrategy,
         };
@@ -363,6 +363,7 @@ const NewBudgetStrategy = ({
           setMethod1("1-2-3-5-8-13-21-34-55-89-144");
           setCount(0);
           setCount2(0);
+          setIncreaseValueType(IncreaseValueType.AFTER_LOSS)
           break;
         case BudgetStrategyType.MARTINGALE:
           console.log(2222)
@@ -648,7 +649,6 @@ const NewBudgetStrategy = ({
                     <ListItem sx={{ order: downLg ? 2 : 1 }}>
                       <FormControl fullWidth>
                         <InputLabel
-                        
                           sx={{
                             background: (theme) =>
                               isDark(theme) ? "#1f2937" : "white",

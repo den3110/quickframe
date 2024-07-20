@@ -279,12 +279,12 @@ const TelegramChannelSignalStrategy = () => {
                         maxHeight: "calc(-300px - 32px - 32px - 12px + 100vh)",
                       }}
                     >
-                      <Typography variant="body1" sx={{ display: "flex" }}>
+                      {/* <Typography variant="body1" sx={{ display: "flex" }}>
                         Kết quả :{" "}
                         <Typography sx={{ color: "success.main" }}>
                           THẮNG : +0.95$
                         </Typography>
-                      </Typography>
+                      </Typography> */}
                       <Typography variant="body1">
                         🎉 Tổng hợp{" "}
                         {transactions?.messages?.[1]?.message?.histories
@@ -413,12 +413,12 @@ const TelegramChannelSignalStrategy = () => {
                             maxHeight: "200px",
                           }}
                         >
-                          <Typography variant="body1" sx={{ display: "flex" }}>
+                          {/* <Typography variant="body1" sx={{ display: "flex" }}>
                             Kết quả :{" "}
                             <Typography sx={{ color: "success.main" }}>
                               THẮNG : +0.95$
                             </Typography>
-                          </Typography>
+                          </Typography> */}
                           <Typography variant="body1">
                             🎉 Tổng hợp{" "}
                             {transactions?.messages?.[1]?.message?.histories

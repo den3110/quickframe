@@ -1,6 +1,6 @@
 function hexToRgb(hex) {
     // Loại bỏ ký tự '#' nếu có
-    hex = hex.replace(/^#/, '');
+    hex = hex?.replace(/^#/, '');
 
     // Chuyển đổi hex thành các thành phần màu
     let bigint = parseInt(hex, 16);

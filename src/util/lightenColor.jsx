@@ -6,7 +6,7 @@
  */
 function lightenColor(hex, percent, warmFactor) {
     // Loại bỏ ký tự #
-  hex = hex.replace(/^#/, '');
+  hex = hex?.replace(/^#/, '');
 
   // Chuyển đổi hex thành RGB
   let r = parseInt(hex.substring(0, 2), 16);

@@ -44,6 +44,7 @@ import { SettingsContext } from "contexts/settingsContext";
 import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
 import { useInView } from "react-intersection-observer";
+import { GlobalContext } from "contexts/GlobalContext";
 
 const NewPlanDrawer = ({
   open,
@@ -61,6 +62,7 @@ const NewPlanDrawer = ({
     threshold: 0,
   });
   const [idPlan, setIdPlan] = useState();
+  const {setChange }= useContext(GlobalContext)
   const { decodedData } = useContext(JwtContext);
   const { walletMode } = useContext(SettingsContext);
   const [step, setStep] = useState(1);
@@ -376,6 +378,7 @@ const NewPlanDrawer = ({
           dataTemp[indexData] = data;
           setData(dataTemp);
         } else {
+          setChange(prev=> !prev)
           setData((prev) => [response?.data?.d, ...prev]);
         }
         showToast(
@@ -1493,13 +1496,15 @@ const NewPlanDrawer = ({
                 </Box>
               )} */}
 
-              <Box mt={1}>
-                <Typography variant="h6">
-                Điều Kiện Chốt Lời/Cắt Lỗ
-                </Typography>
-                <Typography variant="body2">
-                Gói của bạn sẽ tự động chốt lời hoặc cắt lỗ khi một trong các điều kiện sau được đáp ứng. Lợi nhuận hàng ngày được cài lại vào 00:00 GMT.
-                </Typography>
+              <Box mt={1} display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={1}> 
+                <Box>
+                  <Typography variant="h6">
+                    Điều Kiện Chốt Lời/Cắt Lỗ
+                  </Typography>
+                  <Typography variant="body2">
+                    Gói của bạn sẽ tự động chốt lời hoặc cắt lỗ khi một trong các điều kiện sau được đáp ứng. Lợi nhuận hàng ngày được cài lại vào 00:00 GMT.
+                  </Typography>
+                </Box>
                 <FormControlLabel
                   control={
                     <Switch
@@ -1507,7 +1512,6 @@ const NewPlanDrawer = ({
                       onChange={(e) => setTakeProfit(e.target.checked)}
                     />
                   }
-                  label="Kích hoạt"
                 />
               </Box>
               {takeProfit === true && (
@@ -1600,7 +1604,7 @@ const NewPlanDrawer = ({
                     </Typography>
                   </AccordionSummary>
                   <Box p={2}>
-                    <Box mt={2}>
+                    <Box mt={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={1}>
                       <Typography variant="h6">Chế độ chuyên gia</Typography>
                       <FormControlLabel
                         control={
@@ -1608,33 +1612,32 @@ const NewPlanDrawer = ({
                             checked={isBrokerMode}
                             onChange={() => setIsBrokerMode(!isBrokerMode)}
                           />
-                        }
-                        label="Kích hoạt"
+                        }                        
                       />
                     </Box>
-                    <Box mt={2}>
-                      <Typography variant="h6">Chế độ riêng tư</Typography>
-                      <Typography variant="body2">
-                      Người dùng khác sẽ không thể sao chép gói khi bạn bật Chế độ riêng tư
-
-
-                      </Typography>
+                    <Box mt={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={1}>
+                      <Box>
+                        <Typography variant="h6">Chế độ riêng tư</Typography>
+                        <Typography variant="body2">
+                          Người dùng khác sẽ không thể sao chép gói khi bạn bật Chế độ riêng tư
+                        </Typography>
+                      </Box>
                       <FormControlLabel
                         control={
                           <Switch
                             checked={privateMode}
                             onChange={() => setPrivateMode(!privateMode)}
                           />
-                        }
-                       label="Kích hoạt"
+                        }                       
                       />
                     </Box>
-                    <Box mt={2}>
-                      <Typography variant="h6">Tín hiệu đảo lệnh</Typography>
-                      <Typography variant="body2">
-                      Lệnh bạn mở sẽ ngược lại với tín hiệu nhận được
-
-                      </Typography>
+                    <Box mt={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={1}>
+                      <Box>
+                        <Typography variant="h6">Tín hiệu đảo lệnh</Typography>
+                        <Typography variant="body2">
+                          Lệnh bạn mở sẽ ngược lại với tín hiệu nhận được
+                        </Typography>
+                      </Box>
                       <FormControlLabel
                         control={
                           <Switch
@@ -1642,7 +1645,6 @@ const NewPlanDrawer = ({
                             onChange={() => setReserveSignal(!reserveSignal)}
                           />
                         }
-                         label="Kích hoạt"
                       />
                     </Box>
                   </Box>

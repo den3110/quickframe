@@ -124,8 +124,8 @@ const ConnectAccountPage = () => {
                   {dataExchangeUrl && (
                     <Box
                       style={{
-                        // background:
-                        //   "linear-gradient(rgb(102, 108, 117) 0%, rgb(2, 13, 29) 100%)",
+                        background:
+                          "linear-gradient(rgb(102, 108, 117) 0%, rgb(2, 13, 29) 100%)",
                         width: "max-content",
                       }}
                       pl={4}

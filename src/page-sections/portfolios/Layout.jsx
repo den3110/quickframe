@@ -56,6 +56,20 @@ const Layout = ({ children }) => {
             Thống kê
           </Typography>
         </StyledNavLink>
+        <StyledNavLink
+          theme={theme}
+          to="/portfolios/schedule"
+          className={selectedLink=== "/portfolios/schedule" && "active-custom"}
+          sx={{ textDecoration: "none", color: "inherit" }}
+        >
+          <Typography 
+            variant="h6"
+            fontWeight={"600"}
+            sx={{ "&:hover": { color: theme.palette.primary },  "&:active": { color: theme.palette.primary } }}
+          >
+            Hẹn giờ
+          </Typography>
+        </StyledNavLink>
       </Box>
       <Card
         sx={{

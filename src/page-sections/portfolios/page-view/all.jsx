@@ -59,6 +59,7 @@ import formatCurrency from "util/formatCurrency";
 import DuplicatePlan from "../dialog/DuplicatePlan";
 import SharePlan from "../dialog/SharePlan";
 import FilterIcon from "icons/duotone/FilterIcon";
+import { GlobalContext } from "contexts/GlobalContext";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -96,6 +97,7 @@ const PortfoliosList = () => {
     stop_loss_target: 0,
   });
   const canvasRef = useRef();
+  const {setChange} = useContext(GlobalContext)
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
@@ -402,6 +404,7 @@ const PortfoliosList = () => {
           (item, key) => !selectedPlans.find((a) => a._id === item._id)
         )
       );
+      setChange(prev=> !prev)
     } catch (error) {
       console.error("Error sending requests:", error);
     } finally {

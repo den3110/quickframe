@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import { Gauge, gaugeClasses  } from "@mui/x-charts";
 
-const TradeRateChart = ({ rate }) => {
+const TradeRateChart = ({ rate= 0 }) => {
   const theme = useTheme();
 
   return (
@@ -17,7 +17,7 @@ const TradeRateChart = ({ rate }) => {
         }}
         width={120}
         height={120}
-        value={rate}
+        value={isNaN(rate) ? 0 : rate}
         startAngle={-90}
         endAngle={90}
       />

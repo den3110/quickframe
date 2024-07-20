@@ -81,7 +81,7 @@ const RegisterPageView = () => {
   return (
     <Layout>
       <Box maxWidth={550} p={4}>
-        <H5 fontSize={{ sm: 30, xs: 25 }}>Sign up for 14 days free trial</H5>
+        <H5 fontSize={{ sm: 30, xs: 25 }}>Sign up free</H5>
 
         <Paragraph mt={1} mb={6} color="text.secondary">
           No risk, no obligations, no credit-card required.

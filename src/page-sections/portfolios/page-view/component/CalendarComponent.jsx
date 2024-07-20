@@ -51,7 +51,7 @@ const monthNames = [
 const InfoCard = ({ title, value, tooltip, setIsHidden, isHidden }) => {
   return (
     <Card variant="outlined" style={{ borderRadius: 16 }}>
-      <Box sx={{ padding: 1 }}>
+      <Box sx={{ padding: "8px 12px" }}>
         <Grid
           container
           alignItems="center"
@@ -93,11 +93,11 @@ const InfoCard = ({ title, value, tooltip, setIsHidden, isHidden }) => {
             )}
           </Grid>
         </Grid>
-        {isHidden && <Typography color="secondary">*********</Typography>}
+        {isHidden && <Typography fontSize={14} color="secondary">*********</Typography>}
         {!isHidden && (
           <Typography
             variant="body1"
-            fontSize={18}
+            fontSize={14}
             fontWeight={600}
             color={value > 0 ? "success.main" : "error.main"}
             sx={{ filter: "contrast(2.5)" }}
@@ -281,8 +281,28 @@ const CustomToolbar = ({
               background: theme.palette.background.t1,
               display: "flex",
             }}
-          >
+          >     
             <Box
+              onClick={() => {
+                setMode(true);
+                
+              }}
+              sx={{
+                backgroundColor: mode === true && "success.main",
+                backgroundPosition: "50%",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "22px 22px",
+                borderRadius: "6px",
+                cursor: "pointer",
+                display: "block",
+                height: 26,
+                margin: 0,
+                width: 38,
+                backgroundImage:
+                  "url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTQuNDcgMTkuODE3aDEyLjM3OGExLjc3IDEuNzcgMCAwIDAgMS43NjgtMS43NjhWNS42N2ExLjc3IDEuNzcgMCAwIDAtMS43NjgtMS43NjloLTEuNzY5VjIuMTM0aC0xLjc2OHYxLjc2OEg4LjAwNlYyLjEzNEg2LjIzOHYxLjc2OEg0LjQ2OWExLjc3IDEuNzcgMCAwIDAtMS43NjggMS43Njl2MTIuMzc4YTEuNzcgMS43NyAwIDAgMCAxLjc2OCAxLjc2OFptOS43MjUtNS4zMDVINy4xMjJ2LTEuNzY4aDcuMDczdjEuNzY4Wk00LjQ3IDYuNTU1aDEyLjM3OHYxLjc2OEg0LjQ3VjYuNTU1WiIgZmlsbD0iI0ZBRkFGQSIvPjwvc3ZnPg==)",
+              }}
+            ></Box>
+             <Box
               onClick={() => {
                 setMode(false);
               }}
@@ -299,26 +319,6 @@ const CustomToolbar = ({
                 width: 38,
                 backgroundImage:
                   "url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgZmlsbD0ibm9uZSI+PHBhdGggZD0ibTIuMDU5IDE1Ljc1IDMuMDk0LTMuNzEzIDEuMzI2IDIuMTIxIDYuNjMxLTcuOTU3IDMuNTM3IDUuODM2IDIuNjUyLTIuNjUzIiBzdHJva2U9IiNBMEFFQzAiIHN0cm9rZS13aWR0aD0iMS41OTEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==)",
-              }}
-            ></Box>
-            <Box
-              onClick={() => {
-                setMode(true);
-                console.log(1);
-              }}
-              sx={{
-                backgroundColor: mode === true && "success.main",
-                backgroundPosition: "50%",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "22px 22px",
-                borderRadius: "6px",
-                cursor: "pointer",
-                display: "block",
-                height: 26,
-                margin: 0,
-                width: 38,
-                backgroundImage:
-                  "url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTQuNDcgMTkuODE3aDEyLjM3OGExLjc3IDEuNzcgMCAwIDAgMS43NjgtMS43NjhWNS42N2ExLjc3IDEuNzcgMCAwIDAtMS43NjgtMS43NjloLTEuNzY5VjIuMTM0aC0xLjc2OHYxLjc2OEg4LjAwNlYyLjEzNEg2LjIzOHYxLjc2OEg0LjQ2OWExLjc3IDEuNzcgMCAwIDAtMS43NjggMS43Njl2MTIuMzc4YTEuNzcgMS43NyAwIDAgMCAxLjc2OCAxLjc2OFptOS43MjUtNS4zMDVINy4xMjJ2LTEuNzY4aDcuMDczdjEuNzY4Wk00LjQ3IDYuNTU1aDEyLjM3OHYxLjc2OEg0LjQ3VjYuNTU1WiIgZmlsbD0iI0ZBRkFGQSIvPjwvc3ZnPg==)",
               }}
             ></Box>
           </Box>
@@ -371,7 +371,7 @@ const CustomDaySlot = ({ children }) => (
 const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
   const { walletMode } = useContext(SettingsContext);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [mode, setMode] = useState(false);
+  const [mode, setMode] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const theme = useTheme();
   const [stat, setStat] = useState();
@@ -543,7 +543,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         isHiddenVolume={isHiddenVolume}
         setIsHiddenVolume={setIsHiddenVolume}
       />
-      {mode === false && (
+      {mode === true && (
         <Calendar
           className="custom-calendar"
           localizer={localizer}
@@ -573,7 +573,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
           onNavigate={(date) => setCurrentDate(date)}
         />
       )}
-      {mode=== true && <Box sx={{width: "100%"}}>
+      {mode=== false && <Box sx={{width: "100%"}}>
         <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexDirection={downLg ? "column" : "row"}>
           <Box sx={{width: downLg ? "100%" : "48%"}}>
             <Box mb={4}>

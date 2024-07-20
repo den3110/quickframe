@@ -38,11 +38,14 @@ import sortData from "util/sortData";
 // import RefreshProvider from "contexts/RefreshContext";
 // import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 import { SignalMethodUsingTypesTitle } from "type/SignalMethodUsing";
+import { JwtContext } from "contexts/jwtContext";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
-  width: useMediaQuery((theme) => theme.breakpoints.down("lg")) ? "50%" : "auto",
+  width: useMediaQuery((theme) => theme.breakpoints.down("lg"))
+    ? "50%"
+    : "auto",
 }));
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
@@ -66,7 +69,10 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const SignalStrategyList = () => {
-  const { data, setData, loading, setChange } = useContext(SignalStrategyContext);
+  const { decodedData } = useContext(JwtContext);
+  const { data, setData, loading, setChange } = useContext(
+    SignalStrategyContext
+  );
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
@@ -144,7 +150,7 @@ const SignalStrategyList = () => {
             >
               <TextField
                 variant="outlined"
-                sx={{width: downLg ? "aaa" : 450}}
+                sx={{ width: downLg ? "aaa" : 450 }}
                 placeholder="Search Strategy..."
                 InputProps={{
                   startAdornment: (
@@ -211,6 +217,7 @@ const SignalStrategyList = () => {
                     <TableRow>
                       <StyledTableCell>Strategy name</StyledTableCell>
                       <StyledTableCell>Method Using</StyledTableCell>
+                      <StyledTableCell>Loại chiến lược</StyledTableCell>
                       <StyledTableCell>Actions</StyledTableCell>
                     </TableRow>
                   </TableHead>
@@ -270,6 +277,16 @@ const SignalStrategyList = () => {
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{
+                                order: downLg ? 3 : 2,
+                                borderBottom: downLg ? "none" : "",
+                              }}
+                            >
+                              {row?.is_default === true
+                                ? "Chiến lược mặc định"
+                                : "Chiến lược tuỳ chỉnh"}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{
                                 order: downLg ? 2 : 4,
                                 display: downLg ? "flex" : "",
                                 flexDirection: "row-reverse",
@@ -295,34 +312,67 @@ const SignalStrategyList = () => {
                                   horizontal: "right",
                                 }}
                               >
-                                <StyledMenuItem
-                                  onClick={() => {
-                                    if (row.type === "STRING_METHOD") {
-                                      handleOpenNewBotAIStringMethod();
-                                      setIsEditStringMethod(true);
-                                      setSelectedBot(row);
-                                      handleClose(index);
-                                    } else if (row.type === "BUBBLE_METHOD") {
-                                      handleOpenNewBotAI();
-                                      handleClose(index);
-                                      setIsEdit(true);
-                                      setSelectedBot(row);
-                                      setInitState(true);
-                                    }
-                                  }}
-                                >
-                                  Edit Bot
-                                </StyledMenuItem>
-                                <StyledMenuItem>Share Bot</StyledMenuItem>
-                                <StyledMenuItem
-                                  onClick={() => {
-                                    handleClose(index);
-                                    setSelectedBot(row);
-                                    handleOpenDeleteBot();
-                                  }}
-                                >
-                                  Delete Bot
-                                </StyledMenuItem>
+                                {decodedData?.data?._id === row?.userId && (
+                                  <>
+                                    <StyledMenuItem
+                                      onClick={() => {
+                                        if (row.type === "STRING_METHOD") {
+                                          handleOpenNewBotAIStringMethod();
+                                          setIsEditStringMethod(true);
+                                          setSelectedBot(row);
+                                          handleClose(index);
+                                        } else if (
+                                          row.type === "BUBBLE_METHOD"
+                                        ) {
+                                          handleOpenNewBotAI();
+                                          handleClose(index);
+                                          setIsEdit(true);
+                                          setSelectedBot(row);
+                                          setInitState(true);
+                                        }
+                                      }}
+                                    >
+                                      Edit Strategy
+                                    </StyledMenuItem>
+                                    <StyledMenuItem>
+                                      Share Strategy
+                                    </StyledMenuItem>
+                                    <StyledMenuItem
+                                      onClick={() => {
+                                        handleClose(index);
+                                        setSelectedBot(row);
+                                        handleOpenDeleteBot();
+                                      }}
+                                    >
+                                      Delete Strategy
+                                    </StyledMenuItem>
+                                  </>
+                                )}
+                                {row?.is_default === true &&
+                                  decodedData?.data?._id !== row?.userId && (
+                                    <>
+                                      <StyledMenuItem
+                                        onClick={() => {
+                                          if (row.type === "STRING_METHOD") {
+                                            handleOpenNewBotAIStringMethod();
+                                            setIsEditStringMethod(true);
+                                            setSelectedBot(row);
+                                            handleClose(index);
+                                          } else if (
+                                            row.type === "BUBBLE_METHOD"
+                                          ) {
+                                            handleOpenNewBotAI();
+                                            handleClose(index);
+                                            setIsEdit(true);
+                                            setSelectedBot(row);
+                                            setInitState(true);
+                                          }
+                                        }}
+                                      >
+                                        View Strategy
+                                      </StyledMenuItem>
+                                    </>
+                                  )}
                               </Menu>
                             </StyledTableCell>
                           </StyledTableRow>
@@ -331,25 +381,25 @@ const SignalStrategyList = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-              {loading === false && data?.length <= 0 && (
-                <Box
-                  sx={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <EmptyPage
-                    title={"Danh mục tín hiệu đang trống"}
-                    subTitle={
-                      "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
-                    }
-                    titleButton={"Tạo chiến lược mới"}
-                    actionClick={handleMenuClick}
-                  />
-                </Box>
-              )}
+            {loading === false && data?.length <= 0 && (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <EmptyPage
+                  title={"Danh mục tín hiệu đang trống"}
+                  subTitle={
+                    "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
+                  }
+                  titleButton={"Tạo chiến lược mới"}
+                  actionClick={handleMenuClick}
+                />
+              </Box>
+            )}
             <PaginationContainer>
               <Box
                 display={"flex"}

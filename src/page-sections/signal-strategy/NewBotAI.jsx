@@ -161,10 +161,10 @@ const NewBotAI = ({
         }
         onClose();
       } else if (response?.data?.ok === false) {
-        showToast(response?.data?.m);
+        showToast(response?.data?.m, "error");
       }
     } catch (error) {
-      showToast(error?.response?.data?.m);
+      showToast(error?.response?.data?.m, "error");
     }
   };
 

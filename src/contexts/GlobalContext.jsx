@@ -6,6 +6,7 @@ export const GlobalContext = createContext();
 const GlobalProvider = ({ children }) => {
   const [botTotal, setBotTotal] = useState(0);
   const {walletMode }= useContext(SettingsContext)
+  const [change, setChange]= useState(false)
   useEffect(() => {
     (async () => {
       try {
@@ -17,7 +18,7 @@ const GlobalProvider = ({ children }) => {
         }
       } catch (error) {}
     })();
-  }, [walletMode]);
-  return <GlobalContext.Provider value={{botTotal}}>{children}</GlobalContext.Provider>;
+  }, [walletMode, change]);
+  return <GlobalContext.Provider value={{botTotal, change, setChange}}>{children}</GlobalContext.Provider>;
 };
 export default GlobalProvider;

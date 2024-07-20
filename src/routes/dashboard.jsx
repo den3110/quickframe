@@ -19,6 +19,7 @@ import ManageFollowerProvider from "contexts/ManageFollowerContext";
 import TopSignal from "pages/dashboard/signal-strategy/inbox";
 import TelegramChannelPage from "pages/dashboard/signal-strategy/sent";
 import StatPortfolio from "page-sections/portfolios/page-view/stat";
+import PortfolioSchedule from "page-sections/portfolios/page-view/schedule";
 // ALL DASHBOARD PAGES
 const BudgetStrategy = Loadable(
   lazy(() => import("pages/dashboard/budget-strategy"))
@@ -97,6 +98,10 @@ export const DashboardRoutes = [
           {
             path: ":id",
             element: <PortfolioDetail />,
+          },
+          {
+            path: "schedult",
+            element: <PortfolioSchedule />,
           },
         ],
       },          
