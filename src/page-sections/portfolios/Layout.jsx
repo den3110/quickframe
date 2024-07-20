@@ -76,7 +76,7 @@ const Layout = ({ children }) => {
           display: "flex",
         }}
       >
-        <Box flexGrow={1}>{children}</Box>
+        <Box sx={{width: '100%'}} flexGrow={1}>{children}</Box>
       </Card>
     </Box>
   );

@@ -580,7 +580,7 @@ const NewPlanDrawer = ({
       >
         {step === 1 && (
           <>
-            <div>
+            <Box>
               <AppBar position="static" color="default">
                 <Toolbar>
                   <Typography
@@ -1650,7 +1650,7 @@ const NewPlanDrawer = ({
                   </Box>
                 </Accordion>
               </Box>
-            </div>
+            </Box>
 
             <Box
               // mt={4}
