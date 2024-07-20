@@ -126,7 +126,7 @@ function ManageFollowerPage() {
       <Box
         sx={{
           backgroundImage:
-            'url("https://quickinvest.ai/static/media/banner-img.46bb8c00534e137faed8.png")',
+            'url("/static/banner/banner_1.png")',
           backgroundSize: "cover",
           position: "relative",
           marginBottom: "88px",
@@ -138,7 +138,7 @@ function ManageFollowerPage() {
               "&::before": {
                 bottom: "-42px",
                 background:
-                  "url(https://quickinvest.ai/static/media/img-1.7803fbb2ae80371d2726.png) 100% 100% no-repeat",
+                  "url(/static/banner/banner_2.png) 100% 100% no-repeat",
                 content: '""',
                 display: "block",
                 height: "230px",
@@ -182,7 +182,7 @@ function ManageFollowerPage() {
                       width: 129,
                       right: 20,
                       background:
-                        "url(https://quickinvest.ai/static/media/img-2.2bebcb16ef4c97ea99a9.png) 100% 100% no-repeat",
+                        "url(/static/media/img_1.png) 100% 100% no-repeat",
                       zIndex: 2,
                       overflow: "visible",
                       display: downLg ? "none" : "",

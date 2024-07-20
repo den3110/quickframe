@@ -21,7 +21,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import SearchIcon from "icons/SearchIcon";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { MoreVert } from "@mui/icons-material";
 import { isDark } from "util/constants";
 import EditBudgetStrategy from "icons/budget-strategy/EditBudgetStrategy";
@@ -39,6 +39,7 @@ import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import sortData from "util/sortData";
 import RefreshProvider from "contexts/RefreshContext";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { JwtContext } from "contexts/jwtContext";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -69,6 +70,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 }));
 
 const BudgetStrategyPage = () => {
+  const {decodedData }= useContext(JwtContext)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   const [data, setData] = useState([]);
@@ -301,7 +303,7 @@ const BudgetStrategyPage = () => {
                                 horizontal: "right",
                               }}
                             >
-                              {row?.is_default === false && (
+                              {(decodedData?.data?._id === row?.userId) && (
                                 <>
                                   <StyledMenuItem
                                     onClick={() => {
@@ -331,7 +333,7 @@ const BudgetStrategyPage = () => {
                                 </>
                               )}
                               {
-                                row?.is_default=== true && <>
+                                (row?.is_default=== true && decodedData?.data?._id !== row?.userId) && <>
                                   <StyledMenuItem
                                     onClick={() => {
                                       setSelectedStrategy(row);
@@ -341,7 +343,7 @@ const BudgetStrategyPage = () => {
                                     }}
                                   >
                                     <EditBudgetStrategy />
-                                    View Strategy
+                                      View Strategy
                                   </StyledMenuItem>
                                 </>
                               }

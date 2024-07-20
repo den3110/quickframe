@@ -26,7 +26,7 @@ export const SidebarWrapper = styled(Box)(({ theme, compact }) => ({
   }),
   ...(isDark(theme) && {
     border: 0,
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.grey[800],
   }),
 }));
 

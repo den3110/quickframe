@@ -3,12 +3,10 @@ import moment from "moment";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
-  LineChart,
   Line,
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid,
   ResponsiveContainer,
   Area,
   AreaChart,
@@ -49,28 +47,6 @@ const data = [
   { date: "30/07", PnL: 0 },
   { date: "31/07", PnL: 0 },
 ];
-const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div
-        className="custom-tooltip"
-        style={{
-          backgroundColor: "#333",
-          padding: "10px",
-          borderRadius: "5px",
-          color: "#fff",
-        }}
-      >
-        <p>{label}</p>
-        <p style={{ color: payload[0].value >= 0 ? "green" : "red" }}>
-          ${payload[0].value}
-        </p>
-      </div>
-    );
-  }
-
-  return null;
-};
 
 const GrandPnLChart = () => {
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -85,7 +61,7 @@ const GrandPnLChart = () => {
           axisLine={false}
           tickLine={false}
           interval={downLg? 5 : 2}
-          stroke="#fff"
+          stroke={theme.palette.text.primary}
           tick={{
             textAnchor: "end", // Điều chỉnh để nhãn không bị che
             dx: 15,
@@ -93,7 +69,7 @@ const GrandPnLChart = () => {
           }}
         />
         <YAxis
-          stroke="#fff"
+          stroke={theme.palette.text.primary}
           axisLine={false}
           tickLine={false}
           tick={{

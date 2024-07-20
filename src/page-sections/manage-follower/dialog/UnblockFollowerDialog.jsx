@@ -74,7 +74,7 @@ export default function UnblockFollowerDialog({
         <DialogContent>
           <Box display="flex" justifyContent="center">
             <img
-              src="	https://quickinvest.ai/img/strategy/img_1.png"
+              src="/static/icons/img_2.png"
               alt="Illustration"
             />
           </Box>

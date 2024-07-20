@@ -111,6 +111,7 @@ const InfoCard = ({ title, value, tooltip, setIsHidden, isHidden }) => {
 };
 
 const CustomEvent = ({ event }) => {
+  const theme= useTheme()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   return (
@@ -143,7 +144,7 @@ const CustomEvent = ({ event }) => {
           }}
         >
           <Typography
-            sx={{ filter: "contrast(2.5)" }}
+            sx={{ filter: "contrast(2.5)", color: theme.palette.text.primary }}
             fontSize={downLg ? 8 : 10}
           >
             {event.title}
@@ -393,7 +394,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
           end: new Date(item.createdAt).setHours(
             new Date(item.createdAt).getHours() - 1
           ),
-          desc: formatCurrency(item.live_profit),
+          desc: (item.live_profit),
           color:
             item.live_profit >= 0
               ? theme.palette.success.main
@@ -408,7 +409,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
           end: new Date(item.createdAt).setHours(
             new Date(item.createdAt).getHours() - 1
           ),
-          desc: round2number(item.live_volume),
+          desc: (item.live_volume),
           color: "#8c62ff",
         };
 
@@ -426,7 +427,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
           end: new Date(item.createdAt).setHours(
             new Date(item.createdAt).getHours() - 1
           ),
-          desc: formatCurrency(item.demo_profit),
+          desc: (item.demo_profit),
           color:
             item.demo_profit >= 0
               ? theme.palette.success.main
@@ -441,7 +442,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
           end: new Date(item.createdAt).setHours(
             new Date(item.createdAt).getHours() - 1
           ),
-          desc: round2number(item.demo_volume),
+          desc: (item.demo_volume),
           color: "#8c62ff",
         };
 
@@ -455,7 +456,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         title: `Profit`,
         start: new Date(item.createdAt),
         end: new Date(item.createdAt),
-        desc: formatCurrency(item.profit),
+        desc: (item.profit),
         color:
           item.profit >= 0
             ? theme.palette.success.main
@@ -470,7 +471,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         end: new Date(item.createdAt).setHours(
           new Date(item.createdAt).getHours() - 1
         ),
-        desc: round2number(item.volume),
+        desc: (item.volume),
         color: "#8c62ff",
       };
 
@@ -480,6 +481,17 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
       ];
     }
   });
+
+  const groupedData = _.groupBy(events, item => `${item.title}-${moment(item.start).format("DD/MM/YYYY")}-${moment(item.end).format("DD/MM/YYYY")}-${item.color}`);
+  // Create new array with combined desc
+  const result = _.map(groupedData, group => ({
+    title: group[0].title,
+    start: group[0].start,
+    end: group[0].end,
+    desc: _.sumBy(group, 'desc'),
+    color: group[0].color
+  }));
+  
   const handleNavigate = (action) => {
     if (action === "PREV") {
       setCurrentDate(moment(currentDate).subtract(1, "month").toDate());
@@ -535,7 +547,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         <Calendar
           className="custom-calendar"
           localizer={localizer}
-          events={events}
+          events={result}
           startAccessor="start"
           endAccessor="end"
           onSelectEvent={handleSelectEvent}
@@ -568,7 +580,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
               <Typography fontWeight={600} ml={2} fontSize={18}>Vol</Typography>
             </Box>
             <Box>
-              <GrandTotalProfitChart />
+              <GrandTotalProfitChart data={result} monthProps={parseInt(moment(currentDate).format("M"))} />
             </Box>
           </Box>
           <Box sx={{width: downLg ? "100%" : "48%"}}>
@@ -576,7 +588,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
               <Typography fontWeight={600} ml={2} fontSize={18}>Pnl</Typography>
             </Box>
             <Box>
-              <GrandPnLChart />
+              <GrandPnLChart  data={result} />
             </Box>
           </Box>
         </Box>

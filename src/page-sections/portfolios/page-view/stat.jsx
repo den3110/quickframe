@@ -353,210 +353,212 @@ const StatPortfolio = (props) => {
         </Box>
       )}
       {props?.isSubPage !== true && (
-        <Box pt={2} pb={4}>
-          <Box sx={{ padding: "10px" }}>
-            <Box sx={{ padding: downLg ? "" : "20px" }}>
-              <Box>
-                <Box mb={4}>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <Box
-                      onClick={() => {
-                        setSelectedTime(1);
-                        setStat({
-                          profit: dataStat?.day_profit,
-                          win: dataStat?.win_day,
-                          lose: dataStat?.lose_day,
-                          volume: dataStat?.day_volume,
-                        });
-                      }}
-                      color={selectedTime === 1 && "success.main"}
-                      fontSize={18}
-                      fontWeight={600}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      Hôm nay
-                    </Box>
-                    <Box
-                      onClick={() => {
-                        setSelectedTime(2);
-                        setStat({
-                          profit: dataStat?.week_profit,
-                          win: dataStat?.win_week,
-                          lose: dataStat?.lose_week,
-                          volume: dataStat?.week_volume,
-                        });
-                      }}
-                      color={selectedTime === 2 && "success.main"}
-                      fontSize={18}
-                      fontWeight={600}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      Tuần này
-                    </Box>
-                    <Box
-                      onClick={() => {
-                        setSelectedTime(3);
-                        setStat({
-                          profit: dataStat?.month_profit,
-                          win: dataStat?.win_month,
-                          lose: dataStat?.lose_month,
-                          volume: dataStat?.month_volume,
-                        });
-                      }}
-                      color={selectedTime === 3 && "success.main"}
-                      fontSize={18}
-                      fontWeight={600}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      Tháng này
+        <Layout> 
+          <Box pt={2} pb={4}>
+            <Box sx={{ padding: "10px" }}>
+              <Box sx={{ padding: downLg ? "" : "20px" }}>
+                <Box>
+                  <Box mb={4}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Box
+                        onClick={() => {
+                          setSelectedTime(1);
+                          setStat({
+                            profit: dataStat?.day_profit,
+                            win: dataStat?.win_day,
+                            lose: dataStat?.lose_day,
+                            volume: dataStat?.day_volume,
+                          });
+                        }}
+                        color={selectedTime === 1 && "success.main"}
+                        fontSize={18}
+                        fontWeight={600}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        Hôm nay
+                      </Box>
+                      <Box
+                        onClick={() => {
+                          setSelectedTime(2);
+                          setStat({
+                            profit: dataStat?.week_profit,
+                            win: dataStat?.win_week,
+                            lose: dataStat?.lose_week,
+                            volume: dataStat?.week_volume,
+                          });
+                        }}
+                        color={selectedTime === 2 && "success.main"}
+                        fontSize={18}
+                        fontWeight={600}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        Tuần này
+                      </Box>
+                      <Box
+                        onClick={() => {
+                          setSelectedTime(3);
+                          setStat({
+                            profit: dataStat?.month_profit,
+                            win: dataStat?.win_month,
+                            lose: dataStat?.lose_month,
+                            volume: dataStat?.month_volume,
+                          });
+                        }}
+                        color={selectedTime === 3 && "success.main"}
+                        fontSize={18}
+                        fontWeight={600}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        Tháng này
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-                <Grid container spacing={3}>
-                  {/* Top Summary Section */}
-                  <Grid item xs={12} sm={6} md={4}>
-                    <Paper sx={{ height: "100%" }}>
-                      <Box
-                        p={2}
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        alignItems={"center"}
-                        sx={{
-                          border: `1px solid ${theme.palette.border}`,
-                          height: "100%",
-                          borderRadius: 2,
-                        }}
-                      >
-                        <Box>
-                          <Typography
-                            variant="body1"
-                            fontSize={10}
-                            fontWeight={600}
-                          >
-                            Tổng lợi nhuận
-                          </Typography>
-                          <Typography
-                            variant="body1"
-                            fontSize={16}
-                            color={
-                              stat.profit < 0 ? "error.main" : "success.main"
-                            }
-                          >
-                            {formatCurrency(stat.profit)}
-                          </Typography>
+                  <Grid container spacing={3}>
+                    {/* Top Summary Section */}
+                    <Grid item xs={12} sm={6} md={4}>
+                      <Paper sx={{ height: "100%" }}>
+                        <Box
+                          p={2}
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                          sx={{
+                            border: `1px solid ${theme.palette.border}`,
+                            height: "100%",
+                            borderRadius: 2,
+                          }}
+                        >
+                          <Box>
+                            <Typography
+                              variant="body1"
+                              fontSize={10}
+                              fontWeight={600}
+                            >
+                              Tổng lợi nhuận
+                            </Typography>
+                            <Typography
+                              variant="body1"
+                              fontSize={16}
+                              color={
+                                stat.profit < 0 ? "error.main" : "success.main"
+                              }
+                            >
+                              {formatCurrency(stat.profit)}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <TotalProfitChart />
+                          </Box>
                         </Box>
-                        <Box>
-                          <TotalProfitChart />
-                        </Box>
-                      </Box>
-                    </Paper>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <Paper sx={{ height: "100%" }}>
-                      <Box
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        alignItems={"center"}
-                        p={2}
-                        sx={{
-                          border: `1px solid ${theme.palette.border}`,
-                          height: "100%",
-                          borderRadius: 2,
-                        }}
-                      >
-                        <Box>
-                          <Typography variant="body1" fontSize={10}>
-                            Trades
-                          </Typography>
-                          <Typography
-                            variant="body1"
-                            fontSize={16}
-                            fontWeight={600}
-                          >
-                            {stat.win}/{stat.lose}
-                          </Typography>
-                          <Typography variant="body1" fontSize={10}>
-                            Win Rate:{" "}
-                            {round2number(
-                              (stat.win / (stat.win + stat.lose)) * 100
-                            )}
-                            %
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Box
-                            display={"flex"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                          >
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <Paper sx={{ height: "100%" }}>
+                        <Box
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                          p={2}
+                          sx={{
+                            border: `1px solid ${theme.palette.border}`,
+                            height: "100%",
+                            borderRadius: 2,
+                          }}
+                        >
+                          <Box>
+                            <Typography variant="body1" fontSize={10}>
+                              Trades
+                            </Typography>
+                            <Typography
+                              variant="body1"
+                              fontSize={16}
+                              fontWeight={600}
+                            >
+                              {stat.win}/{stat.lose}
+                            </Typography>
+                            <Typography variant="body1" fontSize={10}>
+                              Win Rate:{" "}
+                              {round2number(
+                                (stat.win / (stat.win + stat.lose)) * 100
+                              )}
+                              %
+                            </Typography>
+                          </Box>
+                          <Box>
                             <Box
-                              position={"relative"}
                               display={"flex"}
                               justifyContent={"center"}
                               alignItems={"center"}
-                              top={10}
                             >
-                              <TradeRateChart
-                                rate={Math.ceil(
-                                  (stat.win / (stat.win + stat.lose)) * 100
-                                )}
-                              />
+                              <Box
+                                position={"relative"}
+                                display={"flex"}
+                                justifyContent={"center"}
+                                alignItems={"center"}
+                                top={10}
+                              >
+                                <TradeRateChart
+                                  rate={Math.ceil(
+                                    (stat.win / (stat.win + stat.lose)) * 100
+                                  )}
+                                />
+                              </Box>
                             </Box>
                           </Box>
                         </Box>
-                      </Box>
-                    </Paper>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <Paper sx={{ height: "100%" }}>
-                      <Box
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        alignItems={"center"}
-                        p={2}
-                        sx={{
-                          border: `1px solid ${theme.palette.border}`,
-                          height: "100%",
-                          borderRadius: 2,
-                        }}
-                      >
-                        <Box>
-                          <Typography variant="body1" fontSize={10}>
-                            Total Volumes
-                          </Typography>
-                          <Typography
-                            variant="body1"
-                            fontSize={16}
-                            fontWeight={600}
-                          >
-                            {round2number(stat.volume)}
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <TotalVolumeChart />
-                        </Box>
-                      </Box>
-                    </Paper>
-                  </Grid>
-
-                  {/* Calendar Section */}
-                  <Grid item xs={12}>
-                    <Typography variant="h6" mb={2}>
-                      {t("Lịch Sử KLGD & Lợi Nhuận")}
-                    </Typography>
-                    <Card>
-                      <Paper>
-                        <Box p={2}>
-                          <CalendarComponent isGlobal={true} data={data} />
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <Paper sx={{ height: "100%" }}>
+                        <Box
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                          p={2}
+                          sx={{
+                            border: `1px solid ${theme.palette.border}`,
+                            height: "100%",
+                            borderRadius: 2,
+                          }}
+                        >
+                          <Box>
+                            <Typography variant="body1" fontSize={10}>
+                              Total Volumes
+                            </Typography>
+                            <Typography
+                              variant="body1"
+                              fontSize={16}
+                              fontWeight={600}
+                            >
+                              {round2number(stat.volume)}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <TotalVolumeChart />
+                          </Box>
                         </Box>
                       </Paper>
-                    </Card>
+                    </Grid>
+
+                    {/* Calendar Section */}
+                    <Grid item xs={12}>
+                      <Typography variant="h6" mb={2}>
+                        {t("Lịch Sử KLGD & Lợi Nhuận")}
+                      </Typography>
+                      <Card>
+                        <Paper>
+                          <Box p={2}>
+                            <CalendarComponent isGlobal={true} data={data} />
+                          </Box>
+                        </Paper>
+                      </Card>
+                    </Grid>
                   </Grid>
-                </Grid>
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </Layout>
       )}
     </Box>
   );

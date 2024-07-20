@@ -219,7 +219,7 @@ const LeaderBoard = () => {
                             zIndex: 10,
                             width: 45,
                           }}
-                          src="https://quickinvest.ai/img/icons/rank-1.png"
+                          src="/static/icons/rank-1.png"
                           alt="Can't open"
                         />
                       )}
@@ -231,7 +231,7 @@ const LeaderBoard = () => {
                             zIndex: 10,
                             width: 45,
                           }}
-                          src="https://quickinvest.ai/img/icons/rank-2.png"
+                          src="/static/icons/rank-2.png"
                           alt="Can't open"
                         />
                       )}
@@ -243,7 +243,7 @@ const LeaderBoard = () => {
                             zIndex: 10,
                             width: 45,
                           }}
-                          src="https://quickinvest.ai/img/icons/rank-3.png"
+                          src="/static/icons/rank-3.png"
                           alt="Can't open"
                         />
                       )}
@@ -358,7 +358,7 @@ const LeaderBoard = () => {
                             zIndex: 10,
                             width: 45,
                           }}
-                          src="https://quickinvest.ai/img/icons/rank-1.png"
+                          src="/static/icons/rank-1.png"
                           alt="Can't open"
                         />
                       )}
@@ -370,7 +370,7 @@ const LeaderBoard = () => {
                             zIndex: 10,
                             width: 45,
                           }}
-                          src="https://quickinvest.ai/img/icons/rank-2.png"
+                          src="/static/icons/rank-2.png"
                           alt="Can't open"
                         />
                       )}
@@ -382,7 +382,7 @@ const LeaderBoard = () => {
                             zIndex: 10,
                             width: 45,
                           }}
-                          src="https://quickinvest.ai/img/icons/rank-3.png"
+                          src="/static/icons/rank-3.png"
                           alt="Can't open"
                         />
                       )}
@@ -494,7 +494,7 @@ const LeaderBoard = () => {
                             zIndex: 10,
                             width: 45,
                           }}
-                          src="https://quickinvest.ai/img/icons/rank-1.png"
+                          src="/static/icons/rank-1.png"
                           alt="Can't open"
                         />
                       )}
@@ -506,7 +506,7 @@ const LeaderBoard = () => {
                             zIndex: 10,
                             width: 45,
                           }}
-                          src="https://quickinvest.ai/img/icons/rank-2.png"
+                          src="/static/icons/rank-2.png"
                           alt="Can't open"
                         />
                       )}
@@ -518,7 +518,7 @@ const LeaderBoard = () => {
                             zIndex: 10,
                             width: 45,
                           }}
-                          src="https://quickinvest.ai/img/icons/rank-3.png"
+                          src="/static/icons/rank-3.png"
                           alt="Can't open"
                         />
                       )}
@@ -607,9 +607,9 @@ const LeaderBoard = () => {
                 heightRanking={268}
                 isTop1={true}
                 name={"TOP 1"}
-                imgRank={"https://quickinvest.ai/img/icons/rank-1.png"}
+                imgRank={"/static/icons/rank-1.png"}
                 avatarUser={
-                  "http://localhost:3000/static/logo/luxcoin.png"
+                  "/static/logo/luxcoin.png"
                 }
                 bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
                 border="3.28125px solid rgb(255, 222, 101)"
@@ -619,9 +619,9 @@ const LeaderBoard = () => {
               heightRanking={233}
               isTop1={false}
               name={"TOP 2"}
-              imgRank={"https://quickinvest.ai/img/icons/rank-2.png"}
+              imgRank={"/static/icons/rank-2.png"}
               avatarUser={
-                "http://localhost:3000/static/logo/luxcoin.png"
+                "/static/logo/luxcoin.png"
               }
               bgRadient="linear-gradient(272.63deg, rgb(194, 194, 194) -33.55%, rgb(79, 86, 112) 96.85%)"
               border="3.28125px solid rgb(160, 174, 192)"
@@ -632,9 +632,9 @@ const LeaderBoard = () => {
                 heightRanking={268}
                 isTop1={true}
                 name={"TOP 1"}
-                imgRank={"https://quickinvest.ai/img/icons/rank-1.png"}
+                imgRank={"/static/icons/rank-1.png"}
                 avatarUser={
-                  "http://localhost:3000/static/logo/luxcoin.png"
+                  "/static/logo/luxcoin.png"
                 }
                 bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
                 border="3.28125px solid rgb(255, 222, 101)"
@@ -645,9 +645,9 @@ const LeaderBoard = () => {
               heightRanking={210}
               isTop1={false}
               name={"TOP 3"}
-              imgRank={"https://quickinvest.ai/img/icons/rank-3.png"}
+              imgRank={"/static/icons/rank-3.png"}
               avatarUser={
-                "http://localhost:3000/static/logo/luxcoin.png"
+                "/static/logo/luxcoin.png"
               }
               bgRadient="linear-gradient(92.33deg, rgba(7, 200, 140, 0.89) 2.82%, rgba(53, 214, 202, 0.518) 99.42%)"
               border="3.28125px solid rgb(13, 148, 109)"
@@ -664,27 +664,6 @@ const LeaderBoard = () => {
                   >
                     #{item.rank}
                   </Typography>
-                  {/* {item.rank === 1 && (
-                    <img
-                      src="https://quickinvest.ai/img/icons/rank-1.png"
-                      style={{ width: 28, marginRight: 10 }}
-                      alt="Can't open"
-                    />
-                  )}
-                  {item.rank === 2 && (
-                    <img
-                      src="https://quickinvest.ai/img/icons/rank-2.png"
-                      style={{ width: 28, marginRight: 10 }}
-                      alt="Can't open"
-                    />
-                  )}
-                  {item.rank === 3 && (
-                    <img
-                      src="https://quickinvest.ai/img/icons/rank-3.png"
-                      style={{ width: 28, marginRight: 10 }}
-                      alt="Can't open"
-                    />
-                  )} */}
                   <ListItemAvatar>
                     <Avatar alt={item.name} src={item.avatar} />
                   </ListItemAvatar>

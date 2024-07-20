@@ -1,19 +1,25 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Card, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
 
 const StyledNavLink = styled(NavLink)`
-  &.active {
+  &.active-custom {
     font-weight: bold;
     color: ${props => props.theme.palette.primary.main} !important;
   }
 `;
 
 const Layout = ({ children }) => {
-  const theme= useTheme()
+  const theme = useTheme();
   const { data } = useContext(SignalStrategyContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const location= useLocation()
+  const [selectedLink, setSelectedLink]= useState(location.pathname)
+
+  useEffect(()=> {
+    setSelectedLink(location.pathname)
+  }, [location.pathname])
 
   return (
     <Box
@@ -26,33 +32,30 @@ const Layout = ({ children }) => {
           theme={theme}
           exact
           to="/signal-strategies"
-          activeStyle={{
-            color: theme.palette.primary,
-            fontWeight: "bold",
-          }}
+          className={selectedLink=== "/signal-strategies" && "active-custom"}
+          // activeClassName="active"
           style={{ textDecoration: "none", color: "inherit" }}
+          // sx={{color: theme.palette.primary.main + "!important"}}
         >
           <Typography
             variant="h6"
             fontWeight={"600"}
-            sx={{ "&:hover": { color: theme.palette.primary } }}
+            sx={{ "&:hover": { color: theme.palette.primary.main } }}
           >
             Danh sách ({data?.length})
           </Typography>
         </StyledNavLink>
         <StyledNavLink
-        theme={theme}
+          theme={theme}
           to="/signal-strategies/top-signal"
-          activeStyle={{
-            color: theme.palette.primary,
-            fontWeight: "bold",
-          }}
+          // activeClassName="active"
+          className={selectedLink=== "/signal-strategies/top-signal" && "active-custom"}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <Typography
             variant="h6"
-            fontWeight={"600"}
-            sx={{ "&:hover": { color: theme.palette.primary } }}
+            fontWeight={"600"} 
+            sx={{ "&:hover": { color: theme.palette.primary.main } }}
           >
             Xếp hạng
           </Typography>
@@ -60,16 +63,14 @@ const Layout = ({ children }) => {
         <StyledNavLink
           theme={theme}
           to="/signal-strategies/telegram-channel"
-          activeStyle={{
-            color: theme.palette.primary,
-            fontWeight: "bold",
-          }}
+          // activeClassName="active"
+          className={selectedLink=== "/signal-strategies/telegram-channel" && "active-custom"}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <Typography
             variant="h6"
             fontWeight={"600"}
-            sx={{ "&:hover": { color: theme.palette.primary } }}
+            sx={{ "&:hover": { color: theme.palette.primary.main } }}
           >
             Kênh Telegram
           </Typography>

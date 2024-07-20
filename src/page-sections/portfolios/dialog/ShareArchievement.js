@@ -5,11 +5,11 @@ import share_plan_02 from "../../../assets/share_plan_02.png";
 import a01_mobile from "../../../assets/a01_mobile.png";
 import a02_mobile from "../../../assets/a02_mobile.png";
 import logo_dark from "../../../assets/logo_dark.png";
-import logo2 from "../../../assets/logo2.png";
+// import logo2 from "../../../assets/logo2.png";
 import moment from "moment";
-import numberToWords from "util/numToWord";
+// import numberToWords from "util/numToWord";
 import DownloadIcon from "icons/DownloadIcon";
-import round2number from "util/round2number";
+// import round2number from "util/round2number";
 import formatCurrency from "util/formatCurrency";
 
 const ShareArchievement = forwardRef(

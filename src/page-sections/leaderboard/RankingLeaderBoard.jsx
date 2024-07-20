@@ -11,7 +11,7 @@ const RankingLeaderBoard = (props) => {
             <Box display={"flex"} justifyContent={"center"} alignItems={"center"} position={downLg ? "static" : "absolute"} top={"-15%"} left="50%" sx={{transform: downLg ? "unset" : "translateX(-50%)", borderRadius: "50%", border: border, padding: "1px", background: "rgb(238, 239, 242)", width: downLg? 60 : "70px", height: downLg? 60 : "70px", zIndex: 2}} boxSizing={"content-box"}>
                 <img width={"100%"} style={{borderRadius: "50%"}} alt="Can't open" src={avatarUser} />
                 <img style={{position: "absolute", bottom: downLg ? -5 : "-18px", width: 36}} className="rank-badge" src={imgRank} alt="rank"></img>
-                {isTop1 && <img style={{position: "absolute", top: downLg ? -30 : -40, width: 45}} className="rank-crown" src="https://quickinvest.ai/img/icons/image 53.png" alt="crown"></img>}
+                {isTop1 && <img style={{position: "absolute", top: downLg ? -30 : -40, width: 45}} className="rank-crown" src="/static/icons/image 53.png" alt="crown"></img>}
             </Box>
             {!downLg && <Typography fontWeight={"600"}>{name}</Typography>}
             <Box mt={downLg ? 0 : 2}>

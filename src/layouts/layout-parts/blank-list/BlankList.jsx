@@ -44,7 +44,7 @@ const EmptyPage = ({ title, subTitle, titleButton, actionClick, disableButton })
   return (
     <Box className={classes.container}>
       <img
-        src="https://quickinvest.ai/img/portfolio/img_1.png"
+        src="/static/icons/img_1.png"
         alt="Empty Page"
         className={classes.image}
       />

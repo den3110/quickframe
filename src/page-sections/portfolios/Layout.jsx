@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Card, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import PortfoliosContext from "contexts/PortfoliosContext";
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
-  "&.active": {
+  "&.active-custom": {
     fontWeight: 600,
     color: theme.palette.primary.main
   }
@@ -14,7 +14,12 @@ const Layout = ({ children }) => {
   const theme= useTheme()
   const { data } = useContext(PortfoliosContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const location= useLocation()
+  const [selectedLink, setSelectedLink]= useState(location.pathname)
 
+  useEffect(()=> {
+    setSelectedLink(location.pathname)
+  }, [location.pathname])
   return (
     <Box
       sx={{ padding: downLg ? "8px" : "26px 24px 32px 24px" }}
@@ -26,10 +31,7 @@ const Layout = ({ children }) => {
           theme={theme}
           exact
           to="/portfolios"
-          activeStyle={{
-            color: theme.palette.primary,
-            fontWeight: "bold",
-          }}
+          className={selectedLink=== "/portfolios" && "active-custom"}
           sx={{ textDecoration: "none", color: "inherit",  "&:active": { color: theme.palette.primary + "!important" }}}
         >
           <Typography
@@ -43,10 +45,7 @@ const Layout = ({ children }) => {
         <StyledNavLink
           theme={theme}
           to="/portfolios/statistic"
-          activeStyle={{
-            color: theme.palette.primary,
-            fontWeight: "bold",
-          }}
+          className={selectedLink=== "/portfolios/statistic" && "active-custom"}
           sx={{ textDecoration: "none", color: "inherit" }}
         >
           <Typography 
@@ -55,23 +54,6 @@ const Layout = ({ children }) => {
             sx={{ "&:hover": { color: theme.palette.primary },  "&:active": { color: theme.palette.primary } }}
           >
             Thống kê
-          </Typography>
-        </StyledNavLink>
-        <StyledNavLink
-          theme={theme}
-          to="/portfolios/schedule"
-          activeStyle={{
-            color: theme.palette.primary,
-            fontWeight: "bold",
-          }}
-          sx={{ textDecoration: "none", color: "inherit" }}
-        >
-          <Typography
-            variant="h6"
-            fontWeight={"600"}
-            sx={{ "&:hover": { color: theme.palette.primary },  "&:active": { color: theme.palette.primary } }}
-          >
-            Hẹn giờ
           </Typography>
         </StyledNavLink>
       </Box>
