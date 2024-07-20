@@ -360,28 +360,68 @@ const NewBudgetStrategy = ({
           setMethod3("2-3-4-5-6-1");
           break;
         case BudgetStrategyType.FIBO_X_STEP:
-          setMethod1("1-1-2-6-4-3");
+          setMethod1("1-2-3-5-8-13-21-34-55-89-144");
           setCount(0);
           setCount2(0);
           break;
         case BudgetStrategyType.MARTINGALE:
-          setMethod1("1-1-2-6-4-3");
+          console.log(2222)
+          setMethod1("1-2-4-8-17-35");
           setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
           break;
         case BudgetStrategyType.VICTOR_2:
-          setMethod1("1-1-2-6-4-3");
-          setMethod2("1-2-4-8-17-35");
+          setMethod1("1-1-2-2-3-4-5-7-10-13-18-24-32-44-59-80-108-146-197-271");
+          setMethod2("1-2-4-4-6-8-10-14-20-26-36-48-64-88-118-160-216-292-394-542");
           break;
         case BudgetStrategyType.VICTOR_3:
+          setMethod1("1-1-1-1-1-1-1.5-2-2-2-2.5-3-3.5-4-4.5-5.4-6-7-8-9.5-11");
+          setMethod2("1-2-2-2-2-2-3-3.9-3.9-3.9-4.875-5.85-6.825-7.8-8.775-10.53-11.7-13.65-15.6-18.525-21.45");
+          setMethod3("1-4-4-4-4-4-6-7.605-7.605-7.605-9.50625-11.4075-13.30875-15.21-17.11125-20.5335-22.815-26.6175-30.42-36.12375-41.8275");
+          break;
+        case BudgetStrategyType.VICTOR_4:
+          setMethod1("1-1-1-1-1-1-1-1-1-1-1-1-1-1-1.23-1.25-1.28-1.3-1.47-1.6-1.74-1.88-2.04-2.22");
+          setMethod2("1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-2.28-2.32-2.36-2.41-2.73-2.96-3.21-3.48-3.78");
+          setMethod3("3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-4.22-4.29-4.37-4.45-5.04-5.47-5.94-6.44-6.99-7.59");
+          setMethod4("7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.81-7.94-8.08-8.24-9.33-10.12-10.99-11.92-12.93-14.03");
+          break;
+        default:
+          break;
+      }
+    }
+    if (is_edit !== true) {
+      switch (e.target.value) {
+        case BudgetStrategyType.ALL_ORDERS:
+          setAmount(1);
+          break;
+        case BudgetStrategyType.CUSTOM_AUTOWIN:
           setMethod1("1-1-2-6-4-3");
           setMethod2("1-2-4-8-17-35");
           setMethod3("2-3-4-5-6-1");
           break;
+        case BudgetStrategyType.FIBO_X_STEP:
+          setMethod1("1-2-3-5-8-13-21-34-55-89-144");
+          setCount(0);
+          setCount2(0);
+          break;
+        case BudgetStrategyType.MARTINGALE:
+          console.log(2222)
+          setMethod1("1-2-4-8-17-35");
+          setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
+          break;
+        case BudgetStrategyType.VICTOR_2:
+          setMethod1("1-1-2-2-3-4-5-7-10-13-18-24-32-44-59-80-108-146-197-271");
+          setMethod2("1-2-4-4-6-8-10-14-20-26-36-48-64-88-118-160-216-292-394-542");
+          break;
+        case BudgetStrategyType.VICTOR_3:
+          setMethod1("1-1-1-1-1-1-1.5-2-2-2-2.5-3-3.5-4-4.5-5.4-6-7-8-9.5-11");
+          setMethod2("1-2-2-2-2-2-3-3.9-3.9-3.9-4.875-5.85-6.825-7.8-8.775-10.53-11.7-13.65-15.6-18.525-21.45");
+          setMethod3("1-4-4-4-4-4-6-7.605-7.605-7.605-9.50625-11.4075-13.30875-15.21-17.11125-20.5335-22.815-26.6175-30.42-36.12375-41.8275");
+          break;
         case BudgetStrategyType.VICTOR_4:
-          setMethod1("1-1-2-6-4-3");
-          setMethod2("1-2-4-8-17-35");
-          setMethod3("2-3-4-5-6-1");
-          setMethod4("2-3-4-5-6-1");
+          setMethod1("1-1-1-1-1-1-1-1-1-1-1-1-1-1-1.23-1.25-1.28-1.3-1.47-1.6-1.74-1.88-2.04-2.22");
+          setMethod2("1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-2.28-2.32-2.36-2.41-2.73-2.96-3.21-3.48-3.78");
+          setMethod3("3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-4.22-4.29-4.37-4.45-5.04-5.47-5.94-6.44-6.99-7.59");
+          setMethod4("7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.81-7.94-8.08-8.24-9.33-10.12-10.99-11.92-12.93-14.03");
           break;
         default:
           break;
@@ -507,7 +547,6 @@ const NewBudgetStrategy = ({
                           : ""
                       }
                       label="Cài đặt hàng 1"
-                      defaultValue={"1-1-2-6-4-3"}
                       fullWidth
                       type="text"
                       value={method1}
@@ -566,7 +605,6 @@ const NewBudgetStrategy = ({
                             : ""
                         }
                         label="Đặt giá trị lệnh"
-                        defaultValue={"1-2-3-5-8-13-21-34-55-89-144"}
                         fullWidth
                         type="text"
                         value={method1}
@@ -665,6 +703,7 @@ const NewBudgetStrategy = ({
                   </Box>
                 </>
               )}
+              {console.log("method 1", method1)}
               {type === BudgetStrategyType.MARTINGALE && (
                 <>
                   <Box display={"flex"}>
@@ -678,7 +717,6 @@ const NewBudgetStrategy = ({
                             : ""
                         }
                         label="Đặt giá trị lệnh"
-                        defaultValue={"11-2-2-3-12-1-1"}
                         fullWidth
                         type="text"
                         value={method1}
@@ -726,7 +764,6 @@ const NewBudgetStrategy = ({
                           : ""
                       }
                       label="Cài đặt hàng 1"
-                      defaultValue={"1-1-2-6-4-3"}
                       fullWidth
                       type="text"
                       value={method1}

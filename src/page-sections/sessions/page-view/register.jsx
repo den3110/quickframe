@@ -32,6 +32,7 @@ const RegisterPageView = () => {
   const initialValues = {
     email: "",
     password: "",
+    nickName: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -42,6 +43,9 @@ const RegisterPageView = () => {
     password: Yup.string()
       .min(6, "Password should be of minimum 6 characters length")
       .required("Password is required"),
+    nickName: Yup.string()
+      .max(255)
+      .required("Nickname is required"),
   });
 
   const { errors, values, touched, handleBlur, handleChange, handleSubmit } =
@@ -55,6 +59,7 @@ const RegisterPageView = () => {
           const response = await authApi.register({
             email: values.email,
             password: values.password,
+            nickName: values.nickName, 
             siteId: siteId,
           });
           if (response?.data?.ok === true) {
@@ -112,6 +117,19 @@ const RegisterPageView = () => {
                 onChange={handleChange}
                 helperText={touched.password && errors.password}
                 error={Boolean(touched.password && errors.password)}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                placeholder="Enter your nickname"
+                name="nickName"
+                onBlur={handleBlur}
+                value={values.nickName}
+                onChange={handleChange}
+                helperText={touched.nickName && errors.nickName}
+                error={Boolean(touched.nickName && errors.nickName)}
               />
             </Grid>
 

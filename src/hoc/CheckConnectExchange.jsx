@@ -47,7 +47,7 @@ const CheckConnectExchange = ({ children }) => {
   if (location.pathname=== "/connect" && parseInt(statusCode)=== 402) {
     return <ConnectExchangeContext.Provider value={{linked}}>{children}</ConnectExchangeContext.Provider>;
   }
-  if (location.pathname=== "/dashboard" && parseInt(statusCode)=== 402) {
+  if (location.pathname.startsWith("/dashboard") && parseInt(statusCode)=== 402) {
     return <Navigate to="/connect" />;
   }
   if (location.pathname=== "/" && parseInt(statusCode)=== 402) {

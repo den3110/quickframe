@@ -4,11 +4,11 @@ import { TabContext, TabPanel } from "@mui/lab";
 // CUSTOM PAGE SECTION COMPONENTS
 import Layout from "../Layout";
 import Overview from "../overview";
-import Projects from "../projects";
-import Activity from "../activity";
-import Campaigns from "../campaigns";
-import Documents from "../documents";
-import Connections from "../connections";
+import Projects from "../exchange-account";
+// import Activity from "../activity";
+// import Campaigns from "../campaigns";
+// import Documents from "../documents";
+// import Connections from "../connections";
 const ProfilePageView = () => {
   const [tabValue, setTabValue] = useState("1");
   const handleTabChange = (_, value) => setTabValue(value);
@@ -18,10 +18,10 @@ const ProfilePageView = () => {
           <TabPanel value="1">
             <Overview />
           </TabPanel>
-          {/* <TabPanel value="2">
+          <TabPanel value="2">
             <Projects />
           </TabPanel>
-          <TabPanel value="3">
+          {/* <TabPanel value="3">
             <Campaigns />
           </TabPanel>
           <TabPanel value="4">

@@ -163,8 +163,8 @@ const Layout = ({ children, handleTabList }) => {
 
         <StyledTabList variant="scrollable" onChange={handleTabList}>
           <Tab disableRipple label="Overview" value="1" />
-          {/* <Tab disableRipple label="Projects" value="2" />
-          <Tab disableRipple label="Campaigns" value="3" />
+          <Tab disableRipple label="Exchange conneect" value="2" />
+          {/* <Tab disableRipple label="Campaigns" value="3" />
           <Tab disableRipple label="Documents" value="4" />
           <Tab disableRipple label="Connections" value="5" />
           <Tab disableRipple label="Activity" value="6" /> */}

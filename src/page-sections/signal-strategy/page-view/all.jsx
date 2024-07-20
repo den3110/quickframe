@@ -329,27 +329,27 @@ const SignalStrategyList = () => {
                         </Fragment>
                       ))}
                 </TableBody>
-                {loading === false && data?.length <= 0 && (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <EmptyPage
-                      title={"Danh mục tín hiệu đang trống"}
-                      subTitle={
-                        "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
-                      }
-                      titleButton={"Tạo chiến lược mới"}
-                      actionClick={handleMenuClick}
-                    />
-                  </Box>
-                )}
               </Table>
             </TableContainer>
+              {loading === false && data?.length <= 0 && (
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <EmptyPage
+                    title={"Danh mục tín hiệu đang trống"}
+                    subTitle={
+                      "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
+                    }
+                    titleButton={"Tạo chiến lược mới"}
+                    actionClick={handleMenuClick}
+                  />
+                </Box>
+              )}
             <PaginationContainer>
               <Box
                 display={"flex"}

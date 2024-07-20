@@ -1,5 +1,5 @@
 {
-  "siteId": "luxcoin.app",
+  "siteId": "localhost:3000",
   "theme": {
     "primaryColor": "#44abbf", 
     "textColor": "#000000",
