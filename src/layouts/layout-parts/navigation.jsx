@@ -42,13 +42,13 @@ export const navigations = [
     type: "divider",
   },
   {
-    name: "Management Follower",
+    name: "Thống kê người theo",
     icon: duotone.Follower,
     path: "/manage-follower",
     type: "intLink",
   },
   {
-    name: "Manual Trade",
+    name: "Giao dịch thủ công",
     icon: duotone.ManualTrade,
     path: "/manual-trade",
     type: "intLink",

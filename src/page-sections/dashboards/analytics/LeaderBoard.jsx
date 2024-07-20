@@ -25,35 +25,35 @@ import RefreshProvider from "contexts/RefreshContext";
 const data = [
   {
     id: 1,
-    name: "Nhật Minh Trader",
+    name: "TOP 1",
     value: "$49,076.00",
     percentage: "+934.78%",
     rank: 1,
   },
   {
     id: 2,
-    name: "Roy Trần Invest CPT",
+    name: "TOP 2",
     value: "$48,584.50",
     percentage: "+971.69%",
     rank: 2,
   },
   {
     id: 3,
-    name: "Duyên Trader",
+    name: "TOP 3",
     value: "$45,246.55",
     percentage: "+822.66%",
     rank: 3,
   },
   {
     id: 4,
-    name: "HL07_GNR5k",
+    name: "TOP 4",
     value: "$10,842.50",
     percentage: "+216.85%",
     rank: 4,
   },
   {
     id: 5,
-    name: "CTP Mastric Vip",
+    name: "TOP 5",
     value: "$7,495.95",
     percentage: "+166.57%",
     rank: 5,
@@ -606,10 +606,10 @@ const LeaderBoard = () => {
               <RankingLeaderBoard
                 heightRanking={268}
                 isTop1={true}
-                name={"JennyTrader3"}
+                name={"TOP 1"}
                 imgRank={"https://quickinvest.ai/img/icons/rank-1.png"}
                 avatarUser={
-                  "https://api.quickinvest.ai/v1/plans/user/user-photo?id=CfDJ8ENcw2Vgni1Il0gIyDJ_y-b0PnJYPPaUqqsBFse3eRxDBlHs4aPyZJnpv5jf4bCnQv8FkF8_nd1khnwenTA7en-mrtscPr8wqvfyELHYMgt62DMRWsjzg_imFiCnQnc86ThLFLGPY0EvyvtYrqqiehMZmGBur3FMeSplJvhYYzIEc62Hp1zk0WdEWrrgoLlj1hKUBVxF-1ISMHAw5yHk2CXL5KfON_lDK5TNeBrrs3m36Qm-whJfLUxPMbx0MzWDT5z6Qe-5COwse0z6FCOfa5eQdtRA9JAqzgwHyB_bguly"
+                  "http://localhost:3000/static/logo/luxcoin.png"
                 }
                 bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
                 border="3.28125px solid rgb(255, 222, 101)"
@@ -618,10 +618,10 @@ const LeaderBoard = () => {
             <RankingLeaderBoard
               heightRanking={233}
               isTop1={false}
-              name={"JennyTrader3"}
+              name={"TOP 2"}
               imgRank={"https://quickinvest.ai/img/icons/rank-2.png"}
               avatarUser={
-                "https://api.quickinvest.ai/v1/plans/user/user-photo?id=CfDJ8ENcw2Vgni1Il0gIyDJ_y-b0PnJYPPaUqqsBFse3eRxDBlHs4aPyZJnpv5jf4bCnQv8FkF8_nd1khnwenTA7en-mrtscPr8wqvfyELHYMgt62DMRWsjzg_imFiCnQnc86ThLFLGPY0EvyvtYrqqiehMZmGBur3FMeSplJvhYYzIEc62Hp1zk0WdEWrrgoLlj1hKUBVxF-1ISMHAw5yHk2CXL5KfON_lDK5TNeBrrs3m36Qm-whJfLUxPMbx0MzWDT5z6Qe-5COwse0z6FCOfa5eQdtRA9JAqzgwHyB_bguly"
+                "http://localhost:3000/static/logo/luxcoin.png"
               }
               bgRadient="linear-gradient(272.63deg, rgb(194, 194, 194) -33.55%, rgb(79, 86, 112) 96.85%)"
               border="3.28125px solid rgb(160, 174, 192)"
@@ -631,10 +631,10 @@ const LeaderBoard = () => {
               <RankingLeaderBoard
                 heightRanking={268}
                 isTop1={true}
-                name={"JennyTrader3"}
+                name={"TOP 1"}
                 imgRank={"https://quickinvest.ai/img/icons/rank-1.png"}
                 avatarUser={
-                  "https://api.quickinvest.ai/v1/plans/user/user-photo?id=CfDJ8ENcw2Vgni1Il0gIyDJ_y-b0PnJYPPaUqqsBFse3eRxDBlHs4aPyZJnpv5jf4bCnQv8FkF8_nd1khnwenTA7en-mrtscPr8wqvfyELHYMgt62DMRWsjzg_imFiCnQnc86ThLFLGPY0EvyvtYrqqiehMZmGBur3FMeSplJvhYYzIEc62Hp1zk0WdEWrrgoLlj1hKUBVxF-1ISMHAw5yHk2CXL5KfON_lDK5TNeBrrs3m36Qm-whJfLUxPMbx0MzWDT5z6Qe-5COwse0z6FCOfa5eQdtRA9JAqzgwHyB_bguly"
+                  "http://localhost:3000/static/logo/luxcoin.png"
                 }
                 bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
                 border="3.28125px solid rgb(255, 222, 101)"
@@ -644,10 +644,10 @@ const LeaderBoard = () => {
             <RankingLeaderBoard
               heightRanking={210}
               isTop1={false}
-              name={"JennyTrader3"}
+              name={"TOP 3"}
               imgRank={"https://quickinvest.ai/img/icons/rank-3.png"}
               avatarUser={
-                "https://api.quickinvest.ai/v1/plans/user/user-photo?id=CfDJ8ENcw2Vgni1Il0gIyDJ_y-b0PnJYPPaUqqsBFse3eRxDBlHs4aPyZJnpv5jf4bCnQv8FkF8_nd1khnwenTA7en-mrtscPr8wqvfyELHYMgt62DMRWsjzg_imFiCnQnc86ThLFLGPY0EvyvtYrqqiehMZmGBur3FMeSplJvhYYzIEc62Hp1zk0WdEWrrgoLlj1hKUBVxF-1ISMHAw5yHk2CXL5KfON_lDK5TNeBrrs3m36Qm-whJfLUxPMbx0MzWDT5z6Qe-5COwse0z6FCOfa5eQdtRA9JAqzgwHyB_bguly"
+                "http://localhost:3000/static/logo/luxcoin.png"
               }
               bgRadient="linear-gradient(92.33deg, rgba(7, 200, 140, 0.89) 2.82%, rgba(53, 214, 202, 0.518) 99.42%)"
               border="3.28125px solid rgb(13, 148, 109)"

@@ -150,7 +150,7 @@ const BudgetStrategyPage = () => {
       >
         <Box sx={{ padding: downLg ? "10px" : "10px 24px" }}>
           <Typography variant="h6" fontWeight={600} gutterBottom>
-            Budget Management ({data?.length})
+            Chiến lược vốn ({data?.length})
           </Typography>
           <Box
             sx={{

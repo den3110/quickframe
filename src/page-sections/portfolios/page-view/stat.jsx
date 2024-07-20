@@ -336,7 +336,7 @@ const StatPortfolio = (props) => {
                   {/* Calendar Section */}
                   <Grid item xs={12}>
                     <Typography variant="h6" mb={2}>
-                      {t("Trade History & Profit")}
+                      {t("Lịch Sử KLGD & Lợi Nhuận")}
                     </Typography>
                     <Card>
                       <Paper>
@@ -542,7 +542,7 @@ const StatPortfolio = (props) => {
                   {/* Calendar Section */}
                   <Grid item xs={12}>
                     <Typography variant="h6" mb={2}>
-                      {t("Trade History & Profit")}
+                      {t("Lịch Sử KLGD & Lợi Nhuận")}
                     </Typography>
                     <Card>
                       <Paper>
