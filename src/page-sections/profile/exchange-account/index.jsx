@@ -138,7 +138,7 @@ const ExchangeAccount = () => {
                 </CardActions>
               </StyledCard>
 
-              <StyledCard sx={{ flex: 1 }}>
+              {/* <StyledCard sx={{ flex: 1 }}>
                 <CardContent>
                   <Grid container spacing={2}>
                     <Grid item xs={2}>
@@ -157,7 +157,7 @@ const ExchangeAccount = () => {
                 <CardActions>
                   <TurnOff2FAButton fullWidth>Turn off 2FA</TurnOff2FAButton>
                 </CardActions>
-              </StyledCard>
+              </StyledCard> */}
             </Box>
           </Stack>
         </Grid>

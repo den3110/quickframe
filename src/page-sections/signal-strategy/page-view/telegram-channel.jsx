@@ -279,12 +279,12 @@ const TelegramChannelSignalStrategy = () => {
                         maxHeight: "calc(-300px - 32px - 32px - 12px + 100vh)",
                       }}
                     >
-                      {/* <Typography variant="body1" sx={{ display: "flex" }}>
-                        Kết quả :{" "}
-                        <Typography sx={{ color: "success.main" }}>
-                          THẮNG : +0.95$
+                      <Typography variant="body1" sx={{ display: "flex" }}>
+                        Hãy đặt lệnh :{" "}
+                        <Typography mb={1} fontWeight={600} sx={{ color:transactions?.messages?.[0]?.message?.betType=== "UP" ?  "success.main" : "error.main" }}>
+                          {formatCurrency(transactions?.messages?.[0]?.message?.betAmount)} {transactions?.messages?.[0]?.message?.betType=== "UP" ? "Tăng" : "Giảm"} 
                         </Typography>
-                      </Typography> */}
+                      </Typography>
                       <Typography variant="body1">
                         🎉 Tổng hợp{" "}
                         {transactions?.messages?.[1]?.message?.histories

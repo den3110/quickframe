@@ -100,7 +100,7 @@ export const DashboardRoutes = [
             element: <PortfolioDetail />,
           },
           {
-            path: "schedult",
+            path: "schedule",
             element: <PortfolioSchedule />,
           },
         ],
