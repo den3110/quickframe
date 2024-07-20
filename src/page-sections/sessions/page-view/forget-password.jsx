@@ -22,7 +22,7 @@ const ForgetPasswordPageView = () => {
     try {
       const data = {
         email,
-        siteId: "coinbuck.net",
+        siteId: "luxcoin.app",
       };
       const response = await authApi.requestOtpCode(data);
       console.log(response);

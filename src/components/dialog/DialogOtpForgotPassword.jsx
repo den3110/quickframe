@@ -54,7 +54,7 @@ const DialogOtpForgotPassword = (props) => {
       const data = {
         email,
         code: otp,
-        siteId: "coinbuck.net",
+        siteId: "luxcoin.app",
         newPassword,
       };
       const response = await authApi.forgetPassword(data);
