@@ -18,30 +18,50 @@ import { showToast } from "components/toast/toast";
 
 const UserLinkAccountListDrawer = ({ open, handleClose }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const { userLinkAccountList, selectedLinkAccount,setSelectedLinkAccount , dataSelectedLinkAccount } = useContext(AuthContext);
+  const {
+    userLinkAccountList,
+    selectedLinkAccount,
+    setSelectedLinkAccount,
+    dataSelectedLinkAccount,
+    setDataSelectedLinkAccount
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleAddNewLinkedAccount = () => {
-    navigate("/connect", { state: {is_add_account: true} });
+    navigate("/connect", { state: { is_add_account: true } });
   };
 
-  const handleDisconnect= async ()=> {
+  const handleDisconnect = async () => {
     try {
-      const response= await exchangeApi.userExchangeLinkAccountLogout({}, selectedLinkAccount)
-      if(response?.data?.ok=== true) {
-        setSelectedLinkAccount(undefined)
-        localStorage.removeItem("linkAccount")
-        showToast("Disconnect exchange account successfully", "success")
-        navigate("/connect")
-      }
-      else if(response?.data?.ok=== false) {
-        showToast(response?.data?.m, "error")
+      const response = await exchangeApi.userExchangeLinkAccountLogout(
+        {},
+        selectedLinkAccount
+      );
+      if (response?.data?.ok === true) {
+        setSelectedLinkAccount(undefined);
+        localStorage.removeItem("linkAccount");
+        showToast("Disconnect exchange account successfully", "success");
+        window.location.href = window.location.origin + "/connect";
+      } else if (response?.data?.ok === false) {
+        showToast(response?.data?.m, "error");
       }
     } catch (error) {
-      showToast(error?.response?.data?.message, "error")
+      showToast(error?.response?.data?.message, "error");
     }
-  }
+  };
 
+  const toggleLinkAccount = async (linkAccountId) => {
+    try {
+      localStorage.setItem("linkAccount", linkAccountId);
+      setSelectedLinkAccount(linkAccountId)
+      setDataSelectedLinkAccount(userLinkAccountList?.find(item=> item?._id === linkAccountId))
+      showToast("Chuyển tài khoản thành công", "success")
+      handleClose()
+      // window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Drawer
@@ -76,74 +96,94 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
       >
         <Box sx={{ width: "100%", flex: 1, overflow: "auto" }}>
           {userLinkAccountList?.map((item, key) => (
-            <Box
-              key={key}
-              width="100%"
-              sx={{
-                position: "relative",
-                background:
-                  "linear-gradient(95.4deg, rgba(77, 84, 109, 0.89) 6.95%, rgba(28, 30, 38, 0.89) 100%)",
-                  overflow: "hidden"
-              }}
-              color="white"
-              borderRadius="8px"
-              p={2}
-              mb={2}
-              textAlign="center"
-              className="custom-wallet-demo"
-            >
-              <img
-                src={constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".svg"}
-                style={{ height: 28 }}
-                alt="Can't open"
-              />
-              <Typography fontSize={14} align="left" mt={1} mb={1}>
-                Tài khoản email: {item?.email}
-              </Typography>
-              <Divider style={{ borderColor: "rgba(255, 255, 255, 0.2)" }} />
-              <Typography fontSize={14} align="left" mt={1} mb={1}>
-                {/* ${spotBalance?.demoBalance?.toFixed(2)} */}
-                Nickname: {item?.nickName}
-              </Typography>
-              {
-                item?._id === dataSelectedLinkAccount?._id && 
-                <Box
-                  position={"absolute"}
-                  sx={{
-                    background:
-                      "linear-gradient(154.83deg,#03c768 15.98%,#0062ff 85.83%)",
-                    fontSize: 9,
-                    height: 20,
-                    lineHeight: 2,
-                    right: -20,
-                    textAlign: "center",
-                    textTransform: "uppercase",
-                    top: 15,
-                    transform: "rotate(45deg)",
-                    width: 90,
-                    borderRadius: "12px",
-                    fontWeight: 600,
-                    minWidth: 70,
-                    overflow: "hidden",
-                    padding: "0 6px",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    color: "white",
-                  }}
-                >
-                  Active
+            <Box key={key} mb={2}>
+              <Box
+                key={key}
+                width="100%"
+                sx={{
+                  position: "relative",
+                  background:
+                    "linear-gradient(95.4deg, rgba(77, 84, 109, 0.89) 6.95%, rgba(28, 30, 38, 0.89) 100%)",
+                  overflow: "hidden",
+                }}
+                color="white"
+                borderRadius="8px"
+                p={2}
+                mb={2}
+                textAlign="center"
+                className="custom-wallet-demo"
+              >
+                <img
+                  src={constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".svg"}
+                  style={{ height: 28 }}
+                  alt="Can't open"
+                />
+                <Typography fontSize={14} align="left" mt={1} mb={1}>
+                  Email: {item?.email}
+                </Typography>
+                <Divider style={{ borderColor: "rgba(255, 255, 255, 0.2)" }} />
+                <Typography fontSize={14} align="left" mt={1} mb={1}>
+                  {/* ${spotBalance?.demoBalance?.toFixed(2)} */}
+                  Nickname: {item?.nickName}
+                </Typography>
+                {item?._id === selectedLinkAccount && (
+                  <Box
+                    position={"absolute"}
+                    sx={{
+                      background:
+                        "linear-gradient(154.83deg,#03c768 15.98%,#0062ff 85.83%)",
+                      fontSize: 9,
+                      height: 20,
+                      lineHeight: 2,
+                      right: -20,
+                      textAlign: "center",
+                      textTransform: "uppercase",
+                      top: 15,
+                      transform: "rotate(45deg)",
+                      width: 90,
+                      borderRadius: "12px",
+                      fontWeight: 600,
+                      minWidth: 70,
+                      overflow: "hidden",
+                      padding: "0 6px",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                      color: "white",
+                    }}
+                  >
+                    Active
+                  </Box>
+                )}
+                <Box>
+                  <Box display={"flex"} alignItems={"center"} gap={1}>
+                    {item?._id === selectedLinkAccount && (
+                      <Button color="error" variant="outlined" fullWidth onClick={handleDisconnect}>
+                        Đăng xuất
+                      </Button>
+                    )}
+                    {item?._id !== selectedLinkAccount && (
+                      <Button
+                        fullWidth
+                        onClick={() => toggleLinkAccount(item?._id)}
+                      >
+                        Chuyển tài khoản
+                      </Button>
+                    )}
+                  </Box>
                 </Box>
-              }
+              </Box>
             </Box>
           ))}
         </Box>
-        <Box>
+        <Box sx={{ width: "100%" }}>
           <Box sx={{ position: "sticky", top: 0 }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Button onClick={handleAddNewLinkedAccount}>
+              <Button variant={"outlined"} onClick={handleClose}>
+                Đóng
+              </Button>
+              <Button fullWidth onClick={handleAddNewLinkedAccount}>
                 Thêm tài khoản liên kết
               </Button>
-              <Button onClick={handleDisconnect}>Disconnect current account</Button>
             </Box>
           </Box>
         </Box>

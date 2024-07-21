@@ -16,12 +16,14 @@ import { SettingsContext } from "contexts/settingsContext";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
 import { isDark } from "util/constants";
+import AuthContext from "contexts/AuthContext";
 
 const DailyGoalDialog = ({ open, handleClose, dailyTarget, setDailyTarget }) => {
   const { walletMode } = useContext(SettingsContext);
   const [profitTarget, setProfitTarget] = useState("");
   const [lossTarget, setLossTarget] = useState("");
   const isDisableButton = profitTarget?.length <= 0 || lossTarget?.length <= 0;
+  const {selectedLinkAccount }= useContext(AuthContext)
 
   const handleProfitTargetChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, "");
@@ -46,6 +48,7 @@ const DailyGoalDialog = ({ open, handleClose, dailyTarget, setDailyTarget }) => 
         accountType: walletMode ? "(LIVE)" : "DEMO",
         take_profit_target: profitTarget?.replaceAll("$", ""),
         stop_loss_target: lossTarget?.replaceAll("$", ""),
+        linkAccountId: selectedLinkAccount
       };
       const response = await userApi.postUserExchangeLinkAccountDailyTarget(data);
       if (response?.data?.ok === true) {

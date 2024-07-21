@@ -89,7 +89,7 @@ const ConnectAccountPage = () => {
         setOpen2Fa(true);
         setToken(result?.data?.d?.t);
       } else if (result.data?.ok === true) {
-        console.log(111);
+
         showToast(result.data?.m, "success");
         localStorage.setItem("linkAccount", result?.data?.d?._id)
         window.history.replaceState({}, '')

@@ -43,7 +43,7 @@ const ManualTradeProvider = ({children}) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [selectedLinkAccount]);
 
   const fetchCopytradeStat = useCallback(async () => {
     try {

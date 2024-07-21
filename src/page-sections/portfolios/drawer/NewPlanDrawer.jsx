@@ -45,6 +45,9 @@ import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
 import { useInView } from "react-intersection-observer";
 import { GlobalContext } from "contexts/GlobalContext";
+import AuthContext from "contexts/AuthContext";
+import userApi from "api/user/userApi";
+import { constant } from "constant/constant";
 
 const NewPlanDrawer = ({
   open,
@@ -55,14 +58,14 @@ const NewPlanDrawer = ({
   dataProps,
   setIsEdit,
   allowSelectedTab,
-  selectedSignal
+  selectedSignal,
 }) => {
   const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
   });
   const [idPlan, setIdPlan] = useState();
-  const {setChange }= useContext(GlobalContext)
+  const { setChange } = useContext(GlobalContext);
   const { decodedData } = useContext(JwtContext);
   const { walletMode } = useContext(SettingsContext);
   const [step, setStep] = useState(1);
@@ -75,6 +78,7 @@ const NewPlanDrawer = ({
   const [baseAmount, setBaseAmount] = useState(1);
   const [isBrokerMode, setIsBrokerMode] = useState(false);
   const [budgetStrategy, setBudgetStrategy] = useState("");
+  const [linkAccountId, setLinkAccountId] = useState("");
   const [signalStrategy, setSignalStrategy] = useState("");
   const [arraySignalStrategy, setArraySignalStrategy] = useState([]);
   const [takeProfit, setTakeProfit] = useState(false);
@@ -82,13 +86,16 @@ const NewPlanDrawer = ({
   // const [leaderUserName, setLeaderUserName] = useState([]);
   const [privateMode, setPrivateMode] = useState(false);
   const [reserveSignal, setReserveSignal] = useState(false);
+  const [userLinkAccountListState, setUserLinkAccountListState]= useState([])
 
   const [featureType, setFeatureType] = useState(
     SignalFeatureTypes.SINGLE_METHOD
   ); // signal feature
   const [expanded, setExpanded] = useState(true);
   const [dataBudgetStrategy, setDataBudgetStrategy] = useState([]);
-  const [dataBudgetStrategyDefault, setDataBudgetStrategyDefault] = useState([]);
+  const [dataBudgetStrategyDefault, setDataBudgetStrategyDefault] = useState(
+    []
+  );
   const [dataSignalStrategy, setDataSignalStrategy] = useState([]);
   const [
     dataSignalStrategyTelegramSignal,
@@ -111,7 +118,7 @@ const NewPlanDrawer = ({
   const [whenProfit, setWhenProfit] = useState(0);
   const [whenLosing, setWhenLosing] = useState(0);
   // const [selectedTab, setSelectedTab] = useState(0);
-  const isDisableButton = planName?.length <= 0 ;
+  const isDisableButton = planName?.length <= 0;
   const [selectedTab1, setSelectedTab1] = useState(0);
   const [shuffleMethodsOrder, setShuffleMethodsOrder] = useState(false);
   const [noRepeatMethodsNextTurn, setNoRepeatMethodsNextTurn] = useState(false);
@@ -141,7 +148,7 @@ const NewPlanDrawer = ({
   };
 
   const handleIncrement = (setFunc, value) => {
-    console.log(value)
+    console.log(value);
     setFunc(parseInt(value) + 1);
   };
   const handleDecrement = (setFunc, value) =>
@@ -194,6 +201,7 @@ const NewPlanDrawer = ({
           is_reverse: reserveSignal,
           signal_feature: featureType,
           enabled_tpsl: takeProfit,
+          linkAccountId: linkAccountId,
         };
       } else {
         switch (featureType) {
@@ -225,6 +233,7 @@ const NewPlanDrawer = ({
               is_reverse: reserveSignal,
               signal_feature: featureType,
               enabled_tpsl: takeProfit,
+              linkAccountId: linkAccountId,
             };
 
             break;
@@ -256,6 +265,7 @@ const NewPlanDrawer = ({
               is_reverse: reserveSignal,
               signal_feature: featureType,
               enabled_tpsl: takeProfit,
+              linkAccountId: linkAccountId,
             };
             break;
           case SignalFeatureTypes.AUTO_CHANGE_METHODS:
@@ -293,6 +303,7 @@ const NewPlanDrawer = ({
               is_reverse: reserveSignal,
               signal_feature: featureType,
               enabled_tpsl: takeProfit,
+              linkAccountId: linkAccountId,
             };
             break;
           case SignalFeatureTypes.WAIT_SIGNALS:
@@ -347,6 +358,7 @@ const NewPlanDrawer = ({
               is_reverse: reserveSignal,
               signal_feature: featureType,
               enabled_tpsl: takeProfit,
+              linkAccountId: linkAccountId,
             };
             break;
 
@@ -361,16 +373,12 @@ const NewPlanDrawer = ({
         response = await portfolioApi.usersBotCreate(data);
       }
       if (response?.data?.ok === true) {
-        if(allowSelectedTab) {
-          showToast(
-           "Tạo bot thành công",
-            "success"
-          );
+        if (allowSelectedTab) {
+          showToast("Tạo bot thành công", "success");
           setIsEdit(false);
           onClose();
-          return 
-        }
-        else if (isEdit === true) {
+          return;
+        } else if (isEdit === true) {
           let dataTemp = dataProps;
           const indexData = dataTemp?.findIndex(
             (item) => item?._id === selectedPlan?._id
@@ -378,7 +386,7 @@ const NewPlanDrawer = ({
           dataTemp[indexData] = data;
           setData(dataTemp);
         } else {
-          setChange(prev=> !prev)
+          setChange((prev) => !prev);
           setData((prev) => [response?.data?.d, ...prev]);
         }
         showToast(
@@ -402,10 +410,11 @@ const NewPlanDrawer = ({
         const response1 = await budgetStrategyApi.userBudgetStrategyList();
         const response2 = await signalStrategyApi.userBudgetSignalList();
         const response3 = await signalStrategyApi.userBudgetTelegramSignal();
+        const response4= await userApi.getUserLinkAccountList()
         if (response1?.data?.ok === true) {
           setBudgetStrategy(response1?.data?.d?.[0]?._id);
           setDataBudgetStrategy(response1?.data?.d);
-          setDataBudgetStrategyDefault(response1?.data?.d)
+          setDataBudgetStrategyDefault(response1?.data?.d);
         }
         if (response2?.data?.ok === true) {
           setSignalStrategy(response2?.data?.d?.[0]?._id);
@@ -414,6 +423,10 @@ const NewPlanDrawer = ({
         if (response3?.data?.ok === true) {
           setSignalStrategy(response2?.data?.d?.[0]?._id);
           setDataSignalStrategyTelegramSignal(response3?.data?.d);
+        }
+        if(response4?.data?.ok=== true) {
+          setLinkAccountId(response4?.data?.d?.[0]?._id)
+          setUserLinkAccountListState(response4?.data?.d)
         }
       } catch (error) {}
     })();
@@ -438,25 +451,31 @@ const NewPlanDrawer = ({
       setIdPlan(selectedPlan?._id);
       setPlanName(selectedPlan?.name);
       setInvestmentFund(selectedPlan?.budget_amount);
+      setLinkAccountId(selectedPlan?.linkAccountId);
       setBetSecond(selectedPlan?.bet_second);
       setAutoType(selectedPlan?.autoType);
-      setSelectedTab(selectedPlan?.autoType === 1 ? "Follow Leader" : ((selectedPlan?.autoType=== 0 || selectedPlan?.autoType=== 2) ? "Bot AI" : "Telegram Signal"));
+      setSelectedTab(
+        selectedPlan?.autoType === 1
+          ? "Follow Leader"
+          : selectedPlan?.autoType === 0 || selectedPlan?.autoType === 2
+          ? "Bot AI"
+          : "Telegram Signal"
+      );
       setFeatureType(selectedPlan?.signal_feature);
-      if(!allowSelectedTab) {
+      if (!allowSelectedTab) {
         setBudgetStrategy(selectedPlan?.budgetStrategyId);
-      }  
+      }
       setBaseAmount(selectedPlan?.margin_dense);
       setTakeProfit(selectedPlan?.enabled_tpsl);
       setIsBrokerMode(selectedPlan?.isBrokerMode);
       setPrivateMode(selectedPlan?.isPrivate);
       setReserveSignal(selectedPlan?.is_reverse);
-      if(allowSelectedTab) {
-        setArraySignalStrategy(selectedSignal)
-        setSignalStrategy(selectedSignal[0])
-      }
-      else {
+      if (allowSelectedTab) {
+        setArraySignalStrategy(selectedSignal);
+        setSignalStrategy(selectedSignal[0]);
+      } else {
         setArraySignalStrategy(selectedPlan?.method_data?.method_list);
-        setSignalStrategy(selectedPlan?.method_data?.method_list[0])
+        setSignalStrategy(selectedPlan?.method_data?.method_list[0]);
       }
       setShuffleMethodsOrder(
         selectedPlan?.method_data?.feature_data?.shuffle_methods_order
@@ -514,6 +533,7 @@ const NewPlanDrawer = ({
       setTelegramToken(selectedPlan?.telegram_token);
       setTelegramChatId(selectedPlan?.telegram_chatId);
       setTelegramUrl(selectedPlan?.telegram_url);
+
     } else {
       setIdPlan();
       setPlanName("");
@@ -523,6 +543,7 @@ const NewPlanDrawer = ({
       setSelectedTab("Bot AI");
       setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
       setBudgetStrategy(dataBudgetStrategy?.[0]?._id);
+      setLinkAccountId(userLinkAccountListState?.[0]?._id);
       setBaseAmount(1);
       setTakeProfit(false);
       setIsBrokerMode(false);
@@ -539,7 +560,6 @@ const NewPlanDrawer = ({
       setWinTurnCount(0);
       setWinChangeMethodAfterWinStreak(0);
       setWinChangeMethodAfterLoseStreak(0);
-
       setLoseEnabled(false);
       setLoseReverseSignal(false);
       setLoseEndLoseStreak(false);
@@ -551,9 +571,18 @@ const NewPlanDrawer = ({
       setTelegramChatId("");
       setTelegramToken("");
       setTelegramUrl("");
-     
+      
     }
-  }, [isEdit, selectedPlan, dataBudgetStrategy,allowSelectedTab, selectedSignal]);
+  }, [
+    isEdit,
+    selectedPlan,
+    dataBudgetStrategy,
+    allowSelectedTab,
+    selectedSignal,
+    userLinkAccountListState,
+    dataProps
+    // inView
+  ]);
 
   useEffect(() => {
     if (inView === false) {
@@ -632,7 +661,9 @@ const NewPlanDrawer = ({
                     display="flex"
                     alignItems="center"
                   >
-                    <Typography variant="subtitle1">Ngân sách đầu tư</Typography>
+                    <Typography variant="subtitle1">
+                      Ngân sách đầu tư
+                    </Typography>
                     <Box ml={2} display="flex" alignItems="center">
                       <Button
                         variant="contained"
@@ -759,35 +790,73 @@ const NewPlanDrawer = ({
                     </Typography>
                   </Toolbar>
                 </AppBar>
-                {(
+                {
                   <Box display="flex" mt={2}>
                     {["Bot AI", "Follow Leader", "", "Telegram Signal"].map(
                       (tab) => {
-                        if((tab)=== "") {
-                          return <></>
+                        if (tab === "") {
+                          return <></>;
                         }
                         return (
-                        <Button
-                          disabled={(isEdit || allowSelectedTab)=== true ? true : false}
-                          key={tab}
-                          variant={
-                            selectedTab === tab ? "contained" : "outlined"
-                          }
-                          color={selectedTab === tab ? "primary" : "secondary"}
-                          style={{ marginRight: 8 }}
-                          onClick={() => {
-                            setSelectedTab(tab);
-                            setAutoType(tab === "Follow Leader" ? 1 : (tab=== "Bot AI" ? 0 : 3));
-                            setArraySignalStrategy([]);
-                          }}
-                        >
-                          {tab}
-                        </Button>
-                      )
+                          <Button
+                            disabled={
+                              (isEdit || allowSelectedTab) === true
+                                ? true
+                                : false
+                            }
+                            key={tab}
+                            variant={
+                              selectedTab === tab ? "contained" : "outlined"
+                            }
+                            color={
+                              selectedTab === tab ? "primary" : "secondary"
+                            }
+                            style={{ marginRight: 8 }}
+                            onClick={() => {
+                              setSelectedTab(tab);
+                              setAutoType(
+                                tab === "Follow Leader"
+                                  ? 1
+                                  : tab === "Bot AI"
+                                  ? 0
+                                  : 3
+                              );
+                              setArraySignalStrategy([]);
+                            }}
+                          >
+                            {tab}
+                          </Button>
+                        );
                       }
                     )}
                   </Box>
-                )}
+                }
+              </Box>
+              <Box sx={{ width: "100%" }} mt={2}>
+                <Typography variant="subtitle1">Tài khoản liên kết</Typography>
+                <FormControl variant="outlined" fullWidth margin="normal">  
+                  <Select
+                    value={linkAccountId}
+                    onChange={(e) => {
+                      setLinkAccountId(e.target.value);
+                    }}
+                    // renderValue={value=> <>{value}</>}
+                    size="medium"
+                  >
+                    {userLinkAccountListState?.map((item, key) => (
+                      <MenuItem key={key} value={item?._id}>
+                      <Box display={"flex"} alignItems={"center"} gap={1}>
+                        <img
+                          style={{ width: 32, height: 32 }}
+                          src={constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".ico"}
+                          alt="Can't open"
+                        />{" "}
+                        <Typography fontSize={14} textOverflow={"ellipsis"} overflow={"hidden"} whiteSpace={"nowrap"}>{item?.nickName}</Typography>
+                      </Box>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Box>
               <Box
                 className="aslawkalw"
@@ -803,9 +872,9 @@ const NewPlanDrawer = ({
                       <Select
                         value={featureType}
                         onChange={(e) => {
-                          setFeatureType(e.target.value)
-                          setSignalStrategy("")
-                          setArraySignalStrategy([])
+                          setFeatureType(e.target.value);
+                          setSignalStrategy("");
+                          setArraySignalStrategy([]);
                         }}
                         size="medium"
                       >
@@ -949,12 +1018,11 @@ const NewPlanDrawer = ({
                 sx={{ display: "flex", gap: 1, alignItems: "start" }}
                 // mt={1}
               >
+                {/* {console.log(budgetStrategy)} */}
                 {(selectedTab === "Bot AI" ||
                   selectedTab === "Telegram Signal") && (
                   <Box sx={{ width: "100%" }} fullWidth>
-                    <Typography variant="subtitle1">
-                      Chiến lược vốn*
-                    </Typography>
+                    <Typography variant="subtitle1">Chiến lược vốn*</Typography>
                     <FormControl variant="outlined" fullWidth margin="normal">
                       <Select
                         value={budgetStrategy}
@@ -971,7 +1039,7 @@ const NewPlanDrawer = ({
                     </FormControl>
                   </Box>
                 )}
-                
+
                 <Box sx={{ width: "100%" }}>
                   <Typography variant="subtitle1">
                     {selectedTab === "Bot AI" && "Tín hiệu*"}
@@ -1052,7 +1120,7 @@ const NewPlanDrawer = ({
                     </Box>
                   )}
                   {/*  */}
-                  {console.log("signalStrategy", signalStrategy)}
+                  {/* {console.log("signalStrategy", signalStrategy)} */}
                   {/*  */}
                   {selectedTab === "Telegram Signal" && (
                     <Box sx={{ width: "100%" }} mt={2} mb={1}>
@@ -1072,7 +1140,7 @@ const NewPlanDrawer = ({
                           )}
                         </Select>
                       ) : (
-                        <Select
+                        <Select 
                           fullWidth
                           multiple
                           value={arraySignalStrategy}
@@ -1090,7 +1158,7 @@ const NewPlanDrawer = ({
                             >
                               {selected.map((value) => (
                                 <Chip
-                                  sx={{height: allowSelectedTab ? "" : 50}}
+                                  sx={{ height: allowSelectedTab ? "" : 50 }}
                                   key={value}
                                   label={
                                     <Box>
@@ -1101,7 +1169,7 @@ const NewPlanDrawer = ({
                                           )?.name
                                         }
                                       </Box>
-                                      {!allowSelectedTab &&
+                                      {!allowSelectedTab && (
                                         <Box fontSize={12}>
                                           {
                                             dataSignalStrategyTelegramSignal.find(
@@ -1109,7 +1177,7 @@ const NewPlanDrawer = ({
                                             )?.url
                                           }
                                         </Box>
-                                      }
+                                      )}
                                     </Box>
                                   }
                                 />
@@ -1496,13 +1564,21 @@ const NewPlanDrawer = ({
                 </Box>
               )} */}
 
-              <Box mt={1} display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={1}> 
+              <Box
+                mt={1}
+                display={"flex"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+                gap={1}
+              >
                 <Box>
                   <Typography variant="h6">
                     Điều Kiện Chốt Lời/Cắt Lỗ
                   </Typography>
                   <Typography variant="body2">
-                    Gói của bạn sẽ tự động chốt lời hoặc cắt lỗ khi một trong các điều kiện sau được đáp ứng. Lợi nhuận hàng ngày được cài lại vào 00:00 GMT.
+                    Gói của bạn sẽ tự động chốt lời hoặc cắt lỗ khi một trong
+                    các điều kiện sau được đáp ứng. Lợi nhuận hàng ngày được cài
+                    lại vào 00:00 GMT.
                   </Typography>
                 </Box>
                 <FormControlLabel
@@ -1604,7 +1680,13 @@ const NewPlanDrawer = ({
                     </Typography>
                   </AccordionSummary>
                   <Box p={2}>
-                    <Box mt={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={1}>
+                    <Box
+                      mt={2}
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                    >
                       <Typography variant="h6">Chế độ chuyên gia</Typography>
                       <FormControlLabel
                         control={
@@ -1612,14 +1694,21 @@ const NewPlanDrawer = ({
                             checked={isBrokerMode}
                             onChange={() => setIsBrokerMode(!isBrokerMode)}
                           />
-                        }                        
+                        }
                       />
                     </Box>
-                    <Box mt={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={1}>
+                    <Box
+                      mt={2}
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                    >
                       <Box>
                         <Typography variant="h6">Chế độ riêng tư</Typography>
                         <Typography variant="body2">
-                          Người dùng khác sẽ không thể sao chép gói khi bạn bật Chế độ riêng tư
+                          Người dùng khác sẽ không thể sao chép gói khi bạn bật
+                          Chế độ riêng tư
                         </Typography>
                       </Box>
                       <FormControlLabel
@@ -1628,10 +1717,16 @@ const NewPlanDrawer = ({
                             checked={privateMode}
                             onChange={() => setPrivateMode(!privateMode)}
                           />
-                        }                       
+                        }
                       />
                     </Box>
-                    <Box mt={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} gap={1}>
+                    <Box
+                      mt={2}
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                    >
                       <Box>
                         <Typography variant="h6">Tín hiệu đảo lệnh</Typography>
                         <Typography variant="body2">

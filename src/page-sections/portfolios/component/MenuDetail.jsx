@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Popover,
@@ -19,7 +19,8 @@ import { showToast } from "components/toast/toast";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import { Replay } from "@mui/icons-material";
-import useQuery from "hooks/useQuery";
+// import useQuery from "hooks/useQuery";
+import AuthContext from "contexts/AuthContext";
 
 const MenuComponent = ({ dataStat, setDataStat }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -30,6 +31,7 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [isRunning, setIsRunning] = useState();
   const [isPause, setIsPause]= useState()
+  const {selectedLinkAccount }= useContext(AuthContext)
 
   const handleClick = (event) => {
     setMenuAnchorEl(event.currentTarget);
@@ -54,6 +56,7 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
     try {
       const payload = {
         action: ActionBotType[action],
+        linkAccountId: selectedLinkAccount
       };
       // const { data, error, loading, refetch }= useQuery()
       await portfolioApi.userBotAction(id, payload);

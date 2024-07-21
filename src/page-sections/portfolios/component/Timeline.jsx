@@ -44,6 +44,8 @@ import Dangeous from "icons/duotone/Dangeous";
 import ContactSupport from "icons/duotone/ContactSupport";
 import InsufficientBetBalance from "icons/duotone/InsufficientBetBalance";
 import round2number from "util/round2number";
+import AuthContext from "contexts/AuthContext";
+import { constant } from "constant/constant";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -58,6 +60,7 @@ const CustomTimeline = () => {
   const theme = useTheme();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [countDown, setCountDown] = useState();
+  const {userLinkAccountList }= useContext(AuthContext)
   // const [data, setData]= useState([])
   const { socket, isConnected } = useContext(SocketContext);
   const {
@@ -336,6 +339,7 @@ const CustomTimeline = () => {
         Quá trình đầu tư
       </Typography>
       <Box>
+        
         <Timeline className="askskaa" sx={{ padding: downLg ? 0 : "" }}>
           {dataProps
             ?.slice(
@@ -360,6 +364,16 @@ const CustomTimeline = () => {
                   {index < dataProps.length - 1 && <TimelineConnector />}
                 </TimelineSeparator>
                 <TimelineContent sx={{ paddingRight: 0 }}>
+                  <Box width="100%" display={"flex"} flexDirection={"row-reverse"}>
+                    <Box display={"flex"} alignItems={"center"} gap={.5} sx={{opacity: .6}}>
+                      <img
+                        style={{ width: 32, height: 32 }}
+                        src={constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".ico"}
+                        alt="Can't open"
+                      />
+                      <Typography fontSize={14} fontWeight={600}>{userLinkAccountList?.find(row=> row?._id=== item?.linkAccountId)?.nickName}</Typography>
+                    </Box>
+                  </Box>
                   <Card variant="outlined" sx={{ mb: 2 }}>
                     <Box
                       sx={{

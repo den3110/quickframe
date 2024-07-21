@@ -60,6 +60,9 @@ import DuplicatePlan from "../dialog/DuplicatePlan";
 import SharePlan from "../dialog/SharePlan";
 import FilterIcon from "icons/duotone/FilterIcon";
 import { GlobalContext } from "contexts/GlobalContext";
+import AuthContext from "contexts/AuthContext";
+import { constant } from "constant/constant";
+import SelectDirectLinkAccount from "./component/SelectDirectLinkAccount";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -97,11 +100,12 @@ const PortfoliosList = () => {
     stop_loss_target: 0,
   });
   const canvasRef = useRef();
-  const {setChange} = useContext(GlobalContext)
+  const { setChange } = useContext(GlobalContext);
+  const { selectedLinkAccount, userLinkAccountList } = useContext(AuthContext);
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
-  const [isEditStringMethod, setIsEditStringMethod] = useState(false);
+  // const [isEditStringMethod, setIsEditStringMethod] = useState(false);
   const [isDeleteBot, setIsDeleteBot] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [anchorEls, setAnchorEls] = useState({});
@@ -404,7 +408,7 @@ const PortfoliosList = () => {
           (item, key) => !selectedPlans.find((a) => a._id === item._id)
         )
       );
-      setChange(prev=> !prev)
+      setChange((prev) => !prev);
     } catch (error) {
       console.error("Error sending requests:", error);
     } finally {
@@ -428,14 +432,17 @@ const PortfoliosList = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await userApi.getUsersExchangeLinkAccountDailyTarget({
-        params: { accountType: walletMode ? "LIVE" : "DEMO" },
-      });
+      const response = await userApi.getUsersExchangeLinkAccountDailyTarget(
+        {
+          params: { accountType: walletMode ? "LIVE" : "DEMO" },
+        },
+        selectedLinkAccount
+      );
       if (response?.data?.ok === true) {
         setDailyTarget(response?.data?.d);
       }
     })();
-  }, [walletMode]);
+  }, [walletMode, selectedLinkAccount]);
 
   return (
     <Layout>
@@ -451,9 +458,7 @@ const PortfoliosList = () => {
               }}
             >
               <Box sx={{ width: downLg ? "100%" : "auto" }} display={"flex"}>
-                <Box
-                  sx={{ width:  "100%", paddingRight: "10px" }}
-                >
+                <Box sx={{ width: "100%", paddingRight: "10px" }}>
                   <TextField
                     variant="outlined"
                     placeholder="Tìm gói đầu tư..."
@@ -659,6 +664,7 @@ const PortfoliosList = () => {
                             {formatCurrency(dailyTarget?.profit)}
                           </Typography>
                         </StyledTableCell>
+                        <StyledTableCell>Tài khoản liên kết</StyledTableCell>
                         <StyledTableCell>Thao tác</StyledTableCell>
                         <StyledTableCell></StyledTableCell>
                       </TableRow>
@@ -751,6 +757,11 @@ const PortfoliosList = () => {
                                 {formatCurrency(plan?.total_profit)}
                               </StyledTableCell>
                               <StyledTableCell
+                                sx={{ width: downLg ? "50%" : "aaa" }}
+                              >
+                                <SelectDirectLinkAccount plan={plan} setData={setData} data={data} userLinkAccountList={userLinkAccountList} />
+                              </StyledTableCell>
+                              <StyledTableCell
                                 sx={{
                                   width: downLg ? "100%" : "aaa",
                                   display: downLg ? "flex" : "",
@@ -815,6 +826,7 @@ const PortfoliosList = () => {
                                   </MenuItem> */}
                                 </Menu>
                               </StyledTableCell>
+
                               <StyledTableCell
                                 sx={{ width: downLg ? "100%" : "aaa" }}
                               >

@@ -1,13 +1,15 @@
 import { Button, Switch, useMediaQuery } from "@mui/material";
 import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
-import React, { useEffect, useState } from "react";
+import AuthContext from "contexts/AuthContext";
+import React, { useContext, useEffect, useState } from "react";
 import { ActionBotType } from "type/ActionBotType";
 
 const RunningPlan = (props) => {
   const {setData, data, plan }= props
   const [isRunning, setIsRunning] = useState();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const {selectedLinkAccount }= useContext(AuthContext)
   useEffect(() => {
     if (plan) {
       setIsRunning(plan?.isRunning);
@@ -18,6 +20,7 @@ const RunningPlan = (props) => {
     try {
       const payload = {
         action: e.target.checked === true ? ActionBotType.START : ActionBotType.STOP,
+        linkAccountId: selectedLinkAccount
       };
       await portfolioApi.userBotAction(plan?._id, payload);
         let dataLocal= data

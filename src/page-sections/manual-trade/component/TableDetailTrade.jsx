@@ -37,6 +37,8 @@ import Dangeous from "icons/duotone/Dangeous";
 import ContactSupport from "icons/duotone/ContactSupport";
 import InsufficientBetBalance from "icons/duotone/InsufficientBetBalance";
 import { ManualTradeContext } from "contexts/ManualTradeContext";
+import { constant } from "constant/constant";
+import AuthContext from "contexts/AuthContext";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -48,6 +50,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 
 const TableDetailTrade = () => {
   const theme = useTheme();
+  const {userLinkAccountList }= useContext(AuthContext)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [countDown, setCountDown] = useState();
   // const [data, setData]= useState([])
@@ -333,6 +336,16 @@ const TableDetailTrade = () => {
                   {index < dataProps.length - 1 && <TimelineConnector />}
                 </TimelineSeparator>
                 <TimelineContent sx={{ paddingRight: 0 }}>
+                  <Box width="100%" display={"flex"} flexDirection={"row-reverse"}>
+                    <Box display={"flex"} alignItems={"center"} gap={.5} sx={{opacity: .6}}>
+                      <img
+                        style={{ width: 32, height: 32 }}
+                        src={constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".ico"}
+                        alt="Can't open"
+                      />
+                      <Typography fontSize={14} fontWeight={600}>{userLinkAccountList?.find(row=> row?._id=== item?.linkAccountId)?.nickName}</Typography>
+                    </Box>
+                  </Box>
                   <Card variant="outlined" sx={{ mb: 2 }}>
                     <Box
                       sx={{

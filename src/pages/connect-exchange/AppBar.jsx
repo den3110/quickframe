@@ -25,10 +25,15 @@ const AppBarSection = () => {
             component="div"
             sx={{ fontWeight: "bold" }}
           >
-            Quickframe
+            Luxcoin
           </Typography>
         </Box>
         <Box display={"flex"} alignItems={"center"}>
+          <Box sx={{ marginRight: 2 }}>
+            <Link href="/" color="inherit">
+              Dashboard
+            </Link>
+          </Box>
           <Box sx={{ marginRight: 2 }}>
             <Link href="#" color="inherit">
               English

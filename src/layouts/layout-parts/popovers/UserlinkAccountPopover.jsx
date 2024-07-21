@@ -3,6 +3,8 @@ import AuthContext from "contexts/AuthContext";
 import React, { useContext, useState } from "react";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import UserLinkAccountListDrawer from "../drawers/UserLinkAccountListDrawer";
+import ExchangeIcon from "icons/duotone/ExchangeIcon";
+import { constant } from "constant/constant";
 
 const UserlinkAccountPopover = () => {
   const { dataSelectedLinkAccount } = useContext(AuthContext);
@@ -23,9 +25,7 @@ const UserlinkAccountPopover = () => {
           setOpenDrawerListLinkAccount(true);
         }}
       >
-        <IconButton>
-          <CurrencyExchangeIcon />
-        </IconButton>
+        <img style={{width: 32, height: 32}} src={constant.URL_ASSETS_LOGO + "/"+  dataSelectedLinkAccount?.clientId + ".ico"} alt="Can't open" />
         <Typography fontSize={16} sx={{ cursor: "pointer" }}>
           {dataSelectedLinkAccount?.nickName}
         </Typography>

@@ -41,26 +41,30 @@ export const AuthProvider = ({ children }) => {
       try {
         const response= await userApi.getUserLinkAccountList()
         if(response?.data?.ok=== true) {
-          setUserLinkAccountList(response?.data?.d)
+          setUserLinkAccountList(response?.data?.d?.filter(item=> item?.isLogin=== true))
           if(localStorage.getItem("linkAccount")) {
             // setSelectedLinkAccount(respo)
             setSelectedLinkAccount(localStorage.getItem("linkAccount"))
             setDataSelectedLinkAccount(response?.data?.d?.find(item=> item?._id === localStorage.getItem("linkAccount")))
           }
-          // else {
-          //   setSelectedLinkAccount(response?.data?.d?.[0]?._id)
-          //   localStorage.setItem("linkAccount", response?.data?.d?.[0]?._id)
-          //   setDataSelectedLinkAccount(response?.data?.d?.find(item=> item?._id === response?.data?.d?.[0]?._id))
-          // }
+          else if(response?.data?.d?.find(item=> item?.isLogin=== true)) {
+            localStorage.setItem("linkAccount", response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
+            setSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
+            setDataSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0])
+          }
         }
       } catch (error) {
         
-      }
+      } 
     })()
   }, [])
 
+  // useEffect(()=> {
+
+  // }, [])
+
   return (
-    <AuthContext.Provider value={{ user, loading, setUser, selectedLinkAccount, userLinkAccountList , dataSelectedLinkAccount, setSelectedLinkAccount}}>
+    <AuthContext.Provider value={{ user, loading, setUser, selectedLinkAccount, userLinkAccountList , dataSelectedLinkAccount, setDataSelectedLinkAccount, setSelectedLinkAccount}}>
       {children}
     </AuthContext.Provider>
   );
