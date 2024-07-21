@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Container,
   Grid,
@@ -30,6 +30,7 @@ import portfolioApi from "api/portfolios/portfolioApi";
 import formatCurrency from "util/formatCurrency";
 import _ from "lodash";
 import round2number from "util/round2number";
+import AuthContext from "contexts/AuthContext";
 
 // Register Chart.js components
 ChartJS.register(
@@ -65,6 +66,7 @@ const StatPortfolio = (props) => {
   const theme = useTheme();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [selectedTime, setSelectedTime] = useState(1);
+  const {selectedLinkAccount }= useContext(AuthContext)
 
   useEffect(() => {
     (async () => {
@@ -120,7 +122,8 @@ const StatPortfolio = (props) => {
           };
           const response = await portfolioApi.userExchangeLinkAccounStatics(
             {},
-            { params: payload }
+            { params: payload },
+            selectedLinkAccount
           );
           if (response?.data?.ok === true) {
             console.log(response?.data?.d);
@@ -211,7 +214,7 @@ const StatPortfolio = (props) => {
                   <Grid item xs={12} sm={6} md={4}>
                     <Paper sx={{ height: "100%" }}>
                       <Box
-                        p={2}
+                        p={downLg? 0 : 2}
                         display={"flex"}
                         justifyContent={"space-between"}
                         alignItems={"center"}
@@ -339,8 +342,8 @@ const StatPortfolio = (props) => {
                       {t("Lịch Sử KLGD & Lợi Nhuận")}
                     </Typography>
                     <Card>
-                      <Paper>
-                        <Box p={2}>
+                      <Paper className="akslkwagdad">
+                        <Box className="aklklwakwf" p={downLg ? 0 : 2}>
                           <CalendarComponent data={data} />
                         </Box>
                       </Paper>
@@ -355,7 +358,7 @@ const StatPortfolio = (props) => {
       {props?.isSubPage !== true && (
         <Layout> 
           <Box pt={2} pb={4}>
-            <Box sx={{ padding: "10px" }}>
+            <Box sx={{ padding: downLg ? "8px" : "10px" }}>
               <Box sx={{ padding: downLg ? "" : "20px" }}>
                 <Box>
                   <Box mb={4}>
@@ -547,7 +550,7 @@ const StatPortfolio = (props) => {
                       </Typography>
                       <Card>
                         <Paper>
-                          <Box p={2}>
+                          <Box p={downLg ? 0 : 2}>
                             <CalendarComponent isGlobal={true} data={data} />
                           </Box>
                         </Paper>

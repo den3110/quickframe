@@ -67,6 +67,14 @@
     display: none !important;
 }
 
-.custom-background-dark .mbsc-ios.mbsc-eventcalendar,.custom-background-dark .mbsc-calendar-header,.custom-background-dark .mbsc-ios.mbsc-timeline-resource-header-cont,.custom-background-dark .mbsc-ios.mbsc-timeline-resource-bg, .custom-background-dark .mbsc-ios.mbsc-timeline-header-text {
+.custom-background-dark .mbsc-ios.mbsc-eventcalendar,.custom-background-dark .mbsc-calendar-header,.custom-background-dark .mbsc-ios.mbsc-timeline-resource-header-cont,.custom-background-dark .mbsc-ios.mbsc-timeline-resource-bg, .custom-background-dark .mbsc-ios.mbsc-timeline-header-text,.custom-background-dark .mbsc-ios-dark.mbsc-eventcalendar {
     background-color: #212a37 !important;
+}
+
+.custom-background-light .mbsc-ios.mbsc-calendar-controls, .custom-background-light .mbsc-ios-dark.mbsc-calendar {
+    background: white !important
+}
+
+.mbsc-ios.mbsc-eventcalendar .mbsc-calendar-wrapper {
+    border: none !important;
 }

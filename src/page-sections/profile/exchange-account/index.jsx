@@ -18,6 +18,7 @@ import { constant } from "constant/constant";
 import exchangeApi from "api/exchange/exchangeApi";
 import { showToast } from "components/toast/toast";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "contexts/AuthContext";
 
 const StyledCard = styled(Card)({
   marginBottom: "20px",
@@ -41,12 +42,14 @@ const ExchangeAccount = () => {
   const navigate= useNavigate()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { linked } = useContext(ConnectExchangeContext);
+  const {selectedLinkAccount }= useContext(AuthContext)
 
   const handleDisconnect= async ()=> {
     try {
-      const response= await exchangeApi.userExchangeLinkAccountLogout()
+      const response= await exchangeApi.userExchangeLinkAccountLogout({}, selectedLinkAccount)
       if(response?.data?.ok=== true) {
         showToast("Disconnect exchange account successfully", "success")
+        localStorage.removeItem("linkAccount")
         navigate("/connect")
       }
       else if(response?.data?.ok=== false) {

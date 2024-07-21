@@ -13,10 +13,10 @@ const exchangeApi = {
     const url= "/users/exchange/link-account/leaderboard"
     return axiosClient.get(url, data)
   },
-  userExchangeLinkAccountLogout(data) {
-    const url= "/users/exchange/link-account/logout"
+  userExchangeLinkAccountLogout(data, linkAccountId) {
+    const url= "/users/exchange/link-account/logout/" + linkAccountId
     return axiosClient.put(url, data)
   }
 };
-
+// cho e ti
 export default exchangeApi;

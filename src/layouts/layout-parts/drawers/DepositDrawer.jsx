@@ -11,6 +11,7 @@ import { showToast } from "components/toast/toast";
 import { isDark } from "util/constants";
 import QRCode from "react-qr-code";
 import { QrCode } from "@mui/icons-material";
+import AuthContext from "contexts/AuthContext";
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: "350px",
@@ -59,7 +60,7 @@ export default function DepositDrawer(props) {
   const { open, setOpen } = props;
   const classes = useStyles();
   const [address, setAddress] = React.useState();
-
+  const {selectedLinkAccount }= React.useContext(AuthContext)
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(address?.a);
     showToast("Sao chép thành công", "success")
@@ -72,7 +73,7 @@ export default function DepositDrawer(props) {
 
   const handlePostAddress= async ()=> { 
     try {
-        const response= await userApi.postUserExchangeLinkAccountAddress()
+        const response= await userApi.postUserExchangeLinkAccountAddress({}, selectedLinkAccount)
         if(response?.data?.ok=== true) {
             setAddress(response?.data?.d)
         }
@@ -87,7 +88,7 @@ export default function DepositDrawer(props) {
   React.useEffect(() => {
     (async () => {
       try {
-        const response = await userApi.getUserExchangeLinkAccountAddress();
+        const response = await userApi.getUserExchangeLinkAccountAddress({}, selectedLinkAccount);
         if (response?.data?.ok === true) {
           setAddress(response?.data?.d);
         }
@@ -98,7 +99,7 @@ export default function DepositDrawer(props) {
         showToast(error?.response?.data?.m, "error");
       }
     })();
-  }, []);
+  }, [selectedLinkAccount]);
 
   const DrawerList = (
     <Box sx={{ width: downLg ? "100%" : 448 }} role="presentation">

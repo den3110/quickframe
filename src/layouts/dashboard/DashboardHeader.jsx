@@ -1,5 +1,5 @@
 import { Fragment, useContext, useState } from "react";
-import { Box, IconButton, useMediaQuery } from "@mui/material";
+import { Box, IconButton, Typography, useMediaQuery } from "@mui/material";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 // LAYOUT BASED HOOK
 import useLayout from "./context/useLayout";
@@ -18,7 +18,7 @@ import ProfilePopover from "../layout-parts/popovers/ProfilePopover";
 import ServicePopover from "../layout-parts/popovers/ServicePopover";
 import LanguagePopover from "../layout-parts/popovers/LanguagePopover";
 import NotificationsPopover from "../layout-parts/popovers/NotificationsPopover";
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 // STYLED COMPONENTS
 import {
   DashboardHeaderRoot,
@@ -26,11 +26,15 @@ import {
 } from "../layout-parts/styles/header";
 import WalletPopover from "layouts/layout-parts/popovers/WalletPopover";
 import { Link } from "react-router-dom";
+import UserlinkAccountPopover from "layouts/layout-parts/popovers/UserlinkAccountPopover";
+
 const DashboardHeader = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { handleOpenMobileSidebar } = useLayout();
   // const [openSearchBar, setSearchBar] = useState(false);
   const { settings, saveSettings } = useContext(SettingsContext);
+  
+
   // const upSm = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   const downMd = useMediaQuery((theme) => theme.breakpoints.down(974));
   const handleChangeDirection = (value) => {
@@ -82,6 +86,7 @@ const DashboardHeader = () => {
         </ClickAwayListener> */}
 
         <Box flexGrow={1} ml={1} />
+        <UserlinkAccountPopover />
         <WalletPopover />
         {!downLg && (
           <>

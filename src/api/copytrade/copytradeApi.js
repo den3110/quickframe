@@ -1,12 +1,13 @@
 import axiosClient from "../axiosClient";
 
+
 const copytradeApi = {
   postUserCopytrade(data) {
     const url = "/users/copy-trade/trade";
     return axiosClient.post(url, data);
   },
-  userCopytradeHistory(data) {
-    const url= "/users/copy-trade/history"
+  userCopytradeHistory(data, linkAccountId) {
+    const url= "/users/copy-trade/history/" + linkAccountId
     return axiosClient.get(url, data)
   },
   userCopytradeStaticstic(data) {

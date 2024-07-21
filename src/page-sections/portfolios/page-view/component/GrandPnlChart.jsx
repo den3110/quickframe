@@ -63,10 +63,11 @@ const GrandPnLChart = () => {
           interval={downLg? 5 : 2}
           stroke={theme.palette.text.primary}
           tick={{
-            textAnchor: "end", // Điều chỉnh để nhãn không bị che
-            dx: 15,
-            dy: 10,
+            textAnchor: 'end',
+            dx: 5,
+            dy: 5,
           }}
+          fontSize={downLg ? 14 : 16}
         />
         <YAxis
           stroke={theme.palette.text.primary}
@@ -75,6 +76,7 @@ const GrandPnLChart = () => {
           tick={{
             dx: -20,
           }}
+          fontSize={downLg ? 14 : 16}
         />
         <Tooltip
           content={({ payload }) => {

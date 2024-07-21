@@ -7,7 +7,7 @@ export const DashboardHeaderRoot = styled(AppBar)(({
   paddingBottom: "1rem",
   backgroundImage: "none",
   backdropFilter: "blur(6px)",
-  backgroundColor: "transparent",
+  backgroundColor: theme.palette.background.paper,
   color: theme.palette.text.primary
 }));
 export const StyledToolBar = styled(Toolbar)({

@@ -17,6 +17,7 @@ import { SettingsContext } from "contexts/settingsContext";
 import { SocketContext } from "contexts/SocketContext";
 import copytradeApi from "api/copytrade/copytradeApi";
 import { showToast } from "components/toast/toast";
+import AuthContext from "contexts/AuthContext";
 
 const MultiplyIndex = () => {
   const { isConnected, socket } = useContext(SocketContext);
@@ -29,6 +30,7 @@ const MultiplyIndex = () => {
   const [isBrokerMode, setIsBrokerMode] = useState(false);
   const [betType, setBetType] = useState("");
   const [customMultiplier, setCustomMultiplier] = useState("");
+  const {selectedLinkAccount }= useContext(AuthContext)
   const isDisableButtonTrade = statusTrade === "WAIT" || !statusTrade;
   const isErrorBetAmount =
     betAmount.toString().length <= 0 || betAmount > 1000000 || betAmount <= 0;
@@ -68,6 +70,7 @@ const MultiplyIndex = () => {
         amount: parseFloat(betAmount) * parseInt(multiplier === "Khác" ? parseInt(customMultiplier) : multiplier),
         isBrokerMode,
         accountType: walletMode ? "LIVE" : "DEMO",
+        linkAccountId: selectedLinkAccount
       };
       const response = await copytradeApi.postUserCopytrade(data);
       if (response?.data?.ok === true) {

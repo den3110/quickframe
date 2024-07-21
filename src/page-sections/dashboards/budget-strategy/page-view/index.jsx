@@ -156,7 +156,7 @@ const BudgetStrategyPage = () => {
           </Typography>
           <Box
             sx={{
-              padding: "20px",
+              padding: downLg ? "8px" : "20px",
               background: (theme) => (isDark(theme) ? "#1f2937" : "white"),
             }}
           >
@@ -274,9 +274,9 @@ const BudgetStrategyPage = () => {
                               borderBottom: downLg ? "none" : "",
                             }}
                           >
-                            {row?.is_default === true
+                            <Typography fontSize={14} sx={{whiteSpace: "nowrap"}}>{row?.is_default === true
                               ? "Chiến lược mặc định"
-                              : "Chiến lược tuỳ chỉnh"}
+                              : "Chiến lược tuỳ chỉnh"}</Typography>
                           </StyledTableCell>
                           <StyledTableCell
                             sx={{

@@ -160,7 +160,7 @@ const PortfolioDetail = () => {
                   <InvestmentOverview />
                   <Statistics />
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid className='aksalwqzz' item xs={12} md={8}>
                   <Timeline />
                 </Grid>
                 <Grid item xs={12}></Grid>

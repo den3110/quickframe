@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Box,
   Select,
@@ -20,6 +20,7 @@ import Dialog2Fa from "components/dialog/Dialog2Fa";
 import AppBarSection from "./AppBar";
 import { constant } from "constant/constant";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AuthContext from "contexts/AuthContext";
 
 const RootContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -27,21 +28,20 @@ const RootContainer = styled(Box)(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
   height: "100vh",
-  // backgroundColor: "#f9fafc",
 }));
 
 const ContentContainer = styled(Container)(({ theme }) => ({
-  // backgroundColor: "#fff",
   borderRadius: "10px",
   boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
   padding: theme.spacing(4),
   maxWidth: "500px",
   textAlign: "center",
-  marginTop: theme.spacing(10), // Adjusted margin top to avoid overlap with AppBar
+  marginTop: theme.spacing(10), 
 }));
 
 const ConnectAccountPage = () => {
   const navigate = useNavigate();
+  const {selectedLinkAccount }= useContext(AuthContext)
   const [open2Fa, setOpen2Fa] = useState(false);
   const [token, setToken] = useState();
   const [exchangeUrl, setExchangeUrl] = useState("");
@@ -51,7 +51,7 @@ const ConnectAccountPage = () => {
   const [step, setStep] = useState(1);
   const [exchangeEmail, setExchangeEmail] = useState("");
   const [exchangePassword, setExchangePassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission status
+  const [isSubmitting, setIsSubmitting] = useState(false); 
 
   const handleStep = (step) => {
     setStep(parseInt(step));
@@ -91,6 +91,8 @@ const ConnectAccountPage = () => {
       } else if (result.data?.ok === true) {
         console.log(111);
         showToast(result.data?.m, "success");
+        localStorage.setItem("linkAccount", result?.data?.d?._id)
+        window.history.replaceState({}, '')
         window.location.reload();
       } else {
         showToast(result?.data?.m, "error");

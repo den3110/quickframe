@@ -7,16 +7,17 @@ import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 // import NoTransactionIcon from "icons/wallet/NoTransaction";
 import React, { useContext } from "react";
 import TransactionWallet from "./TransactionWallet";
+import AuthContext from "contexts/AuthContext";
 
 const DemoWallet = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { linked } = useContext(ConnectExchangeContext);
-  const {setChange }= useContext(SpotBalanceContext)
-  const {spotBalance}= useContext(SpotBalanceContext)
+  const {setChange, spotBalance }= useContext(SpotBalanceContext)
+  const {selectedLinkAccount }= useContext(AuthContext)
   
   const handleResetDemoBalance= async ()=> {
     try { 
-      const response= await userApi.userExchangeLinkAccountResetDemo()
+      const response= await userApi.userExchangeLinkAccountResetDemo({}, selectedLinkAccount)
       if(response?.data?.ok=== true) {
         setChange(prev=> !prev)
         showToast("Nạp lại số dư thành công", "success")

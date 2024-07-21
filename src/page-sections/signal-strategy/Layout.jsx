@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
           <Typography
             variant="h6"
             fontWeight={"600"}
-            sx={{ "&:hover": { color: theme.palette.primary.main } }}
+            sx={{ "&:hover": { color: theme.palette.primary.main }, whiteSpace: "nowrap" }}
           >
             Danh sách ({data?.length})
           </Typography>
@@ -50,12 +50,12 @@ const Layout = ({ children }) => {
           to="/signal-strategies/top-signal"
           // activeClassName="active"
           className={selectedLink=== "/signal-strategies/top-signal" && "active-custom"}
-          style={{ textDecoration: "none", color: "inherit" }}
+          style={{ textDecoration: "none", color: "inherit", whiteSpace: "nowrap" }}
         >
           <Typography
             variant="h6"
             fontWeight={"600"} 
-            sx={{ "&:hover": { color: theme.palette.primary.main } }}
+            sx={{ "&:hover": { color: theme.palette.primary.main }, whiteSpace: "nowrap" }}
           >
             Xếp hạng
           </Typography>
@@ -70,7 +70,7 @@ const Layout = ({ children }) => {
           <Typography
             variant="h6"
             fontWeight={"600"}
-            sx={{ "&:hover": { color: theme.palette.primary.main } }}
+            sx={{ "&:hover": { color: theme.palette.primary.main } , whiteSpace: "nowrap" }}
           >
             Kênh Telegram
           </Typography>

@@ -78,9 +78,10 @@ const GrandTotalProfitChart = ({ data: originalData, monthProps }) => {
           stroke={theme.palette.text.primary}
           tick={{
             textAnchor: 'end',
-            dx: 15,
-            dy: 10,
+            dx: 5,
+            dy: 5,
           }}
+          fontSize={downLg ? 14 : 16}
         />
         <YAxis
           stroke={theme.palette.text.primary}
@@ -90,6 +91,7 @@ const GrandTotalProfitChart = ({ data: originalData, monthProps }) => {
           tick={{
             dx: -10,
           }}
+          fontSize={downLg ? 14 : 16}
         />
         <Tooltip
           cursor={{ opacity: .2 }}

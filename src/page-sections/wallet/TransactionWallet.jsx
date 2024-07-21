@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   List,
@@ -17,6 +17,7 @@ import userApi from "api/user/userApi";
 import NoTransactionIcon from "icons/wallet/NoTransaction";
 import { isDark } from "util/constants";
 import { showToast } from "components/toast/toast";
+import AuthContext from "contexts/AuthContext";
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles(() => ({
 
 const TransactionWallet = (props) => {
   const classes = useStyles();
+  const {selectedLinkAccount }= useContext(AuthContext)
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [dataBalance, setDataBalance] = useState({ d: { c: [] } });
@@ -87,18 +89,18 @@ const TransactionWallet = (props) => {
         const response1 =
           await userApi.getUserExchangeLinkAccountTransactionsBalance({
             params: { page, size },
-          });
+          }, selectedLinkAccount);
         const response2 =
           await userApi.getUserExchangeLinkAccountSpotWalletTransactions({
             params: { page, size },
-          });
+          }, selectedLinkAccount);
         setDataBalance(response1?.data);
         setDataBalanceSpot(response2?.data);
       } catch (error) {
         showToast(error?.response?.data?.m);
       }
     })();
-  }, [page, size]);
+  }, [page, size, selectedLinkAccount]);
 
   return (
     <>

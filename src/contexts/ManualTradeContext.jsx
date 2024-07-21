@@ -5,6 +5,7 @@ import { SocketContext } from './SocketContext'
 import { showToast } from 'components/toast/toast'
 // import portfolioApi from 'api/portfolios/portfolioApi'
 import copytradeApi from 'api/copytrade/copytradeApi'
+import AuthContext from './AuthContext'
 
 export const ManualTradeContext= createContext()
 const ManualTradeProvider = ({children}) => {
@@ -13,6 +14,7 @@ const ManualTradeProvider = ({children}) => {
   const [dataStat, setDataStat] = useState();
   const [loading, setLoading]= useState()
   const { isConnected, socket } = useContext(SocketContext);
+  const {selectedLinkAccount }= useContext(AuthContext)
   const fetchGlobalLastResult = useCallback(async () => {
     try {
       setLoading(true);
@@ -30,7 +32,7 @@ const ManualTradeProvider = ({children}) => {
   const fetCopytradeHistory = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await copytradeApi.userCopytradeHistory();
+      const response = await copytradeApi.userCopytradeHistory({}, selectedLinkAccount);
       if (response?.data?.ok === true) {
         const dataResult = mergeAndSortData(response?.data);
         setData(dataResult);

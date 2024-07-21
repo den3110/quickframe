@@ -412,8 +412,8 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         };
 
         return [
-          isHiddenProfit === false ? profitEvent : [],
-          isHiddenVolume === false ? volumeEvent : [],
+          isHiddenProfit === false && profitEvent,
+          isHiddenVolume === false && volumeEvent,
         ];
       } else {
         // demo wallet
@@ -445,15 +445,19 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         };
 
         return [
-          isHiddenProfit === false ? profitEvent : [],
-          isHiddenVolume === false ? volumeEvent : [],
+          isHiddenProfit === false && profitEvent,
+          isHiddenVolume === false && volumeEvent,
         ];
       }
     } else {
       const profitEvent = {
         title: `Profit`,
-        start: new Date(item.createdAt),
-        end: new Date(item.createdAt),
+        start: new Date(item.createdAt).setHours(
+          new Date(item.createdAt).getHours() - 1
+        ),
+        end: new Date(item.createdAt).setHours(
+          new Date(item.createdAt).getHours() - 1
+        ),
         desc: (item.profit),
         color:
           item.profit >= 0
@@ -474,8 +478,8 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
       };
 
       return [
-        isHiddenProfit === false ? profitEvent : [],
-        isHiddenVolume === false ? volumeEvent : [],
+        isHiddenProfit === false && profitEvent,
+        isHiddenVolume === false && volumeEvent,
       ];
     }
   });
@@ -488,7 +492,9 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
     end: group[0].end,
     desc: _.sumBy(group, 'desc'),
     color: group[0].color
-  }));
+  }))?.filter(item=> item.title !== undefined);
+
+  console.log(result)
   
   const handleNavigate = (action) => {
     if (action === "PREV") {
@@ -519,7 +525,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
   };
 
   return (
-    <div style={{ height: "100%" }}>
+    <Box className="kalskalwaww" sx={{ height: "100%" }}>
       <style>
         {`
           .custom-calendar * {
@@ -572,7 +578,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         />
       )}
       {mode=== false && <Box sx={{width: "100%"}}>
-        <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexDirection={downLg ? "column" : "row"}>
+        <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} flexDirection={downLg ? "column" : "row"} gap={downLg ? 4 : 0}>
           <Box sx={{width: downLg ? "100%" : "48%"}}>
             <Box mb={4}>
               <Typography fontWeight={600} ml={2} fontSize={18}>Vol</Typography>
@@ -598,7 +604,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
           <p>{selectedEvent.desc}</p>
         </Box>
       )} */}
-    </div>
+    </Box>
   );
 };
 

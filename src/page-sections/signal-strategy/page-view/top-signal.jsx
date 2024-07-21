@@ -137,7 +137,7 @@ const TopSignalPageView = () => {
 
   return (
     <Layout>
-      <Box sx={{ paddingTop: "22px" }}>
+      <Box sx={{ paddingTop: "22px" }} pb={4}>
         <Box sx={{ padding: downLg ? 0 : "24px" }}>
           <Box
             sx={{
@@ -147,25 +147,28 @@ const TopSignalPageView = () => {
               flexDirection: downLg ? "column" : "row",
             }}
           >
-            <Box sx={{ width: downLg ? "100%" : "100%" }} display={"flex"} justifyContent={"space-between"}>
+            <Box sx={{ width: "100%"}} p={1} display={"flex"} justifyContent={"space-between"}>
               <Box
+
                 sx={{ width: "100%", paddingRight: "10px" }}
               >
                 <TextField
                   fullWidth
                   variant="outlined"
                   sx={{ width: downLg ? "aaa" : 450 }}
+                  size="medium"
                   placeholder="Search Strategy..."
                   InputProps={{
                     startAdornment: (
                       <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
                     ),
-                  }}
-                  inputProps={{
                     style: {
-                      height: "24px",
+                      height: "100%"
                     },
-                  }}
+                    inputProps: {
+                      height: downLg ? "100%" : "24px",
+                    },
+                  }}  
                 />
               </Box>
               <Box>

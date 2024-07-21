@@ -281,9 +281,11 @@ const SignalStrategyList = () => {
                                 borderBottom: downLg ? "none" : "",
                               }}
                             >
-                              {row?.is_default === true
-                                ? "Chiến lược mặc định"
-                                : "Chiến lược tuỳ chỉnh"}
+                              <Typography fontSize={14} sx={{whiteSpace: "nowrap"}}>
+                                {row?.is_default === true
+                                  ? "Chiến lược mặc định"
+                                  : "Chiến lược tuỳ chỉnh"}
+                              </Typography>
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{
