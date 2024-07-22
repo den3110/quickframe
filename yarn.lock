@@ -4197,6 +4197,35 @@
     prop-types "^15.8.1"
     reselect "^4.1.8"
 
+"@mui/x-date-pickers-pro@^7.11.0":
+  version "7.11.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers-pro/-/x-date-pickers-pro-7.11.0.tgz#3570b9c9d8a5cadd01db23539cbd130dab1ea311"
+  integrity sha512-qCHsoNoFgldGxlJE77vL18lhbV7Qg15UFkqCQWV8KbUd5PLrK1kaIf2ddMwLGKJKl4sxSU6rgH/yat95HDdggA==
+  dependencies:
+    "@babel/runtime" "^7.24.8"
+    "@mui/base" "^5.0.0-beta.40"
+    "@mui/system" "^5.16.2"
+    "@mui/utils" "^5.16.2"
+    "@mui/x-date-pickers" "7.11.0"
+    "@mui/x-license" "7.11.0"
+    clsx "^2.1.1"
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
+
+"@mui/x-date-pickers@7.11.0":
+  version "7.11.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-7.11.0.tgz#ac98d9057b733ddec117bc0938f364316eb12b5a"
+  integrity sha512-+zPWs1dwe7J1nZ2iFhTgCae31BLMYMQ2VtQfHxx21Dh6gbBRy/U7YJZg1LdhfQyE093S3e4A5uMZ6PUWdne7iA==
+  dependencies:
+    "@babel/runtime" "^7.24.8"
+    "@mui/base" "^5.0.0-beta.40"
+    "@mui/system" "^5.16.2"
+    "@mui/utils" "^5.16.2"
+    "@types/react-transition-group" "^4.4.10"
+    clsx "^2.1.1"
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
+
 "@mui/x-date-pickers@^5.0.17":
   version "5.0.20"
   resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-5.0.20.tgz#7b4e5b5a214a8095937ba7d82bb82acd6f270d72"
@@ -4214,6 +4243,14 @@
     prop-types "^15.7.2"
     react-transition-group "^4.4.5"
     rifm "^0.12.1"
+
+"@mui/x-license@7.11.0":
+  version "7.11.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-license/-/x-license-7.11.0.tgz#b7566dbb58af40c3b2725c5374124e15663b1362"
+  integrity sha512-4YOfiJ2CDque+nP4MNFU6eNiw2bf9rFGZtN9s0XRWXIaIoLKXICWcMx/PjYpqtLdSGG8eFe+EINX0oxiWC9XSg==
+  dependencies:
+    "@babel/runtime" "^7.24.8"
+    "@mui/utils" "^5.16.2"
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"

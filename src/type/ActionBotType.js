@@ -5,7 +5,8 @@ export const ActionBotType = {
   RESET: "RESET",
   REMOVE: "REMOVE",
   START: "START",
-  STOP: "STOP"
+  STOP: "STOP",
+  RESET_PNL: "RESET_PNL"
 };
 
 export const ActionBotTypeMessageSucces = {
@@ -15,7 +16,8 @@ export const ActionBotTypeMessageSucces = {
   RESET: "Reset gói thành công",
   REMOVE: "Xoá gói thành công",
   START: "Khởi dộng gói thành công",
-  STOP: "Ngừng gói thành công"
+  STOP: "Ngừng gói thành công",
+  RESET_PNL: "Đặt lại Pnl thành công"
 };
 
 export const ActionBotTypeStatus = {
@@ -25,5 +27,6 @@ export const ActionBotTypeStatus = {
   RESET: true,
   REMOVE: false,
   START: true,
-  STOP: false
+  STOP: false,
+  RESET_PNL: false
 };

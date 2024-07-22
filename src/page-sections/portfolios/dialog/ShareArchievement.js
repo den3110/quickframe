@@ -12,9 +12,8 @@ import DownloadIcon from "icons/DownloadIcon";
 // import round2number from "util/round2number";
 import formatCurrency from "util/formatCurrency";
 
-const ShareArchievement = forwardRef(
-  ({ open, handleClose, selectedPlan }, canvasRef) => {
-    const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
+const ShareArchievement = forwardRef(({ open, handleClose, selectedPlan }, canvasRef) => {
+    const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const [count, setCount] = useState(1);
     const handleDownload = () => {
       if (canvasRef.current) {
@@ -63,8 +62,9 @@ const ShareArchievement = forwardRef(
         ctx.fillStyle = "#9fabbc";
         ctx.font = "18px Manrope";
         ctx.fillText(
-          `Trong ${(
-            moment(selectedPlan?.updatedAt ).diff(moment(selectedPlan?.lastStartTime), "hours")
+          `Trong ${moment(selectedPlan?.updatedAt).diff(
+            moment(selectedPlan?.lastStartTime),
+            "hours"
           )} giờ`,
           40,
           170
@@ -136,8 +136,9 @@ const ShareArchievement = forwardRef(
         ctx.fillStyle = "#9fabbc";
         ctx.font = "12px Manrope";
         ctx.fillText(
-          `Trong ${(
-            moment(selectedPlan?.updatedAt ).diff(moment(selectedPlan?.lastStartTime), "hours") 
+          `Trong ${moment(selectedPlan?.updatedAt).diff(
+            moment(selectedPlan?.lastStartTime),
+            "hours"
           )} giờ`,
           20,
           110
@@ -152,7 +153,7 @@ const ShareArchievement = forwardRef(
         ctx.drawImage(
           img4,
           canvas.width - img4.width / 2.5 - 20,
-          canvas.height + img4.height / 2.5 - 55  - 10,
+          canvas.height + img4.height / 2.5 - 55 - 10,
           img4.width / 2.5,
           img4.height / 2.5
         );
@@ -187,7 +188,13 @@ const ShareArchievement = forwardRef(
 
     return (
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
-        <Box style={{ position: "relative", height: downLg ? 390 : 507, overflow: "hidden" }}>
+        <Box
+          style={{
+            position: "relative",
+            height: downLg ? 390 : 507,
+            overflow: "hidden",
+          }}
+        >
           <canvas
             style={{ background: "#121927" }}
             crossOrigin="anonymous"

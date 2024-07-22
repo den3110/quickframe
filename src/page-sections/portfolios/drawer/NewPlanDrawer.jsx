@@ -59,6 +59,7 @@ const NewPlanDrawer = ({
   setIsEdit,
   allowSelectedTab,
   selectedSignal,
+  isEditSingle,
 }) => {
   const { ref, inView } = useInView({
     /* Optional options */
@@ -86,7 +87,7 @@ const NewPlanDrawer = ({
   // const [leaderUserName, setLeaderUserName] = useState([]);
   const [privateMode, setPrivateMode] = useState(false);
   const [reserveSignal, setReserveSignal] = useState(false);
-  const [userLinkAccountListState, setUserLinkAccountListState]= useState([])
+  const [userLinkAccountListState, setUserLinkAccountListState] = useState([]);
 
   const [featureType, setFeatureType] = useState(
     SignalFeatureTypes.SINGLE_METHOD
@@ -142,6 +143,7 @@ const NewPlanDrawer = ({
     useState(0);
   const [loseChangeMethodAfterWinStreak, setLoseChangeMethodAfterWinStreak] =
     useState(0);
+  const [loading, setLoading] = useState();
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab1(newValue);
@@ -378,6 +380,10 @@ const NewPlanDrawer = ({
           setIsEdit(false);
           onClose();
           return;
+        } else if (isEditSingle === true) {
+          console.log("1");
+          // setDataProps
+          setData({ ...selectedPlan, ...data });
         } else if (isEdit === true) {
           let dataTemp = dataProps;
           const indexData = dataTemp?.findIndex(
@@ -407,10 +413,11 @@ const NewPlanDrawer = ({
   useEffect(() => {
     (async () => {
       try {
+        setLoading(true);
         const response1 = await budgetStrategyApi.userBudgetStrategyList();
         const response2 = await signalStrategyApi.userBudgetSignalList();
         const response3 = await signalStrategyApi.userBudgetTelegramSignal();
-        const response4= await userApi.getUserLinkAccountList()
+        const response4 = await userApi.getUserLinkAccountList();
         if (response1?.data?.ok === true) {
           setBudgetStrategy(response1?.data?.d?.[0]?._id);
           setDataBudgetStrategy(response1?.data?.d);
@@ -424,11 +431,14 @@ const NewPlanDrawer = ({
           setSignalStrategy(response2?.data?.d?.[0]?._id);
           setDataSignalStrategyTelegramSignal(response3?.data?.d);
         }
-        if(response4?.data?.ok=== true) {
-          setLinkAccountId(response4?.data?.d?.[0]?._id)
-          setUserLinkAccountListState(response4?.data?.d)
+        if (response4?.data?.ok === true) {
+          setLinkAccountId(response4?.data?.d?.filter(item=> item?.isLogin=== true)?.[0]?._id);
+          setUserLinkAccountListState(response4?.data?.d?.filter(item=> item?.isLogin === true));
         }
-      } catch (error) {}
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
     })();
   }, [isEdit]);
 
@@ -533,7 +543,6 @@ const NewPlanDrawer = ({
       setTelegramToken(selectedPlan?.telegram_token);
       setTelegramChatId(selectedPlan?.telegram_chatId);
       setTelegramUrl(selectedPlan?.telegram_url);
-
     } else {
       setIdPlan();
       setPlanName("");
@@ -571,7 +580,6 @@ const NewPlanDrawer = ({
       setTelegramChatId("");
       setTelegramToken("");
       setTelegramUrl("");
-      
     }
   }, [
     isEdit,
@@ -580,7 +588,7 @@ const NewPlanDrawer = ({
     allowSelectedTab,
     selectedSignal,
     userLinkAccountListState,
-    dataProps
+    dataProps,
     // inView
   ]);
 
@@ -834,27 +842,67 @@ const NewPlanDrawer = ({
               </Box>
               <Box sx={{ width: "100%" }} mt={2}>
                 <Typography variant="subtitle1">Tài khoản liên kết</Typography>
-                <FormControl variant="outlined" fullWidth margin="normal">  
+                <FormControl variant="outlined" fullWidth margin="normal">
                   <Select
                     value={linkAccountId}
                     onChange={(e) => {
                       setLinkAccountId(e.target.value);
                     }}
-                    // renderValue={value=> <>{value}</>}
+                    renderValue={(value) => (
+                      <>
+                        {loading=== true && <Box>Loading...</Box>}
+                        {loading=== false && <Box display={"flex"} alignItems={"center"} gap={1}>
+                          <img
+                            style={{ width: 32, height: 32 }}
+                            src={
+                              constant.URL_ASSETS_LOGO +
+                              "/" +
+                              userLinkAccountListState?.find(item=> item?._id === value)?.clientId +
+                              ".ico"
+                            }
+                            alt="Can't open"
+                          />{" "}
+                          <Typography
+                            fontSize={14}
+                            textOverflow={"ellipsis"}
+                            overflow={"hidden"}
+                            whiteSpace={"nowrap"}
+                          >
+                            {userLinkAccountListState?.find(item=> item?._id === value)?.nickName}
+                          </Typography>
+                        </Box>}
+                      </>
+                    )}
                     size="medium"
                   >
-                    {userLinkAccountListState?.map((item, key) => (
-                      <MenuItem key={key} value={item?._id}>
-                      <Box display={"flex"} alignItems={"center"} gap={1}>
-                        <img
-                          style={{ width: 32, height: 32 }}
-                          src={constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".ico"}
-                          alt="Can't open"
-                        />{" "}
-                        <Typography fontSize={14} textOverflow={"ellipsis"} overflow={"hidden"} whiteSpace={"nowrap"}>{item?.nickName}</Typography>
-                      </Box>
-                      </MenuItem>
-                    ))}
+                    {loading === true && (
+                      <MenuItem value={undefined}>Đang tải</MenuItem>
+                    )}
+                    {loading === false &&
+                      userLinkAccountListState?.map((item, key) => (
+                        <MenuItem key={key} value={item?._id}>
+                          <Box display={"flex"} alignItems={"center"} gap={1}>
+                            <img
+                              style={{ width: 32, height: 32 }}
+                              src={
+                                constant.URL_ASSETS_LOGO +
+                                "/" +
+                                item?.clientId +
+                                ".ico"
+                              }
+                              alt="Can't open"
+                            />{" "}
+                            <Typography
+                              fontSize={14}
+                              textOverflow={"ellipsis"}
+                              overflow={"hidden"}
+                              whiteSpace={"nowrap"}
+                            >
+                              {item?.nickName}
+                            </Typography>
+                          </Box>
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               </Box>
@@ -1027,6 +1075,10 @@ const NewPlanDrawer = ({
                       <Select
                         value={budgetStrategy}
                         onChange={(e) => setBudgetStrategy(e.target.value)}
+                        renderValue={value=> <>
+                          {loading=== true && <>Loading...</>}
+                          {loading=== false && dataBudgetStrategy?.find(item=> item?._id === value)?.name}
+                        </>}
                         size="medium"
                       >
                         {dataBudgetStrategy?.map((item, key) => (
@@ -1140,7 +1192,7 @@ const NewPlanDrawer = ({
                           )}
                         </Select>
                       ) : (
-                        <Select 
+                        <Select
                           fullWidth
                           multiple
                           value={arraySignalStrategy}

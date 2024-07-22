@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Button,
   Popover,
@@ -21,17 +21,22 @@ import PauseIcon from "@mui/icons-material/Pause";
 import { Replay } from "@mui/icons-material";
 // import useQuery from "hooks/useQuery";
 import AuthContext from "contexts/AuthContext";
+import NewPlanDrawer from "../drawer/NewPlanDrawer";
+import ShareArchievement from "../dialog/ShareArchievement";
 
 const MenuComponent = ({ dataStat, setDataStat }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-
+  const canvasRef= useRef()
   const { id } = useParams();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [isRunning, setIsRunning] = useState();
-  const [isPause, setIsPause]= useState()
-  const {selectedLinkAccount }= useContext(AuthContext)
+  const [isPause, setIsPause] = useState();
+  const { selectedLinkAccount } = useContext(AuthContext);
+  const [isEdit, setIsEdit] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [isShareArchievement, setIsShareArchievement] = useState(false);
 
   const handleClick = (event) => {
     setMenuAnchorEl(event.currentTarget);
@@ -56,19 +61,41 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
     try {
       const payload = {
         action: ActionBotType[action],
-        linkAccountId: selectedLinkAccount
+        linkAccountId: selectedLinkAccount,
       };
       // const { data, error, loading, refetch }= useQuery()
       await portfolioApi.userBotAction(id, payload);
       // setData()
       // setIsRunning(ActionBotTypeStatus[action]);
-      setIsPause(!isPause)
+      setIsPause(!isPause);
       showToast(ActionBotTypeMessageSucces[action], "success");
-      setDataStat({...dataStat, lastData: {...dataStat.lastData, isPause: !isPause}})
+      setDataStat({
+        ...dataStat,
+        lastData: { ...dataStat.lastData, isPause: !isPause },
+      });
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }
   };
+
+  const resetPnlToday= async ()=> {
+    try {
+      // const result= await 
+      const payload= {
+        action: ActionBotType.RESET_PNL
+      }
+      const response= await portfolioApi.userBotAction(id, payload)
+      if(response?.data?.ok=== true) {
+        showToast(ActionBotTypeMessageSucces.RESET_PNL, "success")
+      }
+      else if(response?.data?.ok=== false) {
+        showToast(response?.data?.m, "success")
+
+      }
+    } catch (error) {
+        showToast(error?.response?.data?.m, "error")
+    }
+  }
 
   const handleBack = () => {
     navigate(-1);
@@ -86,7 +113,7 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
           Quay lại
         </Button>
         <Box>
-        {(isRunning === false) && (
+          {isRunning === false && (
             <Button
               sx={{
                 "& .MuiButton-startIcon": {
@@ -103,7 +130,7 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
               {downLg ? "" : "Khởi chạy"}
             </Button>
           )}
-          {(isRunning === true && !isPause) && (
+          {isRunning === true && !isPause && (
             <Button
               sx={{
                 "& .MuiButton-startIcon": {
@@ -120,7 +147,7 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
               {downLg ? "" : "Tạm ngưng"}
             </Button>
           )}
-          {(isRunning === true && isPause) && (
+          {isRunning === true && isPause && (
             <Button
               sx={{
                 "& .MuiButton-startIcon": {
@@ -148,7 +175,7 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
             color="secondary"
             size={"large"}
             style={{ marginRight: "8px" }}
-            onClick={() => handleChangeIsRunning("RESTART")}
+            onClick={() => handleChangeIsRunning(ActionBotType.RESTART)}
           >
             {downLg ? "" : "Khởi động lại"}
           </Button>
@@ -173,14 +200,48 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
         }}
       >
         <Box>
-          <MenuItem onClick={handleSubMenuClick}>Chỉnh sửa gói đầu tư</MenuItem>
-          <MenuItem onClick={handleSubMenuClick}>Tạo bản sao gói</MenuItem>
-          <MenuItem onClick={handleSubMenuClick}>Khoe thành tích</MenuItem>
-          <MenuItem onClick={handleSubMenuClick}>Chia sẻ gói</MenuItem>
-          <MenuItem onClick={handleSubMenuClick}>Đặt lại PnL hôm nay</MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              handleSubMenuClick(e);
+              handleClose()
+              setOpenEdit(true);
+              setIsEdit(true);
+              // isEditSingle=
+            }}
+          >
+            Chỉnh sửa gói đầu tư
+          </MenuItem>
+          <MenuItem onClick={(e)=> {
+            handleSubMenuClick(e)
+            handleClose()
+            setIsShareArchievement(true)
+          }}>Khoe thành tích</MenuItem>
+          <MenuItem onClick={async (e)=> {
+            handleSubMenuClick(e)
+            await resetPnlToday()
+          }}>Đặt lại PnL hôm nay</MenuItem>
           <MenuItem onClick={handleSubMenuClick}>Xóa gói đầu tư</MenuItem>
         </Box>
       </Popover>
+      <NewPlanDrawer
+        open={openEdit}
+        handleClose={() => {
+          setOpenEdit(false);
+        }}
+        isEdit={isEdit}
+        setIsEdit={setIsEdit}
+        selectedPlan={dataStat}
+        isEditSingle={true}
+        setData={setDataStat}
+      />
+      <ShareArchievement 
+        ref={canvasRef}
+        open={isShareArchievement}
+        handleClose={()=> {
+          setIsShareArchievement(false)
+        }}
+        selectedPlan={dataStat}
+      />
     </Box>
   );
 };

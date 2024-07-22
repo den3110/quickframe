@@ -16,6 +16,10 @@ const exchangeApi = {
   userExchangeLinkAccountLogout(data, linkAccountId) {
     const url= "/users/exchange/link-account/logout/" + linkAccountId
     return axiosClient.put(url, data)
+  },
+  usersExchangeLinkAccountInfo(data, linkAccountId) {
+    const url= "/users/exchange/link-account/info/" + linkAccountId
+    return axiosClient.get(url, data)
   }
 };
 // cho e ti

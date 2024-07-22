@@ -12,6 +12,7 @@ import {
   Select,
   MenuItem,
   Pagination,
+  Button,
 } from "@mui/material";
 import {
   Timeline,
@@ -46,6 +47,8 @@ import InsufficientBetBalance from "icons/duotone/InsufficientBetBalance";
 import round2number from "util/round2number";
 import AuthContext from "contexts/AuthContext";
 import { constant } from "constant/constant";
+import FilterComponent from "./FilterComponent";
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -60,16 +63,17 @@ const CustomTimeline = () => {
   const theme = useTheme();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [countDown, setCountDown] = useState();
-  const {userLinkAccountList }= useContext(AuthContext)
+  const { userLinkAccountList } = useContext(AuthContext);
   // const [data, setData]= useState([])
   const { socket, isConnected } = useContext(SocketContext);
+  const [openAccordion, setOpenAccordion] = useState(false);
   const {
     data: dataProps,
     dataStat: dataStatProps,
     // loading,
     setData,
     setDataStat,
-    setChange
+    setChange,
   } = useContext(PortfolioDetailContext);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
@@ -81,15 +85,24 @@ const CustomTimeline = () => {
   const handleChangePage = (event, value) => {
     setPage(value);
   };
-  //  e co ghi day a
+
+  const handleAccordionToggle = () => {
+    setOpenAccordion(!openAccordion);
+  };
+
+  
   const renderBetType = (type) => {
     switch (type) {
       case "started_bot":
         return "Khởi động bot";
+      case "reset_pnl":
+        return "Đặt lại Pnl";
       case "stopped_bot":
         return "Dừng bot";
       case "resume_bot":
         return "Tiếp tục bot";
+      case "betsession_is_invalid":
+        return "Phiên đặt cược không hợp lệ"
       case "pause_bot":
         return "Tạm ngưng bot";
       case "stop_plan_take_profit_target":
@@ -241,8 +254,8 @@ const CustomTimeline = () => {
             dataTemp = [data, ...dataTemp];
           }
         }
-        if(data?.result=== "ACTION_BOT" ) {
-          setChange(prev=> !prev)
+        if (data?.result === "ACTION_BOT") {
+          setChange((prev) => !prev);
         }
         setData(dataTemp);
       });
@@ -270,7 +283,7 @@ const CustomTimeline = () => {
             lastData: {
               ...dataStatTemp.lastData,
               profit: data?.runningData?.profit,
-  
+
               budgetStrategy: {
                 ...dataStatTemp.lastData.budgetStrategy,
                 bs: {
@@ -294,14 +307,23 @@ const CustomTimeline = () => {
             dataTemp = [data, ...dataTemp];
           }
         }
-        if(data?.result=== "ACTION_BOT" ) {
-          setChange(prev=> !prev)
+        if (data?.result === "ACTION_BOT") {
+          setChange((prev) => !prev);
         }
-        
+
         setData(dataTemp);
       });
     }
-  }, [isConnected, dataProps, dataStatProps, id, socket, setData, setDataStat, setChange]);
+  }, [
+    isConnected,
+    dataProps,
+    dataStatProps,
+    id,
+    socket,
+    setData,
+    setDataStat,
+    setChange,
+  ]);
 
   useEffect(() => {
     if (isConnected) {
@@ -324,22 +346,27 @@ const CustomTimeline = () => {
     }
   }, [isConnected, socket]);
 
-  useEffect(()=> {
-    if(isConnected) {
-      socket.emit("PLAN_HISTORY_SUBCRIBE", id)
-      return ()=> {
-        socket.emit("PLAN_HISTORY_UNSUBCRIBE", id)
-      }
+  useEffect(() => {
+    if (isConnected) {
+      socket.emit("PLAN_HISTORY_SUBCRIBE", id);
+      return () => {
+        socket.emit("PLAN_HISTORY_UNSUBCRIBE", id);
+      };
     }
-  }, [isConnected, id, socket])
+  }, [isConnected, id, socket]);
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
-        Quá trình đầu tư
-      </Typography>
+      <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
+        <Typography variant="h6" gutterBottom>
+          Quá trình đầu tư
+        </Typography>
+        <Button onClick={handleAccordionToggle}>
+          <FilterListIcon /> Bộ lọc
+        </Button>
+      </Box>
+      <FilterComponent openAccordion={openAccordion} setOpenAccordion={setOpenAccordion} handleAccordionToggle={handleAccordionToggle} />
       <Box>
-        
         <Timeline className="askskaa" sx={{ padding: downLg ? 0 : "" }}>
           {dataProps
             ?.slice(
@@ -364,14 +391,34 @@ const CustomTimeline = () => {
                   {index < dataProps.length - 1 && <TimelineConnector />}
                 </TimelineSeparator>
                 <TimelineContent sx={{ paddingRight: 0 }}>
-                  <Box width="100%" display={"flex"} flexDirection={"row-reverse"}>
-                    <Box display={"flex"} alignItems={"center"} gap={.5} sx={{opacity: .6}}>
+                  <Box
+                    width="100%"
+                    display={"flex"}
+                    flexDirection={"row-reverse"}
+                  >
+                    <Box
+                      display={"flex"}
+                      alignItems={"center"}
+                      gap={0.5}
+                      sx={{ opacity: 0.6 }}
+                    >
                       <img
                         style={{ width: 32, height: 32 }}
-                        src={constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".ico"}
+                        src={
+                          constant.URL_ASSETS_LOGO +
+                          "/" +
+                          item?.clientId +
+                          ".ico"
+                        }
                         alt="Can't open"
                       />
-                      <Typography fontSize={14} fontWeight={600}>{userLinkAccountList?.find(row=> row?._id=== item?.linkAccountId)?.nickName}</Typography>
+                      <Typography fontSize={14} fontWeight={600}>
+                        {
+                          userLinkAccountList?.find(
+                            (row) => row?._id === item?.linkAccountId
+                          )?.nickName
+                        }
+                      </Typography>
                     </Box>
                   </Box>
                   <Card variant="outlined" sx={{ mb: 2 }}>

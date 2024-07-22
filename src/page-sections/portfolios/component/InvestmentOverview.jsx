@@ -4,11 +4,34 @@ import { Card, CardContent, Typography, Box, Divider, useMediaQuery } from "@mui
 import { PortfolioDetailContext } from "../page-view/detail";
 import formatCurrency from "util/formatCurrency";
 import { isDark } from "util/constants";
+import { ActionBotType, ActionBotTypeMessageSucces } from "type/ActionBotType";
+import portfolioApi from "api/portfolios/portfolioApi";
+import { useParams } from "react-router-dom";
+import { showToast } from "components/toast/toast";
+import AuthContext from "contexts/AuthContext";
 
 const InvestmentOverview = () => {
   const {dataStat }= useContext(PortfolioDetailContext)
+  const {selectedLinkAccount }= useContext(AuthContext)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const {id }= useParams()
   
+  const handleChangeIsRunning = async (action) => {
+    try {
+      const payload = {
+        action: ActionBotType[action],
+        linkAccountId: selectedLinkAccount,
+      };
+      // const { data, error, loading, refetch }= useQuery()
+      await portfolioApi.userBotAction(id, payload);
+      // setData()
+      // setIsRunning(ActionBotTypeStatus[action]);
+      showToast(ActionBotTypeMessageSucces[action], "success");
+    } catch (error) {
+      showToast(error?.response?.data?.m, "error");
+    }
+  };
+
   return (
     <Box position={"relative"} overflow={"hidden"}>
       <Card sx={{background: theme=> isDark(theme) ? "" : "#eeeff2"}}>
@@ -82,7 +105,7 @@ const InvestmentOverview = () => {
             }}
           >
             <Typography variant="body2">Lợi nhuận</Typography>
-            <Typography variant="body2">{formatCurrency(dataStat?.isRunning ? dataStat?.lastData.profit : dataStat?.current_profit)} Cài lại</Typography>
+            <Typography variant="body2" display={"flex"} justifyContent={"center"} alignItems={"center"} gap={1}>{formatCurrency(dataStat?.isRunning ? dataStat?.lastData.profit : dataStat?.current_profit)} <Typography onClick={()=> handleChangeIsRunning(ActionBotType.RESET_PNL)} color={"success.main"} fontSize={14} fontWeight={600} sx={{cursor: "pointer"}}>Cài lại</Typography></Typography>
           </Box>
         </CardContent>
         {dataStat?.isRunning=== true && dataStat?.lastData?.isPause=== false && <Box position={"absolute"} sx={{background: "linear-gradient(154.83deg,#03c768 15.98%,#0062ff 85.83%)", fontSize: 9, height: 20, lineHeight: 2, right: -20, textAlign: "center", textTransform: "uppercase", top: 15, transform: "rotate(45deg)", width: 90, borderRadius: "12px", fontWeight: 600, minWidth: 70, overflow: "hidden", padding: "0 6px", whiteSpace: "nowrap", textOverflow: "ellipsis", color: "white"}}>

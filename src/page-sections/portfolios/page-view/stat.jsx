@@ -28,9 +28,11 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import portfolioApi from "api/portfolios/portfolioApi";
 import formatCurrency from "util/formatCurrency";
-import _ from "lodash";
+// import _ from "lodash";
 import round2number from "util/round2number";
 import AuthContext from "contexts/AuthContext";
+import exchangeApi from "api/exchange/exchangeApi";
+import { SettingsContext } from "contexts/settingsContext";
 
 // Register Chart.js components
 ChartJS.register(
@@ -42,22 +44,10 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-const data = {
-  labels: ["01", "02", "03", "04", "05", "06", "07"],
-  datasets: [
-    {
-      label: "Profit/Loss",
-      data: [50, 40, 60, 70, 85, 90, 100],
-      fill: false,
-      backgroundColor: "rgba(75,192,192,0.2)",
-      borderColor: "rgba(75,192,192,1)",
-    },
-  ],
-};
 
 const StatPortfolio = (props) => {
   const { t } = useTranslation();
-  const { dataStat } = props;
+  const { dataStat, setDataStat } = props;
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState();
@@ -67,6 +57,8 @@ const StatPortfolio = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [selectedTime, setSelectedTime] = useState(1);
   const {selectedLinkAccount }= useContext(AuthContext)
+  const {walletMode }= useContext(SettingsContext)
+  const [dataStatGlobal, setDataStatGlobal]= useState()
 
   useEffect(() => {
     (async () => {
@@ -136,7 +128,22 @@ const StatPortfolio = (props) => {
         }
       }
     })();
-  }, [id]);
+  }, [id, selectedLinkAccount]);
+
+  useEffect(()=> {
+    (async ()=> {
+      try {
+        if(props?.isSubPage!== true) {
+          const response= await exchangeApi.usersExchangeLinkAccountInfo({}, selectedLinkAccount)
+          if(response?.data?.ok=== true) {
+            setDataStatGlobal(response?.data?.d)
+          }
+        }  
+      } catch (error) {
+        
+      }
+    })()
+  }, [props?.isSubPage, selectedLinkAccount])
 
   useEffect(() => {
     setStat({
@@ -146,6 +153,61 @@ const StatPortfolio = (props) => {
       volume: dataStat?.day_volume,
     });
   }, [dataStat]);
+
+  useEffect(()=> {
+    if(walletMode) {
+      if(selectedTime=== 1) {
+        setStat({
+          profit: dataStatGlobal?.live_daily_profit,
+          win: dataStatGlobal?.live_win_daily,
+          lose: dataStatGlobal?.live_lose_daily,
+          volume: dataStatGlobal?.live_daily_volume,
+        });
+      }
+      if(selectedTime=== 2) {
+        setStat({
+          profit: dataStatGlobal?.live_week_profit,
+          win: dataStatGlobal?.live_win_week,
+          lose: dataStatGlobal?.live_lose_week,
+          volume: dataStatGlobal?.live_week_volume,
+        });
+      }
+      if(selectedTime=== 3) {
+        setStat({
+          profit: dataStatGlobal?.live_month_profit,
+          win: dataStatGlobal?.live_win_month,
+          lose: dataStatGlobal?.live_lose_month,
+          volume: dataStatGlobal?.live_month_volume,
+        });
+      }
+    }
+    else {
+      if(selectedTime=== 1) {
+        setStat({
+          profit: dataStatGlobal?.demo_daily_profit,
+          win: dataStatGlobal?.demo_win_daily,
+          lose: dataStatGlobal?.demo_lose_daily,
+          volume: dataStatGlobal?.demo_daily_volume,
+        });
+      }
+      if(selectedTime=== 2) {
+        setStat({
+          profit: dataStatGlobal?.demo_week_profit,
+          win: dataStatGlobal?.demo_win_week,
+          lose: dataStatGlobal?.demo_lose_week,
+          volume: dataStatGlobal?.demo_week_volume,
+        });
+      }
+      if(selectedTime=== 3) {
+        setStat({
+          profit: dataStatGlobal?.demo_month_profit,
+          win: dataStatGlobal?.demo_win_month,
+          lose: dataStatGlobal?.demo_lose_month,
+          volume: dataStatGlobal?.demo_month_volume,
+        });
+      }
+    }
+  }, [dataStatGlobal, walletMode, selectedTime])
 
   return (
     <Box pb={4}>
@@ -366,12 +428,22 @@ const StatPortfolio = (props) => {
                       <Box
                         onClick={() => {
                           setSelectedTime(1);
-                          setStat({
-                            profit: dataStat?.day_profit,
-                            win: dataStat?.win_day,
-                            lose: dataStat?.lose_day,
-                            volume: dataStat?.day_volume,
-                          });
+                          if(walletMode=== true) {
+                            setStat({
+                              profit: dataStatGlobal?.live_daily_profit,
+                              win: dataStatGlobal?.live_win_daily,
+                              lose: dataStatGlobal?.live_lose_daily,
+                              volume: dataStatGlobal?.live_daily_volume,
+                            });
+                          }
+                          else {
+                            setStat({
+                              profit: dataStatGlobal?.demo_daily_profit,
+                              win: dataStatGlobal?.demo_win_daily,
+                              lose: dataStatGlobal?.demo_lose_daily,
+                              volume: dataStatGlobal?.demo_daily_volume,
+                            });
+                          }
                         }}
                         color={selectedTime === 1 && "success.main"}
                         fontSize={18}
@@ -383,12 +455,22 @@ const StatPortfolio = (props) => {
                       <Box
                         onClick={() => {
                           setSelectedTime(2);
-                          setStat({
-                            profit: dataStat?.week_profit,
-                            win: dataStat?.win_week,
-                            lose: dataStat?.lose_week,
-                            volume: dataStat?.week_volume,
-                          });
+                          if(walletMode=== true) {
+                            setStat({
+                              profit: dataStatGlobal?.live_week_profit,
+                              win: dataStatGlobal?.live_win_week,
+                              lose: dataStatGlobal?.live_lose_week,
+                              volume: dataStatGlobal?.live_week_volume,
+                            });
+                          }
+                          else {
+                            setStat({
+                              profit: dataStatGlobal?.demo_week_profit,
+                              win: dataStatGlobal?.demo_win_week,
+                              lose: dataStatGlobal?.demo_lose_week,
+                              volume: dataStatGlobal?.demo_week_volume,
+                            });
+                          }
                         }}
                         color={selectedTime === 2 && "success.main"}
                         fontSize={18}
@@ -400,12 +482,22 @@ const StatPortfolio = (props) => {
                       <Box
                         onClick={() => {
                           setSelectedTime(3);
-                          setStat({
-                            profit: dataStat?.month_profit,
-                            win: dataStat?.win_month,
-                            lose: dataStat?.lose_month,
-                            volume: dataStat?.month_volume,
-                          });
+                          if(walletMode=== true) {
+                            setStat({
+                              profit: dataStatGlobal?.live_month_profit,
+                              win: dataStatGlobal?.live_win_month,
+                              lose: dataStatGlobal?.live_lose_month,
+                              volume: dataStatGlobal?.live_month_volume,
+                            });
+                          }
+                          else {
+                            setStat({
+                              profit: dataStatGlobal?.demo_month_profit,
+                              win: dataStatGlobal?.demo_win_month,
+                              lose: dataStatGlobal?.demo_lose_month,
+                              volume: dataStatGlobal?.demo_month_volume,
+                            });
+                          }
                         }}
                         color={selectedTime === 3 && "success.main"}
                         fontSize={18}

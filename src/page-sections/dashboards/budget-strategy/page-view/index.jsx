@@ -342,7 +342,7 @@ const BudgetStrategyPage = () => {
                                       handleOpenNewBudgetStrategy();
                                     }}
                                   >
-                                    <EditBudgetStrategy />
+                                    {/* <EditBudgetStrategy /> */}
                                       View Strategy
                                   </StyledMenuItem>
                                 </>
