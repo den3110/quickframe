@@ -89,6 +89,29 @@ const ManualTradeProvider = ({children}) => {
     }
   }, [isConnected, socket, dataSignal]);
 
+  useEffect(() => {
+    if (isConnected) {
+      socket.on("ADD_OPEN_ORDER", (dataSocket) => {
+        // setDataSignal(data);
+        let dataTemp= data
+        const index = dataTemp?.findIndex(
+          (item) => item.betTime === dataSocket.betTime && dataSocket.autoType === 4);
+        console.log("index", index)
+        if (index !== -1) {
+          dataTemp[index] = dataSocket;
+        } else {
+          const index = dataTemp?.find(
+            (item) => item.betTime !== dataSocket.betTime && dataSocket.autoType === 4
+          );
+          if (index) {
+            dataTemp = [dataSocket, ...dataTemp];
+          }
+        }
+        setData(dataTemp)
+      });
+    }
+  }, [isConnected, socket, data]);
+
   return (
     <ManualTradeContext.Provider value={{ dataSignal, setDataSignal, data, setData, dataStat, setDataStat}}>
       {children}

@@ -37,6 +37,7 @@ import formatCurrency from "util/formatCurrency";
 import Toggle from "icons/duotone/Toggle";
 import CloseIcon from "icons/duotone/CloseIcon";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AuthContext from "contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -59,6 +60,7 @@ const TelegramChannelSignalStrategy = () => {
   const dataBotInit = dataBot;
   const [searchTerm, setSearchTerm] = useState("");
   const { isConnected, socket } = useContext(SocketContext);
+  const {selectedLinkAccount }= useContext(AuthContext)
   const { walletMode } = useContext(SettingsContext);
   const [countDown, setCountDown] = useState(0);
   const [betAmount, setBetAmount] = useState(1);
@@ -92,6 +94,7 @@ const TelegramChannelSignalStrategy = () => {
         amount: parseFloat(betAmount) * parseInt(multiplier),
         isBrokerMode: false,
         accountType: walletMode ? "LIVE" : "DEMO",
+        linkAccountId: selectedLinkAccount
       };
       const response = await copytradeApi.postUserCopytrade(data);
       if (response?.data?.ok === true) {

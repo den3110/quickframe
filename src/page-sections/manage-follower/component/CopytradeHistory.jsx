@@ -123,7 +123,6 @@ const CopytradeHistory = () => {
                     >
                       <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
                         <Typography variant="body2" color="textSecondary">
-                          Created:{" "}
                           {moment(item.createdAt).format(
                             "DD-MM-YYYY, HH:mm:ss"
                           )}

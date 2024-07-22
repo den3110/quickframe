@@ -237,9 +237,7 @@ const TableDetailTrade = () => {
 
       socket.on("ADD_OPEN_ORDER", (data) => {
         const index = dataTemp?.findIndex(
-          (item) => item.betTime === data.betTime && data.autoType === 4
-          // uh oke a
-        );
+          (item) => item.betTime === data.betTime && data.autoType === 4);
         console.log("index", index)
         if (index !== -1) {
           dataTemp[index] = data;
@@ -276,9 +274,8 @@ const TableDetailTrade = () => {
               };
       
               const newData = {total_followers : dataStatProps.total_followers, ...data.runningData}
-              console.log('newData', newData);
               setDataStat(newData);// coi di e :))) ua sai dau a
-        setData(dataTemp);
+              setData(dataTemp);
             }
       });
     }
