@@ -52,6 +52,7 @@ const StatPortfolio = (props) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState();
   const [stat, setStat] = useState({ profit: 0, win: 0, lose: 0, volume: 0 });
+  const [statGlobal, setStatGlobal]= useState({ profit: 0, win: 0, lose: 0, volume: 0 })
   // const
   const theme = useTheme();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -59,7 +60,6 @@ const StatPortfolio = (props) => {
   const {selectedLinkAccount }= useContext(AuthContext)
   const {walletMode }= useContext(SettingsContext)
   const [dataStatGlobal, setDataStatGlobal]= useState()
-
   useEffect(() => {
     (async () => {
       if (id) {
@@ -157,7 +157,7 @@ const StatPortfolio = (props) => {
   useEffect(()=> {
     if(walletMode) {
       if(selectedTime=== 1) {
-        setStat({
+        setStatGlobal({
           profit: dataStatGlobal?.live_daily_profit,
           win: dataStatGlobal?.live_win_daily,
           lose: dataStatGlobal?.live_lose_daily,
@@ -165,7 +165,7 @@ const StatPortfolio = (props) => {
         });
       }
       if(selectedTime=== 2) {
-        setStat({
+        setStatGlobal({
           profit: dataStatGlobal?.live_week_profit,
           win: dataStatGlobal?.live_win_week,
           lose: dataStatGlobal?.live_lose_week,
@@ -173,7 +173,7 @@ const StatPortfolio = (props) => {
         });
       }
       if(selectedTime=== 3) {
-        setStat({
+        setStatGlobal({
           profit: dataStatGlobal?.live_month_profit,
           win: dataStatGlobal?.live_win_month,
           lose: dataStatGlobal?.live_lose_month,
@@ -183,7 +183,7 @@ const StatPortfolio = (props) => {
     }
     else {
       if(selectedTime=== 1) {
-        setStat({
+        setStatGlobal({
           profit: dataStatGlobal?.demo_daily_profit,
           win: dataStatGlobal?.demo_win_daily,
           lose: dataStatGlobal?.demo_lose_daily,
@@ -191,7 +191,7 @@ const StatPortfolio = (props) => {
         });
       }
       if(selectedTime=== 2) {
-        setStat({
+        setStatGlobal({
           profit: dataStatGlobal?.demo_week_profit,
           win: dataStatGlobal?.demo_win_week,
           lose: dataStatGlobal?.demo_lose_week,
@@ -199,7 +199,7 @@ const StatPortfolio = (props) => {
         });
       }
       if(selectedTime=== 3) {
-        setStat({
+        setStatGlobal({
           profit: dataStatGlobal?.demo_month_profit,
           win: dataStatGlobal?.demo_win_month,
           lose: dataStatGlobal?.demo_lose_month,
@@ -208,6 +208,7 @@ const StatPortfolio = (props) => {
       }
     }
   }, [dataStatGlobal, walletMode, selectedTime])
+  console.log(dataStatGlobal)
 
   return (
     <Box pb={4}>
@@ -429,7 +430,7 @@ const StatPortfolio = (props) => {
                         onClick={() => {
                           setSelectedTime(1);
                           if(walletMode=== true) {
-                            setStat({
+                            setStatGlobal({
                               profit: dataStatGlobal?.live_daily_profit,
                               win: dataStatGlobal?.live_win_daily,
                               lose: dataStatGlobal?.live_lose_daily,
@@ -437,7 +438,7 @@ const StatPortfolio = (props) => {
                             });
                           }
                           else {
-                            setStat({
+                            setStatGlobal({
                               profit: dataStatGlobal?.demo_daily_profit,
                               win: dataStatGlobal?.demo_win_daily,
                               lose: dataStatGlobal?.demo_lose_daily,
@@ -456,7 +457,7 @@ const StatPortfolio = (props) => {
                         onClick={() => {
                           setSelectedTime(2);
                           if(walletMode=== true) {
-                            setStat({
+                            setStatGlobal({
                               profit: dataStatGlobal?.live_week_profit,
                               win: dataStatGlobal?.live_win_week,
                               lose: dataStatGlobal?.live_lose_week,
@@ -464,7 +465,7 @@ const StatPortfolio = (props) => {
                             });
                           }
                           else {
-                            setStat({
+                            setStatGlobal({
                               profit: dataStatGlobal?.demo_week_profit,
                               win: dataStatGlobal?.demo_win_week,
                               lose: dataStatGlobal?.demo_lose_week,
@@ -483,7 +484,7 @@ const StatPortfolio = (props) => {
                         onClick={() => {
                           setSelectedTime(3);
                           if(walletMode=== true) {
-                            setStat({
+                            setStatGlobal({
                               profit: dataStatGlobal?.live_month_profit,
                               win: dataStatGlobal?.live_win_month,
                               lose: dataStatGlobal?.live_lose_month,
@@ -491,7 +492,7 @@ const StatPortfolio = (props) => {
                             });
                           }
                           else {
-                            setStat({
+                            setStatGlobal({
                               profit: dataStatGlobal?.demo_month_profit,
                               win: dataStatGlobal?.demo_win_month,
                               lose: dataStatGlobal?.demo_lose_month,
@@ -535,10 +536,10 @@ const StatPortfolio = (props) => {
                               variant="body1"
                               fontSize={16}
                               color={
-                                stat.profit < 0 ? "error.main" : "success.main"
+                                statGlobal.profit < 0 ? "error.main" : "success.main"
                               }
                             >
-                              {formatCurrency(stat.profit)}
+                              {formatCurrency(statGlobal.profit)}
                             </Typography>
                           </Box>
                           <Box>
@@ -569,12 +570,12 @@ const StatPortfolio = (props) => {
                               fontSize={16}
                               fontWeight={600}
                             >
-                              {stat.win}/{stat.lose}
+                              {statGlobal.win}/{statGlobal.lose}
                             </Typography>
                             <Typography variant="body1" fontSize={10}>
                               Win Rate:{" "}
                               {round2number(
-                                (stat.win / (stat.win + stat.lose)) * 100
+                                (statGlobal.win / (statGlobal.win + statGlobal.lose)) * 100
                               )}
                               %
                             </Typography>
@@ -594,7 +595,7 @@ const StatPortfolio = (props) => {
                               >
                                 <TradeRateChart
                                   rate={Math.ceil(
-                                    (stat.win / (stat.win + stat.lose)) * 100
+                                    (statGlobal.win / (statGlobal.win + statGlobal.lose)) * 100
                                   )}
                                 />
                               </Box>
@@ -625,7 +626,7 @@ const StatPortfolio = (props) => {
                               fontSize={16}
                               fontWeight={600}
                             >
-                              {round2number(stat.volume)}
+                              {round2number(statGlobal.volume)}
                             </Typography>
                           </Box>
                           <Box>

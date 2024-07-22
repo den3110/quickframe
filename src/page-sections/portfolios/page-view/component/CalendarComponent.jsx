@@ -91,7 +91,7 @@ const InfoCard = ({ title, value, tooltip, setIsHidden, isHidden }) => {
             )}
           </Grid>
         </Grid>
-        {isHidden && <Typography fontSize={14} color="secondary">*********</Typography>}
+        {isHidden && <Typography fontSize={14} color="">*********</Typography>}
         {!isHidden && (
           <Typography
             variant="body1"
