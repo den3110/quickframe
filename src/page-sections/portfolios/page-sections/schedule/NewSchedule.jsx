@@ -27,6 +27,7 @@ export default function NewSchedule({ open, onClose, isEdit }) {
   const [endTime, setEndTime] = useState(new Date());
   const [packages, setPackages] = useState("");
   const [scheduleName, setScheduleName] = useState("");
+  const [disableEndTime, setDisableEndTime] = useState(false); // Thêm trạng thái disable
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
   const [dataSignalStrategy, setDataSignalStrategy] = useState([]);
@@ -98,25 +99,42 @@ export default function NewSchedule({ open, onClose, isEdit }) {
               value={scheduleName}
               onChange={(e) => setScheduleName(e.target.value)}
             />
-            <Box mt={1}>
+            <Box mt={1} display="flex" alignItems="center" width={"100%"}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <TimePicker
-                    label="Thời gian bắt đầu (UTC+7)"
-                    value={startTime}
-                    onChange={setStartTime}
-                    renderInput={(params) => (
-                      <TextField {...params} fullWidth />
-                    )}
-                  />
-                  <TimePicker
-                    label="Thời gian ngưng (UTC+7)"
-                    value={endTime}
-                    onChange={setEndTime}
-                    renderInput={(params) => (
-                      <TextField {...params} fullWidth />
-                    )}
-                  />
+                <Box sx={{ display: "flex", gap: 1, width: "100%" }}>
+                  <Box flex={1}>
+                    <TimePicker
+                      label="Thời gian bắt đầu (UTC+7)"
+                      value={startTime}
+                      onChange={setStartTime}
+                      renderInput={(params) => (
+                        <TextField {...params} fullWidth />
+                      )}
+                    />
+                  </Box>
+                  <Box
+                    flex={1}
+                    sx={{ display: "flex", alignItems: "center" }}
+                    gap={0.5}
+                  >
+                    <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                      <Checkbox
+                        checked={disableEndTime}
+                        onChange={(e) => setDisableEndTime(e.target.checked)}
+                      />
+                      <Typography variant="body2">Disable</Typography>
+                    </Box>
+                    <TimePicker
+                      label="Thời gian ngưng (UTC+7)"
+                      value={endTime}
+                      onChange={setEndTime}
+                      renderInput={(params) => (
+                        <TextField {...params} fullWidth />
+                      )}
+                      disabled={disableEndTime} // Disable nếu cần
+                      fullWidth
+                    />
+                  </Box>
                 </Box>
               </LocalizationProvider>
             </Box>

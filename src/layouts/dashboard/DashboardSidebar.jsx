@@ -32,7 +32,7 @@ const DashboardSidebar = () => {
             component="img"
             src="/static/logo/luxcoin.png"
             alt="logo"
-            width={60}
+            width={50}
           />
         </Link>
 

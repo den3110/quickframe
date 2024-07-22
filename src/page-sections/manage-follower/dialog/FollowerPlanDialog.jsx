@@ -253,7 +253,7 @@ const FollowerPlanDialog = (props) => {
           {loading=== true && <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <CircularProgress />
           </Box>}
-          {loading=== true && data?.length <= 0 && <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+          {loading=== false && data?.length <= 0 && <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <EmptyPage title={"Danh sách plan trống"} disableButton={true} />
           </Box>}
         </Table>

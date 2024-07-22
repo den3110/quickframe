@@ -127,6 +127,7 @@ const PortfolioSchedule = () => {
       "https://trial.mobiscroll.com/timeline-events/",
       (events) => {
         setEvents(events);
+        console.log(events)
       },
       "jsonp"
     );

@@ -1,12 +1,10 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AuthContext from "contexts/AuthContext";
 import React, { useContext, useState } from "react";
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import UserLinkAccountListDrawer from "../drawers/UserLinkAccountListDrawer";
-import ExchangeIcon from "icons/duotone/ExchangeIcon";
 import { constant } from "constant/constant";
 
-const UserlinkAccountPopover = () => {
+const UserlinkAccountPopover = ({setOpen, isInside}) => {
   const { dataSelectedLinkAccount } = useContext(AuthContext);
   const [openDrawerListLinkAccount, setOpenDrawerListLinkAccount] =
     useState(false);
@@ -23,6 +21,9 @@ const UserlinkAccountPopover = () => {
         mr={1}
         onClick={() => {
           setOpenDrawerListLinkAccount(true);
+          if(isInside) {
+            setOpen(true)
+          }
         }}
       >
         <img style={{width: 32, height: 32}} src={constant.URL_ASSETS_LOGO + "/"+  dataSelectedLinkAccount?.clientId + ".ico"} alt="Can't open" />

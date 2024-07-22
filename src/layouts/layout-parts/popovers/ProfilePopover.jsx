@@ -24,6 +24,8 @@ import AuthContext from "contexts/AuthContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 import { SettingsContext } from "contexts/settingsContext";
 import LanguagePopover from "./LanguagePopover";
+import UserlinkAccountPopover from "./UserlinkAccountPopover";
+import UserLinkAccountListDrawer from "../drawers/UserLinkAccountListDrawer";
 
 // STYLED COMPONENTS
 const StyledButtonBase = styled(ButtonBase)(({ theme }) => ({
@@ -44,7 +46,7 @@ const StyledSmall = styled(Paragraph)(({ theme }) => ({
   },
 }));
 const ProfilePopover = () => {
-  const theme= useTheme()
+  const theme = useTheme();
   const { user } = useContext(AuthContext);
   const { linked } = useContext(ConnectExchangeContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -53,6 +55,9 @@ const ProfilePopover = () => {
   const { logout } = useAuth();
   const { settings, saveSettings } = useContext(SettingsContext);
   const [open, setOpen] = useState(false);
+  const [openDrawerListLinkAccount, setOpenDrawerListLinkAccount] =
+    useState(false);
+
   const handleMenuItem = (path) => () => {
     navigate(path);
     setOpen(false);
@@ -112,30 +117,41 @@ const ProfilePopover = () => {
           <StyledSmall onClick={handleMenuItem("/dashboard/profile")}>
             Profile & Account
           </StyledSmall>
+          {downLg && (
+            <StyledSmall onClick={() => {setOpen(false);setOpenDrawerListLinkAccount(true)}}>
+              <Box sx={{ width: "max-content" }}>
+                <UserlinkAccountPopover />
+              </Box>
+
+            </StyledSmall>
+          )}
           {/* <StyledSmall onClick={handleMenuItem("/dashboard/account")}>
             Settings
           </StyledSmall>
           <StyledSmall onClick={handleMenuItem("/dashboard/profile")}>
             Manage Team
           </StyledSmall>   */}
-          {downLg &&
-            <StyledSmall onClick={()=> {}}>
+          {downLg && (
+            <StyledSmall onClick={() => {}}>
               <Box display="flex" alignItems="center">
                 <Typography fontSize={13}>Light</Typography>
-                <Switch checked={theme.palette.mode=== "dark" ? true : false} onChange={()=> {
-                  handleChangeTheme(
-                    settings.theme === "light" ? "dark" : "light"
-                  );
-                }} />
-                <Typography fontSize={13} >Dark</Typography>
+                <Switch
+                  checked={theme.palette.mode === "dark" ? true : false}
+                  onChange={() => {
+                    handleChangeTheme(
+                      settings.theme === "light" ? "dark" : "light"
+                    );
+                  }}
+                />
+                <Typography fontSize={13}>Dark</Typography>
               </Box>
             </StyledSmall>
-          }
-          {downLg && 
-            <StyledSmall onClick={()=> {}}> 
+          )}
+          {downLg && (
+            <StyledSmall onClick={() => {}}>
               <LanguagePopover />
             </StyledSmall>
-          }
+          )}
           <Divider
             sx={{
               my: 1,
@@ -144,6 +160,12 @@ const ProfilePopover = () => {
           <StyledSmall onClick={logout}>Sign Out</StyledSmall>
         </Box>
       </PopoverLayout>
+      <UserLinkAccountListDrawer
+        open={openDrawerListLinkAccount}
+        handleClose={() => {
+          setOpenDrawerListLinkAccount(false);
+        }}
+      />
     </Fragment>
   );
 };

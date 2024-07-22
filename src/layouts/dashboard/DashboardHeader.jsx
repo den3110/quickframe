@@ -59,7 +59,7 @@ const DashboardHeader = () => {
               component="img"
               src="/static/logo/luxcoin.png"
               alt="logo"
-              width={60}
+              width={50}
             />
           </Link>
         )}
@@ -86,7 +86,9 @@ const DashboardHeader = () => {
         </ClickAwayListener> */}
 
         <Box flexGrow={1} ml={1} />
-        <UserlinkAccountPopover />
+        {!downLg && 
+          <UserlinkAccountPopover />
+        }
         <WalletPopover />
         {!downLg && (
           <>
