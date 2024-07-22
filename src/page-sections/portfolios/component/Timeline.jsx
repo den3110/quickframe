@@ -13,6 +13,7 @@ import {
   MenuItem,
   Pagination,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import {
   Timeline,
@@ -49,6 +50,7 @@ import AuthContext from "contexts/AuthContext";
 import { constant } from "constant/constant";
 import FilterComponent from "./FilterComponent";
 import FilterListIcon from '@mui/icons-material/FilterList';
+import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -67,10 +69,11 @@ const CustomTimeline = () => {
   // const [data, setData]= useState([])
   const { socket, isConnected } = useContext(SocketContext);
   const [openAccordion, setOpenAccordion] = useState(false);
-  const {
-    data: dataProps,
-    dataStat: dataStatProps,
-    // loading,
+  const [dataState, setDataState]= useState([])
+  const { 
+    data: dataProps, // arr
+    dataStat: dataStatProps, // obj
+    loading,
     setData,
     setDataStat,
     setChange,
@@ -355,6 +358,10 @@ const CustomTimeline = () => {
     }
   }, [isConnected, id, socket]);
 
+  useEffect(()=> {
+    setDataState(dataProps)
+  }, [dataProps])
+
   return (
     <Box>
       <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
@@ -365,265 +372,271 @@ const CustomTimeline = () => {
           <FilterListIcon /> Bộ lọc
         </Button>
       </Box>
-      <FilterComponent openAccordion={openAccordion} setOpenAccordion={setOpenAccordion} handleAccordionToggle={handleAccordionToggle} />
+      <FilterComponent openAccordion={openAccordion} setOpenAccordion={setOpenAccordion} handleAccordionToggle={handleAccordionToggle} data={dataProps} setData={setDataState} />
       <Box>
-        <Timeline className="askskaa" sx={{ padding: downLg ? 0 : "" }}>
-          {dataProps
-            ?.slice(
-              rowsPerPage * (page - 1),
-              rowsPerPage * (page - 1) + rowsPerPage
-            )
-            ?.map((item, index) => (
-              <TimelineItem
-                sx={{
-                  "&:before": {
-                    display: "none",
-                  },
-                }}
-                key={index}
-              >
-                <TimelineSeparator>
-                  <TimelineDot
-                    style={{ backgroundColor: renderBackgroundTypeIcon(item) }}
-                  >
-                    {renderTypeIcon(item)}
-                  </TimelineDot>
-                  {index < dataProps.length - 1 && <TimelineConnector />}
-                </TimelineSeparator>
-                <TimelineContent sx={{ paddingRight: 0 }}>
-                  <Box
-                    width="100%"
-                    display={"flex"}
-                    flexDirection={"row-reverse"}
-                  >
+        {loading=== true && <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+            <CircularProgress />
+          </Box>}
+        {loading=== false && 
+          <Timeline className="askskaa" sx={{ padding: downLg ? 0 : "" }}>
+            {dataState
+              ?.slice(
+                rowsPerPage * (page - 1),
+                rowsPerPage * (page - 1) + rowsPerPage
+              )
+              ?.map((item, index) => (
+                <TimelineItem
+                  sx={{
+                    "&:before": {
+                      display: "none",
+                    },
+                  }}
+                  key={index}
+                >
+                  <TimelineSeparator>
+                    <TimelineDot
+                      style={{ backgroundColor: renderBackgroundTypeIcon(item) }}
+                    >
+                      {renderTypeIcon(item)}
+                    </TimelineDot>
+                    {index < dataProps.length - 1 && <TimelineConnector />}
+                  </TimelineSeparator>
+                  <TimelineContent sx={{ paddingRight: 0 }}>
                     <Box
+                      width="100%"
                       display={"flex"}
-                      alignItems={"center"}
-                      gap={0.5}
-                      sx={{ opacity: 0.6 }}
+                      flexDirection={"row-reverse"}
                     >
-                      <img
-                        style={{ width: 32, height: 32 }}
-                        src={
-                          constant.URL_ASSETS_LOGO +
-                          "/" +
-                          item?.clientId +
-                          ".ico"
-                        }
-                        alt="Can't open"
-                      />
-                      <Typography fontSize={14} fontWeight={600}>
-                        {
-                          userLinkAccountList?.find(
-                            (row) => row?._id === item?.linkAccountId
-                          )?.nickName
-                        }
-                      </Typography>
+                      <Box
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={0.5}
+                        sx={{ opacity: 0.6 }}
+                      >
+                        <img
+                          style={{ width: 32, height: 32 }}
+                          src={
+                            constant.URL_ASSETS_LOGO +
+                            "/" +
+                            item?.clientId +
+                            ".ico"
+                          }
+                          alt="Can't open"
+                        />
+                        <Typography fontSize={14} fontWeight={600}>
+                          {
+                            userLinkAccountList?.find(
+                              (row) => row?._id === item?.linkAccountId
+                            )?.nickName
+                          }
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Box>
-                  <Card variant="outlined" sx={{ mb: 2 }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        padding: downLg ? 1 : 2.5,
-                        flexWrap: downLg ? "wrap" : "",
-                      }}
-                    >
-                      {/* row 1 */}
-                      <Box
-                        mb={downLg ? 1.5 : 0}
-                        sx={{ width: downLg ? "calc(100% * 2 / 3)" : "20%" }}
-                      >
-                        <Typography fontSize={12} fontWeight={600} mb={1}>
-                          {moment(item.betTime).format("DD/MM/YYYY, HH:mm:ss")}
-                        </Typography>
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <Typography fontSize={12}>
-                            Thời gian (UTC + 7){" "}
-                          </Typography>
-                          {item?.message === "success" &&
-                            item?.bet_second > 0 && (
-                              <Box
-                                display={"flex"}
-                                alignItems="center"
-                                gap={0.5}
-                                ml={0.5}
-                              >
-                                <AccessTimeIcon
-                                  fontSize="16"
-                                  sx={{ color: theme.palette.success.main }}
-                                />
-                                <Typography
-                                  fontSize={12}
-                                  sx={{ color: theme.palette.success.main }}
-                                >
-                                  {item?.bet_second}
-                                </Typography>
-                              </Box>
-                            )}
-                        </Box>
-                      </Box>
-                      {/* row 2 */}
-                      <Box
-                        mb={downLg ? 1.5 : 0}
-                        sx={{ width: downLg ? "calc(100% * 1 / 3)" : "20%" }}
-                      >
-                        {item?.message === "success" && (
-                          <Typography
-                            fontSize={12}
-                            fontWeight={600}
-                            mb={1}
-                            color={
-                              item.betType === "UP"
-                                ? theme.palette.success.main
-                                : "error"
-                            }
-                          >
-                            {item.betType === "UP" ? "Buy" : "Sell"}
-                          </Typography>
-                        )}
-                        {item?.result === "ACTION_BOT" && (
-                          <Typography
-                            fontSize={12}
-                            fontWeight={600}
-                            mb={1}
-                            sx={{ color: theme.palette.primary.main }}
-                          >
-                            {renderBetType(item.message)}
-                          </Typography>
-                        )}
-                        {item?.result === "ERROR" && (
-                          <Typography
-                            fontSize={12}
-                            fontWeight={600}
-                            mb={1}
-                            sx={{ color: "error.main" }}
-                          >
-                            {renderBetType(item.message)}
-                          </Typography>
-                        )}
-                        {/* a no */}
-                        <Typography fontSize={12}>Loại</Typography>
-                      </Box>
-                      {/* row 3 */}
+                    <Card variant="outlined" sx={{ mb: 2 }}>
                       <Box
                         sx={{
-                          width: downLg ? "aaa" : "20%",
-                          flex: downLg ? 1 : "aaa",
+                          display: "flex",
+                          alignItems: "center",
+                          padding: downLg ? 1 : 2.5,
+                          flexWrap: downLg ? "wrap" : "",
                         }}
                       >
-                        <Typography fontSize={12} fontWeight={600} mb={1}>
-                          {item.profit}
-                        </Typography>
-                        {(item?.betType === "UP" ||
-                          item?.betType === "DOWN") && (
-                          <>
-                            <Typography fontSize={12} fontWeight={600} mb={1}>
-                              ${round2number(item.betAmount)}
-                            </Typography>
+                        {/* row 1 */}
+                        <Box
+                          mb={downLg ? 1.5 : 0}
+                          sx={{ width: downLg ? "calc(100% * 2 / 3)" : "20%" }}
+                        >
+                          <Typography fontSize={12} fontWeight={600} mb={1}>
+                            {moment(item.betTime).format("DD/MM/YYYY, HH:mm:ss")}
+                          </Typography>
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Typography fontSize={12}>
-                              Số tiền vào lệnh
+                              Thời gian (UTC + 7){" "}
                             </Typography>
-                          </>
-                        )}
-                        {/* tiep di a nay e  */}
-                        {item?.message === "stop_plan_take_profit_target" &&
-                          item?.result === "ACTION_BOT" && (
-                            <>
-                              <Typography fontSize={12} fontWeight={600} mb={1}>
-                                $1.00/-$1.00
-                              </Typography>
-                              <Typography fontSize={12}>
-                                Giới hạn PnL
-                              </Typography>
-                            </>
-                          )}
-                      </Box>
-                      {/* row 4 */}
-                      <Box
-                        sx={{
-                          width: downLg ? "aaa" : "20%",
-                          flex: downLg ? 1 : "aaa",
-                        }}
-                      >
-                        {(item?.betType === "UP" ||
-                          item?.betType === "DOWN") && (
-                          <>
+                            {item?.message === "success" &&
+                              item?.bet_second > 0 && (
+                                <Box
+                                  display={"flex"}
+                                  alignItems="center"
+                                  gap={0.5}
+                                  ml={0.5}
+                                >
+                                  <AccessTimeIcon
+                                    fontSize="16"
+                                    sx={{ color: theme.palette.success.main }}
+                                  />
+                                  <Typography
+                                    fontSize={12}
+                                    sx={{ color: theme.palette.success.main }}
+                                  >
+                                    {item?.bet_second}
+                                  </Typography>
+                                </Box>
+                              )}
+                          </Box>
+                        </Box>
+                        {/* row 2 */}
+                        <Box
+                          mb={downLg ? 1.5 : 0}
+                          sx={{ width: downLg ? "calc(100% * 1 / 3)" : "20%" }}
+                        >
+                          {item?.message === "success" && (
                             <Typography
                               fontSize={12}
                               fontWeight={600}
                               mb={1}
                               color={
-                                item.current_profit >= 0
+                                item.betType === "UP"
                                   ? theme.palette.success.main
                                   : "error"
                               }
                             >
-                              {formatCurrency(item.current_profit)}
+                              {item.betType === "UP" ? "Buy" : "Sell"}
                             </Typography>
-                            <Typography fontSize={12}>Lợi nhuận</Typography>
-                          </>
-                        )}
-                        {item?.message === "stop_plan_take_profit_target" &&
-                          item?.result === "ACTION_BOT" && (
-                            <Box>
-                              <Typography fontSize={12} fontWeight={600} mb={1}>
-                                Thủ công
-                              </Typography>
-                              <Typography fontSize={12}>Mô tả</Typography>
-                            </Box>
                           )}
-                      </Box>
-                      {/* row 5 */}
-                      <Box
-                        sx={{
-                          width: downLg ? "aaa" : "20%",
-                          flex: downLg ? 1 : "aaa",
-                        }}
-                      >
-                        {(item?.betType === "UP" || item?.betType === "DOWN") &&
-                          item.result &&
-                          item.message === "success" && (
+                          {item?.result === "ACTION_BOT" && (
+                            <Typography
+                              fontSize={12}
+                              fontWeight={600}
+                              mb={1}
+                              sx={{ color: theme.palette.primary.main }}
+                            >
+                              {renderBetType(item.message)}
+                            </Typography>
+                          )}
+                          {item?.result === "ERROR" && (
+                            <Typography
+                              fontSize={12}
+                              fontWeight={600}
+                              mb={1}
+                              sx={{ color: "error.main" }}
+                            >
+                              {renderBetType(item.message)}
+                            </Typography>
+                          )}
+                          {/* a no */}
+                          <Typography fontSize={12}>Loại</Typography>
+                        </Box>
+                        {/* row 3 */}
+                        <Box
+                          sx={{
+                            width: downLg ? "aaa" : "20%",
+                            flex: downLg ? 1 : "aaa",
+                          }}
+                        >
+                          <Typography fontSize={12} fontWeight={600} mb={1}>
+                            {item.profit}
+                          </Typography>
+                          {(item?.betType === "UP" ||
+                            item?.betType === "DOWN") && (
+                            <>
+                              <Typography fontSize={12} fontWeight={600} mb={1}>
+                                ${round2number(item.betAmount)}
+                              </Typography>
+                              <Typography fontSize={12}>
+                                Số tiền vào lệnh
+                              </Typography>
+                            </>
+                          )}
+                          {/* tiep di a nay e  */}
+                          {item?.message === "stop_plan_take_profit_target" &&
+                            item?.result === "ACTION_BOT" && (
+                              <>
+                                <Typography fontSize={12} fontWeight={600} mb={1}>
+                                  $1.00/-$1.00
+                                </Typography>
+                                <Typography fontSize={12}>
+                                  Giới hạn PnL
+                                </Typography>
+                              </>
+                            )}
+                        </Box>
+                        {/* row 4 */}
+                        <Box
+                          sx={{
+                            width: downLg ? "aaa" : "20%",
+                            flex: downLg ? 1 : "aaa",
+                          }}
+                        >
+                          {(item?.betType === "UP" ||
+                            item?.betType === "DOWN") && (
                             <>
                               <Typography
                                 fontSize={12}
                                 fontWeight={600}
                                 mb={1}
                                 color={
-                                  item?.winAmount >= 0
+                                  item.current_profit >= 0
                                     ? theme.palette.success.main
                                     : "error"
                                 }
                               >
-                                {formatCurrency(item?.winAmount)}
+                                {formatCurrency(item.current_profit)}
+                              </Typography>
+                              <Typography fontSize={12}>Lợi nhuận</Typography>
+                            </>
+                          )}
+                          {item?.message === "stop_plan_take_profit_target" &&
+                            item?.result === "ACTION_BOT" && (
+                              <Box>
+                                <Typography fontSize={12} fontWeight={600} mb={1}>
+                                  Thủ công
+                                </Typography>
+                                <Typography fontSize={12}>Mô tả</Typography>
+                              </Box>
+                            )}
+                        </Box>
+                        {/* row 5 */}
+                        <Box
+                          sx={{
+                            width: downLg ? "aaa" : "20%",
+                            flex: downLg ? 1 : "aaa",
+                          }}
+                        >
+                          {(item?.betType === "UP" || item?.betType === "DOWN") &&
+                            item.result &&
+                            item.message === "success" && (
+                              <>
+                                <Typography
+                                  fontSize={12}
+                                  fontWeight={600}
+                                  mb={1}
+                                  color={
+                                    item?.winAmount >= 0
+                                      ? theme.palette.success.main
+                                      : "error"
+                                  }
+                                >
+                                  {formatCurrency(item?.winAmount)}
+                                </Typography>
+                                <Typography fontSize={12}>Thu nhập</Typography>
+                              </>
+                            )}
+                          {!item.result && item.message === "success" && (
+                            <>
+                              <Typography
+                                fontSize={12}
+                                fontWeight={600}
+                                mb={1}
+                                color={"warning.main"}
+                              >
+                                Chờ {countDown}s
                               </Typography>
                               <Typography fontSize={12}>Thu nhập</Typography>
                             </>
                           )}
-                        {!item.result && item.message === "success" && (
-                          <>
-                            <Typography
-                              fontSize={12}
-                              fontWeight={600}
-                              mb={1}
-                              color={"warning.main"}
-                            >
-                              Chờ {countDown}s
-                            </Typography>
-                            <Typography fontSize={12}>Thu nhập</Typography>
-                          </>
-                        )}
+                        </Box>
+                        {/* {event.income && (
+                        <Typography sx={{width: "20%"}} variant="body2">{event.income}</Typography>
+                      )} */}
                       </Box>
-                      {/* {event.income && (
-                      <Typography sx={{width: "20%"}} variant="body2">{event.income}</Typography>
-                    )} */}
-                    </Box>
-                  </Card>
-                </TimelineContent>
-              </TimelineItem>
-            ))}
-        </Timeline>
+                    </Card>
+                  </TimelineContent>
+                </TimelineItem>
+              ))}
+          </Timeline>
+        }
+        {loading=== false && dataState?.length <= 0 && <EmptyPage title="Danh mục quá trình đầu tư trống" disableButton={true} />}
         <PaginationContainer>
           <Box
             display={"flex"}
@@ -641,7 +654,7 @@ const CustomTimeline = () => {
             </FormControl>
           </Box>
           <Pagination
-            count={Math.ceil(dataProps.length / rowsPerPage)}
+            count={Math.ceil(dataState.length / rowsPerPage)}
             page={page}
             onChange={handleChangePage}
             shape="rounded"

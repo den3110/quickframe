@@ -28,6 +28,7 @@ import {
   Tab,
   Paper,
   Container,
+  CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
@@ -48,6 +49,7 @@ import { GlobalContext } from "contexts/GlobalContext";
 import AuthContext from "contexts/AuthContext";
 import userApi from "api/user/userApi";
 import { constant } from "constant/constant";
+import Backdrop from "components/backdrop/Backdrop";
 
 const NewPlanDrawer = ({
   open,
@@ -614,8 +616,9 @@ const NewPlanDrawer = ({
         justifyContent="space-between"
         height={downLg ? "70vh" : "100%"}
         sx={{ overflowY: "scroll" }}
+        position={"relative"}
       >
-        {step === 1 && (
+         {step === 1 && (
           <>
             <Box>
               <AppBar position="static" color="default">
@@ -1818,7 +1821,7 @@ const NewPlanDrawer = ({
               </Button> */}
               <Button
                 onClick={() => handleStep(2)}
-                disabled={isDisableButton}
+                disabled={(isDisableButton=== false && loading=== false) ?  false : true}
                 variant="contained"
                 color="primary"
                 fullWidth
@@ -1913,6 +1916,7 @@ const NewPlanDrawer = ({
             </Box>
           </>
         )}
+       {loading=== true && <Backdrop />}
       </Box>
     </Drawer>
   );

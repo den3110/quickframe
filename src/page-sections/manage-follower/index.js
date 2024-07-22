@@ -33,6 +33,7 @@ import ListUserFollow from "./component/ListUserFollow";
 import ListUserBlock from "./component/ListUserBlock";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import _ from "lodash";
+import CopytradeHistory from "./component/CopytradeHistory";
 
 const Content = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
@@ -333,81 +334,7 @@ function ManageFollowerPage() {
                 </Box>
               </Card>
             </HistoryHeader>
-            <HistoryTable>
-              <Card>
-                <Box sx={{ padding: "16px" }}>
-                  <TableContainer component={Paper}>
-                    <Table>
-                      {!downLg && (
-                        <TableHead>
-                          <TableRow>
-                            <StyledTableCell>Thời gian</StyledTableCell>
-                            <StyledTableCell>Số lệnh</StyledTableCell>
-                            <StyledTableCell>KLGD</StyledTableCell>
-                            <StyledTableCell>Người theo dõi</StyledTableCell>
-                            <StyledTableCell>Số lệnh theo</StyledTableCell>
-                            <StyledTableCell>KLGD người theo</StyledTableCell>
-                          </TableRow>
-                        </TableHead>
-                      )}
-                      <TableBody>
-                        <TableRow
-                          sx={{
-                            display: downLg ? "flex" : "",
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
-                            15/07/2024 03:24 SA
-                          </StyledTableCell>
-                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
-                            1
-                          </StyledTableCell>
-                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
-                            $111.00
-                          </StyledTableCell>
-                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
-                            0
-                          </StyledTableCell>
-                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
-                            0
-                          </StyledTableCell>
-                          <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
-                            0
-                          </StyledTableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Box>
-              </Card>
-              <PaginationContainer>
-                <Box
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  gap={1}
-                >
-                  <Typography>Hiển thị kết quả:</Typography>
-                  <FormControl variant="outlined" sx={{ minWidth: 60 }}>
-                    <Select
-                      value={rowsPerPage}
-                      onChange={handleChangeRowsPerPage}
-                    >
-                      <MenuItem value={6}>6</MenuItem>
-                      <MenuItem value={12}>12</MenuItem>
-                      <MenuItem value={24}>24</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-                <Pagination
-                  count={Math.ceil(data.length / rowsPerPage)}
-                  page={page}
-                  onChange={handleChangePage}
-                  shape="rounded"
-                />
-              </PaginationContainer>
-            </HistoryTable>
+            <CopytradeHistory />
           </History>
         </Content>
       </Box>

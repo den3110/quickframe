@@ -7,6 +7,7 @@ const AppBarSection = () => {
     e.preventDefault();
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("linkAccout")
     window.location.reload();
   };
   return (

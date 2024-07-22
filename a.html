@@ -115,8 +115,7 @@
     <script>
       $(window).click(function () {
         //Hide the menus if visible
-        $(".wrapper-sidebar").css("width", 0);
-        $(".wrapper-sidebar").css("overflow", "hidden");
+        $(".wrapper-sidebar").removeClass("active")
       });
 
       $(".wrapper-sidebar").click(function (event) {

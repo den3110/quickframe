@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vertical Swiper</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+      }
+      .swiper-container {
+        width: 80%;
+        height: 80vh;
+        max-width: 800px;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .swiper-slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        text-align: center;
+      }
+      .swiper-slide img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .text-content {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        color: black;
+      }
+      .text-content h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .text-content p {
+        margin: 5px 0 0;
+        font-size: 16px;
+      }
+      .swiper-button-next,
+      .swiper-button-prev {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac</h1>
+            <p>aaaa</p>
+          </div>
+        </div>
+        <!-- Add more slides here -->
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac 1</h1>
+            <p>bbbb</p>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac 2</h1>
+            <p>cccc</p>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac 2</h1>
+            <p>cccc</p>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac 2</h1>
+            <p>cccc</p>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac 2</h1>
+            <p>cccc</p>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac 2</h1>
+            <p>cccc</p>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac 2</h1>
+            <p>cccc</p>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac 2</h1>
+            <p>cccc</p>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="text-content">
+            <h1>cac 2</h1>
+            <p>cccc</p>
+          </div>
+        </div>
+
+        <!-- Add more slides as needed -->
+      </div>
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
+      <!-- Add Navigation -->
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+      const swiper = new Swiper(".swiper-container", {
+        direction: "vertical",
+        loop: true,
+        slidesPerView: 7,
+        speed: 1000,
+        autoplay: {
+          delay: 1500,
+          disableOnInteraction: true,
+        },
+        navigation: false,
+        scrollbar: {
+          el: ".swiper-scrollbar",
+          draggable: true,
+        },
+      });
+    </script>
+  </body>
+</html>

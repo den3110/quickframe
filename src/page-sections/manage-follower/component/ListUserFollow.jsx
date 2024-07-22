@@ -20,7 +20,8 @@ import React, { useState } from "react";
 import formatCurrency from "util/formatCurrency";
 import BlockFollowerDialog from "../dialog/BlockFollowerDialog";
 import FollowerPlanDialog from "../dialog/FollowerPlanDialog";
-import BlockIcon from '@mui/icons-material/Block';
+import BlockIcon from "@mui/icons-material/Block";
+import { constant } from "constant/constant";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "16px",
@@ -74,7 +75,7 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
             {data?.map((item, key) => (
               <TableRow
                 onClick={() => {
-                  setSelected(item)
+                  setSelected(item);
                   setOpenFollowerPlan(true);
                 }}
                 key={key}
@@ -90,11 +91,44 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
                 >
                   <Box>
                     {downLg && <Typography>Nick name</Typography>}
-                    {downLg && <Typography fontSize={14} sx={{textDecoration: "underline", cursor: "pointer"}}>Gói: {item?.count || 0}</Typography>}
+                    {downLg && (
+                      <Typography
+                        fontSize={14}
+                        sx={{ textDecoration: "underline", cursor: "pointer" }}
+                      >
+                        Gói: {item?.count || 0}
+                      </Typography>
+                    )}
                   </Box>
                   <Box>
-                    <Typography>{item?.nickName}</Typography>
-                    {!downLg && <Typography fontSize={14} sx={{textDecoration: "underline", cursor: "pointer"}}>Gói: {item?.count || 0}</Typography>}
+                    <Box display={"flex"} alignItems={"center"} gap={.5}>
+                      <img
+                        style={{ width: 32, height: 32 }}
+                        src={
+                          constant.URL_ASSETS_LOGO +
+                          "/" +
+                          item?.clientId +
+                          ".ico"
+                        }
+                        alt="Can't open"
+                      />{" "}
+                      <Typography
+                        fontSize={14}
+                        textOverflow={"ellipsis"}
+                        overflow={"hidden"}
+                        whiteSpace={"nowrap"}
+                      >
+                        {item?.nickName}
+                      </Typography>
+                    </Box>
+                    {!downLg && (
+                      <Typography
+                        fontSize={14}
+                        sx={{ textDecoration: "underline", cursor: "pointer" }}
+                      >
+                        Gói: {item?.count || 0}
+                      </Typography>
+                    )}
                   </Box>
                 </StyledTableCell>
                 <StyledTableCell
@@ -117,7 +151,6 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
                   >
                     {formatCurrency(item?.day_profit)}
                   </Typography>
-                  
                 </StyledTableCell>
                 <StyledTableCell
                   sx={{
@@ -152,7 +185,7 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
                     startIcon={<BlockIcon />}
                     fullWidth={downLg ? true : false}
                     onClick={(e) => {
-                      e.stopPropagation()
+                      e.stopPropagation();
                       setSelected(item);
                       setBlockFollower(true);
                     }}

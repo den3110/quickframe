@@ -29,6 +29,10 @@ const copytradeApi = {
   getUserCopytradeFollowerPlan(data) {
     const url= `/users/copy-trade/follower/plans`
     return axiosClient.get(url, data)
+  },
+  userCopyTradeGlobal(data) {
+    const url= `/users/copy-trade/history`
+    return axiosClient.get(url, data)
   }
 
 };

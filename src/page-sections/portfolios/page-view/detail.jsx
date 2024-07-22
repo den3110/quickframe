@@ -1,4 +1,3 @@
-// src/components/Dashboard.js
 import React, {
   createContext,
   useCallback,
@@ -46,18 +45,31 @@ const a11yProps = (index) => {
 };
 
 export const PortfolioDetailContext = createContext();
+
 const PortfolioDetail = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const [change, setChange]= useState(false)
+  const [change, setChange] = useState(false);
   const { isConnected, socket } = useContext(SocketContext);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
   const { id } = useParams();
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [dataStat, setDataStat] = useState({
     lastData: { budgetStrategy: { bs: {} } },
   });
   const [dataSignal, setDataSignal] = useState();
+  const [loadingCount, setLoadingCount] = useState(0);
+
+  const increaseLoading = () => setLoadingCount((prev) => prev + 1);
+  const decreaseLoading = () => setLoadingCount((prev) => Math.max(prev - 1, 0));
+
+  useEffect(() => {
+    if (loadingCount > 0) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [loadingCount]);
 
   const mergeAndSortData = (data) => {
     const { open, close } = data;
@@ -65,51 +77,57 @@ const PortfolioDetail = () => {
     combined.sort((a, b) => b.betTime - a.betTime);
     return combined;
   };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const fetchUserBotHistory = useCallback(async () => {
     try {
-      setLoading(true);
+      increaseLoading();
       const response = await portfolioApi.userBotHistory(id);
       if (response?.data?.ok === true) {
         const dataResult = mergeAndSortData(response?.data);
         setData(dataResult);
       } else {
+        showToast("Failed to fetch user bot history", "error");
       }
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     } finally {
-      setLoading(false);
+      decreaseLoading();
     }
   }, [id]);
 
   const fetchUserBotInfo = useCallback(async () => {
     try {
-      setLoading(true);
+      increaseLoading();
       const response = await portfolioApi.userBotInfo(id);
       if (response?.data?.ok === true) {
         setDataStat(response?.data?.d);
       } else {
+        showToast("Failed to fetch user bot info", "error");
       }
     } catch (error) {
+      showToast(error?.response?.data?.m, "error");
     } finally {
-      setLoading(false);
+      decreaseLoading();
     }
   }, [id]);
 
   const fetchGlobalLastResult = useCallback(async () => {
     try {
-      setLoading(true);
+      increaseLoading();
       const response = await sessionApi.getGlobalLastResults();
       if (response?.data?.ok === true) {
         setDataSignal(response?.data?.d);
       } else {
+        showToast("Failed to fetch global last result", "error");
       }
     } catch (error) {
+      showToast(error?.response?.data?.m, "error");
     } finally {
-      setLoading(false);
+      decreaseLoading();
     }
   }, []);
 
@@ -134,7 +152,13 @@ const PortfolioDetail = () => {
   }, [isConnected, socket, dataSignal]);
 
   return (
-    <RefreshProvider functionProps={async ()=> {await fetchUserBotInfo();await fetchUserBotHistory();await fetchGlobalLastResult()}}>
+    <RefreshProvider
+      functionProps={async () => {
+        await fetchUserBotInfo();
+        await fetchUserBotHistory();
+        await fetchGlobalLastResult();
+      }}
+    >
       <PortfolioDetailContext.Provider
         value={{
           loading,
@@ -144,7 +168,7 @@ const PortfolioDetail = () => {
           setDataStat,
           dataSignal,
           setDataSignal,
-          setChange
+          setChange,
         }}
       >
         <Box padding={downLg ? 1 : 2}>
@@ -160,7 +184,7 @@ const PortfolioDetail = () => {
                   <InvestmentOverview />
                   <Statistics />
                 </Grid>
-                <Grid className='aksalwqzz' item xs={12} md={8}>
+                <Grid className="aksalwqzz" item xs={12} md={8}>
                   <Timeline />
                 </Grid>
                 <Grid item xs={12}></Grid>
@@ -169,7 +193,7 @@ const PortfolioDetail = () => {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Box>
-             <StatPortfolio isSubPage={true} dataStat={dataStat} />
+              <StatPortfolio isSubPage={true} dataStat={dataStat} />
             </Box>
           </TabPanel>
         </Box>
