@@ -28,7 +28,7 @@ const MultiplyIndex = () => {
   const [statusTrade, setStatusTrade] = useState();
   const [multiplier, setMultiplier] = useState(1);
   const [isBrokerMode, setIsBrokerMode] = useState(false);
-  const [betType, setBetType] = useState("");
+  // const [betType, setBetType] = useState("");
   const [customMultiplier, setCustomMultiplier] = useState("");
   const {selectedLinkAccount }= useContext(AuthContext)
   const isDisableButtonTrade = statusTrade === "WAIT" || !statusTrade;

@@ -75,12 +75,20 @@ const CopytradeHistory = () => {
   }, []);
 
   useEffect(() => {
-    if (isConnected) {
-      socket.on("COPY_TRADE_HISTORY", (data) => {
-        console.log(data);
+    if (isConnected && socket) {
+      socket.on("COPY_TRADE_HISTORY", (dataSocket) => {
+        const dataTemp= data
+        const findIndex= dataTemp?.findIndex(item=> item?.userId === dataSocket?.userId && item?._id === dataSocket?._id && item?.sessionId === dataSocket?.sessionId)
+        if(findIndex !== -1) {
+            dataTemp[findIndex]= dataSocket
+            setData(dataTemp)
+        }
+        else {
+            setData(prev=> ([dataSocket, ...prev]))
+        }
       });
     }
-  }, [isConnected, socket]);
+  }, [isConnected, socket, data]);
 
   return (
     <HistoryTable>
@@ -93,8 +101,8 @@ const CopytradeHistory = () => {
                   <TableRow>
                     <StyledTableCell>Thời gian</StyledTableCell>
                     <StyledTableCell>Số người theo</StyledTableCell>
-                    <StyledTableCell>Số lệnh theo</StyledTableCell>
-                    <StyledTableCell>KLGD người theo</StyledTableCell>
+                    <StyledTableCell>Số lệnh theo (LIVE/DEMO)</StyledTableCell>
+                    <StyledTableCell>KLGD người theo (LIVE/DEMO)</StyledTableCell>
                     <StyledTableCell>Loại lệnh</StyledTableCell>
                   </TableRow>
                 </TableHead>
@@ -128,12 +136,13 @@ const CopytradeHistory = () => {
                       </StyledTableCell>
                       <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
                         <Typography variant="body2">
-                            {walletMode ? item?.live_order_count : item?.demo_order_count}
+                            {item?.live_order_count }/{item?.demo_order_count }
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
                         <Typography variant="body2">
-                            {walletMode ? item?.live_volume : item?.demo_volume}
+                        {item?.live_volume }/{item?.demo_volume }
+
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell sx={{ width: downLg ? "100%" : "", display: downLg ? "flex" : "", justifyContent: "center", alignItems: "center" }}>

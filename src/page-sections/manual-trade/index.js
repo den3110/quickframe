@@ -11,7 +11,7 @@ import SpotBalanceContext from "contexts/SpotBalanceContext";
 const ManualTradePage = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { isConnected, socket } = useContext(SocketContext);
-  const { setSpotBalance, spotBalance, setChange } = useContext(SpotBalanceContext);
+  const { setChange } = useContext(SpotBalanceContext);
 
   useEffect(() => {
     if (isConnected && socket) {
