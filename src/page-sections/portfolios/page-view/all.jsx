@@ -100,6 +100,7 @@ const PortfoliosList = () => {
     take_profit_target: 0,
     stop_loss_target: 0,
   });
+  console.log(dailyTarget);
   const canvasRef = useRef();
   const { setChange } = useContext(GlobalContext);
   const { selectedLinkAccount, userLinkAccountList } = useContext(AuthContext);
@@ -453,18 +454,14 @@ const PortfoliosList = () => {
   }, [walletMode, selectedLinkAccount]);
 
   useEffect(() => {
-    if(showAllLinkAccountId=== true) {
-      setDataState(
-        data
-      );
-    }
-    else {
+    if (showAllLinkAccountId === true) {
+      setDataState(data);
+    } else {
       setDataState(
         data?.filter((item) => item?.linkAccountId === selectedLinkAccount)
       );
     }
   }, [data, selectedLinkAccount, showAllLinkAccountId]);
-
 
   return (
     <Layout>
@@ -511,11 +508,8 @@ const PortfoliosList = () => {
                       endIcon={<SettingIcon width={16} />}
                       onClick={handleOpenSetDailyGoal}
                     >
-                      {dailyTarget?.stop_loss_target === 0 &&
-                        dailyTarget?.take_profit_target === 0 &&
-                        "Mục tiêu ngày"}
-                      {(dailyTarget?.stop_loss_target !== 0 ||
-                        dailyTarget?.take_profit_target !== 0) && (
+                      {dailyTarget?.stop_loss_target === 0 && dailyTarget?.take_profit_target === 0 && "Mục tiêu ngày"}
+                      {(dailyTarget?.stop_loss_target !== 0 || dailyTarget?.take_profit_target !== 0) && (
                         <Box display={"flex"} alignItems={"center"} mr={0.5}>
                           <Typography
                             color="success.main"
@@ -530,7 +524,7 @@ const PortfoliosList = () => {
                             fontSize={12}
                             fontWeight={600}
                           >
-                            {formatCurrency(-dailyTarget?.stop_loss_target)}
+                            {formatCurrency(dailyTarget?.stop_loss_target)?.replace("+", "-")}
                           </Typography>
                         </Box>
                       )}
@@ -585,7 +579,7 @@ const PortfoliosList = () => {
                           fontSize={14}
                           fontWeight={600}
                         >
-                          {formatCurrency(-dailyTarget?.stop_loss_target)}
+                          {formatCurrency(dailyTarget?.stop_loss_target)?.replace("+", "-")}
                         </Typography>
                       </>
                     )}

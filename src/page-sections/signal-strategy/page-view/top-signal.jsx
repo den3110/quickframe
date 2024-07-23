@@ -36,6 +36,7 @@ import PopupControllSignalStategy from "../dialog/PopupControll";
 import SearchIcon from "icons/SearchIcon";
 import sortData from "util/sortData";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
+import _ from "lodash";
 
 // STYLED COMPONENTS
 
@@ -59,12 +60,13 @@ const TopSignalPageView = () => {
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [data, setData] = useState([]);
+  const [dataState, setDataState]= useState([])
   const [loading, setLoading] = useState();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [selected, setSelected] = useState();
   const [page, setPage] = useState(1);
-  const [blockFollower, setBlockFollower] = useState(false);
+  // const [blockFollower, setBlockFollower] = useState(false);
   const [openFollowerPlan, setOpenFollowerPlan] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [checkedRows, setCheckedRows] = useState([]);
@@ -74,6 +76,7 @@ const TopSignalPageView = () => {
 
   const handleChange = (event) => {
     setSelection(event.target.value);
+    handleFilter(parseInt(event.target.value))
   };
   // const [selected, setSelected]=
   //   const [data, set]
@@ -134,6 +137,30 @@ const TopSignalPageView = () => {
     const isChecked = checkedRows.some((row) => row);
     setShowPopup(isChecked);
   }, [checkedRows]);
+
+  useEffect(()=> {
+    setDataState(data)
+  }, [data])
+
+  const handleFilter = (value) => {
+    switch (value) {
+      case 1:
+        setDataState(_.orderBy(data, function(e) { return (e.win_day /
+          (e.win_day + e.lose_day)) *
+          100}))
+        break;
+      case 2:
+        setDataState(_.orderBy(data, function(e) { return e?.win_streak}))
+        break;
+      case 3:
+        setDataState(_.orderBy(data, function(e) { return e?.volume}))
+        break
+      default:
+        break;
+    }
+    // Here you can add the logic to filter data based on selected amount
+    // setData(filteredData);
+  };
 
   return (
     <Layout>
@@ -243,7 +270,7 @@ const TopSignalPageView = () => {
                     </TableRow>
                   )}
                   {loading === false &&
-                    sortData(data, "createdAt", "desc")
+                    sortData(dataState, "createdAt", "desc")
                       .slice(
                         rowsPerPage * (page - 1),
                         rowsPerPage * (page - 1) + rowsPerPage

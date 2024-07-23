@@ -38,6 +38,8 @@ import Toggle from "icons/duotone/Toggle";
 import CloseIcon from "icons/duotone/CloseIcon";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AuthContext from "contexts/AuthContext";
+import SpotBalanceContext from "contexts/SpotBalanceContext";
+import sortData from "util/sortData";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -70,6 +72,7 @@ const TelegramChannelSignalStrategy = () => {
   const [transactions, setTransactions] = useState();
   const [expanded, setExpanded] = useState(false);
   const [accordionData, setAccordionData] = useState([]);
+  const { setChange } = useContext(SpotBalanceContext);
   const { t } = useTranslation();
   const isDisableButtonTrade = statusTrade === "WAIT" || !statusTrade;
   const isErrorBetAmount =
@@ -142,6 +145,15 @@ const TelegramChannelSignalStrategy = () => {
       };
     }
   }, [isConnected, socket, selectedBot]);
+
+  useEffect(() => {
+    if (isConnected && socket) {
+      socket.on("RELOAD_SPOT_BALANCE", (data) => {
+        setChange(prev=> !prev)
+      });
+    }
+  }, [isConnected, socket, setChange]);
+
 
   return (
     <Layout>
@@ -295,7 +307,7 @@ const TelegramChannelSignalStrategy = () => {
                         phiên giao dịch gần nhất (UTC+7):
                       </Typography>
                       <List>
-                        {transactions?.messages?.[1]?.message?.histories?.map(
+                        {sortData(transactions?.messages?.[1]?.message?.histories, "time", "desc")?.map(
                           (transaction, index) => (
                             <Stack key={index} direction="row" spacing={1}>
                               {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}
@@ -429,7 +441,7 @@ const TelegramChannelSignalStrategy = () => {
                             phiên giao dịch gần nhất (UTC+7):
                           </Typography>
                           <List>
-                            {transactions?.messages?.[1]?.message?.histories?.map(
+                            {sortData(transactions?.messages?.[1]?.message?.histories, "time", "desc")?.map(
                               (transaction, index) => (
                                 <Stack key={index} direction="row" spacing={1}>
                                   {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}

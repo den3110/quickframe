@@ -10,8 +10,8 @@ const copytradeApi = {
     const url= "/users/copy-trade/history/" + linkAccountId
     return axiosClient.get(url, data)
   },
-  userCopytradeStaticstic(data) {
-    const url= "/users/copy-trade/statics"
+  userCopytradeStaticstic(data, linkAccountId) {
+    const url= "/users/copy-trade/statics/" + linkAccountId
     return axiosClient.get(url, data)
   },
   userCopytradeFollower(data) {

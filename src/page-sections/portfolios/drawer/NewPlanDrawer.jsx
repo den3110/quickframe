@@ -90,7 +90,7 @@ const NewPlanDrawer = ({
   const [privateMode, setPrivateMode] = useState(false);
   const [reserveSignal, setReserveSignal] = useState(false);
   const [userLinkAccountListState, setUserLinkAccountListState] = useState([]);
-
+  const [loadingSubmit, setLoadingSubmit]= useState()
   const [featureType, setFeatureType] = useState(
     SignalFeatureTypes.SINGLE_METHOD
   ); // signal feature
@@ -114,6 +114,7 @@ const NewPlanDrawer = ({
   const [telegramToken, setTelegramToken] = useState("");
   const [telegramChatId, setTelegramChatId] = useState("");
   const [telegramUrl, setTelegramUrl] = useState("");
+  const [accountType, setAccountType]= useState("DEMO")
   const [winningTotalReach, setWinningTotalReach] = useState(0);
   const [loseTotalReach, setLoseTotalReach] = useState(0);
   const [winningContinue, setWinningContinue] = useState(0);
@@ -174,6 +175,7 @@ const NewPlanDrawer = ({
 
   const handleConfirmAndSave = async () => {
     try {
+      setLoadingSubmit(true)
       let response;
       let data;
       // switch(selectedTab)
@@ -181,7 +183,7 @@ const NewPlanDrawer = ({
         data = {
           autoType: autoType,
           name: planName,
-          accountType: walletMode ? "LIVE" : "DEMO",
+          accountType: accountType,
           budgetStrategyId: budgetStrategy,
           bet_second: betSecond,
           margin_dense: baseAmount,
@@ -213,7 +215,7 @@ const NewPlanDrawer = ({
             data = {
               autoType: autoType,
               name: planName,
-              accountType: walletMode ? "LIVE" : "DEMO",
+              accountType: accountType,
               budgetStrategyId: budgetStrategy,
               bet_second: betSecond,
               margin_dense: baseAmount,
@@ -245,7 +247,7 @@ const NewPlanDrawer = ({
             data = {
               autoType: autoType,
               name: planName,
-              accountType: walletMode ? "LIVE" : "DEMO",
+              accountType: accountType,
               budgetStrategyId: budgetStrategy,
               bet_second: betSecond,
               margin_dense: baseAmount,
@@ -276,7 +278,7 @@ const NewPlanDrawer = ({
             data = {
               autoType: autoType,
               name: planName,
-              accountType: walletMode ? "LIVE" : "DEMO",
+              accountType: accountType,
               budgetStrategyId: budgetStrategy,
               bet_second: betSecond,
               margin_dense: baseAmount,
@@ -314,7 +316,7 @@ const NewPlanDrawer = ({
             data = {
               autoType: autoType,
               name: planName,
-              accountType: walletMode ? "LIVE" : "DEMO",
+              accountType: accountType,
               budgetStrategyId: budgetStrategy,
               bet_second: betSecond,
               margin_dense: baseAmount,
@@ -410,6 +412,9 @@ const NewPlanDrawer = ({
       console.log(error);
       showToast(error?.response?.data?.m);
     }
+    finally {
+      setLoadingSubmit(false)
+    }
   };
 
   useEffect(() => {
@@ -434,8 +439,13 @@ const NewPlanDrawer = ({
           setDataSignalStrategyTelegramSignal(response3?.data?.d);
         }
         if (response4?.data?.ok === true) {
-          setLinkAccountId(response4?.data?.d?.filter(item=> item?.isLogin=== true)?.[0]?._id);
-          setUserLinkAccountListState(response4?.data?.d?.filter(item=> item?.isLogin === true));
+          setLinkAccountId(
+            response4?.data?.d?.filter((item) => item?.isLogin === true)?.[0]
+              ?._id
+          );
+          setUserLinkAccountListState(
+            response4?.data?.d?.filter((item) => item?.isLogin === true)
+          );
         }
       } catch (error) {
       } finally {
@@ -545,6 +555,7 @@ const NewPlanDrawer = ({
       setTelegramToken(selectedPlan?.telegram_token);
       setTelegramChatId(selectedPlan?.telegram_chatId);
       setTelegramUrl(selectedPlan?.telegram_url);
+      setAccountType(selectedPlan?.accountType)
     } else {
       setIdPlan();
       setPlanName("");
@@ -582,6 +593,7 @@ const NewPlanDrawer = ({
       setTelegramChatId("");
       setTelegramToken("");
       setTelegramUrl("");
+      setAccountType("DEMO")
     }
   }, [
     isEdit,
@@ -618,7 +630,7 @@ const NewPlanDrawer = ({
         sx={{ overflowY: "scroll" }}
         position={"relative"}
       >
-         {step === 1 && (
+        {step === 1 && (
           <>
             <Box>
               <AppBar position="static" color="default">
@@ -640,7 +652,7 @@ const NewPlanDrawer = ({
                       fontWeight={600}
                       style={{ flexGrow: 1, marginLeft: "8px" }}
                     >
-                      {walletMode ? "Live" : "Demo"}
+                      {accountType}
                     </Typography>
                   </Typography>
                   <IconButton edge="end" color="inherit" onClick={onClose}>
@@ -843,71 +855,100 @@ const NewPlanDrawer = ({
                   </Box>
                 }
               </Box>
-              <Box sx={{ width: "100%" }} mt={2}>
-                <Typography variant="subtitle1">Tài khoản liên kết</Typography>
-                <FormControl variant="outlined" fullWidth margin="normal">
-                  <Select
-                    value={linkAccountId}
-                    onChange={(e) => {
-                      setLinkAccountId(e.target.value);
-                    }}
-                    renderValue={(value) => (
-                      <>
-                        {loading=== true && <Box>Loading...</Box>}
-                        {loading=== false && <Box display={"flex"} alignItems={"center"} gap={1}>
-                          <img
-                            style={{ width: 32, height: 32 }}
-                            src={
-                              constant.URL_ASSETS_LOGO +
-                              "/" +
-                              userLinkAccountListState?.find(item=> item?._id === value)?.clientId +
-                              ".ico"
-                            }
-                            alt="Can't open"
-                          />{" "}
-                          <Typography
-                            fontSize={14}
-                            textOverflow={"ellipsis"}
-                            overflow={"hidden"}
-                            whiteSpace={"nowrap"}
-                          >
-                            {userLinkAccountListState?.find(item=> item?._id === value)?.nickName}
-                          </Typography>
-                        </Box>}
-                      </>
-                    )}
-                    size="medium"
-                  >
-                    {loading === true && (
-                      <MenuItem value={undefined}>Đang tải</MenuItem>
-                    )}
-                    {loading === false &&
-                      userLinkAccountListState?.map((item, key) => (
-                        <MenuItem key={key} value={item?._id}>
-                          <Box display={"flex"} alignItems={"center"} gap={1}>
-                            <img
-                              style={{ width: 32, height: 32 }}
-                              src={
-                                constant.URL_ASSETS_LOGO +
-                                "/" +
-                                item?.clientId +
-                                ".ico"
-                              }
-                              alt="Can't open"
-                            />{" "}
-                            <Typography
-                              fontSize={14}
-                              textOverflow={"ellipsis"}
-                              overflow={"hidden"}
-                              whiteSpace={"nowrap"}
-                            >
-                              {item?.nickName}
-                            </Typography>
-                          </Box>
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
+              <Box sx={{ width: "100%" }} mt={2} display={"flex"} alignItems={'center'} gap={1}>
+                <Box className='akaskwas' flex={1}>
+                  <Typography variant="subtitle1">
+                    Tài khoản liên kết
+                  </Typography>
+                  <FormControl variant="outlined" fullWidth margin="normal">
+                    <Select
+                      value={linkAccountId}
+                      onChange={(e) => {
+                        setLinkAccountId(e.target.value);
+                      }}
+                      renderValue={(value) => (
+                        <>
+                          {loading === true && <Box>Loading...</Box>}
+                          {loading === false && (
+                            <Box display={"flex"} alignItems={"center"} gap={1}>
+                              <img
+                                style={{ width: 24, height: 24 }}
+                                src={
+                                  constant.URL_ASSETS_LOGO +
+                                  "/" +
+                                  userLinkAccountListState?.find(
+                                    (item) => item?._id === value
+                                  )?.clientId +
+                                  ".ico"
+                                }
+                                alt="Can't open"
+                              />{" "}
+                              <Typography
+                                fontSize={14}
+                                textOverflow={"ellipsis"}
+                                overflow={"hidden"}
+                                whiteSpace={"nowrap"}
+                              >
+                                {
+                                  userLinkAccountListState?.find(
+                                    (item) => item?._id === value
+                                  )?.nickName
+                                }
+                              </Typography>
+                            </Box>
+                          )}
+                        </>
+                      )}
+                      size="medium"
+                    >
+                      {loading === true && (
+                        <MenuItem value={undefined}>Đang tải</MenuItem>
+                      )}
+                      {loading === false &&
+                        userLinkAccountListState?.map((item, key) => (
+                          <MenuItem key={key} value={item?._id}>
+                            <Box display={"flex"} alignItems={"center"} gap={1}>
+                              <img
+                                style={{ width: 32, height: 32 }}
+                                src={
+                                  constant.URL_ASSETS_LOGO +
+                                  "/" +
+                                  item?.clientId +
+                                  ".ico"
+                                }
+                                alt="Can't open"
+                              />{" "}
+                              <Typography
+                                fontSize={14}
+                                textOverflow={"ellipsis"}
+                                overflow={"hidden"}
+                                whiteSpace={"nowrap"}
+                              >
+                                {item?.nickName}
+                              </Typography>
+                            </Box>
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box className='akaskwas' flex={1}>
+                  <Typography variant="subtitle1">
+                    Loại tài khoản
+                  </Typography>
+                  <FormControl variant="outlined" fullWidth margin="normal">
+                    <Select
+                      value={accountType}
+                      onChange={(e) => {
+                        setAccountType(e.target.value);
+                      }}
+                      size="medium"
+                    >
+                     <MenuItem value="DEMO">DEMO</MenuItem>
+                     <MenuItem value="LIVE">LIVE</MenuItem>
+                    </Select> 
+                  </FormControl>
+                </Box>
               </Box>
               <Box
                 className="aslawkalw"
@@ -1078,10 +1119,15 @@ const NewPlanDrawer = ({
                       <Select
                         value={budgetStrategy}
                         onChange={(e) => setBudgetStrategy(e.target.value)}
-                        renderValue={value=> <>
-                          {loading=== true && <>Loading...</>}
-                          {loading=== false && dataBudgetStrategy?.find(item=> item?._id === value)?.name}
-                        </>}
+                        renderValue={(value) => (
+                          <>
+                            {loading === true && <>Loading...</>}
+                            {loading === false &&
+                              dataBudgetStrategy?.find(
+                                (item) => item?._id === value
+                              )?.name}
+                          </>
+                        )}
                         size="medium"
                       >
                         {dataBudgetStrategy?.map((item, key) => (
@@ -1821,7 +1867,9 @@ const NewPlanDrawer = ({
               </Button> */}
               <Button
                 onClick={() => handleStep(2)}
-                disabled={(isDisableButton=== false && loading=== false) ?  false : true}
+                disabled={
+                  isDisableButton === false && loading === false ? false : true
+                }
                 variant="contained"
                 color="primary"
                 fullWidth
@@ -1862,7 +1910,7 @@ const NewPlanDrawer = ({
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
                     <Typography variant="body2">Account Type</Typography>
-                    <Typography variant="subtitle1">{"DEMO"}</Typography>
+                    <Typography variant="subtitle1">{accountType}</Typography>
                   </Box>
                 </Box>
               </Box>
@@ -1910,13 +1958,14 @@ const NewPlanDrawer = ({
                 fullWidth
                 sx={{ padding: "10px" }}
                 onClick={handleConfirmAndSave}
+                disabled={loadingSubmit}
               >
                 Confirm & Save
               </Button>
             </Box>
           </>
         )}
-       {loading=== true && <Backdrop />}
+        {loading === true && <Backdrop />}
       </Box>
     </Drawer>
   );

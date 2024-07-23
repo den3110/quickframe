@@ -193,7 +193,7 @@ const PortfolioDetail = () => {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Box>
-              <StatPortfolio isSubPage={true} dataStat={dataStat} />
+              <StatPortfolio isSubPage={true} dataStat={dataStat} loading={loading} />
             </Box>
           </TabPanel>
         </Box>

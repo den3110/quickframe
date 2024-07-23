@@ -223,67 +223,106 @@ const CustomAutowinTable = () => {
                         </Fragment>
                       )
                     )}
+
+
                   {dataStat?.lastData?.budgetStrategy?.bs
                     ?.budgetStrategyType === BudgetStrategyType.FIBO_X_STEP &&
                     dataStat?.lastData?.budgetStrategy?.bs?.method_data
                       ?.slice(0, 1)
                       ?.map((item, key) => (
                         <Fragment key={key}>
-                          <TableRow
+                          <Box
+                            display="flex"
                             style={{
                               backgroundColor:
                                 dataStat?.lastData.budgetStrategy?.bs?.row ===
                                 parseInt(key) + 1
-                                  ? theme.palette.success[100]
-                                  : "#f9f9fa",
+                                  ? theme.palette.success[101]
+                                  : theme.palette.background.cell,
                             }}
                           >
-                            <StyledTableCell align="center">
+                            <StyledFirstTableCell align="center">
                               <StyledTypography
                                 color={
                                   dataStat?.lastData.budgetStrategy?.bs?.row ===
                                   parseInt(key) + 1
-                                    ? theme.palette.success.buy
-                                    : ""
+                                    ? theme.palette.success.buy + "!important"
+                                    : theme.palette.background.fcell
                                 }
                               >
                                 Hàng {parseInt(key) + 1}
                               </StyledTypography>
-                            </StyledTableCell>
-                            {item?.split("-")?.map((item2, key2) => (
-                              <Fragment key={key2}>
-                                <StyledTableCell
-                                  align="center"
-                                  sx={{
-                                    background:
-                                      dataStat?.lastData.budgetStrategy?.bs
-                                        ?.row ===
-                                        parseInt(key) + 1 &&
-                                      dataStat?.lastData.budgetStrategy?.bs
-                                        ?.index ===
-                                        parseInt(key2) + 1
-                                        ? theme.palette.success.main
-                                        : "",
-                                  }}
-                                >
-                                  <StyledTypography
+                            </StyledFirstTableCell>
+                            {item
+                              ?.split("-")
+                              ?.slice(
+                                keyParent * itemColumnTable,
+                                (keyParent + 1) * itemColumnTable
+                              )
+                              ?.map((item2, key2) => (
+                                <Fragment key={key2}>
+                                  <StyledTableCell
+                                    align="center"
                                     sx={{
-                                      color:
+                                      background:
                                         dataStat?.lastData.budgetStrategy?.bs
                                           ?.row ===
                                           parseInt(key) + 1 &&
                                         dataStat?.lastData.budgetStrategy?.bs
-                                          ?.index === parseInt(key2)
-                                          ? "white"
+                                          ?.index ===
+                                          parseInt(
+                                            key2 + keyParent * itemColumnTable
+                                          )
+                                          ? theme.palette.success.buy
+                                          : dataStat?.lastData.budgetStrategy
+                                              ?.bs?.index ===
+                                              parseInt(
+                                                key2 +
+                                                  keyParent * itemColumnTable
+                                              ) &&
+                                            dataStat?.lastData.budgetStrategy
+                                              ?.bs?.row !==
+                                              parseInt(key) + 1
+                                          ? theme.palette.success[101]
                                           : "",
                                     }}
                                   >
-                                    {item2}
-                                  </StyledTypography>
-                                </StyledTableCell>
-                              </Fragment>
-                            ))}
-                          </TableRow>
+                                    <StyledTypography
+                                      sx={{
+                                        color:
+                                          dataStat?.lastData.budgetStrategy?.bs
+                                            ?.row ===
+                                            parseInt(key) + 1 &&
+                                          dataStat?.lastData.budgetStrategy?.bs
+                                            ?.index ===
+                                            parseInt(
+                                              key2 + keyParent * itemColumnTable
+                                            )
+                                            ? "white"
+                                            : "",
+                                      }}
+                                    >
+                                      {round2number(item2)}
+                                    </StyledTypography>
+                                  </StyledTableCell>
+                                </Fragment>
+                              ))}
+                            {(keyParent + 1) * itemColumnTable >
+                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                                "-"
+                              )?.length &&
+                              Array.from(
+                                Array(
+                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                                    "-"
+                                  )?.length -
+                                    keyParent * itemColumnTable +
+                                    1
+                                ).keys()
+                              ).map((item, key) => (
+                                <StyledTableCell></StyledTableCell>
+                              ))}
+                          </Box>
                         </Fragment>
                       ))}
                 </Box>

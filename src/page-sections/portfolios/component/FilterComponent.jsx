@@ -104,7 +104,6 @@ function FilterComponent({
 
   const handleAmountChange = (event) => {
     setSelectedAmount(event.target.value);
-    console.log(event.target.value)
     switch (event.target.value) {
       case "all":
         setData(data)

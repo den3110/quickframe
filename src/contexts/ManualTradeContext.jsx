@@ -6,6 +6,7 @@ import { showToast } from 'components/toast/toast'
 // import portfolioApi from 'api/portfolios/portfolioApi'
 import copytradeApi from 'api/copytrade/copytradeApi'
 import AuthContext from './AuthContext'
+import _ from 'lodash'
 
 export const ManualTradeContext= createContext()
 const ManualTradeProvider = ({children}) => {
@@ -48,7 +49,7 @@ const ManualTradeProvider = ({children}) => {
   const fetchCopytradeStat = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await copytradeApi.userCopytradeStaticstic();
+      const response = await copytradeApi.userCopytradeStaticstic({}, selectedLinkAccount);
       if (response?.data?.ok === true) {
         setDataStat(response?.data?.d);
       } else {
@@ -58,7 +59,7 @@ const ManualTradeProvider = ({children}) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [selectedLinkAccount]);
 
 
   const mergeAndSortData = (data) => {
@@ -90,15 +91,56 @@ const ManualTradeProvider = ({children}) => {
   }, [isConnected, socket, dataSignal]);
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && socket) {
       socket.on("ADD_OPEN_ORDER", (dataSocket) => {
         // setDataSignal(data);
         let dataTemp= data
+        let dataStatTemp = dataStat;
         const index = dataTemp?.findIndex(
           (item) => item.betTime === dataSocket.betTime && dataSocket.autoType === 4);
         console.log("index", index)
         if (index !== -1) {
           dataTemp[index] = dataSocket;
+          const newObjData = {
+            ...dataStatTemp,
+            ...dataSocket.runningData,
+            lastData: {
+              ...dataStatTemp.lastData,
+            },
+          };
+          setDataStat(newObjData);
+        } else {
+          const index = dataTemp?.find(
+            (item) => item.betTime !== dataSocket.betTime && dataSocket.autoType === 4
+          );
+          if (index) {
+            dataTemp = [dataSocket, ...dataTemp];
+          }
+        }
+        setData(dataTemp)
+        // setDataStat()
+      });
+    }
+  }, [isConnected, socket, data, dataStat]);
+
+  useEffect(() => {
+    if (isConnected && socket) {
+      socket.on("ADD_CLOSE_ORDER", (dataSocket) => {
+        // setDataSignal(data);
+        let dataTemp= _.orderBy(data, "betTime", "desc")
+        let dataStatTemp= dataStat
+        const index = dataTemp?.findIndex(
+          (item) => item.betTime === dataSocket.betTime && dataSocket.autoType === 4);
+        if (index !== -1) {
+          dataTemp[index] = dataSocket;
+          const newObjData = {
+            ...dataStatTemp,
+            ...dataSocket.runningData,
+            lastData: {
+              ...dataStatTemp.lastData,
+            },
+          };
+          setDataStat(newObjData);
         } else {
           const index = dataTemp?.find(
             (item) => item.betTime !== dataSocket.betTime && dataSocket.autoType === 4
@@ -110,7 +152,7 @@ const ManualTradeProvider = ({children}) => {
         setData(dataTemp)
       });
     }
-  }, [isConnected, socket, data]);
+  }, [isConnected, socket, data, dataStat]);
 
   return (
     <ManualTradeContext.Provider value={{ dataSignal, setDataSignal, data, setData, dataStat, setDataStat}}>

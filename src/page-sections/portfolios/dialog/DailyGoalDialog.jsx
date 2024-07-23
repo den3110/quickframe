@@ -38,19 +38,19 @@ const DailyGoalDialog = ({ open, handleClose, dailyTarget, setDailyTarget }) => 
   useEffect(()=> {
     if(dailyTarget){ 
       setProfitTarget("$" + dailyTarget?.take_profit_target?.toString()?.replaceAll("$", ""))
-      setLossTarget("$" + dailyTarget?.stop_loss_target?.toString()?.replaceAll("$", "")  )
+      setLossTarget("$" + dailyTarget?.stop_loss_target?.toString()?.replaceAll("$", "") )
     }
   }, [dailyTarget])
 
   const handleSubmit = async () => {
     try {
       const data = {
-        accountType: walletMode ? "(LIVE)" : "DEMO",
+        accountType: walletMode ? "LIVE" : "DEMO",
         take_profit_target: profitTarget?.replaceAll("$", ""),
         stop_loss_target: lossTarget?.replaceAll("$", ""),
         linkAccountId: selectedLinkAccount
       };
-      const response = await userApi.postUserExchangeLinkAccountDailyTarget(data);
+      const response = await userApi.postUserExchangeLinkAccountDailyTarget(data, selectedLinkAccount);
       if (response?.data?.ok === true) {
         showToast("Thiết lập thành công", "success");
         setDailyTarget({...dailyTarget, take_profit_target: profitTarget, stop_loss_target: lossTarget})

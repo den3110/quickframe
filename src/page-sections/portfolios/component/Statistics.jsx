@@ -17,7 +17,7 @@ import { isDark } from "util/constants";
 
 const Statistics = () => {
   const [selectedTab, setSelectedTab] = useState(0);
-  const { dataStat } = useContext(
+  const { dataStat, loading } = useContext(
     PortfolioDetailContext
   );
  
@@ -49,61 +49,66 @@ const Statistics = () => {
         }}
         mt={2}
       >
-        {selectedTab === 0 && (
-          <TabPanel>
-            <Card variant="outlined">
-              <CardContent>
-                <Box>
-                  <Typography variant="h6">Thống kê</Typography>
-                  <Grid container spacing={2}>
-                    <StatisticCard
-                      title="Thắng/Thua hôm nay"
-                      value={`${dataStat?.win_day}/${dataStat?.lose_day}`}
-                      percentage={`${formatCurrency(dataStat?.win_day / (dataStat?.lose_day  + dataStat?.win_day) * 100)?.replaceAll("$", "")}% Tỉ lệ thắng`}
-                    />
-                    <StatisticCard
-                      title="Lợi nhuận hôm nay"
-                      value={formatCurrency(dataStat?.day_profit)}
-                      percentage="Lợi nhuận hôm nay"
-                      color={dataStat?.day_profit > 0 ? "success.main" : "error.main"}
-                      hidden={true}
-                    />
-                    <StatisticCard
-                      title="KLGD 7N"
-                      value={`${formatCurrency(dataStat?.week_volume)}`}
-                      color={dataStat?.week_volume > 0 ? "success.main" : "error.main"}
-                    />
-                    <StatisticCard
-                      title="Lợi nhuận 7N"
-                      value={formatCurrency(dataStat?.week_profit)}
-                      color={dataStat?.week_profit > 0 ? "success.main" : "error.main"}
-                    />
-                    <StatisticCard
-                      title="Chuỗi thắng tối đa"
-                      value={dataStat?.lastData?.longestWinStreak || 0}
-                      color="success.main"
-                    />
-                    <StatisticCard
-                      title="Chuỗi thua tối đa"
-                      value={dataStat?.lastData?.longestLoseStreak || 0}
-                      color="error.main"
-                    />
-                  </Grid>
-                </Box>
-              </CardContent>
-            </Card>
-          </TabPanel>
-        )}
-        {selectedTab === 1 && (
-          <TabPanel>
-            <CustomAutowinTable />
-          </TabPanel>
-        )}
-        {selectedTab === 2 && (
-          <TabPanel>
-            <SignalBubble />
-          </TabPanel>
-        )}
+        {
+          loading=== false &&
+          <>
+            {selectedTab === 0 && (
+              <TabPanel>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Box>
+                      <Typography variant="h6">Thống kê</Typography>
+                      <Grid container spacing={2}>
+                        <StatisticCard
+                          title="Thắng/Thua hôm nay"
+                          value={`${dataStat?.win_day}/${dataStat?.lose_day}`}
+                          percentage={`${formatCurrency(dataStat?.win_day / (dataStat?.lose_day  + dataStat?.win_day) * 100)?.replaceAll("$", "")}% Tỉ lệ thắng`}
+                        />
+                        <StatisticCard
+                          title="Lợi nhuận hôm nay"
+                          value={formatCurrency(dataStat?.day_profit)}
+                          percentage="Lợi nhuận hôm nay"
+                          color={dataStat?.day_profit > 0 ? "success.main" : "error.main"}
+                          hidden={true}
+                        />
+                        <StatisticCard
+                          title="KLGD 7N"
+                          value={`${formatCurrency(dataStat?.week_volume)}`}
+                          color={dataStat?.week_volume > 0 ? "success.main" : "error.main"}
+                        />
+                        <StatisticCard
+                          title="Lợi nhuận 7N"
+                          value={formatCurrency(dataStat?.week_profit)}
+                          color={dataStat?.week_profit > 0 ? "success.main" : "error.main"}
+                        />
+                        <StatisticCard
+                          title="Chuỗi thắng tối đa"
+                          value={dataStat?.lastData?.longestWinStreak || 0}
+                          color="success.main"
+                        />
+                        <StatisticCard
+                          title="Chuỗi thua tối đa"
+                          value={dataStat?.lastData?.longestLoseStreak || 0}
+                          color="error.main"
+                        />
+                      </Grid>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </TabPanel>
+            )}
+            {selectedTab === 1 && (
+              <TabPanel>
+                <CustomAutowinTable />
+              </TabPanel>
+            )}
+            {selectedTab === 2 && (
+              <TabPanel>
+                <SignalBubble />
+              </TabPanel>
+            )}
+          </>
+        }
       </Box>
     </Box>
   );
