@@ -100,13 +100,13 @@ export default function DeleteSignalStrategy({
             variant="h6"
             fontWeight="bold"
           >
-            Bạn có chắc chắn muốn xóa Bot AI này không ?
+            Bạn có chắc chắn muốn xóa chiến lược này không ?
           </DialogContentText>
           <DialogContentText
             id="confirm-delete-dialog-description"
             align="center"
           >
-            Bot AI này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành động
+            Chiến lược này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành động
             này.
           </DialogContentText>
           {selectedBot?.total_plans >= 2 && (

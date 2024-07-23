@@ -17,6 +17,7 @@ import {
   useMediaQuery,
   useTheme,
   IconButton,
+  Chip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
@@ -25,7 +26,7 @@ import { showToast } from "components/toast/toast";
 export default function NewSchedule({ open, onClose, isEdit }) {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
-  const [packages, setPackages] = useState("");
+  const [packages, setPackages] = useState([]);
   const [scheduleName, setScheduleName] = useState("");
   const [disableEndTime, setDisableEndTime] = useState(false); // Thêm trạng thái disable
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -39,7 +40,7 @@ export default function NewSchedule({ open, onClose, isEdit }) {
       onClose();
       setStartTime(new Date());
       setEndTime(new Date());
-      setPackages("");
+      setPackages([]);
       setScheduleName("");
     } catch (error) {
       // Handle the error appropriately
@@ -53,7 +54,7 @@ export default function NewSchedule({ open, onClose, isEdit }) {
         if (response?.data?.ok === true) {
           setDataSignalStrategy(response?.data?.d);
           setFirstDataSignalStrategy(response?.data?.d?.[0]?._id);
-          setPackages(response?.data?.d?.[0]?._id);
+          setPackages([response?.data?.d?.[0]?._id]);
         } else if (response?.data?.ok === false) {
           showToast(response?.data?.m);
         }
@@ -63,7 +64,11 @@ export default function NewSchedule({ open, onClose, isEdit }) {
     })();
   }, []);
 
-  const isButtonDisabled = !scheduleName || !packages;
+  const handlePackageChange = (event) => {
+    setPackages(event.target.value);
+  };
+
+  const isButtonDisabled = !scheduleName || packages.length === 0;
 
   return (
     <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose}>
@@ -117,7 +122,11 @@ export default function NewSchedule({ open, onClose, isEdit }) {
                     sx={{ display: "flex", alignItems: "center" }}
                     gap={0.5}
                   >
-                    <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                    <Box
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
                       <Checkbox
                         checked={disableEndTime}
                         onChange={(e) => setDisableEndTime(e.target.checked)}
@@ -141,12 +150,41 @@ export default function NewSchedule({ open, onClose, isEdit }) {
             <FormControl fullWidth margin="normal">
               <InputLabel>Chọn gói</InputLabel>
               <Select
+                multiple
                 value={packages}
-                onChange={(e) => setPackages(e.target.value)}
+                onChange={handlePackageChange}
                 label="Chọn gói"
+                renderValue={(selected) => (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 0.5,
+                    }}
+                  >
+                    {selected.map((value) => (
+                      <Chip
+                        sx={{ }}
+                        key={value}
+                        label={
+                          <Box>
+                            <Box>
+                              {
+                                dataSignalStrategy.find(
+                                  (item) => item._id === value
+                                )?.name
+                              }
+                            </Box>
+                          </Box>
+                        }
+                      />
+                    ))}
+                  </Box>
+                )}
               >
                 {dataSignalStrategy?.map((item, key) => (
                   <MenuItem key={key} value={item?._id}>
+                    <Checkbox checked={packages.indexOf(item?._id) > -1} />
                     <ListItemText primary={item.name} />
                   </MenuItem>
                 ))}

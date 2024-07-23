@@ -15,6 +15,8 @@ import {
   CardHeader,
   Stack,
   useTheme,
+  FormGroup,
+  Switch,
 } from "@mui/material";
 import { Add, Remove, Edit, MoreVert, Close } from "@mui/icons-material";
 import { isDark } from "util/constants";
@@ -53,8 +55,8 @@ const NewBotAI = ({
     { type: "lose_streak", count: 1 },
   ]);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const {decodedData }= useContext(JwtContext)
-  const theme= useTheme()
+  const { decodedData } = useContext(JwtContext);
+  const theme = useTheme();
   const [idBotAI, setIdBotAI] = useState();
   const [name, setName] = useState("");
   const [openCandleShadow, setOpenCandleShadow] = useState(false);
@@ -64,8 +66,9 @@ const NewBotAI = ({
   const [selectedBallProps, setSelectedBallProps] = useState();
   // const [conditions, setConditions] = useState([]);
   const [anchorEls, setAnchorEls] = useState([]);
-  const [readOnly, setReadOnly]= useState(false)
+  const [readOnly, setReadOnly] = useState(false);
   const [isNew, setIsNew] = useState(false);
+  const [isDefault, setIsDefault] = useState(false);
   const handleDeleteAllTargetCondition = () => {
     setTargetConditions([]);
   };
@@ -106,18 +109,18 @@ const NewBotAI = ({
     handleGoalChange(index, "count", Math.max(0, goals[index].count - 1));
   };
 
-  const handleEditCondition = (index) => {
-    // Handle editing the selected condition
-    setIsEdit(true);
-    handleMenuClose(index);
-  };
+  // const handleEditCondition = (index) => {
+  //   // Handle editing the selected condition
+  //   setIsEdit(true);
+  //   handleMenuClose(index);
+  // };
 
-  const handleDeleteCondition = (index) => {
-    const newConditions = [...targetConditions];
-    newConditions.splice(index, 1);
-    setTargetConditions(newConditions);
-    handleMenuClose(index);
-  };
+  // const handleDeleteCondition = (index) => {
+  //   const newConditions = [...targetConditions];
+  //   newConditions.splice(index, 1);
+  //   setTargetConditions(newConditions);
+  //   handleMenuClose(index);
+  // };
 
   const handleCreateBot = async () => {
     try {
@@ -130,6 +133,7 @@ const NewBotAI = ({
             .count,
           targetConditions,
         },
+        is_default: isDefault,
         type: "BUBBLE_METHOD",
       };
       let response;
@@ -212,6 +216,7 @@ const NewBotAI = ({
           index: key,
         }))
       );
+      setIsDefault(selectedBot?.is_default);
     } else {
       setIdBotAI(undefined);
       setName("");
@@ -220,24 +225,30 @@ const NewBotAI = ({
         { type: "lose_streak", count: 0 },
       ]);
       setTargetConditions([]);
+      setIsDefault(false);
     }
   }, [initState, selectedBot]);
 
-  useEffect(()=> {
-    if(is_edit=== true && selectedBot?.userId !== decodedData?.data?._id) {
-      setReadOnly(true)
-
+  useEffect(() => {
+    if (is_edit === true && selectedBot?.userId !== decodedData?.data?._id) {
+      setReadOnly(true);
+    } else if (
+      is_edit === true &&
+      selectedBot?.userId === decodedData?.data?._id
+    ) {
+      setReadOnly(false);
+    } else if (is_edit !== true) {
+      setReadOnly(false);
     }
-    else if(is_edit=== true && selectedBot?.userId === decodedData?.data?._id) {
-      setReadOnly(false)
-    }
-    else if(is_edit!== true) {
-      setReadOnly(false)
-    }
-  }, [is_edit,selectedBot,decodedData ])
+  }, [is_edit, selectedBot, decodedData]);
 
   return (
-    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose} sx={{zIndex: ""}}>
+    <Drawer
+      anchor={downLg ? "bottom" : "right"}
+      open={open}
+      onClose={onClose}
+      sx={{ zIndex: "" }}
+    >
       <Box
         sx={{
           width: downLg ? "100%" : 850,
@@ -256,12 +267,14 @@ const NewBotAI = ({
             display={"flex"}
             justifyContent={"space-between"}
             alignItems={"center"}
-            sx={{ 
-            //   position: downLg? "sticky": "",
-            // top: downLg ? 0: "",
-            // zIndex: downLg ? 2 : "",
-            // background: downLg ? theme.palette.background.paper : ""
-            }}
+            sx={
+              {
+                //   position: downLg? "sticky": "",
+                // top: downLg ? 0: "",
+                // zIndex: downLg ? 2 : "",
+                // background: downLg ? theme.palette.background.paper : ""
+              }
+            }
           >
             <IconButton
               onClick={onClose}
@@ -288,12 +301,14 @@ const NewBotAI = ({
               >
                 <FormControlLabel
                   onChange={() => {
-                    const updateGoals = [...goals]; 
-                    const index = updateGoals.findIndex(item => item.type === goal.type);
+                    const updateGoals = [...goals];
+                    const index = updateGoals.findIndex(
+                      (item) => item.type === goal.type
+                    );
 
                     if (index !== -1) {
                       if (updateGoals[index].count <= 0) {
-                        updateGoals[index] = { ...goal, count: 1 }; 
+                        updateGoals[index] = { ...goal, count: 1 };
                       } else {
                         updateGoals[index] = { ...goal, count: 0 };
                       }
@@ -302,7 +317,10 @@ const NewBotAI = ({
                     }
                   }}
                   control={
-                    <Checkbox disabled={readOnly} checked={goal.count <= 0 ? false : true} />
+                    <Checkbox
+                      disabled={readOnly}
+                      checked={goal.count <= 0 ? false : true}
+                    />
                   }
                   label={`Đạt mục tiêu bằng 5 sau khi ${
                     goal.type === "win_streak" ? "Chuỗi thắng" : "Chuỗi thua"
@@ -321,7 +339,6 @@ const NewBotAI = ({
                   </IconButton>
                   <TextField
                     inputProps={{ readOnly: readOnly }}
-
                     type="number"
                     value={goal.count}
                     onChange={(e) =>
@@ -334,7 +351,7 @@ const NewBotAI = ({
                     sx={{ width: 50, mx: 1 }}
                   />
                   <IconButton
-                  disabled={readOnly}
+                    disabled={readOnly}
                     onClick={() => handleIncrementGoal(index)}
                     sx={{
                       backgroundColor: (theme) =>
@@ -356,6 +373,28 @@ const NewBotAI = ({
               + Thêm bóng nến
             </Button>
           </Box> */}
+          {decodedData?.data?.levelStaff >= 3 && (
+            <Box sx={{}}>
+              <Typography fontSize={14} variant="subtitle1">
+                Chiến lược sử dụng
+              </Typography>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      disabled={readOnly}
+                      checked={isDefault}
+                      onChange={(e) => setIsDefault(e.target.checked)}
+                      name="gilad"
+                    />
+                  }
+                  label=<Typography fontSize={14} variant="subtitle1">
+                    Chiến lược mặc định
+                  </Typography>
+                />
+              </FormGroup>
+            </Box>
+          )}
           <Typography mt={2}>Chọn một bóng nến muốn thêm</Typography>
           <CardContent>
             <Grid
@@ -366,7 +405,7 @@ const NewBotAI = ({
               justifyContent="center"
             >
               <Grid item xs={10} md={10}>
-                <Grid container spacing={3} sx={{justifyContent: "center"}}>
+                <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                   <Grid item xs={2} md={2}>
                     <IconButton
                       disabled={readOnly}
@@ -397,7 +436,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
-                    disabled={readOnly}
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -425,7 +464,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
-                    disabled={readOnly}
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -453,7 +492,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
-                    disabled={readOnly}
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -481,7 +520,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
-                    disabled={readOnly}
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -510,7 +549,7 @@ const NewBotAI = ({
                 </Grid>
               </Grid>
               <Grid item xs={10} md={10}>
-                <Grid container spacing={3} sx={{justifyContent: "center"}}>
+                <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
                       <Badge color="warning" overlap="circular">
@@ -549,7 +588,7 @@ const NewBotAI = ({
                 </Grid>
               </Grid>
               <Grid item xs={10} md={10}>
-                <Grid container spacing={3} sx={{justifyContent: "center"}}>
+                <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                   <Grid item xs={2} md={2}>
                     <IconButton
                       aria-label="cart"
@@ -580,7 +619,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
-                    disabled={readOnly}
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -608,7 +647,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
-                    disabled={readOnly}
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -636,7 +675,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
-                    disabled={readOnly}
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -664,7 +703,7 @@ const NewBotAI = ({
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton
-                    disabled={readOnly}
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         // addBubbleOption(1);
@@ -693,7 +732,7 @@ const NewBotAI = ({
                 </Grid>
               </Grid>
               <Grid item xs={10} md={10}>
-                <Grid container spacing={3} sx={{justifyContent: "center"}}>
+                <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
                       <Badge color="warning" overlap="circular">
@@ -741,7 +780,7 @@ const NewBotAI = ({
               action={
                 <Stack spacing={1} direction="row">
                   <Button
-                  disabled={readOnly}
+                    disabled={readOnly}
                     startIcon={<DeleteIcon icon={"entypo:trash"} />}
                     onClick={handleDeleteAllTargetCondition}
                     size="small"
@@ -769,7 +808,7 @@ const NewBotAI = ({
                 return (
                   <Grid item xs={3} md={1} key={index}>
                     <IconButton
-                    disabled={readOnly}
+                      disabled={readOnly}
                       aria-label="cart"
                       onClick={() => {
                         setSelectedCandle({ ...value, key: index });
@@ -853,10 +892,10 @@ const NewBotAI = ({
             justifyContent: "space-between",
             mt: 2,
             gap: 1,
-            position: downLg? "sticky": "",
-            bottom: downLg ? 0: "",
+            position: downLg ? "sticky" : "",
+            bottom: downLg ? 0 : "",
             zIndex: downLg ? 2 : "",
-            background: downLg ? theme.palette.background.paper : ""
+            background: downLg ? theme.palette.background.paper : "",
           }}
         >
           <Button variant="outlined" onClick={onClose} sx={{ padding: "10px" }}>
@@ -864,7 +903,9 @@ const NewBotAI = ({
           </Button>
           <Button
             onClick={handleCreateBot}
-            disabled={(isDisableButton !== true && readOnly !== true) ? false : true}
+            disabled={
+              isDisableButton !== true && readOnly !== true ? false : true
+            }
             fullWidth
             variant="contained"
             color="primary"

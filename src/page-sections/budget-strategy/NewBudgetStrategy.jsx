@@ -60,6 +60,7 @@ const NewBudgetStrategy = ({
   const [seeMore, setSeeMore] = useState(false);
   const [disableButton, setDisableButton] = useState();
   const [isDefaultStrategy, setIsDefaultStrategy] = useState(false);
+
   const handleIncrement = () => {
     setCount(parseInt(count) + 1);
   };
@@ -76,7 +77,7 @@ const NewBudgetStrategy = ({
     setCount2(parseInt(count2) > 0 ? parseInt(count2) - 1 : 0);
   };
 
-  const validateInput = (value= "") => {
+  const validateInput = (value = "") => {
     const pattern = /^(\d+(\.\d+)?)(-(\d+(\.\d+)?))*$/;
     if (value?.length > 0 && value?.match(pattern)) {
       return false;
@@ -297,18 +298,22 @@ const NewBudgetStrategy = ({
   useEffect(() => {
     (() => {
       if (
-        is_edit === true && decodedData?.data?._id !== selectedStrategy?.userId) {
+        is_edit === true &&
+        decodedData?.data?._id !== selectedStrategy?.userId
+      ) {
         setDisableButton(true);
         setReadOnly(true);
         return;
-      } else if(is_edit=== true && decodedData?.data?._id=== selectedStrategy?.userId) {
+      } else if (
+        is_edit === true &&
+        decodedData?.data?._id === selectedStrategy?.userId
+      ) {
         setDisableButton(false);
         setReadOnly(false);
-        return 
-      }
-      else {
-        setDisableButton(false)
-        setReadOnly(false)
+        return;
+      } else {
+        setDisableButton(false);
+        setReadOnly(false);
       }
       handleDisable();
     })();
@@ -363,27 +368,41 @@ const NewBudgetStrategy = ({
           setMethod1("1-2-3-5-8-13-21-34-55-89-144");
           setCount(0);
           setCount2(0);
-          setIncreaseValueType(IncreaseValueType.AFTER_LOSS)
+          setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
           break;
         case BudgetStrategyType.MARTINGALE:
-          console.log(2222)
+          console.log(2222);
           setMethod1("1-2-4-8-17-35");
           setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
           break;
         case BudgetStrategyType.VICTOR_2:
           setMethod1("1-1-2-2-3-4-5-7-10-13-18-24-32-44-59-80-108-146-197-271");
-          setMethod2("1-2-4-4-6-8-10-14-20-26-36-48-64-88-118-160-216-292-394-542");
+          setMethod2(
+            "1-2-4-4-6-8-10-14-20-26-36-48-64-88-118-160-216-292-394-542"
+          );
           break;
         case BudgetStrategyType.VICTOR_3:
           setMethod1("1-1-1-1-1-1-1.5-2-2-2-2.5-3-3.5-4-4.5-5.4-6-7-8-9.5-11");
-          setMethod2("1-2-2-2-2-2-3-3.9-3.9-3.9-4.875-5.85-6.825-7.8-8.775-10.53-11.7-13.65-15.6-18.525-21.45");
-          setMethod3("1-4-4-4-4-4-6-7.605-7.605-7.605-9.50625-11.4075-13.30875-15.21-17.11125-20.5335-22.815-26.6175-30.42-36.12375-41.8275");
+          setMethod2(
+            "1-2-2-2-2-2-3-3.9-3.9-3.9-4.875-5.85-6.825-7.8-8.775-10.53-11.7-13.65-15.6-18.525-21.45"
+          );
+          setMethod3(
+            "1-4-4-4-4-4-6-7.605-7.605-7.605-9.50625-11.4075-13.30875-15.21-17.11125-20.5335-22.815-26.6175-30.42-36.12375-41.8275"
+          );
           break;
         case BudgetStrategyType.VICTOR_4:
-          setMethod1("1-1-1-1-1-1-1-1-1-1-1-1-1-1-1.23-1.25-1.28-1.3-1.47-1.6-1.74-1.88-2.04-2.22");
-          setMethod2("1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-2.28-2.32-2.36-2.41-2.73-2.96-3.21-3.48-3.78");
-          setMethod3("3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-4.22-4.29-4.37-4.45-5.04-5.47-5.94-6.44-6.99-7.59");
-          setMethod4("7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.81-7.94-8.08-8.24-9.33-10.12-10.99-11.92-12.93-14.03");
+          setMethod1(
+            "1-1-1-1-1-1-1-1-1-1-1-1-1-1-1.23-1.25-1.28-1.3-1.47-1.6-1.74-1.88-2.04-2.22"
+          );
+          setMethod2(
+            "1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-2.28-2.32-2.36-2.41-2.73-2.96-3.21-3.48-3.78"
+          );
+          setMethod3(
+            "3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-4.22-4.29-4.37-4.45-5.04-5.47-5.94-6.44-6.99-7.59"
+          );
+          setMethod4(
+            "7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.81-7.94-8.08-8.24-9.33-10.12-10.99-11.92-12.93-14.03"
+          );
           break;
         default:
           break;
@@ -405,24 +424,38 @@ const NewBudgetStrategy = ({
           setCount2(0);
           break;
         case BudgetStrategyType.MARTINGALE:
-          console.log(2222)
+          console.log(2222);
           setMethod1("1-2-4-8-17-35");
           setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
           break;
         case BudgetStrategyType.VICTOR_2:
           setMethod1("1-1-2-2-3-4-5-7-10-13-18-24-32-44-59-80-108-146-197-271");
-          setMethod2("1-2-4-4-6-8-10-14-20-26-36-48-64-88-118-160-216-292-394-542");
+          setMethod2(
+            "1-2-4-4-6-8-10-14-20-26-36-48-64-88-118-160-216-292-394-542"
+          );
           break;
         case BudgetStrategyType.VICTOR_3:
           setMethod1("1-1-1-1-1-1-1.5-2-2-2-2.5-3-3.5-4-4.5-5.4-6-7-8-9.5-11");
-          setMethod2("1-2-2-2-2-2-3-3.9-3.9-3.9-4.875-5.85-6.825-7.8-8.775-10.53-11.7-13.65-15.6-18.525-21.45");
-          setMethod3("1-4-4-4-4-4-6-7.605-7.605-7.605-9.50625-11.4075-13.30875-15.21-17.11125-20.5335-22.815-26.6175-30.42-36.12375-41.8275");
+          setMethod2(
+            "1-2-2-2-2-2-3-3.9-3.9-3.9-4.875-5.85-6.825-7.8-8.775-10.53-11.7-13.65-15.6-18.525-21.45"
+          );
+          setMethod3(
+            "1-4-4-4-4-4-6-7.605-7.605-7.605-9.50625-11.4075-13.30875-15.21-17.11125-20.5335-22.815-26.6175-30.42-36.12375-41.8275"
+          );
           break;
         case BudgetStrategyType.VICTOR_4:
-          setMethod1("1-1-1-1-1-1-1-1-1-1-1-1-1-1-1.23-1.25-1.28-1.3-1.47-1.6-1.74-1.88-2.04-2.22");
-          setMethod2("1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-2.28-2.32-2.36-2.41-2.73-2.96-3.21-3.48-3.78");
-          setMethod3("3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-4.22-4.29-4.37-4.45-5.04-5.47-5.94-6.44-6.99-7.59");
-          setMethod4("7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.81-7.94-8.08-8.24-9.33-10.12-10.99-11.92-12.93-14.03");
+          setMethod1(
+            "1-1-1-1-1-1-1-1-1-1-1-1-1-1-1.23-1.25-1.28-1.3-1.47-1.6-1.74-1.88-2.04-2.22"
+          );
+          setMethod2(
+            "1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-1.95-2.28-2.32-2.36-2.41-2.73-2.96-3.21-3.48-3.78"
+          );
+          setMethod3(
+            "3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-3.8-4.22-4.29-4.37-4.45-5.04-5.47-5.94-6.44-6.99-7.59"
+          );
+          setMethod4(
+            "7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.41-7.81-7.94-8.08-8.24-9.33-10.12-10.99-11.92-12.93-14.03"
+          );
           break;
         default:
           break;
@@ -473,7 +506,7 @@ const NewBudgetStrategy = ({
                 alignItems: "center",
               }}
             >
-              <ListItem sx={{width: "100%"}}>
+              <ListItem sx={{ width: "100%" }}>
                 <TextField
                   inputProps={{ readOnly: readOnly }}
                   label="Tên chiến lược"
@@ -540,7 +573,7 @@ const NewBudgetStrategy = ({
                 <>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
@@ -556,7 +589,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
@@ -573,7 +606,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
@@ -598,7 +631,7 @@ const NewBudgetStrategy = ({
                   >
                     <ListItem>
                       <TextField
-                      inputProps={{ readOnly: readOnly }}
+                        inputProps={{ readOnly: readOnly }}
                         error={isErrormethod1 === true ? true : false}
                         helperText={
                           isErrormethod1 === true
@@ -709,7 +742,7 @@ const NewBudgetStrategy = ({
                   <Box display={"flex"}>
                     <ListItem>
                       <TextField
-                      inputProps={{ readOnly: readOnly }}
+                        inputProps={{ readOnly: readOnly }}
                         error={isErrormethod1 === true ? true : false}
                         helperText={
                           isErrormethod1 === true
@@ -723,7 +756,7 @@ const NewBudgetStrategy = ({
                         onChange={(e) => setMethod1(e.target.value)}
                       />
                     </ListItem>
-                    <ListItem sx={{width: "100%", overflow: "hidden"}}>
+                    <ListItem sx={{ width: "100%", overflow: "hidden" }}>
                       <FormControl fullWidth>
                         <InputLabel
                           sx={{
@@ -756,7 +789,7 @@ const NewBudgetStrategy = ({
                 <>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
@@ -772,7 +805,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
@@ -793,7 +826,7 @@ const NewBudgetStrategy = ({
                 <>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
@@ -810,7 +843,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
@@ -827,7 +860,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
@@ -848,7 +881,7 @@ const NewBudgetStrategy = ({
                 <>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
@@ -865,7 +898,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
@@ -882,7 +915,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
@@ -899,7 +932,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <TextField
-                    inputProps={{ readOnly: readOnly }}
+                      inputProps={{ readOnly: readOnly }}
                       error={isErrormethod4 === true ? true : false}
                       helperText={
                         isErrormethod4 === true
@@ -917,6 +950,32 @@ const NewBudgetStrategy = ({
                 </>
               )}
             </>
+            <ListItem>
+              {decodedData?.data?.levelStaff >= 3 && (
+                <Box sx={{}}>
+                  <Typography fontSize={14} variant="subtitle1">
+                    Chiến lược sử dụng
+                  </Typography>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          disabled={readOnly}
+                          checked={isDefaultStrategy}
+                          onChange={(e) =>
+                            setIsDefaultStrategy(e.target.checked)
+                          }
+                          name="gilad"
+                        />
+                      }
+                      label=<Typography fontSize={14} variant="subtitle1">
+                        Chiến lược mặc định
+                      </Typography>
+                    />
+                  </FormGroup>
+                </Box>
+              )}
+            </ListItem>
             {/* <ListItem>
               <Box fullWidth sx={{ width: "100%" }}>
                 <Accordion
@@ -934,23 +993,6 @@ const NewBudgetStrategy = ({
                 </Accordion>
               </Box>
             </ListItem> */}
-            {decodedData?.data?.levelStaff >= 3 && (
-              <Box sx={{ padding: "8px 16px" }}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        disabled={readOnly}
-                        checked={isDefaultStrategy}
-                        onChange={(e) => setIsDefaultStrategy(e.target.checked)}
-                        name="gilad"
-                      />
-                    }
-                    label="Chiến lược mặc định"
-                  />
-                </FormGroup>
-              </Box>
-            )}
             {type !== BudgetStrategyType.ALL_ORDERS &&
               type !== BudgetStrategyType.FIBO_X_STEP && (
                 <ListItem>

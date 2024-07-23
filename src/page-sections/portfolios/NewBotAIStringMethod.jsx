@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Drawer,
   Box,
@@ -12,20 +12,25 @@ import {
   Checkbox,
   useMediaQuery,
   useTheme,
+  FormGroup,
+  Switch,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
+import { JwtContext } from "contexts/jwtContext";
 
 const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }) => {
   const theme= useTheme()
+  const { decodedData } = useContext(JwtContext)
   const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
   const [idBotAI, setIdBotAI]= useState()
   const [name, setName] = useState("");
   const [strategy, setStrategy] = useState("STRING_METHOD");
   const [chainSignal, setChainSignal] = useState([]);
   const [allResults, setAllResults] = useState(false);
+  const [isDefault, setIsDefault]= useState(false)
   const isDisableButton = name?.length <= 0 || chainSignal?.length <= 0;
   const handleChangeChainSignal = (value) => {
     setChainSignal(value);
@@ -77,11 +82,13 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
         setName(selectedBot?.name)
         setChainSignal(selectedBot?.sources?.conditions)
         setAllResults(selectedBot?.sources?.allResults)
+        setIsDefault(selectedBot?.is_default)
     }
     else {
       setName("")
       setChainSignal([])
       setAllResults(false)
+      setIsDefault(false)
     }
   }, [is_edit, selectedBot])
 
@@ -163,6 +170,23 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
             <br />
             s-bbbbb → s-5b, sxx-b → s2x-b
           </Typography>
+          {decodedData?.data?.levelStaff >= 3 && (
+              <Box sx={{ padding: "8px 16px" }}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        // disabled={readOnly}
+                        checked={isDefault}
+                        onChange={(e) => setIsDefault(e.target.checked)}
+                        name="gilad"
+                      />
+                    }
+                    label="Chiến lược mặc định"
+                  />
+                </FormGroup>
+              </Box>
+            )}
         </Box>
 
         <Box

@@ -24,6 +24,7 @@ import {
   CircularProgress,
   Switch,
   Collapse,
+  FormControlLabel,
 } from "@mui/material";
 import Layout from "../Layout";
 import { isDark } from "util/constants";
@@ -70,17 +71,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   // width: theme.breakpoints.down("lg") ? "20%" : "auto",
 }));
 
-const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  paddingLeft: 4,
-  paddingRight: 4,
-  gap: 10,
-}));
+// const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+//   display: "flex",
+//   alignItems: "center",
+//   paddingLeft: 4,
+//   paddingRight: 4,
+//   gap: 10,
+// }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
-}));
+// const StyledTableRow = styled(TableRow)(({ theme }) => ({
+//   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
+// }));
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -103,6 +104,7 @@ const PortfoliosList = () => {
   const { setChange } = useContext(GlobalContext);
   const { selectedLinkAccount, userLinkAccountList } = useContext(AuthContext);
   const [initState, setInitState] = useState(false);
+  const [dataState, setDataState] = useState([]);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
   // const [isEditStringMethod, setIsEditStringMethod] = useState(false);
@@ -124,9 +126,15 @@ const PortfoliosList = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [duplicateOpen, setDuplicateOpen] = useState(false);
   const [sharePlanOpen, setSharePlanOpen] = useState(false);
+  const [showAllLinkAccountId, setShowAllLinkAccountId] = useState(false);
   const handleDuplicateClose = () => {
     setDuplicateOpen(false);
   };
+
+  const handleChangeShowAllLinkAccountId = (e) => {
+    setShowAllLinkAccountId(e.target.checked);
+  };
+
   const handleDuplicateOpen = () => {
     setDuplicateOpen(true);
   };
@@ -444,6 +452,20 @@ const PortfoliosList = () => {
     })();
   }, [walletMode, selectedLinkAccount]);
 
+  useEffect(() => {
+    if(showAllLinkAccountId=== true) {
+      setDataState(
+        data
+      );
+    }
+    else {
+      setDataState(
+        data?.filter((item) => item?.linkAccountId === selectedLinkAccount)
+      );
+    }
+  }, [data, selectedLinkAccount, showAllLinkAccountId]);
+
+
   return (
     <Layout>
       <Box pt={2} pb={4}>
@@ -516,7 +538,20 @@ const PortfoliosList = () => {
                   </Box>
                 )}
               </Box>
-              <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "block"}>
+              <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "flex"}>
+                {!downLg && (
+                  <Box>
+                    <FormControlLabel
+                      label="Show all account"
+                      control={
+                        <Checkbox
+                          checked={showAllLinkAccountId}
+                          onChange={handleChangeShowAllLinkAccountId}
+                        />
+                      }
+                    />
+                  </Box>
+                )}
                 {!downLg && (
                   <Button
                     variant="outlined"
@@ -685,7 +720,7 @@ const PortfoliosList = () => {
                     )}
 
                     {loading === false &&
-                      sortData(data, "createdAt", "desc")
+                      sortData(dataState, "createdAt", "desc")
                         .slice(
                           rowsPerPage * (page - 1),
                           rowsPerPage * (page - 1) + rowsPerPage
@@ -757,9 +792,14 @@ const PortfoliosList = () => {
                                 {formatCurrency(plan?.total_profit)}
                               </StyledTableCell>
                               <StyledTableCell
-                                sx={{ width: downLg ? "50%" : "aaa" }}
+                                sx={{ width: downLg ? "100%" : "aaa" }}
                               >
-                                <SelectDirectLinkAccount plan={plan} setData={setData} data={data} userLinkAccountList={userLinkAccountList} />
+                                <SelectDirectLinkAccount
+                                  plan={plan}
+                                  setData={setData}
+                                  data={data}
+                                  userLinkAccountList={userLinkAccountList}
+                                />
                               </StyledTableCell>
                               <StyledTableCell
                                 sx={{

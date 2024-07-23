@@ -23,7 +23,7 @@ const DailyGoalDialog = ({ open, handleClose, dailyTarget, setDailyTarget }) => 
   const [profitTarget, setProfitTarget] = useState("");
   const [lossTarget, setLossTarget] = useState("");
   const isDisableButton = profitTarget?.length <= 0 || lossTarget?.length <= 0;
-  const {selectedLinkAccount }= useContext(AuthContext)
+  const {selectedLinkAccount, user }= useContext(AuthContext)
 
   const handleProfitTargetChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, "");
@@ -83,8 +83,7 @@ const DailyGoalDialog = ({ open, handleClose, dailyTarget, setDailyTarget }) => 
       <Divider />
       <DialogContent>
         <Typography gutterBottom>
-          Khi tổng lợi nhuận đạt ngưỡng như đã cài đặt dưới đây thì toàn bộ gói
-          sẽ được ngưng.
+          Khi tổng lợi nhuận đạt ngưỡng như đã cài đặt dưới đây thì toàn bộ gói {walletMode ? "LIVE" : "DEMO"} thuộc tài khoản {user?.nickName} sẽ được ngưng.
         </Typography>
         <Box mt={3} display="flex" justifyContent="space-between" gap={1}>
           <Box sx={{width: "50%"}}>

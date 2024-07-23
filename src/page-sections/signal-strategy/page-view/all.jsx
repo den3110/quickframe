@@ -179,6 +179,7 @@ const SignalStrategyList = () => {
                   Thiết kế Bot AI
                 </Button>
                 <Menu
+                  disableScrollLock={false}
                   anchorEl={anchorElMenu}
                   open={Boolean(anchorElMenu)}
                   onClose={handleMenuClose}
@@ -399,6 +400,7 @@ const SignalStrategyList = () => {
                   }
                   titleButton={"Tạo chiến lược mới"}
                   actionClick={handleMenuClick}
+                  disableButton={true}
                 />
               </Box>
             )}
