@@ -17,12 +17,7 @@ import CustomToolbar from "./canlendarComponent/CustomToolbar";
 import CustomEvent from "./canlendarComponent/CustomEvent";
 import CustomDateHeader from "./canlendarComponent/CustomHeader";
 
-moment.locale("vn", {
-  week: {
-    dow: 1,
-    doy: 1,
-  },
-});
+
 const localizer = momentLocalizer(moment);
 
 

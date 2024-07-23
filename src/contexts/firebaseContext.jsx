@@ -57,6 +57,7 @@ const createUserWithEmail = (email, password) => {
 const logout = () => {
   localStorage.removeItem("accessToken")
   localStorage.removeItem("refreshToken")
+  localStorage.removeItem("linkAccount")
   window.location.reload()
 };
 
