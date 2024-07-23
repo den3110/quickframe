@@ -53,14 +53,14 @@ export const navigations = [
     path: "/manual-trade",
     type: "intLink",
   },
-  // {
-  //   name: "Referral",
-  //   icon: duotone.Introduction,
-  //   path: "/dashboard/referral",
-  // },
-  // {
-  //   name: "Vip Member",
-  //   icon: duotone.VipMember,
-  //   path: "/dashboard/account",
-  // },
+  {
+    name: "Referral",
+    icon: duotone.Introduction,
+    path: "/referral",
+  },
+  {
+    name: "Vip Member",
+    icon: duotone.VipMember,
+    path: "/vip-member",
+  },
 ];

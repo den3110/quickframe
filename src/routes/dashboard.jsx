@@ -20,6 +20,7 @@ import TopSignal from "pages/dashboard/signal-strategy/inbox";
 import TelegramChannelPage from "pages/dashboard/signal-strategy/sent";
 import StatPortfolio from "page-sections/portfolios/page-view/stat";
 import PortfolioSchedule from "page-sections/portfolios/page-view/schedule";
+import VipPage from "page-sections/vip-member";
 // ALL DASHBOARD PAGES
 const BudgetStrategy = Loadable(
   lazy(() => import("pages/dashboard/budget-strategy"))
@@ -64,8 +65,6 @@ export const DashboardRoutes = [
         path: "profile",
         element: <Profile />,
       },
-
-   
     ],
   },
   {
@@ -104,7 +103,7 @@ export const DashboardRoutes = [
             element: <PortfolioSchedule />,
           },
         ],
-      },          
+      },
     ],
   },
   {
@@ -120,11 +119,9 @@ export const DashboardRoutes = [
     ),
     children: [
       {
-        element: (
-          <BudgetStrategy/>
-        ),
-       path : ""
-      },          
+        element: <BudgetStrategy />,
+        path: "",
+      },
     ],
   },
   {
@@ -145,7 +142,7 @@ export const DashboardRoutes = [
             <Outlet />
           </SignalStrategyProvider>
         ),
-        children:[
+        children: [
           {
             path: "",
             element: <SignalStrategyList />,
@@ -163,7 +160,7 @@ export const DashboardRoutes = [
             element: <PortfolioDetail />,
           },
         ],
-      },          
+      },
     ],
   },
   {
@@ -181,18 +178,30 @@ export const DashboardRoutes = [
       {
         element: (
           <ManualTradeProvider>
-          <Outlet />
-        </ManualTradeProvider>
+            <Outlet />
+          </ManualTradeProvider>
         ),
         children: [
           {
             path: "",
             element: <ManualTradePage />,
           },
-        
         ],
-      },          
+      },
     ],
+  },
+  {
+    path: "vip-member",
+    element: (
+      <ProtectedRoute>
+        <CheckConnectExchange>
+          <DashboardLayout>
+            <Outlet />
+          </DashboardLayout>
+        </CheckConnectExchange>
+      </ProtectedRoute>
+    ),
+    children: [{path: "",  element: <VipPage /> }, {index: true, element: <VipPage />}],
   },
   {
     path: "manage-follower",
@@ -209,17 +218,16 @@ export const DashboardRoutes = [
       {
         element: (
           <ManageFollowerProvider>
-          <Outlet />
-        </ManageFollowerProvider>
+            <Outlet />
+          </ManageFollowerProvider>
         ),
         children: [
           {
             path: "",
             element: <ManageFollowerPage />,
           },
-        
         ],
-      },          
+      },
     ],
   },
 ];

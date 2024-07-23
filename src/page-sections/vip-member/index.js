@@ -1,17 +1,18 @@
 import React from 'react';
-import { Container, Box } from '@mui/material';
-import VIPInformation from './VIPInformation';
-import TabsComponent from './TabsComponent';
-import Commissions from './Commissions';
+import { Box, Container } from '@mui/material';
 
-function App() {
+import VIPInformation from './component/VipInformation';
+import TabsComponent from './component/TabsComponent';
+import Commissions from './component/Comission';
+
+function VipPage() {
   return (
-    <Container maxWidth="lg">
+    <Box >
       <VIPInformation />
       <TabsComponent />
       <Commissions />
-    </Container>
+    </Box>
   );
 }
 
-export default App;
+export default VipPage;
