@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Grid, TextField, Box, Checkbox } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -9,12 +9,18 @@ import { Link } from "components/link";
 import { H5, H6, Paragraph } from "components/typography";
 import { FlexBetween, FlexBox, FlexRowAlign } from "components/flexbox";
 import { authApi } from "api";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "contexts/AuthContext";
+import userApi from "api/user/userApi";
+import { constant } from "constant/constant";
 
 const LoginPageView = () => {
+  const {setAccessToken, setSelectedLinkAccount, setUser }= useContext(AuthContext)
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [siteId, setSiteId] = useState("");
+  const navigate= useNavigate()
 
   useEffect(() => {
     const loadConfig = async () => {
@@ -61,15 +67,32 @@ const LoginPageView = () => {
           if (response?.data?.ok === true) {
             localStorage.setItem("accessToken", response.data?.d.access_token);
             localStorage.setItem("refreshToken", response.data?.d.refresh_token);
-            window.location.href = window.location.origin;
+            // window.location.href = window.location.origin;
+            setAccessToken(response?.data?.d?.access_token)
+            const response1= await userApi.getUserLinkAccountList()
+            const response2= userApi.getUserProfile();
+            // console.log("response1", response1)
+            if(response2?.data?.ok=== true) {
+              setUser({...response.data?.d, avatar: constant.URL_AVATAR_URER + response?.data?.d?.photo_token})
+              // localStorage.setItem("linkAccount", response1?.data?.d?.[0]?._id)
+            }
+            if(response1?.data?.ok=== true) {
+              setSelectedLinkAccount(response1?.data?.d?.[0]?._id)
+              localStorage.setItem("linkAccount", response1?.data?.d?.[0]?._id)
+            }
+            navigate("/dashboard")
           } else {
             setErrorMessage(response?.data?.m);
           }
         } catch (error) {
-          console.log(error);
-          setErrorMessage(
-            "Failed to login. Please check your email, password, and site ID."
-          );
+          if(error.response?.status=== 402) {
+            navigate("/connect")
+          };
+          if(error.response?.status!== 402) {
+            setErrorMessage(
+              "Failed to login. Please check your email, password, and site ID."
+            );
+          }
         } finally {
           setIsLoading(false);
         }

@@ -16,7 +16,6 @@ import { FlexBox } from "components/flexbox";
 import { AvatarLoading } from "components/avatar-loading";
 import { H6, Paragraph, Small } from "components/typography";
 // CUSTOM DEFINED HOOK
-import useAuth from "hooks/useAuth";
 import useNavigate from "hooks/useNavigate";
 // CUSTOM UTILS METHOD
 import { isDark } from "util/constants";
@@ -47,12 +46,11 @@ const StyledSmall = styled(Paragraph)(({ theme }) => ({
 }));
 const ProfilePopover = () => {
   const theme = useTheme();
-  const { user } = useContext(AuthContext);
+  const { user, setSelectedLinkAccount, setIsLogout, setDataSelectedLinkAccount } = useContext(AuthContext);
   const { linked } = useContext(ConnectExchangeContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const anchorRef = useRef(null);
   const navigate = useNavigate();
-  const { logout } = useAuth();
   const { settings, saveSettings } = useContext(SettingsContext);
   const [open, setOpen] = useState(false);
   const [openDrawerListLinkAccount, setOpenDrawerListLinkAccount] =
@@ -68,6 +66,17 @@ const ProfilePopover = () => {
       ...settings,
       theme: value,
     });
+  };
+
+  const logout = () => {
+    localStorage.removeItem("accessToken")
+    localStorage.removeItem("refreshToken")
+    localStorage.removeItem("linkAccount")
+    setIsLogout(true)
+    navigate("/login")
+    setSelectedLinkAccount(undefined)
+    setDataSelectedLinkAccount(undefined)
+    localStorage.removeItem("linkAccount")
   };
 
   return (

@@ -49,7 +49,7 @@ const CopytradeHistory = () => {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState();
-  const {walletMode }= useContext(SettingsContext)
+  const { walletMode } = useContext(SettingsContext);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
   };
@@ -77,14 +77,18 @@ const CopytradeHistory = () => {
   useEffect(() => {
     if (isConnected && socket) {
       socket.on("COPY_TRADE_HISTORY", (dataSocket) => {
-        const dataTemp= data
-        const findIndex= dataTemp?.findIndex(item=> item?.userId === dataSocket?.userId && item?._id === dataSocket?._id && item?.sessionId === dataSocket?.sessionId)
-        if(findIndex !== -1) {
-            dataTemp[findIndex]= dataSocket
-            setData(dataTemp)
-        }
-        else {
-            setData(prev=> ([dataSocket, ...prev]))
+        const dataTemp = data;
+        const findIndex = dataTemp?.findIndex(
+          (item) =>
+            item?.userId === dataSocket?.userId &&
+            item?._id === dataSocket?._id &&
+            item?.sessionId === dataSocket?.sessionId
+        );
+        if (findIndex !== -1) {
+          dataTemp[findIndex] = dataSocket;
+          setData(dataTemp);
+        } else {
+          setData((prev) => [dataSocket, ...prev]);
         }
       });
     }
@@ -102,7 +106,9 @@ const CopytradeHistory = () => {
                     <StyledTableCell>Thời gian</StyledTableCell>
                     <StyledTableCell>Số người theo</StyledTableCell>
                     <StyledTableCell>Số lệnh theo (LIVE/DEMO)</StyledTableCell>
-                    <StyledTableCell>KLGD người theo (LIVE/DEMO)</StyledTableCell>
+                    <StyledTableCell>
+                      KLGD người theo (LIVE/DEMO)
+                    </StyledTableCell>
                     <StyledTableCell>Loại lệnh</StyledTableCell>
                   </TableRow>
                 </TableHead>
@@ -121,32 +127,95 @@ const CopytradeHistory = () => {
                         flexWrap: "wrap",
                       }}
                     >
-                      <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
-                        <Typography variant="body2" color="textSecondary">
+                      <StyledTableCell
+                        sx={{
+                          width: downLg ? "100%" : "",
+                          display: downLg ? "flex" : "",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        {downLg && (
+                          <Typography variant="body2" color="textSecondary">
+                            Created at
+                          </Typography>
+                        )}
+                        <Typography variant="body2">
                           {moment(item.createdAt).format(
                             "DD-MM-YYYY, HH:mm:ss"
                           )}
                         </Typography>
                       </StyledTableCell>
-                      <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
+                      <StyledTableCell
+                        sx={{
+                          width: downLg ? "100%" : "",
+                          display: downLg ? "flex" : "",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        {downLg && (
+                          <Typography variant="body2" color="textSecondary">
+                            Số người theo
+                          </Typography>
+                        )}
                         <Typography variant="body2">
-                            {item?.follower_count}
+                          {item?.follower_count}
                         </Typography>
                       </StyledTableCell>
-                      <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
+                      <StyledTableCell
+                        sx={{
+                          width: downLg ? "100%" : "",
+                          display: downLg ? "flex" : "",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      > 
+                        {downLg && (
+                          <Typography variant="body2" color="textSecondary">
+                            Số lệnh theo (LIVE / DEMO)
+                          </Typography>
+                        )}
                         <Typography variant="body2">
-                            {item?.live_order_count }/{item?.demo_order_count }
+                          {item?.live_order_count}/{item?.demo_order_count}
                         </Typography>
                       </StyledTableCell>
-                      <StyledTableCell sx={{ width: downLg ? "50%" : "" }}>
+                      <StyledTableCell
+                        sx={{
+                          width: downLg ? "100%" : "",
+                          display: downLg ? "flex" : "",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        {downLg && (
+                          <Typography variant="body2" color="textSecondary">
+                            KLGD người theo (LIVE / DEMO)
+                          </Typography>
+                        )}
                         <Typography variant="body2">
-                        {item?.live_volume }/{item?.demo_volume }
-
+                          {item?.live_volume}/{item?.demo_volume}
                         </Typography>
                       </StyledTableCell>
-                      <StyledTableCell sx={{ width: downLg ? "100%" : "", display: downLg ? "flex" : "", justifyContent: "center", alignItems: "center" }}>
+                      <StyledTableCell
+                        sx={{
+                          width: downLg ? "100%" : "",
+                          display: downLg ? "flex" : "",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        {downLg && (
+                          <Typography variant="body2" color="textSecondary">
+                            Loại lệnh
+                          </Typography>
+                        )}
                         <Typography variant="body2">
-                            {item?.betType === "UP" ? <TrendingUp color={"success"} /> : <TrendingDown color={"error"} />}
+                          {item?.betType === "UP" ? (
+                            <TrendingUp color={"success"} />
+                          ) : (
+                            <TrendingDown color={"error"} />
+                          )}
                         </Typography>
                       </StyledTableCell>
                     </TableRow>

@@ -148,6 +148,15 @@ const TelegramChannelSignalStrategy = () => {
 
   useEffect(() => {
     if (isConnected && socket) {
+      socket.emit("LINK_ACCOUNT_SUBCRIBE", selectedLinkAccount);
+      return ()=> {
+        socket.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount)
+      }
+    }
+  }, [isConnected, socket, selectedLinkAccount]);
+
+  useEffect(() => {
+    if (isConnected && socket) {
       socket.on("RELOAD_SPOT_BALANCE", (data) => {
         setChange(prev=> !prev)
       });

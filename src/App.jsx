@@ -17,13 +17,13 @@ import { createCustomTheme } from "./theme";
 import useSettings from "hooks/useSettings";
 // I18N FILE
 import "./i18n";
-import { AuthProvider } from "contexts/AuthContext";
+import AuthContext, { AuthProvider } from "contexts/AuthContext";
 import Toast from "components/toast/toast";
 import { SpotBalanceProvider } from "contexts/SpotBalanceContext";
 import JwtProvider from "contexts/jwtContext";
 import GlobalProvider from "contexts/GlobalContext";
 import SocketProvider from "contexts/SocketContext";
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { authApi } from "api";
 
@@ -32,11 +32,28 @@ const App = () => {
   const theme = createCustomTheme(settings);
   // ROUTER CREATE
   const router = createBrowserRouter(routes());
-  const [accessToken, setAccessToken] = useState(getInitialToken());
+  const {accessToken, setAccessToken} = useContext(AuthContext);
+
+  const refreshToken = useCallback(async () => {
+    try {
+      const response = await authApi.refreshToken();
+      if (response?.data?.ok === true) {
+        const result = response.data;
+        setAccessToken(result?.access_token);
+        localStorage.setItem("accessToken", result?.access_token);
+        localStorage.setItem("refreshToken", result?.refresh_token);
+      }
+      // Optionally save the new token to localStorage or other storage
+    } catch (error) {
+      console.error("Failed to refresh token", error);
+      // Handle refresh token error, e.g., logout user
+    }
+  }, [setAccessToken]);
+
   useEffect(() => {
     if (accessToken) {
       const decodedToken = jwtDecode(accessToken);
-      const expTime = decodedToken.exp * 1000; 
+      const expTime = decodedToken.exp * 1000;
       const currentTime = Date.now();
       const timeLeft = expTime - currentTime;
       const refreshTime = timeLeft - 30000; // 30 seconds before exp
@@ -51,54 +68,30 @@ const App = () => {
         refreshToken();
       }
     }
-  }, [accessToken]);
+  }, [accessToken, refreshToken]);
 
-  const refreshToken = async () => {
-    try {
-      const response = await authApi.refreshToken()
-      if(response?.data?.ok=== true) {
-        const result = response.data;
-        setAccessToken(result?.access_token);
-        localStorage.setItem("accessToken", result?.access_token)
-        localStorage.setItem("refreshToken", result?.refresh_token)
-
-      }
-      // Optionally save the new token to localStorage or other storage
-    } catch (error) {
-      console.error("Failed to refresh token", error);
-      // Handle refresh token error, e.g., logout user
-    }
-  };
+ 
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
-          <AuthProvider>
-            <JwtProvider>
-              <SpotBalanceProvider>
-                <GlobalProvider>
-                  <SocketProvider>
-                    <RTL>
-                      <Toast />
-                      <CssBaseline />
-                      <RouterProvider router={router} />
-                    </RTL>
-                  </SocketProvider>
-                </GlobalProvider>
-              </SpotBalanceProvider>
-            </JwtProvider>
-          </AuthProvider>
+          <JwtProvider>
+            <SpotBalanceProvider>
+              <GlobalProvider>
+                <SocketProvider>
+                  <RTL>
+                    <Toast />
+                    <CssBaseline />
+                    <RouterProvider router={router} />
+                  </RTL>
+                </SocketProvider>
+              </GlobalProvider>
+            </SpotBalanceProvider>
+          </JwtProvider>
         </ThemeProvider>
       </StyledEngineProvider>
     </LocalizationProvider>
   );
 };
 export default App;
-
-
-
-const getInitialToken = () => {
-  
-  return localStorage.getItem("accessToken");
-};

@@ -25,13 +25,11 @@ const SocketProvider = ({ children }) => {
 
       socketRef.current.on("connect", () => {
         setIsConnected(true);
-        console.log("Socket connected");
         // socketRef.current.emit("CURRENT_SESSION_SUBCRIBE", {});
       });
 
       socketRef.current.on("disconnect", () => {
         setIsConnected(false);
-        console.log("Socket disconnected");
       });
     } catch (error) {
       console.log(error);

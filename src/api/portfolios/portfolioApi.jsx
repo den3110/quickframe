@@ -40,6 +40,18 @@ const portfolioApi = {
   postUserBotLinkAccount(id, data) {
     const url= `/users/bot/link-account/` + id 
     return axiosClient.post(url, data)
+  },
+  userScheduleList(data) {
+    const url= `/users/schedule/list`
+    return axiosClient.get(url, data)
+  },
+  userScheduleCreate(data) {
+    const url= `/users/schedule/create`
+    return axiosClient.post(url, data)
+  },
+  userScheduleUpdate(id, data) {
+    const url= `/users/schedule/update/` + id
+    return axiosClient.post(url, data)
   }
 };  
 

@@ -13,10 +13,13 @@ import "nprogress/nprogress.css";
 import "react-quill/dist/quill.snow.css";
 import "simplebar-react/dist/simplebar.min.css";
 import "pure-react-carousel/dist/react-carousel.es.css";
+import { AuthProvider } from "contexts/AuthContext";
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <SettingsProvider>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </SettingsProvider>
 );

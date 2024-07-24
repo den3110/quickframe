@@ -1,9 +1,6 @@
 import {
   Box,
-  Avatar,
   styled,
-  Tooltip,
-  Checkbox,
   IconButton,
   useMediaQuery,
   Typography,

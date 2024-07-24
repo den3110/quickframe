@@ -90,7 +90,7 @@ const NewPlanDrawer = ({
   const [privateMode, setPrivateMode] = useState(false);
   const [reserveSignal, setReserveSignal] = useState(false);
   const [userLinkAccountListState, setUserLinkAccountListState] = useState([]);
-  const [loadingSubmit, setLoadingSubmit]= useState()
+  const [loadingSubmit, setLoadingSubmit] = useState();
   const [featureType, setFeatureType] = useState(
     SignalFeatureTypes.SINGLE_METHOD
   ); // signal feature
@@ -114,7 +114,7 @@ const NewPlanDrawer = ({
   const [telegramToken, setTelegramToken] = useState("");
   const [telegramChatId, setTelegramChatId] = useState("");
   const [telegramUrl, setTelegramUrl] = useState("");
-  const [accountType, setAccountType]= useState("DEMO")
+  const [accountType, setAccountType] = useState("DEMO");
   const [winningTotalReach, setWinningTotalReach] = useState(0);
   const [loseTotalReach, setLoseTotalReach] = useState(0);
   const [winningContinue, setWinningContinue] = useState(0);
@@ -175,7 +175,7 @@ const NewPlanDrawer = ({
 
   const handleConfirmAndSave = async () => {
     try {
-      setLoadingSubmit(true)
+      setLoadingSubmit(true);
       let response;
       let data;
       // switch(selectedTab)
@@ -385,7 +385,6 @@ const NewPlanDrawer = ({
           onClose();
           return;
         } else if (isEditSingle === true) {
-          console.log("1");
           // setDataProps
           setData({ ...selectedPlan, ...data });
         } else if (isEdit === true) {
@@ -394,6 +393,7 @@ const NewPlanDrawer = ({
             (item) => item?._id === selectedPlan?._id
           );
           dataTemp[indexData] = data;
+          console.log(indexData);
           setData(dataTemp);
         } else {
           setChange((prev) => !prev);
@@ -411,9 +411,8 @@ const NewPlanDrawer = ({
     } catch (error) {
       console.log(error);
       showToast(error?.response?.data?.m);
-    }
-    finally {
-      setLoadingSubmit(false)
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
@@ -555,7 +554,7 @@ const NewPlanDrawer = ({
       setTelegramToken(selectedPlan?.telegram_token);
       setTelegramChatId(selectedPlan?.telegram_chatId);
       setTelegramUrl(selectedPlan?.telegram_url);
-      setAccountType(selectedPlan?.accountType)
+      setAccountType(selectedPlan?.accountType);
     } else {
       setIdPlan();
       setPlanName("");
@@ -593,7 +592,7 @@ const NewPlanDrawer = ({
       setTelegramChatId("");
       setTelegramToken("");
       setTelegramUrl("");
-      setAccountType("DEMO")
+      setAccountType("DEMO");
     }
   }, [
     isEdit,
@@ -855,8 +854,14 @@ const NewPlanDrawer = ({
                   </Box>
                 }
               </Box>
-              <Box sx={{ width: "100%" }} mt={2} display={"flex"} alignItems={'center'} gap={1}>
-                <Box className='akaskwas' flex={1}>
+              <Box
+                sx={{ width: "100%" }}
+                mt={2}
+                display={"flex"}
+                alignItems={"center"}
+                gap={1}
+              >
+                <Box className="akaskwas" flex={1}>
                   <Typography variant="subtitle1">
                     Tài khoản liên kết
                   </Typography>
@@ -932,10 +937,8 @@ const NewPlanDrawer = ({
                     </Select>
                   </FormControl>
                 </Box>
-                <Box className='akaskwas' flex={1}>
-                  <Typography variant="subtitle1">
-                    Loại tài khoản
-                  </Typography>
+                <Box className="akaskwas" flex={1}>
+                  <Typography variant="subtitle1">Loại tài khoản</Typography>
                   <FormControl variant="outlined" fullWidth margin="normal">
                     <Select
                       value={accountType}
@@ -944,9 +947,9 @@ const NewPlanDrawer = ({
                       }}
                       size="medium"
                     >
-                     <MenuItem value="DEMO">DEMO</MenuItem>
-                     <MenuItem value="LIVE">LIVE</MenuItem>
-                    </Select> 
+                      <MenuItem value="DEMO">DEMO</MenuItem>
+                      <MenuItem value="LIVE">LIVE</MenuItem>
+                    </Select>
                   </FormControl>
                 </Box>
               </Box>
@@ -1257,20 +1260,28 @@ const NewPlanDrawer = ({
                                 gap: 0.5,
                               }}
                             >
-                              {selected.map((value) => (
-                                <Chip
-                                  sx={{ height: allowSelectedTab ? "" : 50 }}
-                                  key={value}
-                                  label={
-                                    <Box>
+                              {console.log(selected)}
+                              {selected?.length > 0 &&
+                                selected.map((value) => (
+                                  <Chip
+                                    sx={{
+                                      // height: allowSelectedTab ? "" : 50,
+                                      display:
+                                        dataSignalStrategyTelegramSignal.find(
+                                          (item) => item._id === value
+                                        )
+                                          ? "aa"
+                                          : "none",
+                                    }}
+                                    key={value}
+                                    label={
                                       <Box>
-                                        {
-                                          dataSignalStrategyTelegramSignal.find(
+                                        <Box>
+                                          {dataSignalStrategyTelegramSignal.find(
                                             (item) => item._id === value
-                                          )?.name
-                                        }
-                                      </Box>
-                                      {!allowSelectedTab && (
+                                          )?.name || ""}
+                                        </Box>
+                                        {/* {!allowSelectedTab && (
                                         <Box fontSize={12}>
                                           {
                                             dataSignalStrategyTelegramSignal.find(
@@ -1278,11 +1289,11 @@ const NewPlanDrawer = ({
                                             )?.url
                                           }
                                         </Box>
-                                      )}
-                                    </Box>
-                                  }
-                                />
-                              ))}
+                                      )} */}
+                                      </Box>
+                                    }
+                                  />
+                                ))}
                             </Box>
                           )}
                         >

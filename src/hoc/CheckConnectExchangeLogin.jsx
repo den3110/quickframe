@@ -6,7 +6,7 @@ import userApi from "api/user/userApi";
 import { createContext } from "react";
 
 export const ConnectExchangeContext = createContext();
-const CheckConnectExchange = ({ children }) => {
+const CheckConnectExchangeLogin = ({ children }) => {
   const location = useLocation();
   const {
     user,
@@ -16,7 +16,7 @@ const CheckConnectExchange = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [linked, setLinked] = useState();
   const [statusCode, setStatusCode] = useState();
-  useEffect(() => { 
+  useEffect(() => {
     const checkUserLink = async () => {
       try {
         const response = await userApi.getUserExchangeLinkAccount(
@@ -44,66 +44,60 @@ const CheckConnectExchange = ({ children }) => {
     }
   }, [user, selectedLinkAccount]);
 
-  // if (!selectedLinkAccount) {
-  //   return <Navigate to="/login" />;
-  // }
-  if (parseInt(statusCode) === 401) {
-    return <Navigate to="/login" />;
-  }
-  if (location.state?.is_add_account === true) {
-    return (
-      <ConnectExchangeContext.Provider value={{ linked }}>
-        {children}
-      </ConnectExchangeContext.Provider>
-    );
-  }
-
+  
   if (authLoading || loading) {
     return <LoadingScreen />;
   }
-  
-  if (!user) {
-    return <Navigate to="/login" />;
+  else if (parseInt(statusCode) === 402) {
+    return <Navigate to={"/connect"} />;
   }
  
-  if (location.pathname === "/connect" && parseInt(statusCode) === 402) {
-    return (
-      <ConnectExchangeContext.Provider value={{ linked }}>
-        {children}
-      </ConnectExchangeContext.Provider>
-    );
+  else if (!selectedLinkAccount) {
+    return <>{children}</>;
   }
-  if (
+
+  else if (!user) {
+    return <>{children}</>;
+  }
+  else if (parseInt(statusCode) === 401) {
+    return <>{children}</>;
+  }
+ 
+  else if (location.pathname === "/connect" && parseInt(statusCode) === 402) {
+    return <Navigate to={"/connect"} />;
+  }
+  else if (
+    parseInt(statusCode) === 402
+  ) {
+    return <Navigate to="/connect" />;
+  }
+  else if (
     location.pathname.startsWith("/dashboard") &&
     parseInt(statusCode) === 402
   ) {
     return <Navigate to="/connect" />;
   }
-  if (location.pathname === "/" && parseInt(statusCode) === 402) {
+  else if (location.pathname === "/" && parseInt(statusCode) === 402) {
     return <Navigate to="/connect" />;
   }
-  if (location.pathname === "/" && parseInt(statusCode) === 401) {
-    return <Navigate to="/login" />;
+  else if (location.pathname === "/" && parseInt(statusCode) === 401) {
+    return <>{children}</>;
   }
-  if (location.pathname === "/dashboard" && parseInt(statusCode) === 401) {
-    return <Navigate to="/login" />;
+  else if (location.pathname === "/dashboard" && parseInt(statusCode) === 401) {
+    return <>{children}</>;
   }
-  if (location.state?.is_add_account === true) {
+  else if (location.state?.is_add_account === true) {
     return (
       <ConnectExchangeContext.Provider value={{ linked }}>
         {children}
       </ConnectExchangeContext.Provider>
     );
   }
-  if (location.pathname === "/connect" && linked?.ok === true) {
+  else if (location.pathname === "/connect" && linked?.ok === true) {
     return <Navigate to="/" />;
   } else {
-    return (
-      <ConnectExchangeContext.Provider value={{ linked }}>
-        {children}
-      </ConnectExchangeContext.Provider>
-    );
+    return <Navigate to="/" />;
   }
 };
 
-export default CheckConnectExchange;
+export default CheckConnectExchangeLogin;

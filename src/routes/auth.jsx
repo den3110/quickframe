@@ -1,6 +1,12 @@
 import { lazy } from "react";
 import Loadable from "./Loadable";
 import { GuestGuard } from "components/auth";
+import { Outlet } from "react-router-dom";
+import ProtectedRoute from "hoc/ProtectedRoute";
+import CheckConnectExchange from "hoc/CheckConnectExchange";
+import DashboardLayout from "layouts/dashboard/DashboardLayout";
+import ProtectedRouteLogin from "hoc/ProtectedRouteLogin";
+import CheckConnectExchangeLogin from "hoc/CheckConnectExchangeLogin";
 
 const Login = Loadable(lazy(() => import("pages/sessions/login")));
 const Register = Loadable(lazy(() => import("pages/sessions/register")));
@@ -9,22 +15,16 @@ const ForgetPassword = Loadable(
   lazy(() => import("pages/sessions/forget-password"))
 );
 
-const LoginDemoWithAuth0 = Loadable(
-  lazy(() => import("pages/auth-demo/auth0/login"))
-);
-
-const LoginDemoWithAmplify = Loadable(
-  lazy(() => import("pages/auth-demo/amplify/login"))
-);
-const RegisterDemoWithAmplify = Loadable(
-  lazy(() => import("pages/auth-demo/amplify/register"))
-);
-const VerifyDemoWithAmplify = Loadable(
-  lazy(() => import("pages/auth-demo/amplify/verify"))
-);
 export const AuthRoutes = [
   {
-    element: <GuestGuard />,
+    // element: <GuestGuard />,
+    element: (
+      <ProtectedRouteLogin>
+        <CheckConnectExchangeLogin>
+          <Outlet />
+        </CheckConnectExchangeLogin>
+      </ProtectedRouteLogin>
+    ),
     children: [
       {
         path: "login",
@@ -43,21 +43,5 @@ export const AuthRoutes = [
         element: <VerifyCode />,
       },
     ],
-  },
-  {
-    path: "auth0/login",
-    element: <LoginDemoWithAuth0 />,
-  },
-  {
-    path: "amplify/login",
-    element: <LoginDemoWithAmplify />,
-  },
-  {
-    path: "amplify/register",
-    element: <RegisterDemoWithAmplify />,
-  },
-  {
-    path: "amplify/verify",
-    element: <VerifyDemoWithAmplify />,
   },
 ];

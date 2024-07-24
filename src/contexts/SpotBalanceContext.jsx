@@ -22,7 +22,7 @@ export const SpotBalanceProvider = ({ children }) => {
 
   useEffect(() => {
     getSpotBalanceUser();
-  }, [change, selectedLinkAccount]);
+  }, [change, selectedLinkAccount, getSpotBalanceUser]);
 
   return (
     <SpotBalanceContext.Provider value={{ spotBalance, change, setChange, setSpotBalance }}>

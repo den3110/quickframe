@@ -56,6 +56,7 @@ const NewBotAIStringMethod = ({
 
   const handleSubmit = async () => {
     try {
+      setReadOnly(true)
       const data = {
         name,
         sources: {
@@ -91,6 +92,9 @@ const NewBotAIStringMethod = ({
       }
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
+    }
+    finally {
+      setReadOnly(false)
     }
   };
 

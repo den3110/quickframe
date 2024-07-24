@@ -20,40 +20,106 @@ import {
   Chip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
+import portfolioApi from "api/portfolios/portfolioApi";
+import moment from "moment-timezone";
 
-export default function NewSchedule({ open, onClose, isEdit }) {
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+export default function NewSchedule({
+  open,
+  onClose,
+  isEdit,
+  dataProps,
+  setDataProps,
+  selectedSchedule,
+  setIsEdit,
+}) {
+  const [startTime, setStartTime] = useState(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+  });
+
+  const [endTime, setEndTime] = useState(() => {
+    const now = new Date();
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      0
+    );
+  });
   const [packages, setPackages] = useState([]);
   const [scheduleName, setScheduleName] = useState("");
-  const [disableEndTime, setDisableEndTime] = useState(false); // Thêm trạng thái disable
+  const [disableEndTime, setDisableEndTime] = useState(false);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
-  const [dataSignalStrategy, setDataSignalStrategy] = useState([]);
-  const [firstDataSignalStrategy, setFirstDataSignalStrategy] = useState();
+  const [dataBotList, setDataBotList] = useState([]);
+  const [firstBot, setFirstBot] = useState();
+  const [loading, setLoading] = useState();
+  const handlePackageChange = (event) => {
+    setPackages(event.target.value);
+  };
 
+  const handleClose = () => {
+    onClose();
+    setIsEdit(false);
+  };
+
+  const isButtonDisabled =
+    !scheduleName || packages.length === 0 || loading === true;
   const handleAdd = async () => {
     try {
-      showToast("Thêm cấu hình thành công", "success");
-      onClose();
+      setLoading(true);
+      const startTimeGMT = moment.tz(startTime, "GMT").format("HH:mm");
+      const endTimeGMT = disableEndTime
+        ? null
+        : moment.tz(endTime, "GMT").format("HH:mm");
+
+      const payload = {
+        name: scheduleName,
+        no_stop_enabled: disableEndTime,
+        start_time: startTimeGMT,
+        stop_time: endTimeGMT,
+        botIds: packages,
+      };
+
+      if (isEdit === true) {
+        await portfolioApi.userScheduleUpdate(selectedSchedule?._id, payload);
+        const dataTemp= dataProps
+        const findIndex= dataProps?.findIndex(item=> item?._id === selectedSchedule?._id)
+        if(findIndex !== -1) {
+          dataTemp[findIndex]= payload
+          setDataProps(dataTemp)
+        }
+        // setDataProps([payload, ...dataProps]);
+        showToast("Sửa cấu hình thành công", "success");
+      } else if (isEdit !== true) {
+        await portfolioApi.userScheduleCreate(payload);
+        setDataProps([payload, ...dataProps]);
+        showToast("Thêm cấu hình thành công", "success");
+      }
+
+      handleClose();
       setStartTime(new Date());
       setEndTime(new Date());
       setPackages([]);
       setScheduleName("");
+      setDisableEndTime(false)
     } catch (error) {
-      // Handle the error appropriately
+      showToast(error.response?.data?.message || "Đã xảy ra lỗi", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await signalStrategyApi.userBudgetSignalList();
+        const response = await portfolioApi.userBotList();
         if (response?.data?.ok === true) {
-          setDataSignalStrategy(response?.data?.d);
-          setFirstDataSignalStrategy(response?.data?.d?.[0]?._id);
+          setDataBotList(response?.data?.d);
+          setFirstBot(response?.data?.d?.[0]?._id);
           setPackages([response?.data?.d?.[0]?._id]);
         } else if (response?.data?.ok === false) {
           showToast(response?.data?.m);
@@ -64,14 +130,70 @@ export default function NewSchedule({ open, onClose, isEdit }) {
     })();
   }, []);
 
-  const handlePackageChange = (event) => {
-    setPackages(event.target.value);
-  };
-
-  const isButtonDisabled = !scheduleName || packages.length === 0;
+  useEffect(() => {
+    const now = new Date();
+    if (isEdit === true) {
+      const [hoursStart, minutesStart] = selectedSchedule?.start_time
+        .split(":")
+        .map(Number);
+      const [hoursStop, minutesStop] = selectedSchedule?.stop_time
+        .split(":")
+        .map(Number);
+      const startDate = new Date(
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hoursStart,
+          minutesStart
+        ).getTime() +
+          7 * 60 * 60 * 1000
+      );
+      const endDate = new Date(
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hoursStop,
+          minutesStop
+        ).getTime() +
+          7 * 60 * 60 * 1000
+      );
+      if (startDate.getDate() !== now.getDate()) {
+        startDate.setDate(now.getDate());
+      }
+      
+      if (endDate.getDate() !== now.getDate()) {
+        endDate.setDate(now.getDate());
+      }
+      setStartTime(startDate);
+      setEndTime(endDate)
+      setScheduleName(selectedSchedule?.name)
+      setPackages(selectedSchedule?.botIds)
+      setDisableEndTime(selectedSchedule?.no_stop_enabled)
+    }
+    else {
+      setStartTime( new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0));
+      setEndTime( new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        23,
+        59,
+        0
+      ))
+      setScheduleName("")
+      setPackages([firstBot])
+      setDisableEndTime(false)
+    }
+  }, [isEdit, selectedSchedule, firstBot]);
 
   return (
-    <Drawer anchor={downLg ? "bottom" : "right"} open={open} onClose={onClose}>
+    <Drawer
+      anchor={downLg ? "bottom" : "right"}
+      open={open}
+      onClose={handleClose}
+    >
       <Box
         sx={{
           width: downLg ? "100%" : 850,
@@ -81,7 +203,6 @@ export default function NewSchedule({ open, onClose, isEdit }) {
         display="flex"
         flexDirection="column"
         justifyContent="space-between"
-        className="akslwkawa"
       >
         <Box>
           <Box
@@ -90,12 +211,12 @@ export default function NewSchedule({ open, onClose, isEdit }) {
             alignItems="center"
           >
             <Typography variant="h6">Thiết lập hẹn giờ</Typography>
-            <IconButton onClick={onClose}>
+            <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
           </Box>
           <Divider sx={{ marginY: 2 }} />
-          <Box className="aslkwawr">
+          <Box>
             <TextField
               label="Tên hẹn giờ"
               variant="outlined"
@@ -140,7 +261,7 @@ export default function NewSchedule({ open, onClose, isEdit }) {
                       renderInput={(params) => (
                         <TextField {...params} fullWidth />
                       )}
-                      disabled={disableEndTime} // Disable nếu cần
+                      disabled={disableEndTime}
                       fullWidth
                     />
                   </Box>
@@ -164,15 +285,13 @@ export default function NewSchedule({ open, onClose, isEdit }) {
                   >
                     {selected.map((value) => (
                       <Chip
-                        sx={{ }}
                         key={value}
                         label={
                           <Box>
                             <Box>
                               {
-                                dataSignalStrategy.find(
-                                  (item) => item._id === value
-                                )?.name
+                                dataBotList.find((item) => item._id === value)
+                                  ?.name
                               }
                             </Box>
                           </Box>
@@ -182,9 +301,9 @@ export default function NewSchedule({ open, onClose, isEdit }) {
                   </Box>
                 )}
               >
-                {dataSignalStrategy?.map((item, key) => (
-                  <MenuItem key={key} value={item?._id}>
-                    <Checkbox checked={packages.indexOf(item?._id) > -1} />
+                {dataBotList.map((item, key) => (
+                  <MenuItem key={key} value={item._id}>
+                    <Checkbox checked={packages.indexOf(item._id) > -1} />
                     <ListItemText primary={item.name} />
                   </MenuItem>
                 ))}

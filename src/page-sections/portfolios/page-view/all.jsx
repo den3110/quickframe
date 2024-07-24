@@ -100,7 +100,6 @@ const PortfoliosList = () => {
     take_profit_target: 0,
     stop_loss_target: 0,
   });
-  console.log(dailyTarget);
   const canvasRef = useRef();
   const { setChange } = useContext(GlobalContext);
   const { selectedLinkAccount, userLinkAccountList } = useContext(AuthContext);
@@ -134,18 +133,25 @@ const PortfoliosList = () => {
 
   const handleChangeShowAllLinkAccountId = (e) => {
     setShowAllLinkAccountId(e.target.checked);
+    if (e.target.checked === true) {
+      setDataState(data);
+    } else {
+      setDataState(
+        data?.filter((item) => item?.linkAccountId === selectedLinkAccount)
+      );
+    }
   };
 
-  const handleDuplicateOpen = () => {
-    setDuplicateOpen(true);
-  };
+  // const handleDuplicateOpen = () => {
+  //   setDuplicateOpen(true);
+  // };
 
   const handleSharePlanClose = () => {
     setSharePlanOpen(false);
   };
-  const handleSharePlanOpen = () => {
-    setSharePlanOpen(true);
-  };
+  // const handleSharePlanOpen = () => {
+  //   setSharePlanOpen(true);
+  // };
 
   const handleToggleAllRows = (event) => {
     const checked = event.target.checked;
@@ -454,14 +460,18 @@ const PortfoliosList = () => {
   }, [walletMode, selectedLinkAccount]);
 
   useEffect(() => {
-    if (showAllLinkAccountId === true) {
-      setDataState(data);
-    } else {
-      setDataState(
-        data?.filter((item) => item?.linkAccountId === selectedLinkAccount)
-      );
-    }
-  }, [data, selectedLinkAccount, showAllLinkAccountId]);
+    setDataState(data);
+  }, [data]);
+
+  // useEffect(() => {
+  //   if (showAllLinkAccountId === true) {
+  //     setDataState(data);
+  //   } else {
+  //     setDataState(
+  //       data?.filter((item) => item?.linkAccountId === selectedLinkAccount)
+  //     );
+  //   }
+  // }, [data, selectedLinkAccount, showAllLinkAccountId]);
 
   return (
     <Layout>
@@ -508,8 +518,11 @@ const PortfoliosList = () => {
                       endIcon={<SettingIcon width={16} />}
                       onClick={handleOpenSetDailyGoal}
                     >
-                      {dailyTarget?.stop_loss_target === 0 && dailyTarget?.take_profit_target === 0 && "Mục tiêu ngày"}
-                      {(dailyTarget?.stop_loss_target !== 0 || dailyTarget?.take_profit_target !== 0) && (
+                      {dailyTarget?.stop_loss_target === 0 &&
+                        dailyTarget?.take_profit_target === 0 &&
+                        "Mục tiêu ngày"}
+                      {(dailyTarget?.stop_loss_target !== 0 ||
+                        dailyTarget?.take_profit_target !== 0) && (
                         <Box display={"flex"} alignItems={"center"} mr={0.5}>
                           <Typography
                             color="success.main"
@@ -524,7 +537,9 @@ const PortfoliosList = () => {
                             fontSize={12}
                             fontWeight={600}
                           >
-                            {formatCurrency(dailyTarget?.stop_loss_target)?.replace("+", "-")}
+                            {formatCurrency(
+                              dailyTarget?.stop_loss_target
+                            )?.replace("+", "-")}
                           </Typography>
                         </Box>
                       )}
@@ -532,21 +547,79 @@ const PortfoliosList = () => {
                   </Box>
                 )}
               </Box>
-              <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "flex"}>
-                {!downLg && (
-                  <Box>
-                    <FormControlLabel
-                      label="Show all account"
-                      control={
-                        <Checkbox
-                          checked={showAllLinkAccountId}
-                          onChange={handleChangeShowAllLinkAccountId}
-                        />
-                      }
-                    />
-                  </Box>
-                )}
-                {!downLg && (
+              {loading === false && (
+                <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "flex"}>
+                  {!downLg && (
+                    <Box>
+                      <FormControlLabel
+                        label="Show all account"
+                        control={
+                          <Checkbox
+                            checked={showAllLinkAccountId}
+                            onChange={handleChangeShowAllLinkAccountId}
+                          />
+                        }
+                      />
+                    </Box>
+                  )}
+                  {!downLg && (
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        mr: 2,
+                        "& .MuiButton-endIcon": {
+                          margin: downLg ? 0 : "",
+                        },
+                      }}
+                      size={downLg ? "large" : "medium"}
+                      fullWidth={downLg ? true : false}
+                      endIcon={<SettingIcon />}
+                      onClick={handleOpenSetDailyGoal}
+                    >
+                      {dailyTarget?.stop_loss_target === 0 &&
+                        dailyTarget?.take_profit_target === 0 &&
+                        "Mục tiêu ngày"}
+                      {(dailyTarget?.stop_loss_target !== 0 ||
+                        dailyTarget?.take_profit_target !== 0) && (
+                        <>
+                          <Typography
+                            color="success.main"
+                            fontSize={14}
+                            fontWeight={600}
+                          >
+                            {formatCurrency(dailyTarget?.take_profit_target)}
+                          </Typography>
+                          &nbsp;/&nbsp;
+                          <Typography
+                            color="error.main"
+                            fontSize={14}
+                            fontWeight={600}
+                          >
+                            {formatCurrency(
+                              dailyTarget?.stop_loss_target
+                            )?.replace("+", "-")}
+                          </Typography>
+                        </>
+                      )}
+                    </Button>
+                  )}
+                  {downLg && (
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        mr: 2,
+                        "& .MuiButton-endIcon": {
+                          margin: downLg ? 0 : "",
+                        },
+                      }}
+                      size={downLg ? "large" : "medium"}
+                      fullWidth={downLg ? true : false}
+                      endIcon={<FilterIcon />}
+                      // onClick={handleDialogOpen}
+                    >
+                      {downLg ? "" : "Filter"}
+                    </Button>
+                  )}
                   <Button
                     variant="outlined"
                     sx={{
@@ -557,113 +630,59 @@ const PortfoliosList = () => {
                     }}
                     size={downLg ? "large" : "medium"}
                     fullWidth={downLg ? true : false}
-                    endIcon={<SettingIcon />}
-                    onClick={handleOpenSetDailyGoal}
-                  >
-                    {dailyTarget?.stop_loss_target === 0 &&
-                      dailyTarget?.take_profit_target === 0 &&
-                      "Mục tiêu ngày"}
-                    {(dailyTarget?.stop_loss_target !== 0 ||
-                      dailyTarget?.take_profit_target !== 0) && (
-                      <>
-                        <Typography
-                          color="success.main"
-                          fontSize={14}
-                          fontWeight={600}
-                        >
-                          {formatCurrency(dailyTarget?.take_profit_target)}
-                        </Typography>
-                        &nbsp;/&nbsp;
-                        <Typography
-                          color="error.main"
-                          fontSize={14}
-                          fontWeight={600}
-                        >
-                          {formatCurrency(dailyTarget?.stop_loss_target)?.replace("+", "-")}
-                        </Typography>
-                      </>
-                    )}
-                  </Button>
-                )}
-                {downLg && (
-                  <Button
-                    variant="outlined"
-                    sx={{
-                      mr: 2,
-                      "& .MuiButton-endIcon": {
-                        margin: downLg ? 0 : "",
-                      },
-                    }}
-                    size={downLg ? "large" : "medium"}
-                    fullWidth={downLg ? true : false}
-                    endIcon={<FilterIcon />}
+                    endIcon={<ContentCopyIcon />}
                     // onClick={handleDialogOpen}
                   >
-                    {downLg ? "" : "Filter"}
+                    {downLg ? "" : "Copy"}
                   </Button>
-                )}
-                <Button
-                  variant="outlined"
-                  sx={{
-                    mr: 2,
-                    "& .MuiButton-endIcon": {
-                      margin: downLg ? 0 : "",
-                    },
-                  }}
-                  size={downLg ? "large" : "medium"}
-                  fullWidth={downLg ? true : false}
-                  endIcon={<ContentCopyIcon />}
-                  // onClick={handleDialogOpen}
-                >
-                  {downLg ? "" : "Copy"}
-                </Button>
-                <Button
-                  variant="contained"
-                  fullWidth={downLg ? true : false}
-                  size={downLg ? "large" : "medium"}
-                  color="success"
-                  endIcon={<AddIcon />}
-                  // onClick={handleOpenNewBudgetStrategy}
-                  onClick={handleOpenPlanDrawer}
-                  sx={{
-                    "& .MuiButton-endIcon": {
-                      margin: downLg ? 0 : "",
-                    },
-                  }}
-                >
-                  {downLg ? "" : "Tạo plan"}
-                </Button>
-                <Menu
-                  anchorEl={anchorElMenu}
-                  open={Boolean(anchorElMenu)}
-                  onClose={handleMenuClose}
-                  // anchorPosition={""}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                  }}
-                >
-                  <MenuItem
-                    onClick={() => {
-                      handleOpenNewBotAIStringMethod();
-                      handleMenuClose();
+                  <Button
+                    variant="contained"
+                    fullWidth={downLg ? true : false}
+                    size={downLg ? "large" : "medium"}
+                    color="success"
+                    endIcon={<AddIcon />}
+                    // onClick={handleOpenNewBudgetStrategy}
+                    onClick={handleOpenPlanDrawer}
+                    sx={{
+                      "& .MuiButton-endIcon": {
+                        margin: downLg ? 0 : "",
+                      },
                     }}
                   >
-                    <Add />
-                    String Method mới
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      // Handle new candle model action
-                      handleOpenNewBotAI();
-                      handleMenuClose();
+                    {downLg ? "" : "Tạo plan"}
+                  </Button>
+                  <Menu
+                    anchorEl={anchorElMenu}
+                    open={Boolean(anchorElMenu)}
+                    onClose={handleMenuClose}
+                    // anchorPosition={""}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
                     }}
                   >
-                    <InsertChart />
-                    Mô hình nến mới
-                  </MenuItem>
-                </Menu>
-              </Box>
+                    <MenuItem
+                      onClick={() => {
+                        handleOpenNewBotAIStringMethod();
+                        handleMenuClose();
+                      }}
+                    >
+                      <Add />
+                      String Method mới
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        // Handle new candle model action
+                        handleOpenNewBotAI();
+                        handleMenuClose();
+                      }}
+                    >
+                      <InsertChart />
+                      Mô hình nến mới
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              )}
             </Box>
             <Box sx={{ position: "relative" }}>
               <TableContainer component={Paper}>
@@ -776,18 +795,48 @@ const PortfoliosList = () => {
                                 </Box>
                               </StyledTableCell>
                               <StyledTableCell
-                                sx={{ width: downLg ? "50%" : "aaa" }}
+                                sx={{ width: downLg ? "100%" : "aaa", display: downLg ? "flex" : "", justifyContent: "space-between", alignItems: "center"  }}
                               >
-                                {formatCurrency(plan?.week_profit)}
+                                {downLg && (
+                                  <Typography variant="body2" color="textSecondary">
+                                    Lợi nhuận 7N
+                                  </Typography>
+                                )}
+                                <Typography variant="body2">
+                                  {formatCurrency(plan?.week_profit)}
+                                </Typography>
                               </StyledTableCell>
                               <StyledTableCell
-                                sx={{ width: downLg ? "50%" : "aaa" }}
+                                sx={{ width: downLg ? "100%" : "aaa", display: downLg ? "flex" : "", justifyContent: "space-between", alignItems: "center"  }}
                               >
-                                {formatCurrency(plan?.total_profit)}
+                                {downLg && (
+                                  <Box>
+                                    <Typography variant="body2" color="textSecondary">Lợi nhuận</Typography>
+                                    <Typography
+                                      fontWeight={600}
+                                      fontSize={12}
+                                      color={
+                                        dailyTarget?.profit >= 0
+                                          ? "success.main"
+                                          : "error.main"
+                                      }
+                                    >
+                                      {formatCurrency(dailyTarget?.profit)}
+                                    </Typography>
+                                  </Box>
+                                )}
+                                <Typography variant="body2">
+                                  {formatCurrency(plan?.total_profit)}
+                                </Typography>
                               </StyledTableCell>
                               <StyledTableCell
-                                sx={{ width: downLg ? "100%" : "aaa" }}
+                                sx={{ width: downLg ? "100%" : "aaa", display: downLg ? "flex" : "", justifyContent: "space-between", alignItems: "center"  }}
                               >
+                                {downLg && (
+                                  <Typography variant="body2" color="textSecondary">
+                                    Tài khoản liên kết
+                                  </Typography>
+                                )}
                                 <SelectDirectLinkAccount
                                   plan={plan}
                                   setData={setData}

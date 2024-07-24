@@ -91,9 +91,9 @@ const GridBallButton = ({
     // tinh nhu nay dung khong a
     switch (betIndex) {
       case 81:
-        return 99;
+        return 100;
       default:
-        return selectedCandle?.betIndex - 22 - 80 + 100;
+        return selectedCandle?.betIndex - 22 - 80 + 100 + 1;
     }
   };
   useEffect(() => {

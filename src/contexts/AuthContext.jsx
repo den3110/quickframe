@@ -1,6 +1,6 @@
 import userApi from 'api/user/userApi';
 import { constant } from 'constant/constant';
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 
 const AuthContext = createContext();
 
@@ -10,9 +10,9 @@ export const AuthProvider = ({ children }) => {
   const [selectedLinkAccount, setSelectedLinkAccount]= useState(localStorage.getItem("linkAccount") ? localStorage.getItem("linkAccount") : undefined)
   const [dataSelectedLinkAccount, setDataSelectedLinkAccount]= useState()
   const [loading, setLoading] = useState(true);
-  const loadUserProfile = async () => {
-    const accessToken = localStorage.getItem('accessToken');
-
+  const [accessToken, setAccessToken]= useState(localStorage.getItem("accessToken") ? localStorage.getItem("accessToken") : undefined)
+  const [isLogout, setIsLogout]= useState(false)
+  const loadUserProfile = useCallback(async () => {
     if (accessToken) {
       try {
         const response = await userApi.getUserProfile(accessToken);
@@ -30,11 +30,11 @@ export const AuthProvider = ({ children }) => {
       }
     }
     setLoading(false);
-  };
+  }, [accessToken]);
 
   useEffect(() => {
     loadUserProfile();
-  }, []);
+  }, [loadUserProfile, accessToken]);
 
   useEffect(()=> {
     (async ()=> {
@@ -42,29 +42,31 @@ export const AuthProvider = ({ children }) => {
         const response= await userApi.getUserLinkAccountList()
         if(response?.data?.ok=== true) {
           setUserLinkAccountList(response?.data?.d?.filter(item=> item?.isLogin=== true))
-          if(localStorage.getItem("linkAccount")) {
-            // setSelectedLinkAccount(respo)
-            setSelectedLinkAccount(localStorage.getItem("linkAccount"))
-            setDataSelectedLinkAccount(response?.data?.d?.find(item=> item?._id === localStorage.getItem("linkAccount")))
-          }
-          else if(response?.data?.d?.find(item=> item?.isLogin=== true)) {
-            localStorage.setItem("linkAccount", response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
-            setSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
-            setDataSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0])
-          }
+            if(selectedLinkAccount) {
+              // setSelectedLinkAccount(respo)
+              setSelectedLinkAccount(selectedLinkAccount)
+              setDataSelectedLinkAccount(response?.data?.d?.find(item=> item?._id === selectedLinkAccount))
+            } 
+            else if(isLogout=== true) {
+              setSelectedLinkAccount(undefined)
+            }
+            else if(response?.data?.d?.find(item=> item?.isLogin=== true)) {
+              localStorage.setItem("linkAccount", response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
+              setSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
+              setDataSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0])
+            }
         }
       } catch (error) {
-        
       } 
     })()
-  }, [])
+  }, [selectedLinkAccount, isLogout])
 
   // useEffect(()=> {
 
   // }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loading, setUser, selectedLinkAccount, userLinkAccountList , dataSelectedLinkAccount, setDataSelectedLinkAccount, setSelectedLinkAccount}}>
+    <AuthContext.Provider value={{ user, loading, setUser, selectedLinkAccount, userLinkAccountList , dataSelectedLinkAccount, setDataSelectedLinkAccount, setSelectedLinkAccount, setAccessToken, isLogout, setIsLogout, accessToken}}>
       {children}
     </AuthContext.Provider>
   );
