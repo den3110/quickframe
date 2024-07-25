@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -16,6 +16,7 @@ import OtpInput from "react-otp-input";
 import { showToast } from "components/toast/toast";
 import exchangeApi from "api/exchange/exchangeApi";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "contexts/AuthContext";
 
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -29,6 +30,7 @@ const CustomDialogContent = styled(DialogContent)(({ theme }) => ({
 }));
 
 const Dialog2Fa = (props) => {
+  const { setSelectedLinkAccount }= useContext(AuthContext)
   const theme= useTheme()
   const navigate = useNavigate();
   const { open, setOpen, dataExchangeUrl, token } = props;
@@ -49,7 +51,11 @@ const Dialog2Fa = (props) => {
       };
       const response = await exchangeApi.userExchangeLinkAccount2Fa(data);
       if (response?.data?.ok === true) {
-        navigate("/account");
+        showToast("Kết nối tài khoản thành công", "success");
+        localStorage.setItem("linkAccount", response?.data?.d?._id)
+        setSelectedLinkAccount(response?.data?.d?._id)
+        window.history.replaceState({}, '')
+        navigate("/");
       }
       else if(response?.data?.ok=== false) {
         showToast(response?.data?.m, "error")

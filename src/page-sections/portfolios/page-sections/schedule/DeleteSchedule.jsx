@@ -13,8 +13,9 @@ import {
   styled,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
+// import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import { showToast } from "components/toast/toast";
+import portfolioApi from "api/portfolios/portfolioApi";
 
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -25,8 +26,10 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
 export default function DeleteSchedule({
   open,
   onClose,
-  selectedStrategy,
+  selectedSchedule,
   setChange,
+  setDataProps,
+  dataProps
 }) {
   const [deletePackages, setDeletePackages] = React.useState(false);
 
@@ -36,10 +39,20 @@ export default function DeleteSchedule({
 
   const handleDeletBudgetStrategy = async () => {
     try {
-      setChange((prev) => !prev);
-      showToast("Đã xoá gói đầu tư thành công", "success");
-      onClose();
-    } catch (error) {}
+      const payload= {params: {_id: selectedSchedule?._id}}
+      const response= await portfolioApi.userScheduleDelete(selectedSchedule?._id, payload)
+      if(response?.data?.ok=== true) {
+        showToast("Đã xoá hẹn giờ thành công", "success")
+        setDataProps(dataProps?.filter(item=> item?._id !== selectedSchedule?._id))
+        onClose();
+      }
+      else if(response?.data?.ok=== false) {
+        showToast(response?.data?.m, "error")
+      }
+    } catch (error) {
+      showToast(error?.response?.data?.m, "error")
+      // console.log(error?.response?.data?.m)
+    }
   };
   return (
     <React.Fragment>
@@ -79,7 +92,7 @@ export default function DeleteSchedule({
             Bạn có 1 gói đang sử dụng bộ hẹn giờ này Bộ hẹn giờ này sẽ bị xóa
             ngay lập tức. Bạn không thể hoàn tác hành động này.
           </DialogContentText>
-          {selectedStrategy?.total_plans >= 2 && (
+          {selectedSchedule?.total_plans >= 2 && (
             <Box display="flex" justifyContent="center">
               <FormControlLabel
                 control={
@@ -89,7 +102,7 @@ export default function DeleteSchedule({
                     color="primary"
                   />
                 }
-                label={`Xóa ${selectedStrategy?.total_plans} gói sử dụng chiến lược này`}
+                label={`Xóa ${selectedSchedule?.total_plans} gói sử dụng chiến lược này`}
               />
             </Box>
           )}

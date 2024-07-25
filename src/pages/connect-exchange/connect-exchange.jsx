@@ -89,7 +89,7 @@ const ConnectAccountPage = () => {
         setOpen2Fa(true);
         setToken(result?.data?.d?.t);
       } else if (result.data?.ok === true) {
-        console.log(111)
+        
         showToast("Kết nối tài khoản thành công", "success");
         localStorage.setItem("linkAccount", result?.data?.d?._id)
         setSelectedLinkAccount(result?.data?.d?._id)

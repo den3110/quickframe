@@ -6,6 +6,8 @@ import ProtectedRoute from "hoc/ProtectedRoute";
 import CheckConnectExchange from "hoc/CheckConnectExchange";
 import ConnectAccountPage from "pages/connect-exchange/connect-exchange";
 import { Navigate } from "react-router-dom";
+import CheckConnectExchangeConnect from "hoc/CheckConnectExchangeConnect";
+import ProtectedRouteConnect from "hoc/ProtectedRouteConnect";
 
 const ErrorPage = Loadable(lazy(() => import("pages/404")));
 // const Landing = Loadable(lazy(() => import("pages/landing")));
@@ -29,11 +31,11 @@ export const routes = () => {
     {
       path: "/connect",
       element: (
-        <ProtectedRoute>
-          <CheckConnectExchange>
+        <ProtectedRouteConnect>
+          <CheckConnectExchangeConnect>
             <ConnectAccountPage />
-          </CheckConnectExchange>
-        </ProtectedRoute>
+          </CheckConnectExchangeConnect>
+        </ProtectedRouteConnect>
       ),
     },
     ...AuthRoutes,

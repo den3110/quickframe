@@ -95,8 +95,8 @@ export default function NewSchedule({
         // setDataProps([payload, ...dataProps]);
         showToast("Sửa cấu hình thành công", "success");
       } else if (isEdit !== true) {
-        await portfolioApi.userScheduleCreate(payload);
-        setDataProps([payload, ...dataProps]);
+        const response= await portfolioApi.userScheduleCreate(payload);
+        setDataProps([payload, ...response?.data?.d]);
         showToast("Thêm cấu hình thành công", "success");
       }
 
@@ -328,7 +328,7 @@ export default function NewSchedule({
             onClick={handleAdd}
             disabled={isButtonDisabled}
           >
-            Thêm cấu hình
+            {isEdit=== true ? "Sửa cấu hình" : "Thêm cấu hình"}
           </Button>
         </Box>
       </Box>

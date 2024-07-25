@@ -38,10 +38,11 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
         selectedLinkAccount
       );
       if (response?.data?.ok === true) {
-        setSelectedLinkAccount(undefined);
         localStorage.removeItem("linkAccount");
+        setSelectedLinkAccount(undefined);
         showToast("Disconnect exchange account successfully", "success");
-        window.location.href = window.location.origin + "/connect";
+        // window.location.href = window.location.origin + "/connect";
+        navigate("/connect")
       } else if (response?.data?.ok === false) {
         showToast(response?.data?.m, "error");
       }

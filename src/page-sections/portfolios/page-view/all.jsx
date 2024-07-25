@@ -651,6 +651,7 @@ const PortfoliosList = () => {
                   >
                     {downLg ? "" : "Tạo plan"}
                   </Button>
+
                   <Menu
                     anchorEl={anchorElMenu}
                     open={Boolean(anchorElMenu)}
@@ -681,6 +682,19 @@ const PortfoliosList = () => {
                       Mô hình nến mới
                     </MenuItem>
                   </Menu>
+                </Box>
+              )}
+              {downLg && (
+                <Box>
+                  <FormControlLabel
+                    label="Show all account"
+                    control={
+                      <Checkbox
+                        checked={showAllLinkAccountId}
+                        onChange={handleChangeShowAllLinkAccountId}
+                      />
+                    }
+                  />
                 </Box>
               )}
             </Box>
@@ -795,10 +809,18 @@ const PortfoliosList = () => {
                                 </Box>
                               </StyledTableCell>
                               <StyledTableCell
-                                sx={{ width: downLg ? "100%" : "aaa", display: downLg ? "flex" : "", justifyContent: "space-between", alignItems: "center"  }}
+                                sx={{
+                                  width: downLg ? "100%" : "aaa",
+                                  display: downLg ? "flex" : "",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
                               >
                                 {downLg && (
-                                  <Typography variant="body2" color="textSecondary">
+                                  <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                  >
                                     Lợi nhuận 7N
                                   </Typography>
                                 )}
@@ -807,11 +829,21 @@ const PortfoliosList = () => {
                                 </Typography>
                               </StyledTableCell>
                               <StyledTableCell
-                                sx={{ width: downLg ? "100%" : "aaa", display: downLg ? "flex" : "", justifyContent: "space-between", alignItems: "center"  }}
+                                sx={{
+                                  width: downLg ? "100%" : "aaa",
+                                  display: downLg ? "flex" : "",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
                               >
                                 {downLg && (
                                   <Box>
-                                    <Typography variant="body2" color="textSecondary">Lợi nhuận</Typography>
+                                    <Typography
+                                      variant="body2"
+                                      color="textSecondary"
+                                    >
+                                      Lợi nhuận
+                                    </Typography>
                                     <Typography
                                       fontWeight={600}
                                       fontSize={12}
@@ -830,10 +862,18 @@ const PortfoliosList = () => {
                                 </Typography>
                               </StyledTableCell>
                               <StyledTableCell
-                                sx={{ width: downLg ? "100%" : "aaa", display: downLg ? "flex" : "", justifyContent: "space-between", alignItems: "center"  }}
+                                sx={{
+                                  width: downLg ? "100%" : "aaa",
+                                  display: downLg ? "flex" : "",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
                               >
                                 {downLg && (
-                                  <Typography variant="body2" color="textSecondary">
+                                  <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                  >
                                     Tài khoản liên kết
                                   </Typography>
                                 )}

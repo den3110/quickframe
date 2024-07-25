@@ -52,6 +52,10 @@ const portfolioApi = {
   userScheduleUpdate(id, data) {
     const url= `/users/schedule/update/` + id
     return axiosClient.post(url, data)
+  },
+  userScheduleDelete(id, data) {
+    const url= `/users/schedule/delete/` + id
+    return axiosClient.delete(url, data)
   }
 };  
 

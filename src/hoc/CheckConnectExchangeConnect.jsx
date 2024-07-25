@@ -6,7 +6,7 @@ import userApi from "api/user/userApi";
 import { createContext } from "react";
 
 export const ConnectExchangeContext = createContext();
-const CheckConnectExchange = ({ children }) => {
+const CheckConnectExchangeConnect = ({ children }) => {
   const location = useLocation();
   const {
     user,
@@ -47,7 +47,8 @@ const CheckConnectExchange = ({ children }) => {
   // if (!selectedLinkAccount) {
   //   return <Navigate to="/login" />;
   // }
-  if (location.state?.is_add_account === true && location.pathname.startsWith("dashboard")) {
+  
+  if (location.state?.is_add_account === true) {
     return (
       <ConnectExchangeContext.Provider value={{ linked }}>
         {children}
@@ -117,4 +118,4 @@ const CheckConnectExchange = ({ children }) => {
   
 };
 
-export default CheckConnectExchange;
+export default CheckConnectExchangeConnect;

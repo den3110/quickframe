@@ -45,7 +45,7 @@ function VIPInformation() {
         sx={{
           backgroundColor: "#1c1c1c",
           color: "#fff",
-          padding: "20px",
+          // padding: "20px",
           backgroundImage:
             'url("https://quickinvest.ai/static/media/07.d8642d0d575db73e0bfd.png")',
           backgroundRepeat: "no-repeat",
@@ -123,20 +123,22 @@ function VIPInformation() {
               </Grid>
             </Grid>
           </Box>
-          <Box flex={1} sx={{ position: "relative", textAlign: "right" }}>
-            <Box
+          <Box flex={1} sx={{ position: "relative", textAlign: "right", height: "100%" }}>
+            <img
               width={"100%"}
               height={"100%"}
-              sx={{
-                backgroundImage:
-                  "url(https://quickinvest.ai/static/media/12.d05f39a25debb79dbccf.png)",
+              src="https://quickinvest.ai/static/media/12.d05f39a25debb79dbccf.png"
+              alt="Can't display"
+              style={{
+                width: "100%",
+                height: "auto",
                 bottom: 0,
                 position: "absolute",
                 right: 0,
                 transform: "translateY(77px)",
                 maxWidth: "666.75px",
               }}
-            ></Box>
+            ></img>
           </Box>
         </Box>
       </Card>

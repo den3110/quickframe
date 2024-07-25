@@ -178,6 +178,7 @@ const PortfolioSchedule = () => {
           <IconButton
             onClick={() => {
               setDeleteSchedule(true);
+              setSelectedSchedule(resource)
             }}
           >
             <DeleteBudgetStrategyIcon />
@@ -257,10 +258,13 @@ const PortfolioSchedule = () => {
         // setS
       />
       <DeleteSchedule
+        selectedSchedule={selectedSchedule}
         open={deleteSchedule}
         onClose={() => {
           setDeleteSchedule(false);
         }}
+        dataProps={data}
+        setDataProps={setData}
       />
     </Layout>
   );
