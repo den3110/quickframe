@@ -17,6 +17,7 @@ import SpotBalanceContext from "contexts/SpotBalanceContext";
 import { isDark } from "util/constants";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function WithdrawDrawer(props) {
+  const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { spotBalance } = React.useContext(SpotBalanceContext);
   const { open, setOpen } = props;
@@ -109,7 +111,7 @@ export default function WithdrawDrawer(props) {
   const DrawerList = (
     <Box sx={{ width: downLg ? "100%" : 448 }} role="presentation">
       <Box className={classes.header} sx={{ padding: "24px 16px" }}>
-        <Typography variant="h6">Ví giao dịch</Typography>
+        <Typography variant="h6">{t("transaction_wallet")}</Typography>
         <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>

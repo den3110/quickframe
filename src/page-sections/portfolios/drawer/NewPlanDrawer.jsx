@@ -50,6 +50,7 @@ import AuthContext from "contexts/AuthContext";
 import userApi from "api/user/userApi";
 import { constant } from "constant/constant";
 import Backdrop from "components/backdrop/Backdrop";
+import { useTranslation } from "react-i18next";
 
 const NewPlanDrawer = ({
   open,
@@ -67,6 +68,7 @@ const NewPlanDrawer = ({
     /* Optional options */
     threshold: 0,
   });
+  const {t }= useTranslation()
   const [idPlan, setIdPlan] = useState();
   const { setChange } = useContext(GlobalContext);
   const { decodedData } = useContext(JwtContext);
@@ -860,7 +862,7 @@ const NewPlanDrawer = ({
               >
                 <Box className="akaskwas" flex={1}>
                   <Typography variant="subtitle1">
-                    Tài khoản liên kết
+                    {t("linked_account")}
                   </Typography>
                   <FormControl variant="outlined" fullWidth margin="normal">
                     <Select

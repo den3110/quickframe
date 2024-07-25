@@ -9,7 +9,7 @@ import {
   Tooltip,
   IconButton,
 } from "@mui/material";
-import formatCurrency from "util/formatCurrency";
+// import formatCurrency from "util/formatCurrency";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const InfoCard = ({ title, value, tooltip }) => {
@@ -40,7 +40,7 @@ const InfoCard = ({ title, value, tooltip }) => {
 
 function VIPInformation() {
   return (
-    <Box mt={4} mb={4}>
+    <Box mt={4} mb={4} >
       <Card
         sx={{
           backgroundColor: "#1c1c1c",

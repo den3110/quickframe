@@ -27,8 +27,10 @@ import DetailTransactionDrawer from "../drawers/DetailTransactionDrawer";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import WithdrawDrawer from "../drawers/WithdrawDrawer";
 import { SettingsContext } from "contexts/settingsContext";
+import { useTranslation } from "react-i18next";
 
 const WalletPopover = () => {
+  const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { spotBalance } = useContext(SpotBalanceContext);
   const {walletMode, setWalletMode }= useContext(SettingsContext)
@@ -126,7 +128,7 @@ const WalletPopover = () => {
         sx={{zIndex: ""}}
       >
         <DialogTitle>
-          Ví giao dịch
+          {t("transaction_wallet")}
           <IconButton
             aria-label="close"
             onClick={handleClose}
@@ -155,7 +157,7 @@ const WalletPopover = () => {
             mb={1}
             mt={1}
           >
-            Chuyển sang chế độ {mode === true ? "DEMO" : "LIVE"}{" "}
+            {t("switch_mode")} {mode === true ? "DEMO" : "LIVE"}{" "}
             <LoopIcon fontSize={"18px"} />
           </Typography>
           {mode === false && (

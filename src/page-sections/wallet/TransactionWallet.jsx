@@ -18,6 +18,7 @@ import NoTransactionIcon from "icons/wallet/NoTransaction";
 import { isDark } from "util/constants";
 import { showToast } from "components/toast/toast";
 import AuthContext from "contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const TransactionWallet = (props) => {
+  const {t }= useTranslation()
   const classes = useStyles();
   const {selectedLinkAccount }= useContext(AuthContext)
   const [page, setPage] = useState(1);
@@ -104,7 +106,7 @@ const TransactionWallet = (props) => {
 
   return (
     <>
-      <Typography variant="h6">Giao dịch gần đây</Typography>
+      <Typography variant="h6">{t("recent_transaction")}</Typography>
       {sortedData?.length <= 0 && (
         <Box
           display="flex"
@@ -115,7 +117,7 @@ const TransactionWallet = (props) => {
           color="grey.500"
         >
           <NoTransactionIcon />
-          <Typography>Không có giao dịch nào tại đây!</Typography>
+          <Typography>{t("no_transaction")}</Typography>
         </Box>
       )}
       {sortedData?.length > 0 && (

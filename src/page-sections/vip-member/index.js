@@ -6,6 +6,7 @@ import TabsComponent from './component/TabsComponent';
 import Commissions from './component/Comission';
 
 function VipPage() {
+  
   return (
     <Box >
       <VIPInformation />

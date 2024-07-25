@@ -8,8 +8,11 @@ import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 import React, { useContext } from "react";
 import TransactionWallet from "./TransactionWallet";
 import AuthContext from "contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const DemoWallet = (props) => {
+  const {t }= useTranslation()
+
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { linked } = useContext(ConnectExchangeContext);
   const {setChange, spotBalance }= useContext(SpotBalanceContext)
@@ -20,7 +23,7 @@ const DemoWallet = (props) => {
       const response= await userApi.userExchangeLinkAccountResetDemo({}, selectedLinkAccount)
       if(response?.data?.ok=== true) {
         setChange(prev=> !prev)
-        showToast("Nạp lại số dư thành công", "success")
+        showToast(t("recharge_balance_noti_success"), "success")
       }
       else {
         showToast(response?.data?.m, "error")
@@ -67,18 +70,18 @@ const DemoWallet = (props) => {
           {linked?.d?.e}
         </Typography>
         <Typography variant="body1" align="left" fontSize={12} mb={2}>
-          Tài khoản email
+          {t("email_account")}
         </Typography>
         <Divider style={{ borderColor: " rgba(255, 255, 255, 0.2)" }} />
         <Typography variant="h6" align="left" mt={1} mb={1}>
           ${spotBalance?.demoBalance?.toFixed(2)}
         </Typography>
-        <Typography variant="body1" align="left" fontSize={12} mb={2}>
-          Ví DEMO
+        <Typography dịch gần đây variant="body1" align="left" fontSize={12} mb={2}>
+          {t("wallet")} DEMO
         </Typography>
       </Box>
       <Button onClick={handleResetDemoBalance} variant="contained" color="primary" sx={{ mb: 2 }}>
-        Nạp lại số dư
+        {t("recharge_balance")}
       </Button>
       <TransactionWallet handleOpenDetailTransaction={props?.handleOpenDetailTransaction} />
     </Box>

@@ -12,6 +12,7 @@ import { isDark } from "util/constants";
 import QRCode from "react-qr-code";
 import { QrCode } from "@mui/icons-material";
 import AuthContext from "contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: "350px",
@@ -57,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DepositDrawer(props) {
   const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
+  const {t }= useTranslation()
   const { open, setOpen } = props;
   const classes = useStyles();
   const [address, setAddress] = React.useState();
@@ -104,7 +106,7 @@ export default function DepositDrawer(props) {
   const DrawerList = (
     <Box sx={{ width: downLg ? "100%" : 448 }} role="presentation">
       <Box className={classes.header} sx={{ padding: "24px 16px" }}>
-        <Typography variant="h6">Ví giao dịch</Typography>
+        <Typography variant="h6">{t("transaction_wallet")}</Typography>
         <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>

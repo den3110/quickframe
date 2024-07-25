@@ -66,6 +66,7 @@ import { constant } from "constant/constant";
 import SelectDirectLinkAccount from "./component/SelectDirectLinkAccount";
 import { AutoTypesTitle } from "type/AutoTypes";
 import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
+import { useTranslation } from "react-i18next";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -95,6 +96,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 
 const PortfoliosList = () => {
   const { data, setData, loading } = useContext(PortfoliosContext);
+  const {t }= useTranslation()
   const navigate = useNavigate();
   const { walletMode } = useContext(SettingsContext);
   const [dailyTarget, setDailyTarget] = useState({
@@ -728,7 +730,7 @@ const PortfoliosList = () => {
                             {formatCurrency(dailyTarget?.profit)}
                           </Typography>
                         </StyledTableCell>
-                        <StyledTableCell>Tài khoản liên kết</StyledTableCell>
+                        <StyledTableCell>{t("linked_account")}</StyledTableCell>
                         <StyledTableCell>Thao tác</StyledTableCell>
                         <StyledTableCell></StyledTableCell>
                       </TableRow>
@@ -878,7 +880,7 @@ const PortfoliosList = () => {
                                     variant="body2"
                                     color="textSecondary"
                                   >
-                                    Tài khoản liên kết
+                                    {t("linked_account")}
                                   </Typography>
                                 )}
                                 <SelectDirectLinkAccount

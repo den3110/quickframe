@@ -4,8 +4,11 @@ import SpotBalanceContext from "contexts/SpotBalanceContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 import React, { useContext } from "react";
 import TransactionWallet from "./TransactionWallet";
+import { useTranslation } from "react-i18next";
 
 const LiveWallet = (props) => {
+  const {t }= useTranslation()
+
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { linked } = useContext(ConnectExchangeContext);
   const { spotBalance } = useContext(SpotBalanceContext);
@@ -48,7 +51,7 @@ const LiveWallet = (props) => {
           {linked?.d?.e}
         </Typography>
         <Typography variant="body1" align="left" fontSize={12} mb={2}>
-          Tài khoản email
+          {t("email_account")}
         </Typography>
         <Divider style={{ borderColor: " rgba(255, 255, 255, 0.2)" }} />
         <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
@@ -57,7 +60,7 @@ const LiveWallet = (props) => {
               ${spotBalance?.usdtAvailableBalance?.toFixed(2)}
             </Typography>
             <Typography variant="body1" align="left" fontSize={12} mb={2}>
-              Ví USDT
+              {t("wallet")} USDT
             </Typography>
           </Box>
           <Box>
@@ -65,7 +68,7 @@ const LiveWallet = (props) => {
               ${spotBalance?.availableBalance?.toFixed(2)}
             </Typography>
             <Typography variant="body1" align="left" fontSize={12} mb={2}>
-              Ví Live
+              {t("wallet")} Live
             </Typography>
           </Box>
         </Box>
@@ -80,7 +83,7 @@ const LiveWallet = (props) => {
           color="primary"
           sx={{ mb: 2, mr: 2 }}
         >
-          Rút tiền
+          {t("withdraw")}
         </Button>
         <Button
           onClick={() => {
@@ -91,7 +94,7 @@ const LiveWallet = (props) => {
           color="primary"
           sx={{ mb: 2, mr: 2 }}
         >
-          Nạp tiền
+          {t("deposit")}
         </Button>
         <Button
           onClick={() => {
@@ -102,7 +105,7 @@ const LiveWallet = (props) => {
           color="primary"
           sx={{ mb: 2, mr: 2 }}
         >
-          Chuyển
+          {t("transfer")}
         </Button>
       </Box>
       <TransactionWallet

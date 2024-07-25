@@ -99,7 +99,7 @@ const MultiLevelMenu = ({ sidebarCompact }) => {
                 )}
 
                 <ItemText compact={COMPACT} active={activeRoute(item.path)}>
-                  {item.name}
+                  {t(item.name)}
                 </ItemText>
               </Box>
               <Badge

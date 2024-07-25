@@ -9,6 +9,9 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import LoopIcon from "@mui/icons-material/Loop";
 import TollIcon from "@mui/icons-material/Toll";
 import TransactionIcon from "icons/wallet/Transaction";
+import { useTranslation } from "react-i18next";
+
+
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: "350px",
@@ -56,7 +59,7 @@ export default function DetailTransactionDrawer(props) {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { open, setOpen } = props;
   const classes = useStyles();
-
+  const {t }= useTranslation()
   const onClose = () => {
     setOpen(false);
     props?.openWalletPopup();
@@ -65,7 +68,7 @@ export default function DetailTransactionDrawer(props) {
   const DrawerList = (
     <Box sx={{ width: downLg ? "100%" : 448 }} role="presentation">
       <Box className={classes.header} sx={{ padding: "24px 16px" }}>
-        <Typography variant="h6">Ví giao dịch</Typography>
+        <Typography variant="h6">{t("transaction_wallet")}</Typography>
         <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>

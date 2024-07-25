@@ -19,6 +19,7 @@ import exchangeApi from "api/exchange/exchangeApi";
 import { showToast } from "components/toast/toast";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const StyledCard = styled(Card)({
   marginBottom: "20px",
@@ -39,6 +40,7 @@ const TurnOff2FAButton = styled(Button)({
 });
 
 const ExchangeAccount = () => {
+  const {t }= useTranslation()
   const navigate= useNavigate()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { linked } = useContext(ConnectExchangeContext);
@@ -117,7 +119,7 @@ const ExchangeAccount = () => {
                       fontSize={12}
                       mb={2}
                     >
-                      Tài khoản email
+                      {t("email_account")}
                     </Typography>
                     <Divider
                       style={{ borderColor: " rgba(255, 255, 255, 0.2)" }}

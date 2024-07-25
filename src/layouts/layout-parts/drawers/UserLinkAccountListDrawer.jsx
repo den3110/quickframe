@@ -15,9 +15,11 @@ import { constant } from "constant/constant";
 import { useNavigate } from "react-router-dom";
 import exchangeApi from "api/exchange/exchangeApi";
 import { showToast } from "components/toast/toast";
+import { useTranslation } from "react-i18next";
 
 const UserLinkAccountListDrawer = ({ open, handleClose }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const {t }= useTranslation()
   const {
     userLinkAccountList,
     selectedLinkAccount,
@@ -74,7 +76,7 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
       sx={{ zIndex: "" }}
     >
       <DialogTitle>
-        Tài khoản liên kết
+        {t("linked_account")}
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -167,7 +169,7 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
                         fullWidth
                         onClick={() => toggleLinkAccount(item?._id)}
                       >
-                        Chuyển tài khoản
+                        {t("switch_account")}
                       </Button>
                     )}
                   </Box>
@@ -183,7 +185,7 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
                 Đóng
               </Button>
               <Button fullWidth onClick={handleAddNewLinkedAccount}>
-                Thêm tài khoản liên kết
+                {t("add_linked_account")}
               </Button>
             </Box>
           </Box>

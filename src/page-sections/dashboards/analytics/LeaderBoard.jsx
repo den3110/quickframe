@@ -21,44 +21,9 @@ import FlickAnimate from "icons/FlickAnimate";
 import MoreInfo from "icons/MoreInfo";
 import RankingLeaderBoard from "page-sections/leaderboard/RankingLeaderBoard";
 import RefreshProvider from "contexts/RefreshContext";
-
-const data = [
-  {
-    id: 1,
-    name: "TOP 1",
-    value: "$49,076.00",
-    percentage: "+934.78%",
-    rank: 1,
-  },
-  {
-    id: 2,
-    name: "TOP 2",
-    value: "$48,584.50",
-    percentage: "+971.69%",
-    rank: 2,
-  },
-  {
-    id: 3,
-    name: "TOP 3",
-    value: "$45,246.55",
-    percentage: "+822.66%",
-    rank: 3,
-  },
-  {
-    id: 4,
-    name: "TOP 4",
-    value: "$10,842.50",
-    percentage: "+216.85%",
-    rank: 4,
-  },
-  {
-    id: 5,
-    name: "TOP 5",
-    value: "$7,495.95",
-    percentage: "+166.57%",
-    rank: 5,
-  },
-];
+import formatCurrency from "util/formatCurrency";
+import sortData from "util/sortData";
+import { useTranslation } from "react-i18next";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   display: "flex",
@@ -75,6 +40,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 
 const LeaderBoard = () => {
   const theme = useTheme();
+  const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [dataUser, setDataUser] = useState([]);
   const [dataBot, setDataBot] = useState([]);
@@ -131,7 +97,7 @@ const LeaderBoard = () => {
             mt={1}
             mb={1}
           >
-            Gói hiệu quả hàng đầu <BunnyStar />
+            {t("top_efficient_plan")} <BunnyStar />
           </Typography>
           <Fragment>
             <Tooltip title="Vuốt sang trái để xem thêm gói">
@@ -167,7 +133,7 @@ const LeaderBoard = () => {
               },
             }}
           >
-            {data.map((item, index) => (
+            {dataBot.map((item, index) => (
               <SwiperSlide key={index}>
                 <Box
                   style={{
@@ -306,278 +272,6 @@ const LeaderBoard = () => {
                 </Box>
               </SwiperSlide>
             ))}
-            {data.map((item, index) => (
-              <SwiperSlide key={index}>
-                <Box
-                  style={{
-                    padding: "20px 0",
-                    height: "100%",
-                    maxWidth: 300,
-                  }}
-                >
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{
-                      width: "100%",
-                      background: (theme) =>
-                        isDark(theme) ? "rgb(31, 41, 55)" : "white",
-                    }}
-                    style={{
-                      borderRadius: "8px",
-                      padding: "20px 0",
-                      textAlign: "center",
-                      height: "100%",
-                      boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
-                    }}
-                    position={"relative"}
-                  >
-                    <Box
-                      position={"absolute"}
-                      style={{
-                        width: "100%",
-                        height: "50%",
-                        background: renderBackgroundLeaderBoardBot(item.rank),
-                        top: 0,
-                        left: 0,
-                        borderRadius: 8,
-                      }}
-                    ></Box>
-                    <Box
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                    >
-                      {item.rank === 1 && (
-                        <img
-                          style={{
-                            position: "relative",
-                            top: -40,
-                            zIndex: 10,
-                            width: 45,
-                          }}
-                          src="/static/icons/rank-1.png"
-                          alt="Can't open"
-                        />
-                      )}
-                      {item.rank === 2 && (
-                        <img
-                          style={{
-                            position: "relative",
-                            top: -40,
-                            zIndex: 10,
-                            width: 45,
-                          }}
-                          src="/static/icons/rank-2.png"
-                          alt="Can't open"
-                        />
-                      )}
-                      {item.rank === 3 && (
-                        <img
-                          style={{
-                            position: "relative",
-                            top: -40,
-                            zIndex: 10,
-                            width: 45,
-                          }}
-                          src="/static/icons/rank-3.png"
-                          alt="Can't open"
-                        />
-                      )}
-                      {item.rank !== 1 &&
-                        item.rank !== 2 &&
-                        item.rank !== 3 && (
-                          <>
-                            <Box
-                              style={{
-                                position: "relative",
-                                top: -40,
-                                zIndex: 10,
-                              }}
-                            >
-                              <Box
-                                display={"flex"}
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                sx={{ width: 40, height: 50 }}
-                              >
-                                <Box
-                                  display="flex"
-                                  justifyContent={"center"}
-                                  alignItems={"center"}
-                                  sx={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: "50%",
-                                    background: "rgb(160, 174, 192)",
-                                  }}
-                                >
-                                  {item.rank}
-                                </Box>
-                              </Box>
-                            </Box>
-                          </>
-                        )}
-                    </Box>
-                    <Typography variant="subtitle1" color="textSecondary">
-                      #{item.rank}
-                    </Typography>
-                    <Typography variant="h6" color="textPrimary">
-                      {item.name}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary">
-                      PnL 24h {item.pnl}
-                    </Typography>
-                    <Typography
-                      variant="h5"
-                      color="textPrimary"
-                      style={{ margin: "10px 0" }}
-                    >
-                      {item.amount}
-                    </Typography>
-                    <Button variant="outlined">Gói riêng tư</Button>
-                  </Box>
-                </Box>
-              </SwiperSlide>
-            ))}
-            {data.map((item, index) => (
-              <SwiperSlide key={index}>
-                <Box
-                  style={{
-                    padding: "20px 0",
-                    height: "100%",
-                    maxWidth: 300,
-                  }}
-                >
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{
-                      width: "100%",
-                      background: (theme) =>
-                        isDark(theme) ? "rgb(31, 41, 55)" : "white",
-                    }}
-                    style={{
-                      borderRadius: "8px",
-                      padding: "20px 0",
-                      textAlign: "center",
-                      height: "100%",
-                      boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
-                    }}
-                    position={"relative"}
-                  >
-                    <Box
-                      position={"absolute"}
-                      style={{
-                        width: "100%",
-                        height: "50%",
-                        background: renderBackgroundLeaderBoardBot(item.rank),
-                        top: 0,
-                        left: 0,
-                        borderRadius: 8,
-                      }}
-                    ></Box>
-                    <Box
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                    >
-                      {item.rank === 1 && (
-                        <img
-                          style={{
-                            position: "relative",
-                            top: -40,
-                            zIndex: 10,
-                            width: 45,
-                          }}
-                          src="/static/icons/rank-1.png"
-                          alt="Can't open"
-                        />
-                      )}
-                      {item.rank === 2 && (
-                        <img
-                          style={{
-                            position: "relative",
-                            top: -40,
-                            zIndex: 10,
-                            width: 45,
-                          }}
-                          src="/static/icons/rank-2.png"
-                          alt="Can't open"
-                        />
-                      )}
-                      {item.rank === 3 && (
-                        <img
-                          style={{
-                            position: "relative",
-                            top: -40,
-                            zIndex: 10,
-                            width: 45,
-                          }}
-                          src="/static/icons/rank-3.png"
-                          alt="Can't open"
-                        />
-                      )}
-                      {item.rank !== 1 &&
-                        item.rank !== 2 &&
-                        item.rank !== 3 && (
-                          <>
-                            <Box
-                              style={{
-                                position: "relative",
-                                top: -40,
-                                zIndex: 10,
-                              }}
-                            >
-                              <Box
-                                display={"flex"}
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                sx={{ width: 40, height: 50 }}
-                              >
-                                <Box
-                                  display="flex"
-                                  justifyContent={"center"}
-                                  alignItems={"center"}
-                                  sx={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: "50%",
-                                    background: "rgb(160, 174, 192)",
-                                  }}
-                                >
-                                  {item.rank}
-                                </Box>
-                              </Box>
-                            </Box>
-                          </>
-                        )}
-                    </Box>
-                    <Typography variant="subtitle1" color="textSecondary">
-                      #{item.rank}
-                    </Typography>
-                    <Typography variant="h6" color="textPrimary">
-                      {item.name}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary">
-                      PnL 24h {item.pnl}
-                    </Typography>
-                    <Typography
-                      variant="h5"
-                      color="textPrimary"
-                      style={{ margin: "10px 0" }}
-                    >
-                      {item.amount}
-                    </Typography>
-                    <Button variant="outlined">Gói riêng tư</Button>
-                  </Box>
-                </Box>
-              </SwiperSlide>
-            ))}
           </Swiper>
         </Box>
         <Typography
@@ -591,7 +285,7 @@ const LeaderBoard = () => {
             WebkitTextFillColor: "transparent",
           }}
         >
-          Bảng xếp hạng nhà đầu tư hàng ngày <MoreInfo />
+          {t("daily_roi_leaderboard")} <MoreInfo />
         </Typography>
         <Box className="asjkasjaqw">
           <Box
@@ -654,7 +348,7 @@ const LeaderBoard = () => {
             />
           </Box>
           <List sx={{ padding: downLg ? 1 : 0 }}>
-            {data?.slice(3).map((item, index) => (
+            {sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")?.slice(3).map((item, index) => (
               <StyledListItem key={index} style={{ cursor: "pointer" }}>
                 <Box display="flex" alignItems="center">
                   <Typography
@@ -681,7 +375,7 @@ const LeaderBoard = () => {
                     borderRadius: 10,
                   }}
                 >
-                  {item.percentage}
+                  {formatCurrency(item.profit)}
                 </Typography>
               </StyledListItem>
             ))}
