@@ -77,10 +77,15 @@ const LoginPageView = () => {
               // localStorage.setItem("linkAccount", response1?.data?.d?.[0]?._id)
             }
             if(response1?.data?.ok=== true) {
-              setSelectedLinkAccount(response1?.data?.d?.find(item=> item?.isLogin=== true)?._id)
-              localStorage.setItem("linkAccount", response1?.data?.d?.find(item=> item?.isLogin=== true)?._id)
+              if(response1?.data?.d?.find(item=> item?.isLogin=== true)) {
+                setSelectedLinkAccount(response1?.data?.d?.find(item=> item?.isLogin=== true)?._id)
+                localStorage.setItem("linkAccount", response1?.data?.d?.find(item=> item?.isLogin=== true)?._id)
+                navigate("/dashboard")
+              }
+              else {
+                navigate("/connect")
+              }
             }
-            navigate("/dashboard")
           } else {
             setErrorMessage(response?.data?.m);
           }
