@@ -77,8 +77,8 @@ const LoginPageView = () => {
               // localStorage.setItem("linkAccount", response1?.data?.d?.[0]?._id)
             }
             if(response1?.data?.ok=== true) {
-              setSelectedLinkAccount(response1?.data?.d?.[0]?._id)
-              localStorage.setItem("linkAccount", response1?.data?.d?.[0]?._id)
+              setSelectedLinkAccount(response1?.data?.d?.find(item=> item?.isLogin=== true)?._id)
+              localStorage.setItem("linkAccount", response1?.data?.d?.find(item=> item?.isLogin=== true)?._id)
             }
             navigate("/dashboard")
           } else {

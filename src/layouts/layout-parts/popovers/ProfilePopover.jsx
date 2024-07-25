@@ -73,10 +73,9 @@ const ProfilePopover = () => {
     localStorage.removeItem("refreshToken")
     localStorage.removeItem("linkAccount")
     setIsLogout(true)
-    navigate("/login")
     setSelectedLinkAccount(undefined)
     setDataSelectedLinkAccount(undefined)
-    localStorage.removeItem("linkAccount")
+    navigate("/login")
   };
 
   return (

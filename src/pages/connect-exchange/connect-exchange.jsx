@@ -41,7 +41,7 @@ const ContentContainer = styled(Container)(({ theme }) => ({
 
 const ConnectAccountPage = () => {
   const navigate = useNavigate();
-  const {selectedLinkAccount }= useContext(AuthContext)
+  const {selectedLinkAccount, setSelectedLinkAccount }= useContext(AuthContext)
   const [open2Fa, setOpen2Fa] = useState(false);
   const [token, setToken] = useState();
   const [exchangeUrl, setExchangeUrl] = useState("");
@@ -89,15 +89,17 @@ const ConnectAccountPage = () => {
         setOpen2Fa(true);
         setToken(result?.data?.d?.t);
       } else if (result.data?.ok === true) {
-
-        showToast(result.data?.m, "success");
+        console.log(111)
+        showToast("Kết nối tài khoản thành công", "success");
         localStorage.setItem("linkAccount", result?.data?.d?._id)
+        setSelectedLinkAccount(result?.data?.d?._id)
         window.history.replaceState({}, '')
-        window.location.reload();
+        navigate("/")
       } else {
         showToast(result?.data?.m, "error");
       }
     } catch (error) {
+      console.log(error)
       showToast(
         error?.response?.data?.m || "Error connecting exchange account",
         "error"

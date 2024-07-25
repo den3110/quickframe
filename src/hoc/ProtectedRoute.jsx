@@ -22,8 +22,12 @@ const ProtectedRoute = ({ children }) => {
   if(!selectedLinkAccount && location.pathname.startsWith("/connect")) {
     return children
   }
-
-  return children;
+  if(selectedLinkAccount && location.pathname.startsWith("/connect")) {
+    return <Navigate to="/" />
+  }
+  else {
+    return children;
+  }
 };
 
 export default ProtectedRoute;
