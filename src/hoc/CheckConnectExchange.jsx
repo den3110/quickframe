@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import LoadingScreen from "components/loading/LoadingScreen";
 import AuthContext from "contexts/AuthContext";
 import userApi from "api/user/userApi";
@@ -12,10 +12,15 @@ const CheckConnectExchange = ({ children }) => {
     user,
     loading: authLoading,
     selectedLinkAccount,
+    isLogout,
+    setDataSelectedLinkAccount,
+    setSelectedLinkAccount,
+    setAccessToken
   } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [linked, setLinked] = useState();
   const [statusCode, setStatusCode] = useState();
+  const navigate= useNavigate()
   useEffect(() => { 
     const checkUserLink = async () => {
       try {
@@ -26,7 +31,12 @@ const CheckConnectExchange = ({ children }) => {
         if (response?.data?.ok === true) {
           setLinked(response.data);
         } else if (response?.data?.ok === false) {
-          setLinked(response.data);
+          localStorage.removeItem("linkAccount")
+            localStorage.removeItem("accessToken")
+            setSelectedLinkAccount(undefined)
+            setAccessToken(undefined)
+            setDataSelectedLinkAccount(undefined)
+            navigate("/login")
         }
       } catch (error) {
         setLinked(error?.response?.data);
@@ -42,16 +52,14 @@ const CheckConnectExchange = ({ children }) => {
     } else {
       setLoading(false);
     }
-  }, [user, selectedLinkAccount]);
+  }, [user, selectedLinkAccount, navigate, setAccessToken, setDataSelectedLinkAccount, setSelectedLinkAccount]);
 
   // if (!selectedLinkAccount) {
   //   return <Navigate to="/login" />;
   // }
-  if (location.state?.is_add_account === true && location.pathname.startsWith("dashboard")) {
+  if (location.state?.is_add_account === true) {
     return (
-      <ConnectExchangeContext.Provider value={{ linked }}>
-        {children}
-      </ConnectExchangeContext.Provider>
+      <Navigate to="/connect" />
     );
   }
 
@@ -114,7 +122,7 @@ const CheckConnectExchange = ({ children }) => {
       </ConnectExchangeContext.Provider>
     );
   }
-  
+
 };
 
 export default CheckConnectExchange;
