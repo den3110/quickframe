@@ -147,13 +147,13 @@ const TopSignalPageView = () => {
       case 1:
         setDataState(_.orderBy(data, function(e) { return (e.win_day /
           (e.win_day + e.lose_day)) *
-          100}))
+          100}, "desc"))
         break;
       case 2:
-        setDataState(_.orderBy(data, function(e) { return e?.win_streak}))
+        setDataState(_.orderBy(data, function(e) { return e?.win_streak}, "desc"))
         break;
       case 3:
-        setDataState(_.orderBy(data, function(e) { return e?.volume}))
+        setDataState(_.orderBy(data, function(e) { return e?.volume}, "desc"))
         break
       default:
         break;

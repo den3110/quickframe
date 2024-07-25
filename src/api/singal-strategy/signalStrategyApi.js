@@ -20,6 +20,14 @@ const signalStrategyApi = {
   userBudgetTelegramSignal(data) {
     const url= `/users/budget-signal/telegram-signals`
     return axiosClient.get(url, data)
+  },
+  usersBudgetSignalHistory(id, data) {
+    const url= `/users/budget-signal/history/` + id
+    return axiosClient.get(url, data)
+  },
+  userBudgetSignalTeleSignalInfo(id, data) {
+    const url= `/users/budget-signal/tele-signal-info/` + id
+    return axiosClient.get(url, data)
   }
   
 };

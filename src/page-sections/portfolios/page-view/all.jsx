@@ -64,6 +64,8 @@ import { GlobalContext } from "contexts/GlobalContext";
 import AuthContext from "contexts/AuthContext";
 import { constant } from "constant/constant";
 import SelectDirectLinkAccount from "./component/SelectDirectLinkAccount";
+import { AutoTypesTitle } from "type/AutoTypes";
+import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -758,7 +760,9 @@ const PortfoliosList = () => {
                               sx={{
                                 display: downLg ? "flex" : "",
                                 flexWrap: downLg ? "wrap" : "",
+                                marginBottom: "12px"
                               }}
+                              
                             >
                               {!downLg && (
                                 <StyledTableCell>
@@ -824,7 +828,7 @@ const PortfoliosList = () => {
                                     Lợi nhuận 7N
                                   </Typography>
                                 )}
-                                <Typography variant="body2">
+                                <Typography fontWeight={600} variant="body2" color={plan?.week_profit > 0 ? "success.main" : "error.main"}>
                                   {formatCurrency(plan?.week_profit)}
                                 </Typography>
                               </StyledTableCell>
@@ -844,7 +848,7 @@ const PortfoliosList = () => {
                                     >
                                       Lợi nhuận
                                     </Typography>
-                                    <Typography
+                                    {/* <Typography
                                       fontWeight={600}
                                       fontSize={12}
                                       color={
@@ -854,10 +858,10 @@ const PortfoliosList = () => {
                                       }
                                     >
                                       {formatCurrency(dailyTarget?.profit)}
-                                    </Typography>
+                                    </Typography> */}
                                   </Box>
                                 )}
-                                <Typography variant="body2">
+                                <Typography fontWeight={600} variant="body2" color={plan?.total_profit > 0 ? "success.main" : "error.main"}>
                                   {formatCurrency(plan?.total_profit)}
                                 </Typography>
                               </StyledTableCell>
@@ -1019,6 +1023,7 @@ const PortfoliosList = () => {
                                         <Typography
                                           variant="body1"
                                           component="div"
+                                          fontSize={14}
                                         >
                                           {
                                             SignalFeatureTypesTitle[
@@ -1043,8 +1048,9 @@ const PortfoliosList = () => {
                                         <Typography
                                           variant="body1"
                                           component="div"
+                                          fontSize={14}
                                         >
-                                          {plan?.name}
+                                          {BudgetStrategyTypeTitle[plan?.lastData?.budgetStrategy?.bs?.budgetStrategyType]}
                                         </Typography>
                                         <Typography fontSize={12}>
                                           Chiến lược vốn
@@ -1063,6 +1069,7 @@ const PortfoliosList = () => {
                                         <Typography
                                           variant="body1"
                                           component="div"
+                                          fontSize={14}
                                         >
                                           ${plan?.margin_dense?.toFixed(2)}
                                         </Typography>

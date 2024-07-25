@@ -12,6 +12,7 @@ const CheckConnectExchangeConnect = ({ children }) => {
     user,
     loading: authLoading,
     selectedLinkAccount,
+    isLogout
   } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [linked, setLinked] = useState();
@@ -54,6 +55,11 @@ const CheckConnectExchangeConnect = ({ children }) => {
         {children}
       </ConnectExchangeContext.Provider>
     );
+  }
+
+  if(isLogout) {
+    return <Navigate to="/login" />;
+
   }
 
   if (parseInt(statusCode) === 401) {

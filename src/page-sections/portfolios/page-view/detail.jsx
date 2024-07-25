@@ -17,6 +17,7 @@ import sessionApi from "api/session/sessionApi";
 import RefreshProvider from "contexts/RefreshContext";
 import { showToast } from "components/toast/toast";
 import StatPortfolio from "./stat";
+import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 
 const TabPanel = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -46,7 +47,7 @@ const a11yProps = (index) => {
 
 export const PortfolioDetailContext = createContext();
 
-const PortfolioDetail = () => {
+const PortfolioDetail = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [change, setChange] = useState(false);
   const { isConnected, socket } = useContext(SocketContext);
@@ -61,7 +62,8 @@ const PortfolioDetail = () => {
   const [loadingCount, setLoadingCount] = useState(0);
 
   const increaseLoading = () => setLoadingCount((prev) => prev + 1);
-  const decreaseLoading = () => setLoadingCount((prev) => Math.max(prev - 1, 0));
+  const decreaseLoading = () =>
+    setLoadingCount((prev) => Math.max(prev - 1, 0));
 
   useEffect(() => {
     if (loadingCount > 0) {
@@ -85,7 +87,12 @@ const PortfolioDetail = () => {
   const fetchUserBotHistory = useCallback(async () => {
     try {
       increaseLoading();
-      const response = await portfolioApi.userBotHistory(id);
+      let response;
+      if (props?.isSignalStrategy === true) {
+        response = await signalStrategyApi.usersBudgetSignalHistory(id);
+      } else {
+        response = await portfolioApi.userBotHistory(id);
+      }
       if (response?.data?.ok === true) {
         const dataResult = mergeAndSortData(response?.data);
         setData(dataResult);
@@ -97,12 +104,17 @@ const PortfolioDetail = () => {
     } finally {
       decreaseLoading();
     }
-  }, [id]);
+  }, [id, props?.isSignalStrategy]);
 
   const fetchUserBotInfo = useCallback(async () => {
     try {
       increaseLoading();
-      const response = await portfolioApi.userBotInfo(id);
+      let response;
+      if (props?.isSignalStrategy === true) {
+        response = await signalStrategyApi.userBudgetSignalTeleSignalInfo(id);
+      } else {
+        response = await portfolioApi.userBotInfo(id);
+      }
       if (response?.data?.ok === true) {
         setDataStat(response?.data?.d);
       } else {
@@ -113,7 +125,7 @@ const PortfolioDetail = () => {
     } finally {
       decreaseLoading();
     }
-  }, [id]);
+  }, [id, props?.isSignalStrategy]);
 
   const fetchGlobalLastResult = useCallback(async () => {
     try {
@@ -172,30 +184,43 @@ const PortfolioDetail = () => {
         }}
       >
         <Box padding={downLg ? 1 : 2}>
-          <MenuComponent dataStat={dataStat} setDataStat={setDataStat} />
+          <MenuComponent
+            dataStat={dataStat}
+            setDataStat={setDataStat}
+            {...props}
+          />
           <Tabs value={value} onChange={handleChange} aria-label="tabs example">
             <Tab label="Quá trình đầu tư" {...a11yProps(0)} />
-            <Tab label="Thống kê" {...a11yProps(1)} />
+            {props?.isSignalStrategy !== true && (
+              <Tab label="Thống kê" {...a11yProps(1)} />
+            )}
           </Tabs>
           <TabPanel value={value} index={0}>
             <Box sx={{ pt: 4 }}>
               <Grid container spacing={4}>
                 <Grid item xs={12} md={4}>
-                  <InvestmentOverview />
-                  <Statistics />
+                  <InvestmentOverview {...props} />
+                  <Statistics {...props} />
                 </Grid>
                 <Grid className="aksalwqzz" item xs={12} md={8}>
-                  <Timeline />
+                  <Timeline {...props} />
                 </Grid>
                 <Grid item xs={12}></Grid>
               </Grid>
             </Box>
           </TabPanel>
-          <TabPanel value={value} index={1}>
-            <Box>
-              <StatPortfolio isSubPage={true} dataStat={dataStat} loading={loading} />
-            </Box>
-          </TabPanel>
+          {props?.isSignalStrategy !== true && (
+            <TabPanel value={value} index={1}>
+              <Box>
+                <StatPortfolio
+                  {...props}
+                  isSubPage={true}
+                  dataStat={dataStat}
+                  loading={loading}
+                />
+              </Box>
+            </TabPanel>
+          )}
         </Box>
       </PortfolioDetailContext.Provider>
     </RefreshProvider>

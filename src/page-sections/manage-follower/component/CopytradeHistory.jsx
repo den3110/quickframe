@@ -125,6 +125,7 @@ const CopytradeHistory = () => {
                       sx={{
                         display: downLg ? "flex" : "",
                         flexWrap: "wrap",
+                        marginBottom: "16px"
                       }}
                     >
                       <StyledTableCell

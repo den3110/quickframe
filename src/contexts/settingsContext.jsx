@@ -3,7 +3,7 @@ import { THEMES } from "util/constants";
 import useLocalStorage from "hooks/useLocalStorage";
 const initialSettings = {
   direction: "ltr",
-  theme: THEMES.LIGHT,
+  theme: THEMES.DARK,
   // activeLayout: "layout1",
   responsiveFontSizes: true
 };

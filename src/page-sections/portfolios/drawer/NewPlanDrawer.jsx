@@ -153,7 +153,6 @@ const NewPlanDrawer = ({
   };
 
   const handleIncrement = (setFunc, value) => {
-    console.log(value);
     setFunc(parseInt(value) + 1);
   };
   const handleDecrement = (setFunc, value) =>
@@ -393,7 +392,6 @@ const NewPlanDrawer = ({
             (item) => item?._id === selectedPlan?._id
           );
           dataTemp[indexData] = data;
-          console.log(indexData);
           setData(dataTemp);
         } else {
           setChange((prev) => !prev);
@@ -409,7 +407,6 @@ const NewPlanDrawer = ({
         showToast(response?.data?.m);
       }
     } catch (error) {
-      console.log(error);
       showToast(error?.response?.data?.m);
     } finally {
       setLoadingSubmit(false);
@@ -1260,7 +1257,6 @@ const NewPlanDrawer = ({
                                 gap: 0.5,
                               }}
                             >
-                              {console.log(selected)}
                               {selected?.length > 0 &&
                                 selected.map((value) => (
                                   <Chip

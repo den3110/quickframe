@@ -19,14 +19,17 @@ import { showToast } from "components/toast/toast";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import { Replay } from "@mui/icons-material";
-// import useQuery from "hooks/useQuery";
+import useQuery from "hooks/useQuery";
 import AuthContext from "contexts/AuthContext";
 import NewPlanDrawer from "../drawer/NewPlanDrawer";
 import ShareArchievement from "../dialog/ShareArchievement";
+import AddIcon from "@mui/icons-material/Add";
+import { SignalFeatureTypes } from "type/SignalFeatureTypes";
+import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 
-const MenuComponent = ({ dataStat, setDataStat }) => {
+const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const canvasRef= useRef()
+  const canvasRef = useRef();
   const { id } = useParams();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -37,6 +40,11 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [isShareArchievement, setIsShareArchievement] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const open = Boolean(anchorEl);
+  const menuOpen = Boolean(menuAnchorEl);
 
   const handleClick = (event) => {
     setMenuAnchorEl(event.currentTarget);
@@ -54,8 +62,10 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-  const menuOpen = Boolean(menuAnchorEl);
+  const handleNewPlan = () => {
+    setIsEdit(true);
+    setOpenDrawer(true);
+  };
 
   const handleChangeIsRunning = async (action) => {
     try {
@@ -78,24 +88,22 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
     }
   };
 
-  const resetPnlToday= async ()=> {
+  const resetPnlToday = async () => {
     try {
-      // const result= await 
-      const payload= {
-        action: ActionBotType.RESET_PNL
-      }
-      const response= await portfolioApi.userBotAction(id, payload)
-      if(response?.data?.ok=== true) {
-        showToast(ActionBotTypeMessageSucces.RESET_PNL, "success")
-      }
-      else if(response?.data?.ok=== false) {
-        showToast(response?.data?.m, "success")
-
+      // const result= await
+      const payload = {
+        action: ActionBotType.RESET_PNL,
+      };
+      const response = await portfolioApi.userBotAction(id, payload);
+      if (response?.data?.ok === true) {
+        showToast(ActionBotTypeMessageSucces.RESET_PNL, "success");
+      } else if (response?.data?.ok === false) {
+        showToast(response?.data?.m, "success");
       }
     } catch (error) {
-        showToast(error?.response?.data?.m, "error")
+      showToast(error?.response?.data?.m, "error");
     }
-  }
+  };
 
   const handleBack = () => {
     navigate(-1);
@@ -106,6 +114,21 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
     setIsPause(dataStat?.lastData?.isPause);
   }, [dataStat]);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const response = await signalStrategyApi.userBudgetTelegramSignal();
+        if (response?.data?.ok === true) {
+          setData(response?.data?.d);
+        }
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -113,75 +136,96 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
           Quay lại
         </Button>
         <Box>
-          {isRunning === false && (
-            <Button
-              sx={{
-                "& .MuiButton-startIcon": {
-                  margin: downLg ? 0 : "",
-                },
-              }}
-              startIcon={<PlayArrowIcon />}
-              variant="contained"
-              color="success"
-              size={"large"}
-              style={{ marginRight: "8px" }}
-              onClick={() => handleChangeIsRunning("START")}
-            >
-              {downLg ? "" : "Khởi chạy"}
-            </Button>
+          {isSignalStrategy === false && (
+            <>
+              {isRunning === false && (
+                <Button
+                  sx={{
+                    "& .MuiButton-startIcon": {
+                      margin: downLg ? 0 : "",
+                    },
+                  }}
+                  startIcon={<PlayArrowIcon />}
+                  variant="contained"
+                  color="success"
+                  size={"large"}
+                  style={{ marginRight: "8px" }}
+                  onClick={() => handleChangeIsRunning("START")}
+                >
+                  {downLg ? "" : "Khởi chạy"}
+                </Button>
+              )}
+              {isRunning === true && !isPause && (
+                <Button
+                  sx={{
+                    "& .MuiButton-startIcon": {
+                      margin: downLg ? 0 : "",
+                    },
+                  }}
+                  startIcon={<PauseIcon />}
+                  variant="contained"
+                  color="success"
+                  size={"large"}
+                  style={{ marginRight: "8px" }}
+                  onClick={() => handleChangeIsRunning("PAUSE")}
+                >
+                  {downLg ? "" : "Tạm ngưng"}
+                </Button>
+              )}
+              {isRunning === true && isPause && (
+                <Button
+                  sx={{
+                    "& .MuiButton-startIcon": {
+                      margin: downLg ? 0 : "",
+                    },
+                  }}
+                  startIcon={<PlayArrowIcon />}
+                  variant="contained"
+                  color="primary"
+                  size={"large"}
+                  style={{ marginRight: "8px" }}
+                  onClick={() => handleChangeIsRunning("RESUME")}
+                >
+                  {downLg ? "" : "Tiếp tục"}
+                </Button>
+              )}
+              <Button
+                sx={{
+                  "& .MuiButton-startIcon": {
+                    margin: downLg ? 0 : "",
+                  },
+                }}
+                startIcon={<Replay />}
+                variant="contained"
+                color="secondary"
+                size={"large"}
+                style={{ marginRight: "8px" }}
+                onClick={() => handleChangeIsRunning(ActionBotType.RESTART)}
+              >
+                {downLg ? "" : "Khởi động lại"}
+              </Button>
+              <IconButton size={"large"} onClick={handleClick}>
+                <MoreVertIcon />
+              </IconButton>
+            </>
           )}
-          {isRunning === true && !isPause && (
+          {isSignalStrategy === true && (
             <Button
               sx={{
                 "& .MuiButton-startIcon": {
                   margin: downLg ? 0 : "",
                 },
               }}
-              startIcon={<PauseIcon />}
-              variant="contained"
-              color="success"
-              size={"large"}
-              style={{ marginRight: "8px" }}
-              onClick={() => handleChangeIsRunning("PAUSE")}
-            >
-              {downLg ? "" : "Tạm ngưng"}
-            </Button>
-          )}
-          {isRunning === true && isPause && (
-            <Button
-              sx={{
-                "& .MuiButton-startIcon": {
-                  margin: downLg ? 0 : "",
-                },
-              }}
-              startIcon={<PlayArrowIcon />}
+              startIcon={<AddIcon />}
               variant="contained"
               color="primary"
               size={"large"}
               style={{ marginRight: "8px" }}
-              onClick={() => handleChangeIsRunning("RESUME")}
+              onClick={() => handleNewPlan()}
             >
-              {downLg ? "" : "Tiếp tục"}
+              {downLg ? "" : "Tạo plan"}
             </Button>
           )}
-          <Button
-            sx={{
-              "& .MuiButton-startIcon": {
-                margin: downLg ? 0 : "",
-              },
-            }}
-            startIcon={<Replay />}
-            variant="contained"
-            color="secondary"
-            size={"large"}
-            style={{ marginRight: "8px" }}
-            onClick={() => handleChangeIsRunning(ActionBotType.RESTART)}
-          >
-            {downLg ? "" : "Khởi động lại"}
-          </Button>
-          <IconButton size={"large"} onClick={handleClick}>
-            <MoreVertIcon />
-          </IconButton>
         </Box>
       </Box>
 
@@ -203,7 +247,7 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
           <MenuItem
             onClick={(e) => {
               handleSubMenuClick(e);
-              handleClose()
+              handleClose();
               setOpenEdit(true);
               setIsEdit(true);
               // isEditSingle=
@@ -211,15 +255,23 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
           >
             Chỉnh sửa gói đầu tư
           </MenuItem>
-          <MenuItem onClick={(e)=> {
-            handleSubMenuClick(e)
-            handleClose()
-            setIsShareArchievement(true)
-          }}>Khoe thành tích</MenuItem>
-          <MenuItem onClick={async (e)=> {
-            handleSubMenuClick(e)
-            await resetPnlToday()
-          }}>Đặt lại PnL hôm nay</MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              handleSubMenuClick(e);
+              handleClose();
+              setIsShareArchievement(true);
+            }}
+          >
+            Khoe thành tích
+          </MenuItem>
+          <MenuItem
+            onClick={async (e) => {
+              handleSubMenuClick(e);
+              await resetPnlToday();
+            }}
+          >
+            Đặt lại PnL hôm nay
+          </MenuItem>
           <MenuItem onClick={handleSubMenuClick}>Xóa gói đầu tư</MenuItem>
         </Box>
       </Popover>
@@ -234,11 +286,33 @@ const MenuComponent = ({ dataStat, setDataStat }) => {
         isEditSingle={true}
         setData={setDataStat}
       />
-      <ShareArchievement 
+      <NewPlanDrawer
+        open={openDrawer}
+        handleClose={() => {
+          setOpenDrawer(false);
+        }}
+        isEdit={isEdit}
+        allowSelectedTab={true}
+        selectedPlan={{
+          ...dataStat,
+          autoType: 3,
+          signal_feature:
+            data?.map((item) => item?._id)?.length > 1
+              ? SignalFeatureTypes.AUTO_CHANGE_METHODS
+              : SignalFeatureTypes.SINGLE_METHOD,
+          budget_amount: 100,
+          name: "",
+          bet_second: 25,
+          margin_dense: 100,
+        }}
+        setIsEdit={setIsEdit}
+        selectedSignal={data?.map((item) => item?._id)}
+      />
+      <ShareArchievement
         ref={canvasRef}
         open={isShareArchievement}
-        handleClose={()=> {
-          setIsShareArchievement(false)
+        handleClose={() => {
+          setIsShareArchievement(false);
         }}
         selectedPlan={dataStat}
       />
