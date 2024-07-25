@@ -10,7 +10,6 @@ const useRefreshToken = async () => {
     const response = await authApi.refreshToken({ refreshToken });
     localStorage.setItem('accessToken', response.data.accessToken);
     localStorage.setItem('refreshToken', response.data.refreshToken);
-    localStorage.setItem('user', JSON.stringify(response.data.user));
     return response.data.accessToken;
   } catch (error) {
     console.error('Failed to refresh token:', error);

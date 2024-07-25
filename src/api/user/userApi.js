@@ -11,7 +11,6 @@ const userApi = {
     return axiosClient.post(url, data);
   },
   getUserExchangeLinkAccount(data, linkAccountId) {
-    console.log(localStorage.getItem("account"))
     const url = "/users/exchange/link-account/profile/" + linkAccountId;
     return axiosClient.get(url, data);
   },

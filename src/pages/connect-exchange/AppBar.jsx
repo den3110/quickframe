@@ -12,6 +12,7 @@ const AppBarSection = () => {
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("linkAccount")
     setSelectedLinkAccount(undefined)
+    setAccessToken(undefined)
     navigate("/login")
     // window.location.reload();
   };
