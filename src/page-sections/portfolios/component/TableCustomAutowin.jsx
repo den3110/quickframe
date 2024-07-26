@@ -99,15 +99,11 @@ const CustomAutowinTable = () => {
         <Box>
           <Swiper
             breakpoints={{
-              // when window width is >= 640px
               300: {
                 slidesPerView: 1,
               },
             }}
           >
-            {/* {console.log(dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
-                    "-"
-                  )?.length, itemColumnTable)} */}
             {Array.from(
               Array(
                 isNumber(Math.ceil(
@@ -124,7 +120,8 @@ const CustomAutowinTable = () => {
               <SwiperSlide key={keyParent}>
                 <Box display={"block"}>
                   {dataStat?.lastData?.budgetStrategy?.bs
-                    ?.budgetStrategyType !== BudgetStrategyType.FIBO_X_STEP &&
+                    ?.budgetStrategyType !== BudgetStrategyType.FIBO_X_STEP && dataStat?.lastData?.budgetStrategy?.bs
+                    ?.budgetStrategyType !== BudgetStrategyType.CUSTOM_AUTOWIN &&
                     dataStat?.lastData?.budgetStrategy?.bs?.method_data?.map(
                       (item, key) => (
                         <Fragment key={key}>
@@ -162,23 +159,23 @@ const CustomAutowinTable = () => {
                                     align="center"
                                     sx={{
                                       background:
-                                        dataStat?.lastData.budgetStrategy?.bs
-                                          ?.row ===
+                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                          ?.row) ===
                                           parseInt(key) + 1 &&
-                                        dataStat?.lastData.budgetStrategy?.bs
-                                          ?.index ===
+                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                          ?.index) ===
                                           parseInt(
                                             key2 + keyParent * itemColumnTable
                                           )
                                           ? theme.palette.success.buy
-                                          : dataStat?.lastData.budgetStrategy
-                                              ?.bs?.index ===
+                                          : parseInt(dataStat?.lastData.budgetStrategy
+                                              ?.bs?.index) ===
                                               parseInt(
                                                 key2 +
                                                   keyParent * itemColumnTable
                                               ) &&
-                                            dataStat?.lastData.budgetStrategy
-                                              ?.bs?.row !==
+                                            parseInt(dataStat?.lastData.budgetStrategy
+                                              ?.bs?.row) !==
                                               parseInt(key) + 1
                                           ? theme.palette.success[101]
                                           : "",
@@ -187,11 +184,11 @@ const CustomAutowinTable = () => {
                                     <StyledTypography
                                       sx={{
                                         color:
-                                          dataStat?.lastData.budgetStrategy?.bs
-                                            ?.row ===
+                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                            ?.row) ===
                                             parseInt(key) + 1 &&
-                                          dataStat?.lastData.budgetStrategy?.bs
-                                            ?.index ===
+                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                            ?.index) ===
                                             parseInt(
                                               key2 + keyParent * itemColumnTable
                                             )
@@ -224,18 +221,17 @@ const CustomAutowinTable = () => {
                       )
                     )}
 
-
                   {dataStat?.lastData?.budgetStrategy?.bs
-                    ?.budgetStrategyType === BudgetStrategyType.FIBO_X_STEP &&
+                    ?.budgetStrategyType === BudgetStrategyType.CUSTOM_AUTOWIN &&
                     dataStat?.lastData?.budgetStrategy?.bs?.method_data
-                      ?.slice(0, 1)
+                      
                       ?.map((item, key) => (
                         <Fragment key={key}>
                           <Box
                             display="flex"
                             style={{
                               backgroundColor:
-                                dataStat?.lastData.budgetStrategy?.bs?.row ===
+                                parseInt(dataStat?.lastData.budgetStrategy?.bs?.row) ===
                                 parseInt(key) + 1
                                   ? theme.palette.success[101]
                                   : theme.palette.background.cell,
@@ -244,13 +240,15 @@ const CustomAutowinTable = () => {
                             <StyledFirstTableCell align="center">
                               <StyledTypography
                                 color={
-                                  dataStat?.lastData.budgetStrategy?.bs?.row ===
+                                  parseInt(dataStat?.lastData.budgetStrategy?.bs?.row) ===
                                   parseInt(key) + 1
                                     ? theme.palette.success.buy + "!important"
                                     : theme.palette.background.fcell
                                 }
                               >
-                                Hàng {parseInt(key) + 1}
+                                {parseInt(key)=== 0 && "Hàng win"}
+                                {parseInt(key)=== 1 && "Giá trị"}
+                                {parseInt(key)=== 2 && "Hàng lose"}
                               </StyledTypography>
                             </StyledFirstTableCell>
                             {item
@@ -265,23 +263,23 @@ const CustomAutowinTable = () => {
                                     align="center"
                                     sx={{
                                       background:
-                                        dataStat?.lastData.budgetStrategy?.bs
-                                          ?.row ===
+                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                          ?.row) ===
                                           parseInt(key) + 1 &&
-                                        dataStat?.lastData.budgetStrategy?.bs
-                                          ?.index ===
+                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                          ?.index) ===
                                           parseInt(
                                             key2 + keyParent * itemColumnTable
                                           )
                                           ? theme.palette.success.buy
-                                          : dataStat?.lastData.budgetStrategy
-                                              ?.bs?.index ===
+                                          : parseInt(dataStat?.lastData.budgetStrategy
+                                              ?.bs?.index) ===
                                               parseInt(
                                                 key2 +
                                                   keyParent * itemColumnTable
                                               ) &&
-                                            dataStat?.lastData.budgetStrategy
-                                              ?.bs?.row !==
+                                            parseInt(dataStat?.lastData.budgetStrategy
+                                              ?.bs?.row) !==
                                               parseInt(key) + 1
                                           ? theme.palette.success[101]
                                           : "",
@@ -290,11 +288,11 @@ const CustomAutowinTable = () => {
                                     <StyledTypography
                                       sx={{
                                         color:
-                                          dataStat?.lastData.budgetStrategy?.bs
-                                            ?.row ===
+                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                            ?.row) ===
                                             parseInt(key) + 1 &&
-                                          dataStat?.lastData.budgetStrategy?.bs
-                                            ?.index ===
+                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                            ?.index) ===
                                             parseInt(
                                               key2 + keyParent * itemColumnTable
                                             )
@@ -320,7 +318,109 @@ const CustomAutowinTable = () => {
                                     1
                                 ).keys()
                               ).map((item, key) => (
-                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell key={key}></StyledTableCell>
+                              ))}
+                          </Box>
+                        </Fragment>
+                      ))}
+
+                      {/*  */}
+                      {dataStat?.lastData?.budgetStrategy?.bs
+                    ?.budgetStrategyType === BudgetStrategyType.FIBO_X_STEP &&
+                    dataStat?.lastData?.budgetStrategy?.bs?.method_data
+                      ?.slice(0, 1)
+                      ?.map((item, key) => (
+                        <Fragment key={key}>
+                          <Box
+                            display="flex"
+                            style={{
+                              backgroundColor:
+                                parseInt(dataStat?.lastData.budgetStrategy?.bs?.row) ===
+                                parseInt(key) + 1
+                                  ? theme.palette.success[101]
+                                  : theme.palette.background.cell,
+                            }}
+                          >
+                            <StyledFirstTableCell align="center">
+                              <StyledTypography
+                                color={
+                                  parseInt(dataStat?.lastData.budgetStrategy?.bs?.row) ===
+                                  parseInt(key) + 1
+                                    ? theme.palette.success.buy + "!important"
+                                    : theme.palette.background.fcell
+                                }
+                              >
+                                Hàng {parseInt(key) + 1}
+                              </StyledTypography>
+                            </StyledFirstTableCell>
+                            {item
+                              ?.split("-")
+                              ?.slice(
+                                keyParent * itemColumnTable,
+                                (keyParent + 1) * itemColumnTable
+                              )
+                              ?.map((item2, key2) => (
+                                <Fragment key={key2}>
+                                  <StyledTableCell
+                                    align="center"
+                                    sx={{
+                                      background:
+                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                          ?.row) ===
+                                          parseInt(key) + 1 &&
+                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                          ?.index) ===
+                                          parseInt(
+                                            key2 + keyParent * itemColumnTable
+                                          )
+                                          ? theme.palette.success.buy
+                                          : parseInt(dataStat?.lastData.budgetStrategy
+                                              ?.bs?.index) ===
+                                              parseInt(
+                                                key2 +
+                                                  keyParent * itemColumnTable
+                                              ) &&
+                                            parseInt(dataStat?.lastData.budgetStrategy
+                                              ?.bs?.row) !==
+                                              parseInt(key) + 1
+                                          ? theme.palette.success[101]
+                                          : "",
+                                    }}
+                                  >
+                                    <StyledTypography
+                                      sx={{
+                                        color:
+                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                            ?.row) ===
+                                            parseInt(key) + 1 &&
+                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
+                                            ?.index) ===
+                                            parseInt(
+                                              key2 + keyParent * itemColumnTable
+                                            )
+                                            ? "white"
+                                            : "",
+                                      }}
+                                    >
+                                      {round2number(item2)}
+                                    </StyledTypography>
+                                  </StyledTableCell>
+                                </Fragment>
+                              ))}
+                            {(keyParent + 1) * itemColumnTable >
+                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                                "-"
+                              )?.length &&
+                              Array.from(
+                                Array(
+                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                                    "-"
+                                  )?.length -
+                                    keyParent * itemColumnTable +
+                                    1
+                                ).keys()
+                              ).map((item, key) => (
+                                <StyledTableCell key={key}></StyledTableCell>
                               ))}
                           </Box>
                         </Fragment>

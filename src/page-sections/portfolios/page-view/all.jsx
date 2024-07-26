@@ -435,6 +435,13 @@ const PortfoliosList = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    const filtered = data.filter(item =>
+      item.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setDataState(filtered);
+  };
+
   useEffect(() => {
     setCheckedRows(
       data
@@ -467,6 +474,8 @@ const PortfoliosList = () => {
     setDataState(data);
   }, [data]);
 
+  
+
   // useEffect(() => {
   //   if (showAllLinkAccountId === true) {
   //     setDataState(data);
@@ -495,11 +504,13 @@ const PortfoliosList = () => {
                   <TextField
                     variant="outlined"
                     placeholder="Tìm gói đầu tư..."
+                    sx={{ width: downLg ? "aaa" : 450 }}
                     InputProps={{
                       startAdornment: (
                         <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
                       ),
                     }}
+                    onChange={handleSearch}
                     inputProps={{
                       style: {
                         height: "24px",

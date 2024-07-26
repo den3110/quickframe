@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   DialogTitle,
   Divider,
   Drawer,
@@ -8,7 +9,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import AuthContext from "contexts/AuthContext";
 import { constant } from "constant/constant";
@@ -16,17 +17,27 @@ import { useNavigate } from "react-router-dom";
 import exchangeApi from "api/exchange/exchangeApi";
 import { showToast } from "components/toast/toast";
 import { useTranslation } from "react-i18next";
+import { useInView } from "react-intersection-observer";
+import userApi from "api/user/userApi";
 
 const UserLinkAccountListDrawer = ({ open, handleClose }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const {t }= useTranslation()
+  const [loading, setLoading] = useState();
+  const { ref, inView } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
+  const { t } = useTranslation();
   const {
-    userLinkAccountList,
+    // userLinkAccountList,
     selectedLinkAccount,
     setSelectedLinkAccount,
     dataSelectedLinkAccount,
-    setDataSelectedLinkAccount
+    setDataSelectedLinkAccount,
+    userLinkAccountList,
+    logoutFromSystem,
   } = useContext(AuthContext);
+  const [userLinkAccountListState, setUserLinkAccountListState] = useState([]);
   const navigate = useNavigate();
 
   const handleAddNewLinkedAccount = () => {
@@ -44,7 +55,7 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
         setSelectedLinkAccount(undefined);
         showToast("Disconnect exchange account successfully", "success");
         // window.location.href = window.location.origin + "/connect";
-        navigate("/connect")
+        navigate("/connect");
       } else if (response?.data?.ok === false) {
         showToast(response?.data?.m, "error");
       }
@@ -56,15 +67,39 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
   const toggleLinkAccount = async (linkAccountId) => {
     try {
       localStorage.setItem("linkAccount", linkAccountId);
-      setSelectedLinkAccount(linkAccountId)
-      setDataSelectedLinkAccount(userLinkAccountList?.find(item=> item?._id === linkAccountId))
-      showToast("Chuyển tài khoản thành công", "success")
-      handleClose()
+      setSelectedLinkAccount(linkAccountId);
+      setDataSelectedLinkAccount(
+        userLinkAccountList?.find((item) => item?._id === linkAccountId)
+      );
+      showToast("Chuyển tài khoản thành công", "success");
+      handleClose();
       // window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (inView) {
+      (async () => {
+        try {
+          setLoading(true);
+          const response = await userApi.getUserLinkAccountList();
+          if (response?.data?.ok === true) {
+            setUserLinkAccountListState(
+              response?.data?.d?.filter((item) => item?.isLogin === true)
+            );
+          }
+        } catch (error) {
+          if (error?.response?.status === 401) {
+            logoutFromSystem();
+          }
+        } finally {
+          setLoading(false);
+        }
+      })();
+    }
+  }, [inView, logoutFromSystem]);
 
   return (
     <Drawer
@@ -87,6 +122,7 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
       </DialogTitle>
       <Divider />
       <Box
+        ref={ref}
         sx={{
           width: downLg ? "100%" : 448,
           padding: "24px 16px",
@@ -98,85 +134,111 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
         }}
       >
         <Box sx={{ width: "100%", flex: 1, overflow: "auto" }}>
-          {userLinkAccountList?.map((item, key) => (
-            <Box key={key} mb={2}>
-              <Box
-                key={key}
-                width="100%"
-                sx={{
-                  position: "relative",
-                  background:
-                    "linear-gradient(95.4deg, rgba(77, 84, 109, 0.89) 6.95%, rgba(28, 30, 38, 0.89) 100%)",
-                  overflow: "hidden",
-                }}
-                color="white"
-                borderRadius="8px"
-                p={2}
-                mb={2}
-                textAlign="center"
-                className="custom-wallet-demo"
-              >
-                <img
-                  src={constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".svg"}
-                  style={{ height: 28 }}
-                  alt="Can't open"
-                />
-                <Typography fontSize={14} align="left" mt={1} mb={1}>
-                  Email: {item?.email}
-                </Typography>
-                <Divider style={{ borderColor: "rgba(255, 255, 255, 0.2)" }} />
-                <Typography fontSize={14} align="left" mt={1} mb={1}>
-                  {/* ${spotBalance?.demoBalance?.toFixed(2)} */}
-                  Nickname: {item?.nickName}
-                </Typography>
-                {item?._id === selectedLinkAccount && (
+          {loading === false && (
+            <>
+              {userLinkAccountListState?.map((item, key) => (
+                <Box key={key} mb={2}>
                   <Box
-                    position={"absolute"}
+                    key={key}
+                    width="100%"
                     sx={{
+                      position: "relative",
                       background:
-                        "linear-gradient(154.83deg,#03c768 15.98%,#0062ff 85.83%)",
-                      fontSize: 9,
-                      height: 20,
-                      lineHeight: 2,
-                      right: -20,
-                      textAlign: "center",
-                      textTransform: "uppercase",
-                      top: 15,
-                      transform: "rotate(45deg)",
-                      width: 90,
-                      borderRadius: "12px",
-                      fontWeight: 600,
-                      minWidth: 70,
+                        "linear-gradient(95.4deg, rgba(77, 84, 109, 0.89) 6.95%, rgba(28, 30, 38, 0.89) 100%)",
                       overflow: "hidden",
-                      padding: "0 6px",
-                      whiteSpace: "nowrap",
-                      textOverflow: "ellipsis",
-                      color: "white",
                     }}
+                    color="white"
+                    borderRadius="8px"
+                    p={2}
+                    mb={2}
+                    textAlign="center"
+                    className="custom-wallet-demo"
                   >
-                    Active
-                  </Box>
-                )}
-                <Box>
-                  <Box display={"flex"} alignItems={"center"} gap={1}>
+                    <img
+                      src={
+                        constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".svg"
+                      }
+                      style={{ height: 28 }}
+                      alt="Can't open"
+                    />
+                    <Typography fontSize={14} align="left" mt={1} mb={1}>
+                      Email: {item?.email}
+                    </Typography>
+                    <Divider
+                      style={{ borderColor: "rgba(255, 255, 255, 0.2)" }}
+                    />
+                    <Typography fontSize={14} align="left" mt={1} mb={1}>
+                      {/* ${spotBalance?.demoBalance?.toFixed(2)} */}
+                      Nickname: {item?.nickName}
+                    </Typography>
                     {item?._id === selectedLinkAccount && (
-                      <Button color="error" variant="outlined" fullWidth onClick={handleDisconnect}>
-                        Đăng xuất
-                      </Button>
-                    )}
-                    {item?._id !== selectedLinkAccount && (
-                      <Button
-                        fullWidth
-                        onClick={() => toggleLinkAccount(item?._id)}
+                      <Box
+                        position={"absolute"}
+                        sx={{
+                          background:
+                            "linear-gradient(154.83deg,#03c768 15.98%,#0062ff 85.83%)",
+                          fontSize: 9,
+                          height: 20,
+                          lineHeight: 2,
+                          right: -20,
+                          textAlign: "center",
+                          textTransform: "uppercase",
+                          top: 15,
+                          transform: "rotate(45deg)",
+                          width: 90,
+                          borderRadius: "12px",
+                          fontWeight: 600,
+                          minWidth: 70,
+                          overflow: "hidden",
+                          padding: "0 6px",
+                          whiteSpace: "nowrap",
+                          textOverflow: "ellipsis",
+                          color: "white",
+                        }}
                       >
-                        {t("switch_account")}
-                      </Button>
+                        Active
+                      </Box>
                     )}
+                    <Box>
+                      <Box display={"flex"} alignItems={"center"} gap={1}>
+                        {item?._id === selectedLinkAccount && (
+                          <Button
+                            color="error"
+                            variant="outlined"
+                            fullWidth
+                            onClick={handleDisconnect}
+                          >
+                            Đăng xuất
+                          </Button>
+                        )}
+                        {item?._id !== selectedLinkAccount && (
+                          <Button
+                            fullWidth
+                            onClick={() => toggleLinkAccount(item?._id)}
+                          >
+                            {t("switch_account")}
+                          </Button>
+                        )}
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
+              ))}
+            </>
+          )}
+          {loading === true && (
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress />
             </Box>
-          ))}
+          )}
         </Box>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ position: "sticky", top: 0 }}>

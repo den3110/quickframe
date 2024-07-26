@@ -26,10 +26,12 @@ const UserlinkAccountPopover = ({setOpen, isInside}) => {
           }
         }}
       >
-        <img style={{width: 32, height: 32}} src={constant.URL_ASSETS_LOGO + "/"+  dataSelectedLinkAccount?.clientId + ".ico"} alt="Can't open" />
-        <Typography fontSize={16} sx={{ cursor: "pointer" }}>
-          {dataSelectedLinkAccount?.nickName}
-        </Typography>
+        {dataSelectedLinkAccount && <>
+          <img style={{width: 32, height: 32}} src={constant.URL_ASSETS_LOGO + "/"+  dataSelectedLinkAccount?.clientId + ".ico"} alt="Can't open" />
+          <Typography fontSize={16} sx={{ cursor: "pointer" }}>
+            {dataSelectedLinkAccount?.nickName}
+          </Typography>
+        </>}
       </Box>
       <UserLinkAccountListDrawer
         open={openDrawerListLinkAccount}

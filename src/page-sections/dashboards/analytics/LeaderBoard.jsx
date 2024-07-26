@@ -380,7 +380,7 @@ const LeaderBoard = () => {
                       color="textSecondary"
                       sx={{ marginRight: 2 }}
                     >
-                      #{item.rank}
+                      #{parseInt(index) + 3 }
                     </Typography>
                     <ListItemAvatar>
                       <Avatar alt={item.name} src={item.avatar} />

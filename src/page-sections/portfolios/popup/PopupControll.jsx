@@ -30,6 +30,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
         <Button
           onClick={onClickStop}
           startIcon={<PauseIcon />}
+          color="warning"
           sx={{
             fontSize: downLg ? 10 : "",
             flexDirection: downLg ? "column" : "row",
@@ -55,6 +56,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
         </Button>
         <Button
           startIcon={<CachedIcon />}
+          color="success"
           sx={{
             fontSize: downLg ? 10 : "",
             flexDirection: downLg ? "column" : "row",
@@ -67,6 +69,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
         </Button>
         <Button
           startIcon={<ReplayIcon />}
+          color={"info"}
           sx={{
             fontSize: downLg ? 10 : "",
             flexDirection: downLg ? "column" : "row",
@@ -80,6 +83,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
         <Button
           onClick={onClickDelete}
           startIcon={<DeleteIcon />}
+          color="error"
           sx={{
             fontSize: downLg ? 10 : "",
             flexDirection: downLg ? "column" : "row",

@@ -23,7 +23,7 @@ import {
 import Layout from "../Layout";
 import { isDark } from "util/constants";
 import SearchIcon from "@mui/icons-material/Search";
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { MoreVert, Add, InsertChart } from "@mui/icons-material";
 import moment from "moment";
 import NewBotAI from "../NewBotAI";
@@ -70,6 +70,7 @@ const SignalStrategyList = () => {
   const { data, setData, loading, setChange } = useContext(
     SignalStrategyContext
   );
+  const [dataState, setDataState]= useState([])
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
@@ -131,6 +132,16 @@ const SignalStrategyList = () => {
   const handleMenuClose = () => {
     setAnchorElMenu(null);
   };
+  const handleSearch = (e) => {
+    const filtered = data.filter(item =>
+      item.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setDataState(filtered);
+  };
+
+  useEffect(() => {
+    setDataState(data);
+  }, [data]);
 
   return (
     <Layout>
@@ -148,7 +159,8 @@ const SignalStrategyList = () => {
               <TextField
                 variant="outlined"
                 sx={{ width: downLg ? "aaa" : 450 }}
-                placeholder="Search Strategy..."
+                placeholder="Tìm chiến lược tín hiệu..."
+                onChange={handleSearch}
                 InputProps={{
                   startAdornment: (
                     <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
@@ -234,7 +246,7 @@ const SignalStrategyList = () => {
                     </TableRow>
                   )}
                   {loading === false &&
-                    sortData(data, "createdAt", "desc")
+                    sortData(dataState, "createdAt", "desc")
                       .slice(
                         rowsPerPage * (page - 1),
                         rowsPerPage * (page - 1) + rowsPerPage

@@ -74,6 +74,7 @@ const BudgetStrategyPage = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   const [data, setData] = useState([]);
+  const [dataState, setDataState]= useState([])
   const [loading, setLoading] = useState();
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
@@ -118,6 +119,13 @@ const BudgetStrategyPage = () => {
     setPage(value);
   };
 
+  const handleSearch = (e) => {
+    const filtered = data.filter(item =>
+      item.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setDataState(filtered);
+  };
+
   const fetchUserBudgetStrategy = useCallback(async () => {
     try {
       setLoading(true);
@@ -137,6 +145,10 @@ const BudgetStrategyPage = () => {
   useEffect(() => {
     fetchUserBudgetStrategy();
   }, [change, fetchUserBudgetStrategy]);
+
+  useEffect(() => {
+    setDataState(data);
+  }, [data]);
 
   return (
     <RefreshProvider
@@ -170,13 +182,14 @@ const BudgetStrategyPage = () => {
             >
               <TextField
                 variant="outlined"
-                placeholder="Search Strategy..."
+                placeholder="Tìm chiến lược vốn..."
                 sx={{ width: downLg ? "100%" : 450 }}
                 InputProps={{
                   startAdornment: (
                     <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
                   ),
                 }}
+                onChange={handleSearch}
               />
               <Box
                 mt={downLg ? 2 : 0}
@@ -230,7 +243,7 @@ const BudgetStrategyPage = () => {
                     </TableRow>
                   )}
                   {loading === false &&
-                    sortData(data, "createdAt", "desc")
+                    sortData(dataState, "createdAt", "desc")
                       .slice(
                         rowsPerPage * (page - 1),
                         rowsPerPage * (page - 1) + rowsPerPage
