@@ -177,7 +177,7 @@ const MemberListAccount = () => {
                       borderBottom: downLg ? "none" : "",
                     }}
                   >
-                    <Typography fontSize={14} sx={{ whiteSpace: "nowrap" }}>
+                    <Typography fontSize={14} sx={{ whiteSpace: "nowrap" }}  fontWeight={"600"}>
                       ${numberWithCommas(round2number(row?.tradevol))}
                     </Typography>
                     {downLg && (
