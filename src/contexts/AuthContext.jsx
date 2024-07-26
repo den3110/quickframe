@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const response= await userApi.getUserLinkAccountList()
         if(response?.data?.ok=== true) {
-            setUserLinkAccountList(response?.data?.d?.filter(item=> item?.isLogin=== true && item?._id === selectedLinkAccount))
+            setUserLinkAccountList(response?.data?.d?.filter(item=> item?.isLogin=== true))
             if(selectedLinkAccount) {
               // setSelectedLinkAccount(respo)
               if(response?.data?.d?.find(item=> item?._id === selectedLinkAccount && item?.isLogin=== true)) {
