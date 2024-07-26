@@ -368,7 +368,7 @@ const LeaderBoard = () => {
                           sortData(
                             dataUser,
                             function (e) {
-                              return parseFloat(e.profit);
+                              return parseFloat(e.pnl);
                             },
                             "desc"
                           )[0]?.name,
@@ -382,10 +382,10 @@ const LeaderBoard = () => {
                     sortData(
                       dataUser,
                       function (e) {
-                        return parseFloat(e.profit);
+                        return parseFloat(e.pnl);
                       },
                       "desc"
-                    )[0]?.profit
+                    )[0]?.pnl
                   }
                   heightRanking={268}
                   isTop1={true}
@@ -393,7 +393,7 @@ const LeaderBoard = () => {
                     sortData(
                       dataUser,
                       function (e) {
-                        return parseFloat(e.profit);
+                        return parseFloat(e.pnl);
                       },
                       "desc"
                     )[0]?.name
@@ -414,7 +414,7 @@ const LeaderBoard = () => {
                         sortData(
                           dataUser,
                           function (e) {
-                            return parseFloat(e.profit);
+                            return parseFloat(e.pnl);
                           },
                           "desc"
                         )[1]?.name,
@@ -428,10 +428,10 @@ const LeaderBoard = () => {
                   sortData(
                     dataUser,
                     function (e) {
-                      return parseFloat(e.profit);
+                      return parseFloat(e.pnl);
                     },
                     "desc"
-                  )[1]?.profit
+                  )[1]?.pnl
                 }
                 heightRanking={233}
                 isTop1={false}
@@ -439,7 +439,7 @@ const LeaderBoard = () => {
                   sortData(
                     dataUser,
                     function (e) {
-                      return parseFloat(e.profit);
+                      return parseFloat(e.pnl);
                     },
                     "desc"
                   )[1]?.name
@@ -461,7 +461,7 @@ const LeaderBoard = () => {
                           sortData(
                             dataUser,
                             function (e) {
-                              return parseFloat(e.profit);
+                              return parseFloat(e.pnl);
                             },
                             "desc"
                           )[0]?.name,
@@ -475,10 +475,10 @@ const LeaderBoard = () => {
                     sortData(
                       dataUser,
                       function (e) {
-                        return parseFloat(e.profit);
+                        return parseFloat(e.pnl);
                       },
                       "desc"
-                    )[0]?.profit
+                    )[0]?.pnl
                   }
                   heightRanking={268}
                   isTop1={true}
@@ -486,7 +486,7 @@ const LeaderBoard = () => {
                     sortData(
                       dataUser,
                       function (e) {
-                        return parseFloat(e.profit);
+                        return parseFloat(e.pnl);
                       },
                       "desc"
                     )[0]?.name
@@ -508,7 +508,7 @@ const LeaderBoard = () => {
                         sortData(
                           dataUser,
                           function (e) {
-                            return parseFloat(e.profit);
+                            return parseFloat(e.pnl);
                           },
                           "desc"
                         )[2]?.name,
@@ -522,10 +522,10 @@ const LeaderBoard = () => {
                   sortData(
                     dataUser,
                     function (e) {
-                      return parseFloat(e.profit);
+                      return parseFloat(e.pnl);
                     },
                     "desc"
-                  )[2]?.profit
+                  )[2]?.pnl
                 }
                 heightRanking={210}
                 isTop1={false}
@@ -533,7 +533,7 @@ const LeaderBoard = () => {
                   sortData(
                     dataUser,
                     function (e) {
-                      return parseFloat(e.profit);
+                      return parseFloat(e.pnl);
                     },
                     "desc"
                   )[2]?.name
@@ -548,7 +548,7 @@ const LeaderBoard = () => {
               {sortData(
                 dataUser,
                 function (e) {
-                  return parseFloat(e.profit);
+                  return parseFloat(e.pnl);
                 },
                 "desc"
               )
@@ -576,7 +576,7 @@ const LeaderBoard = () => {
                         #{parseInt(index) + 4}
                       </Typography>
                       <ListItemAvatar>
-                        <Avatar alt={item.name} src={item.photoUrl} />
+                        <Avatar alt={item.name} src={item.photoUrl ? `/users/avatar/${item.photoUrl}` : ""} />
                       </ListItemAvatar>
                       <ListItemText primary={item.name} />
                     </Box>
@@ -592,7 +592,7 @@ const LeaderBoard = () => {
                         borderRadius: 10,
                       }}
                     >
-                      {formatCurrency(item.profit)}
+                      {item.pnl} %
                     </Typography>
                   </StyledListItem>
                 ))}
