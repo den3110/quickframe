@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Box,
   Button,
@@ -18,7 +18,8 @@ function LevelSelect() {
   const handleLevelChange = (event) => {
     setLevel(event.target.value);
     if(event.target.value=== "level") {
-        setSubLevel(0); 
+        setSubLevel(1); 
+        // setLevelContext(1)
     }
 };
 
@@ -36,6 +37,10 @@ function LevelSelect() {
         setPageContext(1)
     }
   }
+
+  useEffect(()=> {
+    setLevelContext(1)
+  }, [setLevelContext])
 
   return (
     <Box display="flex" alignItems="center" gap={1}>
