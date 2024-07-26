@@ -175,7 +175,7 @@ const LeaderBoard = () => {
             {sortData(
               dataBot,
               function (e) {
-                return parseFloat(e.profit);
+                return parseFloat(e.profitRate);
               },
               "desc"
             ).map((item, index) => (
@@ -324,7 +324,7 @@ const LeaderBoard = () => {
                     }
                     {
                       item?.isPrivate=== false && 
-                      <Button variant={"contained"} onClick={()=> {
+                      <Button disabled variant={"contained"} onClick={()=> {
                         setOpenCopyPlan(true)
                       }}>Copy plan</Button>
                     }
