@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Card,
@@ -8,9 +8,11 @@ import {
   Divider,
   Tooltip,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 // import formatCurrency from "util/formatCurrency";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { VipMemberContext } from "..";
 
 const InfoCard = ({ title, value, tooltip }) => {
   return (
@@ -39,8 +41,11 @@ const InfoCard = ({ title, value, tooltip }) => {
 };
 
 function VIPInformation() {
+  const {dataOverview }= useContext(VipMemberContext)
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+
   return (
-    <Box mt={4} mb={4} >
+    <Box mb={downLg ? 2 : 4} >
       <Card
         sx={{
           backgroundColor: "#1c1c1c",
@@ -50,6 +55,7 @@ function VIPInformation() {
             'url("https://quickinvest.ai/static/media/07.d8642d0d575db73e0bfd.png")',
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
+          borderRadius: 0
         }}
       >
         <Box
@@ -58,11 +64,12 @@ function VIPInformation() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            height: 480,
-            padding: "77px",
+            height: downLg ? "auto" : 480,
+            padding: downLg ? "0 16px 24px 16px" : "77px",
+            flexDirection: downLg ? "column" : "row"
           }}
         >
-          <Box>
+          <Box width={downLg ? "100%" : "aaaa"}>
             <Box mt={1} mb={1}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography fontSize={18} color="black" fontWeight={600}>
@@ -83,7 +90,7 @@ function VIPInformation() {
                 backgroundSize: "cover",
                 height: 134,
                 position: "relative",
-                width: 480,
+                width: downLg ? "100%" : 480,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -99,7 +106,7 @@ function VIPInformation() {
               <Box sx={{ padding: "0 16px" }}>
                 <Typography variant="h4" color="success.main">
                   {/* {dataStat?.name} */}
-                  1
+                  {dataOverview?.rank}
                 </Typography>
               </Box>
             </CardContent>
@@ -111,10 +118,10 @@ function VIPInformation() {
               </Box>
             </Box>
             <Grid container spacing={1} mt={1}>
-              <Grid item xs={6}>
+              <Grid item xs={12} md={6}>
                 <InfoCard title="F1 VIP" value={"21/3"} tooltip={"F1 VIP"} />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12} md={6}>
                 <InfoCard
                   title="KLGD F1 (Tuần này)"
                   value={"$1.09 /$2,000.00"}
@@ -133,9 +140,9 @@ function VIPInformation() {
                 width: "100%",
                 height: "auto",
                 bottom: 0,
-                position: "absolute",
+                position: downLg ? "static" : "absolute",
                 right: 0,
-                transform: "translateY(77px)",
+                transform: downLg ? "translateY(30px)" : "translateY(77px)",
                 maxWidth: "666.75px",
               }}
             ></img>

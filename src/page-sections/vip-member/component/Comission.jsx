@@ -1,116 +1,144 @@
 import React from "react";
-import { Box, Typography, Paper, Grid, Button, TextField } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import SearchIcon from '@mui/icons-material/Search';
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers-pro/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import SearchIcon from "@mui/icons-material/Search";
+import dayjs from "dayjs";
+import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 
 function Commissions() {
-  const [startDate, setStartDate] = React.useState(new Date("2024-07-01"));
-  const [endDate, setEndDate] = React.useState(new Date("2024-07-23"));
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const [dateRange, setDateRange] = React.useState([
+    dayjs("2024-07-01"),
+    dayjs("2024-07-23"),
+  ]);
 
   return (
-    <Box p={2}>
-      <Paper sx={{ p: 2, mt: 4, mb: 4 }}>
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          alignItems="center"
-        >
-          <Box item xs={3}>
-            <Typography variant="body1">Trading Commission</Typography>
-          </Box>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Box>
+        <Paper sx={{ p: 2, mt: 4, mb: 4 }}>
           <Box
             display={"flex"}
-            justifyContent={"center"}
+            justifyContent={"space-between"}
             alignItems="center"
-            gap={1}
+            flexDirection={downLg ? "column" : "row"}
           >
-            <Box item xs={3}>
-              <DatePicker
-                label="Start Date"
-                value={startDate}
-                onChange={(newValue) => setStartDate(newValue)}
-                renderInput={(params) => <TextField {...params} />}
-              />
+            <Box item width={downLg ? "100%" : "aaa"} mb={downLg ? 1.5 : 0}>
+              <Typography variant="body1">Trading Commission</Typography>
             </Box>
-            <Box item xs={3}>
-              <DatePicker
-                label="End Date"
-                value={endDate}
-                onChange={(newValue) => setEndDate(newValue)}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </Box>
-            <Box item xs={3}>
-              <Button startIcon={<SearchIcon />} variant="contained" color="primary">
-                Search
-              </Button>
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems="center"
+              gap={1}
+            >
+              <Box item xs={6}>
+                <DateRangePicker
+                  startText="Start Date"
+                  endText="End Date"
+                  value={dateRange}
+                  onChange={(newValue) => setDateRange(newValue)}
+                  inputFormat="DD/MM/YYYY"
+                  renderInput={(startProps, endProps) => (
+                    <>
+                      <TextField {...startProps} sx={{ width: 120 }} />
+                      <Box sx={{ mx: 2 }}> to </Box>
+                      <TextField {...endProps} sx={{ width: 120 }} />
+                    </>
+                  )}
+                />
+              </Box>
+              <Box item xs={3}>
+                <Button
+                  startIcon={<SearchIcon />}
+                  variant="contained"
+                  color="primary"
+                >
+                  Search
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
-        <Box mt={4}>
-          <Typography variant="body2" color="textSecondary">
-            Note: You will receive commissions from the trading volume as soon
-            as your peers make trades.
-          </Typography>
-          <Box mt={2} textAlign="center">
-            <Typography variant="h6" color="textSecondary">
-              There is no data here!
+          <Box mt={4}>
+            <Typography variant="body2" color="textSecondary">
+              Note: You will receive commissions from the trading volume as soon
+              as your peers make trades.
             </Typography>
+            <Box mt={2} textAlign="center">
+              <EmptyPage
+                title={"Không có dữ liệu ở đây!"}
+                disableButton={true}
+              />
+            </Box>
           </Box>
-        </Box>
-      </Paper>
+        </Paper>
 
-      <Paper sx={{ p: 2, mt: 4, mb: 4 }}>
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          alignItems="center"
-        >
-          <Box item xs={3}>
-            <Typography variant="body1">Trading Commission</Typography>
-          </Box>
+        <Paper sx={{ p: 2, mt: 4, mb: 4 }}>
           <Box
             display={"flex"}
-            justifyContent={"center"}
+            justifyContent={"space-between"}
             alignItems="center"
-            gap={1}
+            flexDirection={downLg ? "column" : "row"}
           >
-            <Box item xs={3}>
-              <DatePicker
-                label="Start Date"
-                value={startDate}
-                onChange={(newValue) => setStartDate(newValue)}
-                renderInput={(params) => <TextField {...params} />}
-              />
+            <Box item width={downLg ? "100%" : "aaa"} mb={downLg ? 1.5 : 0}>
+              <Typography variant="body1">Trading Commission</Typography>
             </Box>
-            <Box item xs={3}>
-              <DatePicker
-                label="End Date"
-                value={endDate}
-                onChange={(newValue) => setEndDate(newValue)}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </Box>
-            <Box item xs={3}>
-              <Button startIcon={<SearchIcon />} variant="contained" color="primary">
-                Search
-              </Button>
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems="center"
+              gap={1}
+            >
+              <Box item xs={6}>
+                <DateRangePicker
+                  startText="Start Date"
+                  endText="End Date"
+                  value={dateRange}
+                  onChange={(newValue) => setDateRange(newValue)}
+                  inputFormat="DD/MM/YYYY"
+                  renderInput={(startProps, endProps) => (
+                    <>
+                      <TextField {...startProps} sx={{ width: 120 }} />
+                      <Box sx={{ mx: 2 }}> to </Box>
+                      <TextField {...endProps} sx={{ width: 120 }} />
+                    </>
+                  )}
+                />
+              </Box>
+              <Box item xs={3}>
+                <Button
+                  startIcon={<SearchIcon />}
+                  variant="contained"
+                  color="primary"
+                >
+                  Search
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
-        <Box mt={4}>
-          <Typography variant="body2" color="textSecondary">
-            Note: You will receive commissions from the trading volume as soon
-            as your peers make trades.
-          </Typography>
-          <Box mt={2} textAlign="center">
-            <Typography variant="h6" color="textSecondary">
-              There is no data here!
+          <Box mt={4}>
+            <Typography variant="body2" color="textSecondary">
+              Note: You will receive commissions from the trading volume as soon
+              as your peers make trades.
             </Typography>
+            <Box mt={2} textAlign="center">
+              <EmptyPage
+                title={"Không có dữ liệu ở đây!"}
+                disableButton={true}
+              />
+            </Box>
           </Box>
-        </Box>
-      </Paper>
-    </Box>
+        </Paper>
+      </Box>
+    </LocalizationProvider>
   );
 }
 
