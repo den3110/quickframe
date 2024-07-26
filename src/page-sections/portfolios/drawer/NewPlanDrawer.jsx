@@ -63,12 +63,14 @@ const NewPlanDrawer = ({
   allowSelectedTab,
   selectedSignal,
   isEditSingle,
+  isFromLeaderboard
 }) => {
   const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
   });
   const {t }= useTranslation()
+  const {selectedLinkAccount }= useContext(AuthContext)
   const [idPlan, setIdPlan] = useState();
   const { setChange } = useContext(GlobalContext);
   const { decodedData } = useContext(JwtContext);
@@ -101,6 +103,7 @@ const NewPlanDrawer = ({
   const [dataBudgetStrategyDefault, setDataBudgetStrategyDefault] = useState(
     []
   );
+  const [initLinkAccountId, setInitLinkAccountId]= useState("")
   const [dataSignalStrategy, setDataSignalStrategy] = useState([]);
   const [
     dataSignalStrategyTelegramSignal,
@@ -374,13 +377,18 @@ const NewPlanDrawer = ({
         }
       }
       if (isEdit === true) {
-        data = { ...selectedPlan, ...data };
-        response = await portfolioApi.userBotUpdate(idPlan, data);
+        if(isFromLeaderboard) {
+          response = await portfolioApi.usersBotCreate(data);
+        }
+        else {
+          data = { ...selectedPlan, ...data };
+          response = await portfolioApi.userBotUpdate(idPlan, data);
+        }
       } else {
         response = await portfolioApi.usersBotCreate(data);
       }
       if (response?.data?.ok === true) {
-        if (allowSelectedTab) {
+        if (allowSelectedTab || isFromLeaderboard) {
           showToast("Tạo bot thành công", "success");
           setIsEdit(false);
           onClose();
@@ -437,6 +445,8 @@ const NewPlanDrawer = ({
           setDataSignalStrategyTelegramSignal(response3?.data?.d);
         }
         if (response4?.data?.ok === true) {
+          setInitLinkAccountId( response4?.data?.d?.filter((item) => item?.isLogin === true && item?._id === selectedLinkAccount)?.[0]
+          ?._id)
           setLinkAccountId(
             response4?.data?.d?.filter((item) => item?.isLogin === true)?.[0]
               ?._id
@@ -450,7 +460,7 @@ const NewPlanDrawer = ({
         setLoading(false);
       }
     })();
-  }, [isEdit]);
+  }, [isEdit, selectedLinkAccount]);
 
   useEffect(() => {
     if (selectedTab === "Telegram Signal") {
@@ -560,6 +570,15 @@ const NewPlanDrawer = ({
       setLoseStreakTarget(selectedPlan?.lose_streak_target)
       setWinTotalTarget(selectedPlan?.win_total_target)
       setLoseTotalTarget(selectedPlan?.lose_total_target)
+      if(isFromLeaderboard=== true) {
+        setFeatureType(SignalFeatureTypes.SINGLE_METHOD)
+        setLinkAccountId(initLinkAccountId)
+        setAccountType(walletMode ? "LIVE": "DEMO")
+        setBaseAmount(selectedPlan?.margin_dense)
+        setBetSecond(25)
+        setInvestmentFund(100)
+        setArraySignalStrategy(selectedPlan?.method_data?.method_list)
+      }
     } else {
       setIdPlan();
       setPlanName("");
@@ -613,6 +632,9 @@ const NewPlanDrawer = ({
     selectedSignal,
     userLinkAccountListState,
     dataProps,
+    initLinkAccountId,
+    isFromLeaderboard,
+    walletMode
     // inView
   ]);
 

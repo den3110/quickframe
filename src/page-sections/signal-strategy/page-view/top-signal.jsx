@@ -77,7 +77,15 @@ const TopSignalPageView = () => {
   const handleChange = (event) => {
     setSelection(event.target.value);
     handleFilter(parseInt(event.target.value))
+  }
+
+  const handleSearch = (e) => {
+    const filtered = data.filter(item =>
+      item.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setDataState(filtered);
   };
+
   // const [selected, setSelected]=
   //   const [data, set]
   const handleChangeRowsPerPage = (event) => {
@@ -174,17 +182,17 @@ const TopSignalPageView = () => {
               flexDirection: downLg ? "column" : "row",
             }}
           >
-            <Box sx={{ width: "100%"}} p={1} display={"flex"} justifyContent={"space-between"}>
+            <Box sx={{ width: "100%"}} p={1} display={"flex"} justifyContent={"space-between"} flexWrap={downLg ? "wrap" : "nowrap"}>
               <Box
-
-                sx={{ width: "100%", paddingRight: "10px" }}
+                sx={{ width: "100%", paddingRight: downLg ? 0 : "10px" }}
               >
                 <TextField
                   fullWidth
                   variant="outlined"
                   sx={{ width: downLg ? "aaa" : 450 }}
                   size="medium"
-                  placeholder="Search Strategy..."
+                  placeholder="Tìm bot..."
+                  onChange={handleSearch}
                   InputProps={{
                     startAdornment: (
                       <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
@@ -198,8 +206,8 @@ const TopSignalPageView = () => {
                   }}  
                 />
               </Box>
-              <Box>
-                <Box sx={{width: 200}}>
+              <Box mt={downLg ? 2 : 0} sx={{width: downLg ? "100%" : 200}}>
+                <Box sx={{width: "100%"}}>
                   <FormControl fullWidth variant="outlined">
                     <InputLabel id="demo-simple-select-outlined-label">
                       Bộ lọc

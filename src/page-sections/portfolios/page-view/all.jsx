@@ -471,8 +471,14 @@ const PortfoliosList = () => {
   }, [walletMode, selectedLinkAccount]);
 
   useEffect(() => {
-    setDataState(data);
-  }, [data]);
+    if(showAllLinkAccountId=== true) {
+      setDataState(data);
+    }
+    else {
+      setDataState(data?.filter((item) => item?.linkAccountId === selectedLinkAccount))
+
+    }
+  }, [data, showAllLinkAccountId, selectedLinkAccount]);
 
   
 

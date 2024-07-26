@@ -3,10 +3,11 @@ import React from 'react'
 import round2number from 'util/round2number';
 
 const RankingLeaderBoard = (props) => {
+    const {handleClick }= props
     const {heightRanking, isTop1, name, imgRank, avatarUser, bgRadient, border, profit}= props
     const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
   return (
-    <Box flex={"1 1 0"} width={"100%"}>
+    <Box onClick={handleClick} flex={"1 1 0"} width={"100%"} sx={{cursor: "pointer"}}>
         <Box height={downLg ? 88 : heightRanking} sx={{borderTopLeftRadius: 20, borderTopRightRadius: 20, boxShadow: "rgba(114, 107, 107, 0.1) 8px 4px 50px", borderRadius: 10}}>
             <Box padding={downLg ? 1 : 0} sx={{height: "100%", display: "flex", flexDirection: downLg ? "row" : "column", alignItems: "center", justifyContent: downLg ? "space-between" : "center"}} position={"relative"}>
             <Box display={"flex"} justifyContent={"center"} alignItems={"center"} position={downLg ? "static" : "absolute"} top={"-15%"} left="50%" sx={{transform: downLg ? "unset" : "translateX(-50%)", borderRadius: "50%", border: border, padding: "1px", background: "rgb(238, 239, 242)", width: downLg? 60 : "70px", height: downLg? 60 : "70px", zIndex: 2}} boxSizing={"content-box"}>

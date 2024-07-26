@@ -1,4 +1,10 @@
-import React, { Fragment, useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   Typography,
   Box,
@@ -27,6 +33,7 @@ import sortData from "util/sortData";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "contexts/AuthContext";
+import NewPlanDrawer from "page-sections/portfolios/drawer/NewPlanDrawer";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   display: "flex",
@@ -43,38 +50,42 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 
 const LeaderBoard = () => {
   const theme = useTheme();
-  const {t }= useTranslation()
+  const { t } = useTranslation();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [dataUser, setDataUser] = useState([]);
   const [dataBot, setDataBot] = useState([]);
-  const [loading, setLoading]= useState()
-  const navigate= useNavigate()
-  const {logoutFromSystem, logoutToConnect }= useContext(AuthContext)
+  const [loading, setLoading] = useState();
+  const navigate = useNavigate();
+  const [isEdit, setIsEdit] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState();
+  const { logoutFromSystem, logoutToConnect } = useContext(AuthContext);
   const fetchDataUser = useCallback(async () => {
     try {
-      await new Promise((res)=> {setTimeout(res, 2000)})
+      setLoading(true);
+
       const response = await exchangeApi.userExchangeLinkAccountLeaderboard();
-      setDataUser(response?.data?.d)
+      setDataUser(response?.data?.d);
     } catch (error) {
-      if(error?.response?.status=== 401) {
-        
-        logoutFromSystem()
-        navigate("/login")
+      if (error?.response?.status === 401) {
+        logoutFromSystem();
+        navigate("/login");
+      } else if (error?.response?.status === 402) {
+        logoutToConnect();
+        navigate("/connect");
       }
-      else if(error?.response?.status=== 402) {
-        logoutToConnect()
-        navigate("/connect")
-      }
+    } finally {
+      setLoading(false);
     }
   }, []);
   const fetchDataBot = useCallback(async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await exchangeApi.userBotLeaderboard();
-      setDataBot(response?.data?.d)
-    } catch (error) {}
-    finally {
-      setLoading(false)
+      setDataBot(response?.data?.d);
+    } catch (error) {
+    } finally {
+      setLoading(false);
     }
   }, []);
   useEffect(() => {
@@ -98,7 +109,12 @@ const LeaderBoard = () => {
   };
 
   return (
-    <RefreshProvider functionProps={async ()=> {await fetchDataBot(); await fetchDataUser()}}>
+    <RefreshProvider
+      functionProps={async () => {
+        await fetchDataBot();
+        await fetchDataUser();
+      }}
+    >
       <Box sx={{ width: "100%", padding: "2px 10px 50px 10px" }}>
         <Box
           display={"flex"}
@@ -268,7 +284,7 @@ const LeaderBoard = () => {
                         )}
                     </Box>
                     <Typography variant="subtitle1" color="textSecondary">
-                      #{item.rank}
+                      #{parseInt(index) + 1}
                     </Typography>
                     <Typography
                       variant={downLg ? "body1" : "h6"}
@@ -306,7 +322,7 @@ const LeaderBoard = () => {
         >
           {t("daily_roi_leaderboard")} <MoreInfo />
         </Typography>
-        {loading=== false && 
+        {loading === false && (
           <Box className="asjkasjaqw">
             <Box
               sx={{ padding: downLg ? "0" : "0 48px" }}
@@ -318,100 +334,231 @@ const LeaderBoard = () => {
             >
               {downLg && (
                 <RankingLeaderBoard
-                  profit={sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")[0]?.profit}
+                  handleClick={() => {
+                    setSelectedPlan({
+                      autoType: 1,
+                      margin_dense: 100,
+                      method_data: {
+                        method_list: [
+                          sortData(
+                            dataUser,
+                            function (e) {
+                              return parseFloat(e.profit);
+                            },
+                            "desc"
+                          )[0]?.name,
+                        ],
+                      },
+                    });
+                    setOpenDrawer(true);
+                    setIsEdit(true);
+                  }}
+                  profit={
+                    sortData(
+                      dataUser,
+                      function (e) {
+                        return parseFloat(e.profit);
+                      },
+                      "desc"
+                    )[0]?.profit
+                  }
                   heightRanking={268}
                   isTop1={true}
                   name={"TOP 1"}
                   imgRank={"/static/icons/rank-1.png"}
-                  avatarUser={
-                    "/static/logo/luxcoin.png"
-                  }
+                  avatarUser={"/static/logo/luxcoin.png"}
                   bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
                   border="3.28125px solid rgb(255, 222, 101)"
                 />
               )}
               <RankingLeaderBoard
-                profit={sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")[1]?.profit}
+                handleClick={() => {
+                  setSelectedPlan({
+                    autoType: 1,
+                    margin_dense: 100,
+                    method_data: {
+                      method_list: [
+                        sortData(
+                          dataUser,
+                          function (e) {
+                            return parseFloat(e.profit);
+                          },
+                          "desc"
+                        )[1]?.name,
+                      ],
+                    },
+                  });
+                  setOpenDrawer(true);
+                  setIsEdit(true);
+                }}
+                profit={
+                  sortData(
+                    dataUser,
+                    function (e) {
+                      return parseFloat(e.profit);
+                    },
+                    "desc"
+                  )[1]?.profit
+                }
                 heightRanking={233}
                 isTop1={false}
                 name={"TOP 2"}
                 imgRank={"/static/icons/rank-2.png"}
-                avatarUser={
-                  "/static/logo/luxcoin.png"
-                }
+                avatarUser={"/static/logo/luxcoin.png"}
                 bgRadient="linear-gradient(272.63deg, rgb(194, 194, 194) -33.55%, rgb(79, 86, 112) 96.85%)"
                 border="3.28125px solid rgb(160, 174, 192)"
               />
               {/*  */}
               {!downLg && (
                 <RankingLeaderBoard
-                  profit={sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")[0]?.profit}
+                  handleClick={() => {
+                    setSelectedPlan({
+                      autoType: 1,
+                      margin_dense: 100,
+                      method_data: {
+                        method_list: [
+                          sortData(
+                            dataUser,
+                            function (e) {
+                              return parseFloat(e.profit);
+                            },
+                            "desc"
+                          )[0]?.name,
+                        ],
+                      },
+                    });
+                    setOpenDrawer(true);
+                    setIsEdit(true);
+                  }}
+                  profit={
+                    sortData(
+                      dataUser,
+                      function (e) {
+                        return parseFloat(e.profit);
+                      },
+                      "desc"
+                    )[0]?.profit
+                  }
                   heightRanking={268}
                   isTop1={true}
                   name={"TOP 1"}
                   imgRank={"/static/icons/rank-1.png"}
-                  avatarUser={
-                    "/static/logo/luxcoin.png"
-                  }
+                  avatarUser={"/static/logo/luxcoin.png"}
                   bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
                   border="3.28125px solid rgb(255, 222, 101)"
                 />
               )}
               {/*  */}
               <RankingLeaderBoard
-                profit={sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")[2]?.profit}
+                handleClick={() => {
+                  setSelectedPlan({
+                    autoType: 1,
+                    margin_dense: 100,
+                    method_data: {
+                      method_list: [
+                        sortData(
+                          dataUser,
+                          function (e) {
+                            return parseFloat(e.profit);
+                          },
+                          "desc"
+                        )[2]?.name,
+                      ],
+                    },
+                  });
+                  setOpenDrawer(true);
+                  setIsEdit(true);
+                }}
+                profit={
+                  sortData(
+                    dataUser,
+                    function (e) {
+                      return parseFloat(e.profit);
+                    },
+                    "desc"
+                  )[2]?.profit
+                }
                 heightRanking={210}
                 isTop1={false}
                 name={"TOP 3"}
                 imgRank={"/static/icons/rank-3.png"}
-                avatarUser={
-                  "/static/logo/luxcoin.png"
-                }
+                avatarUser={"/static/logo/luxcoin.png"}
                 bgRadient="linear-gradient(92.33deg, rgba(7, 200, 140, 0.89) 2.82%, rgba(53, 214, 202, 0.518) 99.42%)"
                 border="3.28125px solid rgb(13, 148, 109)"
               />
             </Box>
             <List sx={{ padding: downLg ? 1 : 0 }}>
-              {sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")?.slice(3).map((item, index) => (
-                <StyledListItem key={index} style={{ cursor: "pointer" }}>
-                  <Box display="flex" alignItems="center">
+              {sortData(
+                dataUser,
+                function (e) {
+                  return parseFloat(e.profit);
+                },
+                "desc"
+              )
+                ?.slice(3)
+                .map((item, index) => (
+                  <StyledListItem
+                    onClick={() => {
+                      setSelectedPlan({
+                        autoType: 1,
+                        margin_dense: 100,
+                        method_data: { method_list: [item?.name] },
+                      });
+                      setOpenDrawer(true);
+                      setIsEdit(true);
+                    }}
+                    key={index}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Box display="flex" alignItems="center">
+                      <Typography
+                        variant="body1"
+                        color="textSecondary"
+                        sx={{ marginRight: 2 }}
+                      >
+                        #{parseInt(index) + 3}
+                      </Typography>
+                      <ListItemAvatar>
+                        <Avatar alt={item.name} src={item.avatar} />
+                      </ListItemAvatar>
+                      <ListItemText primary={item.name} />
+                    </Box>
                     <Typography
                       variant="body1"
-                      color="textSecondary"
-                      sx={{ marginRight: 2 }}
+                      color="textPrimary"
+                      sx={{
+                        background: (theme) =>
+                          isDark(theme) ? "#7d818d" : "#dbdde5",
+                      }}
+                      style={{
+                        padding: 4,
+                        borderRadius: 10,
+                      }}
                     >
-                      #{parseInt(index) + 3 }
+                      {formatCurrency(item.profit)}
                     </Typography>
-                    <ListItemAvatar>
-                      <Avatar alt={item.name} src={item.avatar} />
-                    </ListItemAvatar>
-                    <ListItemText primary={item.name} />
-                  </Box>
-                  <Typography
-                    variant="body1"
-                    color="textPrimary"
-                    sx={{
-                      background: (theme) =>
-                        isDark(theme) ? "#7d818d" : "#dbdde5",
-                    }}
-                    style={{
-                      padding: 4,
-                      borderRadius: 10,
-                    }}
-                  >
-                    {formatCurrency(item.profit)}
-                  </Typography>
-                </StyledListItem>
-              ))}
+                  </StyledListItem>
+                ))}
             </List>
           </Box>
-        }
-        {loading=== true && 
+        )}
+        {loading === true && (
           <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
             <CircularProgress />
           </Box>
-        }
+        )}
       </Box>
+      <NewPlanDrawer
+        open={openDrawer}
+        handleClose={() => {
+          setOpenDrawer(false);
+        }}
+        isEdit={isEdit}
+        setIsEdit={setIsEdit}
+        selectedPlan={selectedPlan}
+        isFromLeaderboard={true}
+        // setData={setDataStat}
+      />
     </RefreshProvider>
   );
 };
