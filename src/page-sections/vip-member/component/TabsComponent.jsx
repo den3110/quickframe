@@ -1,50 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Tabs, Tab, Typography } from '@mui/material';
-import affiliateApi from 'api/affiliate/affiliateApi';
-import { showToast } from 'components/toast/toast';
+import React, { useContext, useEffect, useState } from "react";
+import { Box, Tabs, Tab, Typography } from "@mui/material";
+import affiliateApi from "api/affiliate/affiliateApi";
+import { showToast } from "components/toast/toast";
+import AuthContext from "contexts/AuthContext";
 
 function TabsComponent() {
   const [value, setValue] = React.useState(0);
-  const [data, setData]= useState()
-  const [page, setPage]= useState(1)
-  const [size, setSize]= useState(6)
-  const [level, setLevel]= useState(1)
-  const [nickName, setNickName]= useState("abc")
-  const [days, setDays]= useState(1)
-
+  const [data, setData] = useState();
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(6);
+  const [level, setLevel] = useState(1);
+  const [nickName, setNickName] = useState("abc");
+  const [days, setDays] = useState(1);
+  const { selectedLinkAccount } = useContext(AuthContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  useEffect(()=> {
-    (async ()=> {
+  useEffect(() => {
+    (async () => {
       try {
-        const data= {
+        const data = {
           params: {
             page,
             size,
             lvl: level,
             nickName,
-            days
-
-          }
-        }
-        const response= await affiliateApi.userExchangeLinkAccountAffiliate(data)
-        if(response?.data?.ok=== true) {
-          console.log(response?.data?.d, "success")
-        }
-        else if(response?.data?.ok=== false) {
-          showToast(response?.data?.m, "error")
+            days,
+          },
+        };
+        const response = await affiliateApi.userExchangeLinkAccountAffiliate(
+          data,
+          selectedLinkAccount
+        );
+        if (response?.data?.ok === true) {
+          console.log(response?.data?.d, "success");
+        } else if (response?.data?.ok === false) {
+          showToast(response?.data?.m, "error");
         }
       } catch (error) {
-        showToast(error?.response?.data?.m, "error")
+        showToast(error?.response?.data?.m, "error");
       }
-    })()
-  }, [])
+    })();
+  }, [selectedLinkAccount, size, level, nickName, days, page]);
 
   return (
-    <Box sx={{ width: '100%', mt: 4, mb: 4, p: 2 }}>
+    <Box sx={{ width: "100%", mt: 4, mb: 4, p: 2 }}>
       <Tabs value={value} onChange={handleChange}>
         <Tab label="General" />
         <Tab label="Member List" />

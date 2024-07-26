@@ -187,7 +187,7 @@ const NewPlanDrawer = ({
           accountType: accountType,
           budgetStrategyId: budgetStrategy,
           bet_second: betSecond,
-          margin_dense: baseAmount,
+          margin_dense: parseFloat(baseAmount),
           isBrokerMode: isBrokerMode,
           isNotificationsEnabled: true,
           method_data: {
@@ -219,7 +219,7 @@ const NewPlanDrawer = ({
               accountType: accountType,
               budgetStrategyId: budgetStrategy,
               bet_second: betSecond,
-              margin_dense: baseAmount,
+              margin_dense: parseFloat(baseAmount),
               isBrokerMode: isBrokerMode,
               isNotificationsEnabled: true,
               method_data: {
@@ -251,7 +251,7 @@ const NewPlanDrawer = ({
               accountType: accountType,
               budgetStrategyId: budgetStrategy,
               bet_second: betSecond,
-              margin_dense: baseAmount,
+              margin_dense: parseFloat(baseAmount),
               isBrokerMode: isBrokerMode,
               isNotificationsEnabled: true,
               method_data: {
@@ -282,7 +282,7 @@ const NewPlanDrawer = ({
               accountType: accountType,
               budgetStrategyId: budgetStrategy,
               bet_second: betSecond,
-              margin_dense: baseAmount,
+              margin_dense: parseFloat(baseAmount),
               isBrokerMode: isBrokerMode,
               isNotificationsEnabled: true,
               method_data: {
@@ -320,7 +320,7 @@ const NewPlanDrawer = ({
               accountType: accountType,
               budgetStrategyId: budgetStrategy,
               bet_second: betSecond,
-              margin_dense: baseAmount,
+              margin_dense: parseFloat(baseAmount),
               isBrokerMode: isBrokerMode,
               isNotificationsEnabled: true,
               method_data: {
@@ -554,6 +554,12 @@ const NewPlanDrawer = ({
       setTelegramChatId(selectedPlan?.telegram_chatId);
       setTelegramUrl(selectedPlan?.telegram_url);
       setAccountType(selectedPlan?.accountType);
+      setTakeProfitTarget(selectedPlan?.take_profit_target)
+      setStopLossTarget(selectedPlan?.stop_loss_target)
+      setWinStreakTarget(selectedPlan?.win_streak_target)
+      setLoseStreakTarget(selectedPlan?.lose_streak_target)
+      setWinTotalTarget(selectedPlan?.win_total_target)
+      setLoseTotalTarget(selectedPlan?.lose_total_target)
     } else {
       setIdPlan();
       setPlanName("");
@@ -592,6 +598,12 @@ const NewPlanDrawer = ({
       setTelegramToken("");
       setTelegramUrl("");
       setAccountType("DEMO");
+      setTakeProfitTarget(0)
+      setStopLossTarget(0)
+      setWinStreakTarget(0)
+      setLoseStreakTarget(0)
+      setWinTotalTarget(0)
+      setLoseTotalTarget(0)
     }
   }, [
     isEdit,
@@ -1012,9 +1024,11 @@ const NewPlanDrawer = ({
                     >
                       <Typography>$</Typography>
                       <TextField
+                        type="number"
                         value={baseAmount}
+                        defaultValue={0}
                         onChange={(e) => {
-                          setBaseAmount(parseFloat(e.target.value) || 0);
+                          setBaseAmount((e.target.value));
                         }}
                         inputProps={{
                           min: 0,
