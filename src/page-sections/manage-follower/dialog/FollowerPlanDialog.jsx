@@ -48,7 +48,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const FollowerPlanDialog = (props) => {
     const theme = useTheme();
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-    console.log(theme.breakpoints.down("lg"))
   const { open, onClose, selected } = props;
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);

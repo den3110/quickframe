@@ -159,13 +159,14 @@ export default function DepositDrawer(props) {
             <Typography variant="body2" mb={1}>
               Số tiền nạp tối thiểu là 5 USDT.
             </Typography>
-            <Box display={"flex"} alignItems={"center"}>
+            <Box display={"flex"} alignItems={"center"} gap={1}>
               <Button
                 variant="outlined"
                 color="primary"
                 className={classes.backButton}
                 onClick={onClose}
                 startIcon={<ArrowBackIosNewIcon />}
+                sx={{padding: "10px"}}
               >
                 Quay lại
               </Button>
@@ -175,6 +176,7 @@ export default function DepositDrawer(props) {
                 color="primary"
                 onClick={handleCopyAddress}
                 className={classes.copyButton}
+                sx={{padding: "10px"}}
               >
                 Sao Chép Địa Chỉ Ví
               </Button>

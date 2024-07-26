@@ -1,25 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Typography,
   Box,
-  Paper,
   Tabs,
   Tab,
   TextField,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Grid,
   InputAdornment,
   Card,
-  FormControl,
-  Select,
-  MenuItem,
-  Pagination,
   CircularProgress,
   Tooltip,
   IconButton,
@@ -53,26 +41,9 @@ const HistoryHeader = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 
-const HistoryTable = styled(Box)(({ theme }) => ({}));
-
 const NoData = styled(Box)(({ theme }) => ({
   textAlign: "center",
   // padding: theme.spacing(4),
-}));
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  padding: "16px",
-  "&.MuiTableCell-root": {
-    borderBottom: `1px solid ${theme.palette.border}`,
-  },
-}));
-
-const PaginationContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
 }));
 
 const InfoCard = ({ title, value, tooltip }) => {
@@ -106,6 +77,7 @@ function ManageFollowerPage() {
   const { data, setData, loading, setChange } = useContext(
     ManageFollowerContext
   );
+  const [dataState, setDataState]= useState([])
   const [tabValue, setTabValue] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
@@ -121,6 +93,26 @@ function ManageFollowerPage() {
   const handleChangePage = (event, value) => {
     setPage(value);
   };
+
+  const handleSearch = (e) => {
+    if(parseInt(tabValue)=== 0) {
+      const filtered = data?.followList?.filter(item =>
+        item.nickName.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setDataState({...dataState, followList: filtered});
+    }
+    else {
+      const filtered = data?.blockList?.filter(item =>
+        item.nickName.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      console.log(filtered)
+      setDataState({...dataState, blockList: filtered});
+    }
+  };
+
+  useEffect(()=> {
+    setDataState(data)
+  }, [data])
 
   return (
     <Box paddingBottom={"32px"}>
@@ -263,6 +255,8 @@ function ManageFollowerPage() {
                 <TextField
                   variant="outlined"
                   placeholder="Tìm biệt danh"
+                  sx={{ width: downLg ? "100%" : 450 }}
+                  onChange={handleSearch}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -271,13 +265,13 @@ function ManageFollowerPage() {
                     ),
                   }}
                 />
-                <Button
+                {/* <Button
                   variant="contained"
                   color="success"
                   sx={{ height: "100%" }}
                 >
                   Tìm kiếm
-                </Button>
+                </Button> */}
               </Box>
             </Box>
             <TabPanel>
@@ -285,7 +279,7 @@ function ManageFollowerPage() {
                 <Box>
                   <NoData>
                     {loading === true && <CircularProgress />}
-                    {loading === false && data?.followList?.length <= 0 && (
+                    {loading === false && dataState?.followList?.length <= 0 && (
                       <EmptyPage
                         title={"Không có dữ liệu"}
                         disableButton={true}
@@ -294,7 +288,7 @@ function ManageFollowerPage() {
                   </NoData>
                   {loading === false && data?.followList?.length > 0 && (
                     <ListUserFollow
-                      data={data?.followList}
+                      data={dataState?.followList}
                       setData={setData}
                       dataProps={data}
                       setChange={setChange}
@@ -315,7 +309,7 @@ function ManageFollowerPage() {
                   </NoData>
                   {loading === false && data?.blockList?.length > 0 && (
                     <ListUserBlock
-                      data={data?.blockList}
+                      data={dataState?.blockList}
                       setData={setData}
                       dataProps={data}
                       setChange={setChange}

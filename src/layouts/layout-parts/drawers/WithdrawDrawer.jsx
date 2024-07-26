@@ -18,6 +18,7 @@ import { isDark } from "util/constants";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
 import { useTranslation } from "react-i18next";
+import AuthContext from "contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
@@ -52,6 +53,7 @@ export default function WithdrawDrawer(props) {
   const classes = useStyles();
   const isButtonDisabled = !amount || !toAddress || !twoFACode || parseFloat(amount) < 5;
   const isErrorInputAmount= parseFloat(amount) < 5
+  const {selectedLinkAccount }= React.useContext(AuthContext)
   
   const onClose = () => {
     setOpen(false);
@@ -76,7 +78,7 @@ export default function WithdrawDrawer(props) {
         netword: "bsc",
         memo: "true"
       }
-      const response= await userApi.userExchangeLinkAccountWithdraw(data)
+      const response= await userApi.userExchangeLinkAccountWithdraw(data, selectedLinkAccount)
       if(response?.data?.ok=== true) {
 
       }
@@ -96,7 +98,7 @@ export default function WithdrawDrawer(props) {
         typeWallet: "bsc",
         memo: "true"
       }
-      const response= await userApi.userExchangeLinkAccountTransfer(data)
+      const response= await userApi.userExchangeLinkAccountTransfer(data, selectedLinkAccount)
       if(response?.data?.ok=== true) {
         
       }
@@ -272,13 +274,14 @@ export default function WithdrawDrawer(props) {
           <Typography variant="body2" mb={1}>
             Số tiền rút tối thiểu là 5 USDT.
           </Typography>
-          <Box display={"flex"} alignItems={"center"}>
+          <Box display={"flex"} alignItems={"center"} gap={1}>
             <Button
               variant="outlined"
               color="primary"
               className={classes.backButton}
               onClick={onClose}
               startIcon={<ArrowBackIosNewIcon />}
+              sx={{padding: "10px"}}
             >
               Quay lại
             </Button>

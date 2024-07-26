@@ -4,7 +4,7 @@ import {
   Box,
   Typography,
   Card,
-  CardContent,
+  // CardContent,
   useMediaQuery,
   useTheme,
   styled,
@@ -24,7 +24,7 @@ import {
 import moment from "moment";
 import formatCurrency from "util/formatCurrency";
 import { SocketContext } from "contexts/SocketContext";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SignalDisconnected from "icons/duotone/SignalDisconnected";
 import TrendingUp from "icons/duotone/TrendingUp";
@@ -48,7 +48,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-const TableDetailTrade = () => {
+const TableDetailTrade = ({dataState}) => {
   const theme = useTheme();
   const {userLinkAccountList }= useContext(AuthContext)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -301,7 +301,7 @@ const TableDetailTrade = () => {
         socket.emit("LAST_RESULTS_UNSUBCRIBE");
       };
     }
-  }, [isConnected]);
+  }, [isConnected, socket]);
 
   return (
     <Box>
@@ -310,7 +310,7 @@ const TableDetailTrade = () => {
       </Typography>
       <Box>
         <Timeline className="askskaa" sx={{ padding: downLg ? 0 : "" }}>
-          {dataProps
+          {dataState
             ?.slice(
               rowsPerPage * (page - 1),
               rowsPerPage * (page - 1) + rowsPerPage

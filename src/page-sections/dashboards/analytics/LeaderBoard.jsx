@@ -34,6 +34,9 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "contexts/AuthContext";
 import NewPlanDrawer from "page-sections/portfolios/drawer/NewPlanDrawer";
+import round2number from "util/round2number";
+import numberWithCommas from "util/numberSeparatorThousand";
+import CopyPlanDrawer from "../component/drawer/CopyPlanDrawer";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   display: "flex",
@@ -59,6 +62,7 @@ const LeaderBoard = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState();
+  const [openCopyPlan, setOpenCopyPlan]= useState(false)
   const { logoutFromSystem, logoutToConnect } = useContext(AuthContext);
   const fetchDataUser = useCallback(async () => {
     try {
@@ -168,7 +172,13 @@ const LeaderBoard = () => {
               },
             }}
           >
-            {dataBot.map((item, index) => (
+            {sortData(
+              dataBot,
+              function (e) {
+                return parseFloat(e.profit);
+              },
+              "desc"
+            ).map((item, index) => (
               <SwiperSlide key={index}>
                 <Box
                   style={{
@@ -201,7 +211,7 @@ const LeaderBoard = () => {
                       style={{
                         width: "100%",
                         height: "50%",
-                        background: renderBackgroundLeaderBoardBot(item.rank),
+                        background: renderBackgroundLeaderBoardBot(parseInt(index) + 1),
                         top: 0,
                         left: 0,
                         borderRadius: 8,
@@ -212,7 +222,7 @@ const LeaderBoard = () => {
                       justifyContent={"center"}
                       alignItems={"center"}
                     >
-                      {item.rank === 1 && (
+                      {parseInt(index) + 1 === 1 && (
                         <img
                           style={{
                             position: "relative",
@@ -224,7 +234,7 @@ const LeaderBoard = () => {
                           alt="Can't open"
                         />
                       )}
-                      {item.rank === 2 && (
+                      {parseInt(index) + 1 === 2 && (
                         <img
                           style={{
                             position: "relative",
@@ -236,7 +246,7 @@ const LeaderBoard = () => {
                           alt="Can't open"
                         />
                       )}
-                      {item.rank === 3 && (
+                      {parseInt(index) + 1 === 3 && (
                         <img
                           style={{
                             position: "relative",
@@ -248,9 +258,9 @@ const LeaderBoard = () => {
                           alt="Can't open"
                         />
                       )}
-                      {item.rank !== 1 &&
-                        item.rank !== 2 &&
-                        item.rank !== 3 && (
+                      {parseInt(index) + 1 !== 1 &&
+                        parseInt(index) + 1 !== 2 &&
+                        parseInt(index) + 1 !== 3 && (
                           <>
                             <Box
                               style={{
@@ -276,33 +286,48 @@ const LeaderBoard = () => {
                                     background: "rgb(160, 174, 192)",
                                   }}
                                 >
-                                  {item.rank}
+                                  {parseInt(index) + 1}
                                 </Box>
                               </Box>
                             </Box>
                           </>
                         )}
                     </Box>
-                    <Typography variant="subtitle1" color="textSecondary">
-                      #{parseInt(index) + 1}
-                    </Typography>
                     <Typography
-                      variant={downLg ? "body1" : "h6"}
-                      color="textPrimary"
+                      // variant={downLg ? "body1" : "h6"}
+                      mb={1}
+                      fontSize={14}
+                      fontWeight={600}
+                      // color="textPrimary"
+                      color="text.main"
                     >
                       {item.name}
                     </Typography>
-                    <Typography variant="body1" color="textSecondary">
-                      PnL 24h {item.pnl}
-                    </Typography>
+                    <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                      <Typography fontSize={12} color="textSecondary">
+                        PnL 24h {item.pnl}&nbsp;
+                      </Typography>
+                      <Typography fontWeight={600} fontSize={12} color={parseFloat(item?.profitRate) > 0 ? "success.main" : "error.main"}>
+                        ({formatCurrency(item?.profitRate)?.replace("$", "")}%)
+                      </Typography>
+                    </Box>
                     <Typography
-                      variant="h5"
+                      fontWeight={600}
                       color="textPrimary"
                       style={{ margin: "10px 0" }}
                     >
-                      {item.amount}
+                      ${numberWithCommas(round2number(item.profit))}
                     </Typography>
-                    <Button variant="outlined">Gói riêng tư</Button>
+                    {
+                      item?.isPrivate=== true && 
+                      <Button sx={{cursor: "context-menu"}} disableRipple variant="outlined">Gói riêng tư</Button>
+                    }
+                    {
+                      item?.isPrivate=== false && 
+                      <Button variant={"contained"} onClick={()=> {
+                        setOpenCopyPlan(true)
+                      }}>Copy plan</Button>
+                    }
                   </Box>
                 </Box>
               </SwiperSlide>
@@ -364,7 +389,15 @@ const LeaderBoard = () => {
                   }
                   heightRanking={268}
                   isTop1={true}
-                  name={"TOP 1"}
+                  name={
+                    sortData(
+                      dataUser,
+                      function (e) {
+                        return parseFloat(e.profit);
+                      },
+                      "desc"
+                    )[0]?.name
+                  }
                   imgRank={"/static/icons/rank-1.png"}
                   avatarUser={"/static/logo/luxcoin.png"}
                   bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
@@ -402,7 +435,15 @@ const LeaderBoard = () => {
                 }
                 heightRanking={233}
                 isTop1={false}
-                name={"TOP 2"}
+                name={
+                  sortData(
+                    dataUser,
+                    function (e) {
+                      return parseFloat(e.profit);
+                    },
+                    "desc"
+                  )[1]?.name
+                }
                 imgRank={"/static/icons/rank-2.png"}
                 avatarUser={"/static/logo/luxcoin.png"}
                 bgRadient="linear-gradient(272.63deg, rgb(194, 194, 194) -33.55%, rgb(79, 86, 112) 96.85%)"
@@ -441,7 +482,15 @@ const LeaderBoard = () => {
                   }
                   heightRanking={268}
                   isTop1={true}
-                  name={"TOP 1"}
+                  name={
+                    sortData(
+                      dataUser,
+                      function (e) {
+                        return parseFloat(e.profit);
+                      },
+                      "desc"
+                    )[0]?.name
+                  }
                   imgRank={"/static/icons/rank-1.png"}
                   avatarUser={"/static/logo/luxcoin.png"}
                   bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
@@ -480,7 +529,15 @@ const LeaderBoard = () => {
                 }
                 heightRanking={210}
                 isTop1={false}
-                name={"TOP 3"}
+                name={
+                  sortData(
+                    dataUser,
+                    function (e) {
+                      return parseFloat(e.profit);
+                    },
+                    "desc"
+                  )[2]?.name
+                }
                 imgRank={"/static/icons/rank-3.png"}
                 avatarUser={"/static/logo/luxcoin.png"}
                 bgRadient="linear-gradient(92.33deg, rgba(7, 200, 140, 0.89) 2.82%, rgba(53, 214, 202, 0.518) 99.42%)"
@@ -516,10 +573,10 @@ const LeaderBoard = () => {
                         color="textSecondary"
                         sx={{ marginRight: 2 }}
                       >
-                        #{parseInt(index) + 3}
+                        #{parseInt(index) + 4}
                       </Typography>
                       <ListItemAvatar>
-                        <Avatar alt={item.name} src={item.avatar} />
+                        <Avatar alt={item.name} src={item.photoUrl} />
                       </ListItemAvatar>
                       <ListItemText primary={item.name} />
                     </Box>
@@ -559,6 +616,7 @@ const LeaderBoard = () => {
         isFromLeaderboard={true}
         // setData={setDataStat}
       />
+      <CopyPlanDrawer open={openCopyPlan} setOpen={setOpenCopyPlan} />
     </RefreshProvider>
   );
 };

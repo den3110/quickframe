@@ -12,6 +12,7 @@ import { isDark } from "util/constants";
 import { SwapHoriz } from "@mui/icons-material";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import { useTranslation } from "react-i18next";
+import AuthContext from "contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
@@ -62,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 48,
     lineHeight: "120%",
     letterSpacing: -0.5,
-    color: "rgb(17, 24, 39)",
+    // color: "rgb(17, 24, 39)",
     background: "transparent",
     outline: "none",
   },
@@ -73,6 +74,7 @@ export default function MoveBalanceDrawer(props) {
   const theme= useTheme()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { spotBalance, setChange } = React.useContext(SpotBalanceContext);
+  const {selectedLinkAccount }= React.useContext(AuthContext)
   const { open, setOpen } = props;
   const classes = useStyles();
   const [balanceMove, setBalanceMove] = React.useState();
@@ -94,7 +96,8 @@ export default function MoveBalanceDrawer(props) {
       };
       if (mode === false) {
         const response = await userApi.postUserExchangeLinkAccountMoveUsdtBo(
-          data
+          data,
+          selectedLinkAccount
         );
         if (response?.data?.ok === false) {
           showToast(response?.data?.m, "error");
@@ -183,6 +186,7 @@ export default function MoveBalanceDrawer(props) {
               inputMode="decimal"
               value={balanceMove}
               onChange={(e) => setBalanceMove(e.target.value)}
+              style={{color: theme.palette.mode=== "dark" ? "#fff" : "#000"}}
             />
           </Box>
           <Typography
@@ -214,13 +218,14 @@ export default function MoveBalanceDrawer(props) {
         </Box>
 
         <Box className={classes.footer}>
-          <Box display={"flex"} alignItems={"center"}>
+          <Box display={"flex"} alignItems={"center"} gap={1}>
             <Button
               variant="outlined"
               color="primary"
               className={classes.backButton}
               onClick={onClose}
               startIcon={<ArrowBackIosNewIcon />}
+              sx={{padding: "10px"}}
             >
               Quay lại
             </Button>
@@ -230,6 +235,7 @@ export default function MoveBalanceDrawer(props) {
               color="primary"
               className={classes.copyButton}
               onClick={handleMoveBalance}
+              sx={{padding: "10px"}}
               disabled={
                 balanceMove?.length < 0 ||
                 balanceMove === 0 ||

@@ -367,7 +367,7 @@ const BudgetStrategyPage = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            {loading === false && data?.length <= 0 && (
+            {loading === false && dataState?.length <= 0 && (
               <Box
                 sx={{
                   width: "100%",
@@ -406,7 +406,7 @@ const BudgetStrategyPage = () => {
                 </FormControl>
               </Box>
               <Pagination
-                count={Math.ceil(data.length / rowsPerPage)}
+                count={Math.ceil(dataState.length / rowsPerPage)}
                 page={page}
                 onChange={handleChangePage}
                 shape="rounded"
