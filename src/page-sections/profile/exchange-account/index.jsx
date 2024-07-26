@@ -44,14 +44,18 @@ const ExchangeAccount = () => {
   const navigate= useNavigate()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { linked } = useContext(ConnectExchangeContext);
-  const {selectedLinkAccount }= useContext(AuthContext)
+  const {selectedLinkAccount, setSelectedLinkAccount, setAccessToken }= useContext(AuthContext)
 
   const handleDisconnect= async ()=> {
     try {
       const response= await exchangeApi.userExchangeLinkAccountLogout({}, selectedLinkAccount)
       if(response?.data?.ok=== true) {
         showToast("Disconnect exchange account successfully", "success")
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         localStorage.removeItem("linkAccount")
+        setSelectedLinkAccount(undefined)
+        setAccessToken(undefined)
         navigate("/connect")
       }
       else if(response?.data?.ok=== false) {

@@ -21,6 +21,7 @@ import TelegramChannelPage from "pages/dashboard/signal-strategy/sent";
 import StatPortfolio from "page-sections/portfolios/page-view/stat";
 import PortfolioSchedule from "page-sections/portfolios/page-view/schedule";
 import VipPage from "page-sections/vip-member";
+import ErrorBoundary from "ErrorBoundary";
 // ALL DASHBOARD PAGES
 const BudgetStrategy = Loadable(
   lazy(() => import("pages/dashboard/budget-strategy"))
@@ -36,13 +37,15 @@ export const DashboardRoutes = [
   {
     path: "dashboard",
     element: (
-      <ProtectedRoute>
-        <CheckConnectExchange>
-          <DashboardLayout>
-            <Outlet />
-          </DashboardLayout>
-        </CheckConnectExchange>
-      </ProtectedRoute>
+      <ErrorBoundary>
+        <ProtectedRoute>
+          <CheckConnectExchange>
+            <DashboardLayout>
+              <Outlet />
+            </DashboardLayout>
+          </CheckConnectExchange>
+        </ProtectedRoute>
+      </ErrorBoundary>
     ),
     children: [
       {

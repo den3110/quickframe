@@ -42,14 +42,16 @@ const CheckConnectExchangeConnect = ({ children }) => {
             setSelectedLinkAccount(undefined)
             setAccessToken(undefined)
             setDataSelectedLinkAccount(undefined)
-          setStatusCode(response?.data?.status);
-
+            setStatusCode(response?.data?.status);
             navigate("/login")
         }
       } catch (error) {
         setLinked(error?.response?.data);
         console.error("Error checking user link:", error);
         setStatusCode(error?.response?.status);
+        if(error?.response?.status=== 402) {
+          navigate("/connect")
+        }
       } finally {
         setLoading(false);
       }
@@ -60,7 +62,7 @@ const CheckConnectExchangeConnect = ({ children }) => {
     } else {
       setLoading(false);
     }
-  }, [user, selectedLinkAccount, isLogout, navigate, setAccessToken, setDataSelectedLinkAccount, setSelectedLinkAccount, accessToken]);
+  }, [user, selectedLinkAccount, isLogout, setAccessToken, setDataSelectedLinkAccount, setSelectedLinkAccount, accessToken, navigate]);
 
   // if (!selectedLinkAccount) {
   //   return <Navigate to="/login" />;

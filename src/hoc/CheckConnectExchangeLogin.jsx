@@ -40,6 +40,7 @@ const CheckConnectExchangeLogin = ({ children }) => {
         setLinked(error?.response?.data);
         console.error("Error checking user link:", error);
         setStatusCode(error?.response?.status);
+        
       } finally {
         setLoading(false);
       }

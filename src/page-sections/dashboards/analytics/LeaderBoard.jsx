@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useContext, useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -11,6 +11,7 @@ import {
   Tooltip,
   useMediaQuery,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import exchangeApi from "api/exchange/exchangeApi";
@@ -24,6 +25,8 @@ import RefreshProvider from "contexts/RefreshContext";
 import formatCurrency from "util/formatCurrency";
 import sortData from "util/sortData";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "contexts/AuthContext";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   display: "flex",
@@ -44,19 +47,35 @@ const LeaderBoard = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [dataUser, setDataUser] = useState([]);
   const [dataBot, setDataBot] = useState([]);
-
+  const [loading, setLoading]= useState()
+  const navigate= useNavigate()
+  const {logoutFromSystem, logoutToConnect }= useContext(AuthContext)
   const fetchDataUser = useCallback(async () => {
     try {
       await new Promise((res)=> {setTimeout(res, 2000)})
       const response = await exchangeApi.userExchangeLinkAccountLeaderboard();
       setDataUser(response?.data?.d)
-    } catch (error) {}
+    } catch (error) {
+      if(error?.response?.status=== 401) {
+        
+        logoutFromSystem()
+        navigate("/login")
+      }
+      else if(error?.response?.status=== 402) {
+        logoutToConnect()
+        navigate("/connect")
+      }
+    }
   }, []);
   const fetchDataBot = useCallback(async () => {
     try {
+      setLoading(true)
       const response = await exchangeApi.userBotLeaderboard();
       setDataBot(response?.data?.d)
     } catch (error) {}
+    finally {
+      setLoading(false)
+    }
   }, []);
   useEffect(() => {
     fetchDataUser();
@@ -287,100 +306,111 @@ const LeaderBoard = () => {
         >
           {t("daily_roi_leaderboard")} <MoreInfo />
         </Typography>
-        <Box className="asjkasjaqw">
-          <Box
-            sx={{ padding: downLg ? "0" : "0 48px" }}
-            flexDirection={downLg ? "column" : "row"}
-            display={"flex"}
-            alignItems={"flex-end"}
-            justifyContent={"space-between"}
-            gap={downLg ? 5 : 11}
-          >
-            {downLg && (
+        {loading=== false && 
+          <Box className="asjkasjaqw">
+            <Box
+              sx={{ padding: downLg ? "0" : "0 48px" }}
+              flexDirection={downLg ? "column" : "row"}
+              display={"flex"}
+              alignItems={"flex-end"}
+              justifyContent={"space-between"}
+              gap={downLg ? 5 : 11}
+            >
+              {downLg && (
+                <RankingLeaderBoard
+                  profit={sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")[0]?.profit}
+                  heightRanking={268}
+                  isTop1={true}
+                  name={"TOP 1"}
+                  imgRank={"/static/icons/rank-1.png"}
+                  avatarUser={
+                    "/static/logo/luxcoin.png"
+                  }
+                  bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
+                  border="3.28125px solid rgb(255, 222, 101)"
+                />
+              )}
               <RankingLeaderBoard
-                heightRanking={268}
-                isTop1={true}
-                name={"TOP 1"}
-                imgRank={"/static/icons/rank-1.png"}
+                profit={sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")[1]?.profit}
+                heightRanking={233}
+                isTop1={false}
+                name={"TOP 2"}
+                imgRank={"/static/icons/rank-2.png"}
                 avatarUser={
                   "/static/logo/luxcoin.png"
                 }
-                bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
-                border="3.28125px solid rgb(255, 222, 101)"
+                bgRadient="linear-gradient(272.63deg, rgb(194, 194, 194) -33.55%, rgb(79, 86, 112) 96.85%)"
+                border="3.28125px solid rgb(160, 174, 192)"
               />
-            )}
-            <RankingLeaderBoard
-              heightRanking={233}
-              isTop1={false}
-              name={"TOP 2"}
-              imgRank={"/static/icons/rank-2.png"}
-              avatarUser={
-                "/static/logo/luxcoin.png"
-              }
-              bgRadient="linear-gradient(272.63deg, rgb(194, 194, 194) -33.55%, rgb(79, 86, 112) 96.85%)"
-              border="3.28125px solid rgb(160, 174, 192)"
-            />
-            {/*  */}
-            {!downLg && (
+              {/*  */}
+              {!downLg && (
+                <RankingLeaderBoard
+                  profit={sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")[0]?.profit}
+                  heightRanking={268}
+                  isTop1={true}
+                  name={"TOP 1"}
+                  imgRank={"/static/icons/rank-1.png"}
+                  avatarUser={
+                    "/static/logo/luxcoin.png"
+                  }
+                  bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
+                  border="3.28125px solid rgb(255, 222, 101)"
+                />
+              )}
+              {/*  */}
               <RankingLeaderBoard
-                heightRanking={268}
-                isTop1={true}
-                name={"TOP 1"}
-                imgRank={"/static/icons/rank-1.png"}
+                profit={sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")[2]?.profit}
+                heightRanking={210}
+                isTop1={false}
+                name={"TOP 3"}
+                imgRank={"/static/icons/rank-3.png"}
                 avatarUser={
                   "/static/logo/luxcoin.png"
                 }
-                bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
-                border="3.28125px solid rgb(255, 222, 101)"
+                bgRadient="linear-gradient(92.33deg, rgba(7, 200, 140, 0.89) 2.82%, rgba(53, 214, 202, 0.518) 99.42%)"
+                border="3.28125px solid rgb(13, 148, 109)"
               />
-            )}
-            {/*  */}
-            <RankingLeaderBoard
-              heightRanking={210}
-              isTop1={false}
-              name={"TOP 3"}
-              imgRank={"/static/icons/rank-3.png"}
-              avatarUser={
-                "/static/logo/luxcoin.png"
-              }
-              bgRadient="linear-gradient(92.33deg, rgba(7, 200, 140, 0.89) 2.82%, rgba(53, 214, 202, 0.518) 99.42%)"
-              border="3.28125px solid rgb(13, 148, 109)"
-            />
-          </Box>
-          <List sx={{ padding: downLg ? 1 : 0 }}>
-            {sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")?.slice(3).map((item, index) => (
-              <StyledListItem key={index} style={{ cursor: "pointer" }}>
-                <Box display="flex" alignItems="center">
+            </Box>
+            <List sx={{ padding: downLg ? 1 : 0 }}>
+              {sortData(dataUser, function(e) {return parseFloat(e.profit)}, "desc")?.slice(3).map((item, index) => (
+                <StyledListItem key={index} style={{ cursor: "pointer" }}>
+                  <Box display="flex" alignItems="center">
+                    <Typography
+                      variant="body1"
+                      color="textSecondary"
+                      sx={{ marginRight: 2 }}
+                    >
+                      #{item.rank}
+                    </Typography>
+                    <ListItemAvatar>
+                      <Avatar alt={item.name} src={item.avatar} />
+                    </ListItemAvatar>
+                    <ListItemText primary={item.name} />
+                  </Box>
                   <Typography
                     variant="body1"
-                    color="textSecondary"
-                    sx={{ marginRight: 2 }}
+                    color="textPrimary"
+                    sx={{
+                      background: (theme) =>
+                        isDark(theme) ? "#7d818d" : "#dbdde5",
+                    }}
+                    style={{
+                      padding: 4,
+                      borderRadius: 10,
+                    }}
                   >
-                    #{item.rank}
+                    {formatCurrency(item.profit)}
                   </Typography>
-                  <ListItemAvatar>
-                    <Avatar alt={item.name} src={item.avatar} />
-                  </ListItemAvatar>
-                  <ListItemText primary={item.name} />
-                </Box>
-                <Typography
-                  variant="body1"
-                  color="textPrimary"
-                  sx={{
-                    background: (theme) =>
-                      isDark(theme) ? "#7d818d" : "#dbdde5",
-                  }}
-                  style={{
-                    padding: 4,
-                    borderRadius: 10,
-                  }}
-                >
-                  {formatCurrency(item.profit)}
-                </Typography>
-              </StyledListItem>
-            ))}
-          </List>
-        </Box>
+                </StyledListItem>
+              ))}
+            </List>
+          </Box>
+        }
+        {loading=== true && 
+          <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+            <CircularProgress />
+          </Box>
+        }
       </Box>
     </RefreshProvider>
   );

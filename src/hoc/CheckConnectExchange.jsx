@@ -11,14 +11,16 @@ const CheckConnectExchange = ({ children }) => {
   const location = useLocation();
   const {
     user,
-    loading: authLoading,
+    // loading: authLoading,
     selectedLinkAccount,
-    isLogout,
+    // isLogout,
     setDataSelectedLinkAccount,
     setSelectedLinkAccount,
     setAccessToken,
     accessToken,
-    setIsLogout
+    setIsLogout,
+    logoutFromSystem,
+    logoutToConnect
   } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [linked, setLinked] = useState();
@@ -37,7 +39,6 @@ const CheckConnectExchange = ({ children }) => {
 
         } else if (response?.data?.ok === false) {
           setStatusCode(response?.data?.status);
-
             localStorage.removeItem("linkAccount")
             localStorage.removeItem("accessToken")
             setSelectedLinkAccount(undefined)
@@ -47,8 +48,15 @@ const CheckConnectExchange = ({ children }) => {
         }
       } catch (error) {
         setLinked(error?.response?.data);
-        console.error("Error checking user link:", error);
         setStatusCode(error?.response?.status);
+        if(error?.response?.status=== 401) {
+          logoutFromSystem()
+          navigate("/login")
+        }
+        if(error?.response?.status=== 402) {
+          logoutToConnect()
+          navigate("/connect")
+        }
       } finally {
         setLoading(false);
       }
@@ -75,9 +83,9 @@ const CheckConnectExchange = ({ children }) => {
   }
  
 
-  if (authLoading || loading) {
-    return <LoadingScreen />;
-  }
+  // if (authLoading || loading) {
+  //   return <LoadingScreen />;
+  // }
   
   if (!user) {
     return <Navigate to="/login" />;

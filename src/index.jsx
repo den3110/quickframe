@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import SettingsProvider from "contexts/settingsContext";
 import App from "./App";
-import "./style.css"
-import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+import "./style.css";
+import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 
 // third-party library css
 import "swiper/css";

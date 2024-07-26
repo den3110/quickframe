@@ -1,8 +1,9 @@
 import { Box, Typography, useMediaQuery } from '@mui/material'
 import React from 'react'
+import round2number from 'util/round2number';
 
 const RankingLeaderBoard = (props) => {
-    const {heightRanking, isTop1, name, imgRank, avatarUser, bgRadient, border}= props
+    const {heightRanking, isTop1, name, imgRank, avatarUser, bgRadient, border, profit}= props
     const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
   return (
     <Box flex={"1 1 0"} width={"100%"}>
@@ -15,7 +16,7 @@ const RankingLeaderBoard = (props) => {
             </Box>
             {!downLg && <Typography fontWeight={"600"}>{name}</Typography>}
             <Box mt={downLg ? 0 : 2}>
-                <Typography fontSize={24} color={"rgb(138, 157, 198)"} fontWeight={600}>612.98%</Typography>
+                <Typography fontSize={24} color={"rgb(138, 157, 198)"} fontWeight={600}>{round2number(profit)}%</Typography>
             </Box>
             {!downLg &&
             <Box mt={1} color={"rgb(138, 157, 198)"}>Pnl 24h</Box>

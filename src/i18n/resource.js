@@ -52,7 +52,8 @@ export const resources = {
       "withdraw": "Withdraw",
       "deposit": "Deposit",
       "transfer": "Transfer",
-      "balance": "Balance"
+      "balance": "Balance",
+      "disconnect_link_account": "Disconnect now!"
     }
   },
   vi: {
@@ -108,7 +109,8 @@ export const resources = {
       "withdraw": "Rút tiền",
       "deposit": "Nạp tiền",
       "transfer": "Chuyển",
-      "balance": "Số dư"
+      "balance": "Số dư",
+      "disconnect_link_account": "Ngắt kết nối tài khoản"
     }
   }
 };
