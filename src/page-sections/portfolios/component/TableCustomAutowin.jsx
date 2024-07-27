@@ -65,16 +65,21 @@ const CustomAutowinTable = () => {
   }));
 
   useEffect(() => {
-    if (
-      dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split("-")
-        ?.length /
-        itemColumnTable <
-      1
-    ) {
-      setItemColumnTable(
+    try {
+      if (
         dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split("-")
-          ?.length
-      );
+          ?.length /
+          itemColumnTable <
+        1
+      ) {
+        setItemColumnTable(
+          dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split("-")
+            ?.length
+        );
+      }
+    }
+    catch(e) {
+      console.log(e)
     }
   }, [dataStat?.lastData?.budgetStrategy?.bs?.method_data, itemColumnTable]);
 
