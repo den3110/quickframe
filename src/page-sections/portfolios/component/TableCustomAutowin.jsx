@@ -67,13 +67,13 @@ const CustomAutowinTable = () => {
   useEffect(() => {
     try {
       if (
-        dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split("-")
+        dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString().split("-")
           ?.length /
           itemColumnTable <
         1
       ) {
         setItemColumnTable(
-          dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split("-")
+          dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString().split("-")
             ?.length
         );
       }
@@ -108,15 +108,16 @@ const CustomAutowinTable = () => {
                 slidesPerView: 1,
               },
             }}
-          >
+          > 
+            {console.log(dataStat?.lastData?.budgetStrategy)}
             {Array.from(
               Array(
                 isNumber(Math.ceil(
-                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
                     "-"
                   )?.length / itemColumnTable
                 )) ? Math.ceil(
-                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
                     "-"
                   )?.length / itemColumnTable
                 ) : 0
@@ -153,6 +154,7 @@ const CustomAutowinTable = () => {
                               </StyledTypography>
                             </StyledFirstTableCell>
                             {item
+                              ?.toString()
                               ?.split("-")
                               ?.slice(
                                 keyParent * itemColumnTable,
@@ -207,12 +209,12 @@ const CustomAutowinTable = () => {
                                 </Fragment>
                               ))}
                             {(keyParent + 1) * itemColumnTable >
-                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
                                 "-"
                               )?.length &&
                               Array.from(
                                 Array(
-                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
                                     "-"
                                   )?.length -
                                     keyParent * itemColumnTable +
@@ -311,12 +313,12 @@ const CustomAutowinTable = () => {
                                 </Fragment>
                               ))}
                             {(keyParent + 1) * itemColumnTable >
-                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
                                 "-"
                               )?.length &&
                               Array.from(
                                 Array(
-                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
                                     "-"
                                   )?.length -
                                     keyParent * itemColumnTable +
@@ -413,12 +415,12 @@ const CustomAutowinTable = () => {
                                 </Fragment>
                               ))}
                             {(keyParent + 1) * itemColumnTable >
-                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
                                 "-"
                               )?.length &&
                               Array.from(
                                 Array(
-                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.split(
+                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
                                     "-"
                                   )?.length -
                                     keyParent * itemColumnTable +
