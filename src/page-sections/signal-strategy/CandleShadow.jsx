@@ -164,7 +164,7 @@ const GridBallButton = ({
         alignItems: "center",
       }}
     >
-      <Typography sx={{opacity: 1}} fontSize={10}>{parseInt(index) + 1}</Typography>
+      <Typography sx={{opacity: 1}} fontSize={10}>{number - (20 * tableIndex)}</Typography>
     </StyledIconButton>
   );
 };
