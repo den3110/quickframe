@@ -258,7 +258,7 @@ const TopSignalPageView = () => {
                       <StyledTableCell>Thắng/Thua</StyledTableCell>
                       <StyledTableCell>Chuỗi thắng</StyledTableCell>
                       <StyledTableCell>Chuỗi thua</StyledTableCell>
-                      <StyledTableCell>Chuỗi vòng thắng</StyledTableCell>
+                      <StyledTableCell>Victor Streak</StyledTableCell>
                       <StyledTableCell>VOL</StyledTableCell>
                       <StyledTableCell>Thao tác</StyledTableCell>
                     </TableRow>
@@ -458,11 +458,11 @@ const TopSignalPageView = () => {
                             }}
                           >
                             {downLg && (
-                              <Typography>Chuỗi vòng thắng:</Typography>
+                              <Typography>Victor Streak :</Typography>
                             )}
                             <Typography fontWeight={600} fontSize={14}>
-                              {item?.longest_win_streak}/
-                              {item?.longest_lose_streak}
+                              {item?.victor_streak}/
+                              {item?.longest_victor_streak}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell
