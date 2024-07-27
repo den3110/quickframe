@@ -12,3 +12,10 @@ export const AutoTypesTitle = {
   TELEGRAM_SIGNAL: "Telegram Signal"
 };
 
+export const AutoTypesTitleValue = {
+  0: "Bot AI",
+  1: "Copytrade",
+  2: "Telebot",
+  3: "Telegram Signal"
+};
+

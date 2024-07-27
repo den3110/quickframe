@@ -6,7 +6,8 @@ export const ActionBotType = {
   REMOVE: "REMOVE",
   START: "START",
   STOP: "STOP",
-  RESET_PNL: "RESET_PNL"
+  RESET_PNL: "RESET_PNL",
+  GENERATE_SHARE_CODE: "GENERATE_SHARE_CODE"
 };
 
 export const ActionBotTypeMessageSucces = {

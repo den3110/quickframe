@@ -355,6 +355,15 @@ const TelegramChannelSignalStrategy = () => {
             )}
             {downLg && (
               <Box sx={{ overflow: "auto", maxHeight: "100%" }}>
+                <Box mb={1}>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    placeholder="Tìm kiếm kênh..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
+                </Box>
                 {filteredData?.map((item, index) => (
                   <Accordion
                     onClick={() => {

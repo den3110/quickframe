@@ -33,7 +33,7 @@ const copytradeApi = {
   userCopyTradeGlobal(data) {
     const url= `/users/copy-trade/history`
     return axiosClient.get(url, data)
-  }
+  },
 
 };
 

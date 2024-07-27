@@ -67,6 +67,7 @@ import SelectDirectLinkAccount from "./component/SelectDirectLinkAccount";
 import { AutoTypesTitle } from "type/AutoTypes";
 import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
 import { useTranslation } from "react-i18next";
+import OpenCopyPlanDialog from "../dialog/OpenCopyPlanDialog";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -131,6 +132,8 @@ const PortfoliosList = () => {
   const [duplicateOpen, setDuplicateOpen] = useState(false);
   const [sharePlanOpen, setSharePlanOpen] = useState(false);
   const [showAllLinkAccountId, setShowAllLinkAccountId] = useState(false);
+  const [changeState, setChangeState]= useState(false)
+  const [openCopyPlanPopup, setOpenCopyPlanPopup]= useState(false)
   const handleDuplicateClose = () => {
     setDuplicateOpen(false);
   };
@@ -153,9 +156,9 @@ const PortfoliosList = () => {
   const handleSharePlanClose = () => {
     setSharePlanOpen(false);
   };
-  // const handleSharePlanOpen = () => {
-  //   setSharePlanOpen(true);
-  // };
+  const handleSharePlanOpen = () => {
+    setSharePlanOpen(true);
+  };
 
   const handleToggleAllRows = (event) => {
     const checked = event.target.checked;
@@ -470,15 +473,15 @@ const PortfoliosList = () => {
     })();
   }, [walletMode, selectedLinkAccount]);
 
+    console.log(changeState)
   useEffect(() => {
     if(showAllLinkAccountId=== true) {
       setDataState(data);
     }
     else {
       setDataState(data?.filter((item) => item?.linkAccountId === selectedLinkAccount))
-
     }
-  }, [data, showAllLinkAccountId, selectedLinkAccount]);
+  }, [data, showAllLinkAccountId, selectedLinkAccount, changeState]);
 
   
 
@@ -652,6 +655,9 @@ const PortfoliosList = () => {
                     size={downLg ? "large" : "medium"}
                     fullWidth={downLg ? true : false}
                     endIcon={<ContentCopyIcon />}
+                    onClick={()=> {
+                      setOpenCopyPlanPopup(true)
+                    }}
                     // onClick={handleDialogOpen}
                   >
                     {downLg ? "" : "Copy"}
@@ -847,7 +853,7 @@ const PortfoliosList = () => {
                                     Lợi nhuận 7N
                                   </Typography>
                                 )}
-                                <Typography fontWeight={600} variant="body2" color={plan?.week_profit > 0 ? "success.main" : "error.main"}>
+                                <Typography fontWeight={600} variant="body2" color={plan?.week_profit >= 0 ? "success.main" : "error.main"}>
                                   {formatCurrency(plan?.week_profit)}
                                 </Typography>
                               </StyledTableCell>
@@ -880,7 +886,7 @@ const PortfoliosList = () => {
                                     </Typography> */}
                                   </Box>
                                 )}
-                                <Typography fontWeight={600} variant="body2" color={plan?.total_profit > 0 ? "success.main" : "error.main"}>
+                                <Typography fontWeight={600} variant="body2" color={plan?.total_profit >= 0 ? "success.main" : "error.main"}>
                                   {formatCurrency(plan?.total_profit)}
                                 </Typography>
                               </StyledTableCell>
@@ -914,9 +920,11 @@ const PortfoliosList = () => {
                                 }}
                               >
                                 <RunningPlan
+                                  dataState={dataState}
                                   data={data}
                                   setData={setData}
                                   plan={plan}
+                                  changeState={changeState}
                                 />
                                 <IconButton
                                   onClick={(event) =>
@@ -958,15 +966,15 @@ const PortfoliosList = () => {
                                   >
                                     Chia sẻ thành tích
                                   </MenuItem>
-                                  {/* <MenuItem
+                                  <MenuItem
                                     onClick={() => {
                                       handleSharePlanOpen();
                                       setSelectedPlan(plan);
                                       handleClose(index);
                                     }}
                                   >
-                                    Share Plan
-                                  </MenuItem> */}
+                                    Chia sẻ plan
+                                  </MenuItem>
                                   {/* <MenuItem onClick={() => handleClose(index)}>
                                     Copy plan to LIVE
                                   </MenuItem> */}
@@ -1054,27 +1062,29 @@ const PortfoliosList = () => {
                                           Chiến lược tín hiệu
                                         </Typography>
                                       </Box>
-                                      <Box
-                                        flex={1}
-                                        mb={downLg ? 1 : 0}
-                                        sx={{
-                                          display: downLg ? "flex" : "",
-                                          justifyContent: "space-between",
-                                          alignItems: "center",
-                                          flexDirection: "row-reverse",
-                                        }}
-                                      >
-                                        <Typography
-                                          variant="body1"
-                                          component="div"
-                                          fontSize={14}
+                                      {plan?.isCopy!== true && 
+                                        <Box
+                                          flex={1}
+                                          mb={downLg ? 1 : 0}
+                                          sx={{
+                                            display: downLg ? "flex" : "",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            flexDirection: "row-reverse",
+                                          }}
                                         >
-                                          {BudgetStrategyTypeTitle[plan?.lastData?.budgetStrategy?.bs?.budgetStrategyType]}
-                                        </Typography>
-                                        <Typography fontSize={12}>
-                                          Chiến lược vốn
-                                        </Typography>
-                                      </Box>
+                                          <Typography
+                                            variant="body1"
+                                            component="div"
+                                            fontSize={14}
+                                          >
+                                            {BudgetStrategyTypeTitle[plan?.lastData?.budgetStrategy?.bs?.budgetStrategyType]}
+                                          </Typography>
+                                          <Typography fontSize={12}>
+                                            Chiến lược vốn
+                                          </Typography>
+                                        </Box>
+                                      }
                                       <Box
                                         flex={1}
                                         mb={downLg ? 1 : 0}
@@ -1194,6 +1204,7 @@ const PortfoliosList = () => {
           setData={setData}
           dataProps={data}
           setIsEdit={setIsEdit}
+          setChangeState={setChangeState}
         />
         <ShareArchievement
           open={dialogOpen}
@@ -1212,6 +1223,16 @@ const PortfoliosList = () => {
           onClose={handleSharePlanClose}
           selectedPlan={selectedPlan}
           setData={setData}
+        />
+        <OpenCopyPlanDialog 
+          dataProps={data}
+          setDataProps={setData}
+          open={openCopyPlanPopup}
+          onClose={()=> {
+            setOpenCopyPlanPopup(false)
+          }}
+          changeState={changeState}
+          setChangeState={setChangeState}
         />
       </Box>
     </Layout>

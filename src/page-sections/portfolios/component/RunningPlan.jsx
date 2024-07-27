@@ -6,7 +6,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ActionBotType } from "type/ActionBotType";
 
 const RunningPlan = (props) => {
-  const {setData, data, plan }= props
+  const {setData, data, plan, dataState, changeState }= props
   const [isRunning, setIsRunning] = useState();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const {selectedLinkAccount }= useContext(AuthContext)
@@ -14,7 +14,7 @@ const RunningPlan = (props) => {
     if (plan) {
       setIsRunning(plan?.isRunning);
     }
-  }, [plan, data]);
+  }, [plan, data, dataState, changeState]);
 
   const handleChangeIsRunning = async (e) => {
     try {

@@ -201,7 +201,9 @@ const BudgetStrategyPage = () => {
                   sx={{ mr: 2 }}
                   size={downLg ? "large" : "medium"}
                   fullWidth={downLg ? true : false}
-                  onClick={handleDialogOpen}
+                  onClick={()=> {
+                    handleDialogOpen()
+                  }}
                   startIcon={<ContentCopyIcon />}
                 >
                   Copy

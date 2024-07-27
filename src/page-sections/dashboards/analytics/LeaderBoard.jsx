@@ -324,7 +324,8 @@ const LeaderBoard = () => {
                     }
                     {
                       item?.isPrivate=== false && 
-                      <Button disabled variant={"contained"} onClick={()=> {
+                      <Button variant={"contained"} onClick={()=> {
+                        setSelectedPlan(item)
                         setOpenCopyPlan(true)
                       }}>Copy plan</Button>
                     }
@@ -664,7 +665,7 @@ const LeaderBoard = () => {
         isFromLeaderboard={true}
         // setData={setDataStat}
       />
-      <CopyPlanDrawer open={openCopyPlan} setOpen={setOpenCopyPlan} />
+      <CopyPlanDrawer open={openCopyPlan} setOpen={setOpenCopyPlan} selectedPlan={selectedPlan} isFromCopyPlan={true} />
     </RefreshProvider>
   );
 };

@@ -56,6 +56,14 @@ const portfolioApi = {
   userScheduleDelete(id, data) {
     const url= `/users/schedule/delete/` + id
     return axiosClient.delete(url, data)
+  },
+  getUserBotCopyInfo(id, data) {
+    const url= `/users/bot/copy-info/` + id
+    return axiosClient.get(url, data)
+  },
+  postUserBotCopyInfo(id , data){
+    const url= `/users/bot/copy-info/` + id
+    return axiosClient.post(url, data)
   }
 };  
 
