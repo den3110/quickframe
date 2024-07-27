@@ -206,7 +206,7 @@ const TopSignalPageView = () => {
                   }}  
                 />
               </Box>
-              <Box mt={downLg ? 2 : 0} sx={{width: downLg ? "100%" : 200}}>
+              <Box mt={downLg ? 2 : 0} sx={{width: downLg ? "100%" : 300}}>
                 <Box sx={{width: "100%"}}>
                   <FormControl fullWidth variant="outlined">
                     <InputLabel id="demo-simple-select-outlined-label">
