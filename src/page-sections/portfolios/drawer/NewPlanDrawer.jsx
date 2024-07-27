@@ -631,7 +631,7 @@ const NewPlanDrawer = ({
       setIdPlan();
       setPlanName("");
       setInvestmentFund(100);
-      setBetSecond(1);
+      setBetSecond(25);
       setAutoType(AutoTypes.BOT);
       setSelectedTab("Bot AI");
       setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
