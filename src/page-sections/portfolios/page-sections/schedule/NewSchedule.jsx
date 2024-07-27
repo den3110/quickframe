@@ -32,6 +32,7 @@ export default function NewSchedule({
   setDataProps,
   selectedSchedule,
   setIsEdit,
+  setChange
 }) {
   const [startTime, setStartTime] = useState(() => {
     const now = new Date();
@@ -85,18 +86,21 @@ export default function NewSchedule({
       };
 
       if (isEdit === true) {
-        await portfolioApi.userScheduleUpdate(selectedSchedule?._id, payload);
-        const dataTemp= dataProps
-        const findIndex= dataProps?.findIndex(item=> item?._id === selectedSchedule?._id)
-        if(findIndex !== -1) {
-          dataTemp[findIndex]= payload
-          setDataProps(dataTemp)
+        const response= await portfolioApi.userScheduleUpdate(selectedSchedule?._id, payload);
+        const dataTemp = dataProps;
+        const findIndex = dataProps?.findIndex(
+          (item) => item?._id === selectedSchedule?._id
+        );
+        if (findIndex !== -1) {
+          dataTemp[findIndex] = response?.data?.d;
+          setDataProps(dataTemp);
         }
         // setDataProps([payload, ...dataProps]);
         showToast("Sửa cấu hình thành công", "success");
+        setChange(prev=> !prev)
       } else if (isEdit !== true) {
-        const response= await portfolioApi.userScheduleCreate(payload);
-        setDataProps([payload, ...response?.data?.d]);
+        const response = await portfolioApi.userScheduleCreate(payload);
+        setDataProps([response?.data?.d, ...dataProps]);
         showToast("Thêm cấu hình thành công", "success");
       }
 
@@ -105,8 +109,9 @@ export default function NewSchedule({
       setEndTime(new Date());
       setPackages([]);
       setScheduleName("");
-      setDisableEndTime(false)
+      setDisableEndTime(false);
     } catch (error) {
+      console.log(error);
       showToast(error.response?.data?.message || "Đã xảy ra lỗi", "error");
     } finally {
       setLoading(false);
@@ -133,58 +138,66 @@ export default function NewSchedule({
   useEffect(() => {
     const now = new Date();
     if (isEdit === true) {
-      const [hoursStart, minutesStart] = selectedSchedule?.start_time
-        .split(":")
-        .map(Number);
-      const [hoursStop, minutesStop] = selectedSchedule?.stop_time
-        .split(":")
-        .map(Number);
-      const startDate = new Date(
-        new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate(),
-          hoursStart,
-          minutesStart
-        ).getTime() +
-          7 * 60 * 60 * 1000
-      );
-      const endDate = new Date(
-        new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate(),
-          hoursStop,
-          minutesStop
-        ).getTime() +
-          7 * 60 * 60 * 1000
-      );
-      if (startDate.getDate() !== now.getDate()) {
-        startDate.setDate(now.getDate());
+      if (selectedSchedule?.start_time) {
+        const [hoursStart, minutesStart] = selectedSchedule?.start_time
+          .split(":")
+          .map(Number);
+        const startDate = new Date(
+          new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            hoursStart,
+            minutesStart
+          ).getTime() +
+            7 * 60 * 60 * 1000
+        );
+        if (startDate.getDate() !== now.getDate()) {
+          startDate.setDate(now.getDate());
+        }
+        setStartTime(startDate);
       }
-      
-      if (endDate.getDate() !== now.getDate()) {
-        endDate.setDate(now.getDate());
+      else {
+        setStartTime(new Date())
       }
-      setStartTime(startDate);
-      setEndTime(endDate)
-      setScheduleName(selectedSchedule?.name)
-      setPackages(selectedSchedule?.botIds)
-      setDisableEndTime(selectedSchedule?.no_stop_enabled)
-    }
-    else {
-      setStartTime( new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0));
-      setEndTime( new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        23,
-        59,
-        0
-      ))
-      setScheduleName("")
-      setPackages([firstBot])
-      setDisableEndTime(false)
+      if (selectedSchedule?.stop_time) {
+        const [hoursStop, minutesStop] = selectedSchedule?.stop_time
+          .split(":")
+          .map(Number);
+  
+        const endDate = new Date(
+          new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            hoursStop,
+            minutesStop
+          ).getTime() +
+            7 * 60 * 60 * 1000
+        );
+  
+        if (endDate.getDate() !== now.getDate()) {
+          endDate.setDate(now.getDate());
+        }
+  
+        setEndTime(endDate);
+      }
+      else {
+        setEndTime(new Date())
+      }
+      setScheduleName(selectedSchedule?.name);
+      setPackages(selectedSchedule?.botIds);
+      setDisableEndTime(selectedSchedule?.no_stop_enabled);
+    } else {
+      setStartTime(
+        new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0)
+      );
+      setEndTime(
+        new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 0)
+      );
+      setScheduleName("");
+      setPackages([firstBot]);
+      setDisableEndTime(false);
     }
   }, [isEdit, selectedSchedule, firstBot]);
 
@@ -328,7 +341,7 @@ export default function NewSchedule({
             onClick={handleAdd}
             disabled={isButtonDisabled}
           >
-            {isEdit=== true ? "Sửa cấu hình" : "Thêm cấu hình"}
+            {isEdit === true ? "Sửa cấu hình" : "Thêm cấu hình"}
           </Button>
         </Box>
       </Box>

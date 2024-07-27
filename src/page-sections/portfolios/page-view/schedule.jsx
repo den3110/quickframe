@@ -32,7 +32,7 @@ const PortfolioSchedule = () => {
   const [deleteSchedule, setDeleteSchedule] = useState(false);
   const [resources, setResources] = useState([]);
   const [selectedSchedule, setSelectedSchedule]= useState()
-
+  const [change, setChange]= useState(false)
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -61,16 +61,14 @@ const PortfolioSchedule = () => {
   }, []);
 
   useEffect(() => {
-    // Create resources from API data
     const newResources = sortData(data, "createdAt", "desc").map((item, index) => ({
       ...item,
-      id: index + 1, // Generate unique id or use an identifier from API
+      id: index + 1,
       name: item.name,
-      color: getRandomColor(), // Or use a static color if you prefer
+      color: getRandomColor(), 
     }));
     setResources(newResources);
 
-    // Create events from API data
     const today = new Date();
     const formattedEvents = sortData(data, "createdAt", "desc").map((event) => {
       if (event?.stop_time) {
@@ -136,7 +134,8 @@ const PortfolioSchedule = () => {
       }
     });
     setEvents(formattedEvents);
-  }, [data]);
+
+  }, [data, change]);
 
   const getRandomColor = () => {
     // Function to generate random color for resources
@@ -255,6 +254,7 @@ const PortfolioSchedule = () => {
         selectedSchedule={selectedSchedule}
         isEdit={isEdit}
         setIsEdit={setIsEdit}
+        setChange={setChange}
         // setS
       />
       <DeleteSchedule
