@@ -13,6 +13,8 @@ import {
 // import formatCurrency from "util/formatCurrency";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { VipMemberContext } from "..";
+import formatCurrency from "util/formatCurrency";
+import numberWithCommas from "util/numberSeparatorThousand";
 
 const InfoCard = ({ title, value, tooltip }) => {
   return (
@@ -43,7 +45,7 @@ const InfoCard = ({ title, value, tooltip }) => {
 function VIPInformation() {
   const {dataOverview }= useContext(VipMemberContext)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-
+  
   return (
     <Box mb={downLg ? 2 : 4} >
       <Card
@@ -119,12 +121,12 @@ function VIPInformation() {
             </Box>
             <Grid container spacing={1} mt={1}>
               <Grid item xs={12} md={6}>
-                <InfoCard title="F1 VIP" value={"21/3"} tooltip={"F1 VIP"} />
+                <InfoCard title="F1 VIP" value={`${dataOverview?.f1_agencies}/${dataOverview?.upnextrank_agencies}`} tooltip={"F1 VIP"} />
               </Grid>
               <Grid item xs={12} md={6}>
                 <InfoCard
                   title="KLGD F1 (Tuần này)"
-                  value={"$1.09 /$2,000.00"}
+                  value={`${formatCurrency(dataOverview?.current_week_f1_vol)?.replace("+", "")} /${numberWithCommas(formatCurrency(dataOverview?.current_week_f1_nextrankvol)?.replace("+", ""))}`}
                   tooltip={"KLGD F1 (Tuần này)"}
                 />
               </Grid>

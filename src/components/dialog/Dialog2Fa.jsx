@@ -9,6 +9,7 @@ import {
   DialogTitle,
   IconButton,
   useTheme,
+  useMediaQuery
 } from "@mui/material";
 import { styled } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
@@ -30,6 +31,9 @@ const CustomDialogContent = styled(DialogContent)(({ theme }) => ({
 }));
 
 const Dialog2Fa = (props) => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const downXss = useMediaQuery((theme) => theme.breakpoints.down("xss"));
+  
   const { setSelectedLinkAccount }= useContext(AuthContext)
   const theme= useTheme()
   const navigate = useNavigate();
@@ -79,6 +83,17 @@ const Dialog2Fa = (props) => {
     }
   };
 
+  const renderWidth= (breakpoint)=> {
+    switch (breakpoint) {
+      case downLg:
+        return 36
+      case downXss: 
+        return 28
+      default:
+        return 56
+    }
+  }
+
   return (
     <>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -106,9 +121,9 @@ const Dialog2Fa = (props) => {
                   {...props}
                   sx={{
                     all: "unset",
-                    minWidth: 56,
-                    height: 56,
-                    fontSize: 18,
+                    minWidth: (downLg && !downXss) ? 36 : (downXss ? 28 : 56),
+                    height: (downLg && !downXss) ? 36 : (downXss ? 28 : 56),
+                    fontSize: (downLg && !downXss) ? 14 : 18,
                     flexBasis: 70,
                     borderRadius: 2,
                     fontWeight: 600,

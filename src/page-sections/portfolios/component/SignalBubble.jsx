@@ -17,7 +17,7 @@ const colors = [
   (theme) => (isDark(theme) ? "#565d67" : "#d9d9d9"),
   "#0caf60",
   "#fd4f4f",
-  "#ff0"
+  "#ff0",
 ];
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -48,11 +48,9 @@ const GridBallButton = ({
             state = 1;
           } else if (resultType === "DOWN") {
             state = 2;
-          }
-          else if (resultType === "NORMAL") {
+          } else if (resultType === "NORMAL") {
             state = 3;
-          }
-          else if (resultType === "NONE") {
+          } else if (resultType === "NONE") {
             state = 0;
           }
           setBallBubble(state);
@@ -134,22 +132,31 @@ const SignalBubble = () => {
         style={{ paddingBottom: "20px", overflowY: "unset" }}
         className="waa"
         // navigation
-        initialSlide={2}
+        initialSlide={3}
         onBeforeInit={(swiper) => {
-            sliderRef.current = swiper;
+          sliderRef.current = swiper;
         }}
         breakpoints={{
           // when window width is >= 640px
           300: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          400: {
             slidesPerView: 3,
             spaceBetween: 20,
           },
           // when window width is >= 768px
-          768: {
+          900: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          
+          1400: {
             slidesPerView: 3,
             spaceBetween: 20,
           },
-          1400: {
+          1800: {
             slidesPerView: 4,
             spaceBetween: 20,
           },
@@ -162,7 +169,7 @@ const SignalBubble = () => {
         {[1, 2, 3, 4, 5].map((table, tableIndex) => (
           <SwiperSlide key={tableIndex}>
             <Box sx={{ mb: 2 }}>
-              <Typography variant="body2" mb={1} sx={{ fontSize : "0.7em"}}>
+              <Typography variant="body2" mb={1} sx={{ fontSize: "0.7em" }}>
                 Bảng {table}
               </Typography>
               <Box
@@ -216,13 +223,13 @@ const SignalBubble = () => {
         zIndex={99}
       >
         <Box>
-          <IconButton color="primary" onClick={handlePrev   }>
+          <IconButton color="primary" onClick={handlePrev}>
             <ArrowBackIos />
           </IconButton>
         </Box>
         <Box>
           <IconButton color="primary">
-            <ArrowForwardIos  onClick={handleNext}/>
+            <ArrowForwardIos onClick={handleNext} />
           </IconButton>
         </Box>
       </Box>

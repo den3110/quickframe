@@ -17,6 +17,7 @@ const baseOptions = {
   breakpoints: {
     values: {
       xs: 0,
+      xss: 400,
       sm: 600,
       md: 900,
       lg: 974,
