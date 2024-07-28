@@ -18,6 +18,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
 } from "@mui/material";
 import { green, red } from "@mui/material/colors";
 import TimerIcon from "@mui/icons-material/Timer";
@@ -40,7 +41,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AuthContext from "contexts/AuthContext";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import sortData from "util/sortData";
-import TelegramIcon from '@mui/icons-material/Telegram';
+import TelegramIcon from "@mui/icons-material/Telegram";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -63,7 +64,7 @@ const TelegramChannelSignalStrategy = () => {
   const dataBotInit = dataBot;
   const [searchTerm, setSearchTerm] = useState("");
   const { isConnected, socket } = useContext(SocketContext);
-  const {selectedLinkAccount }= useContext(AuthContext)
+  const { selectedLinkAccount } = useContext(AuthContext);
   const { walletMode } = useContext(SettingsContext);
   const [countDown, setCountDown] = useState(0);
   const [betAmount, setBetAmount] = useState(1);
@@ -98,7 +99,7 @@ const TelegramChannelSignalStrategy = () => {
         amount: parseFloat(betAmount) * parseInt(multiplier),
         isBrokerMode: false,
         accountType: walletMode ? "LIVE" : "DEMO",
-        linkAccountId: selectedLinkAccount
+        linkAccountId: selectedLinkAccount,
       };
       const response = await copytradeApi.postUserCopytrade(data);
       if (response?.data?.ok === true) {
@@ -150,20 +151,19 @@ const TelegramChannelSignalStrategy = () => {
   useEffect(() => {
     if (isConnected && socket) {
       socket.emit("LINK_ACCOUNT_SUBCRIBE", selectedLinkAccount);
-      return ()=> {
-        socket.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount)
-      }
+      return () => {
+        socket.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount);
+      };
     }
   }, [isConnected, socket, selectedLinkAccount]);
 
   useEffect(() => {
     if (isConnected && socket) {
       socket.on("RELOAD_SPOT_BALANCE", (data) => {
-        setChange(prev=> !prev)
+        setChange((prev) => !prev);
       });
     }
   }, [isConnected, socket, setChange]);
-
 
   return (
     <Layout>
@@ -223,7 +223,15 @@ const TelegramChannelSignalStrategy = () => {
                             }}
                           >
                             <ListItemText
-                              primary={<Typography>{item.name} <TelegramIcon /></Typography>}
+                              primary={
+                                <Box
+                                  display={"flex"}
+                                  justifyContent={"space-between"}
+                                  alignItems={"center"}
+                                >
+                                  <Typography>{item.name}</Typography>
+                                </Box>
+                              }
                               secondary={
                                 <Box
                                   sx={{ display: "flex", alignItems: "center" }}
@@ -263,9 +271,7 @@ const TelegramChannelSignalStrategy = () => {
                                     <Typography
                                       fontWeight={600}
                                       fontSize={12}
-                                      color={
-                                       "success.main"
-                                      }
+                                      color={"success.main"}
                                     >
                                       {item?.longest_win_streak}
                                     </Typography>
@@ -279,7 +285,10 @@ const TelegramChannelSignalStrategy = () => {
                                     </Typography>
                                   </Box>
 
-                                  <Typography fontSize={8}> &nbsp;|&nbsp; </Typography>
+                                  <Typography fontSize={8}>
+                                    {" "}
+                                    &nbsp;|&nbsp;{" "}
+                                  </Typography>
                                   <Box display="flex" alignItems={"center"}>
                                     <Typography fontSize={12}>
                                       VOL:&nbsp;
@@ -287,9 +296,7 @@ const TelegramChannelSignalStrategy = () => {
                                     <Typography
                                       fontWeight={600}
                                       fontSize={12}
-                                      color={
-                                       "warning.main"
-                                      }
+                                      color={"warning.main"}
                                     >
                                       ${round2number(item?.volume)}
                                     </Typography>
@@ -326,12 +333,6 @@ const TelegramChannelSignalStrategy = () => {
                         maxHeight: "calc(-300px - 32px - 32px - 12px + 100vh)",
                       }}
                     >
-                      <Typography variant="body1" sx={{ display: "flex" }}>
-                        Hãy đặt lệnh :{" "}
-                        <Typography mb={1} fontWeight={600} sx={{ color:transactions?.messages?.[0]?.message?.betType=== "UP" ?  "success.main" : "error.main" }}>
-                          {formatCurrency(transactions?.messages?.[0]?.message?.betAmount)} {transactions?.messages?.[0]?.message?.betType=== "UP" ? "Tăng" : "Giảm"} 
-                        </Typography>
-                      </Typography>
                       <Typography variant="body1">
                         🎉 Tổng hợp{" "}
                         {transactions?.messages?.[1]?.message?.histories
@@ -339,8 +340,13 @@ const TelegramChannelSignalStrategy = () => {
                         phiên giao dịch gần nhất (UTC+7):
                       </Typography>
                       <List>
-                        {sortData(transactions?.messages?.[1]?.message?.histories, "time", "desc")?.map(
-                          (transaction, index) => (
+                        {sortData(
+                          transactions?.messages?.[1]?.message?.histories,
+                          "time",
+                          "desc"
+                        )
+                          ?.reverse()
+                          ?.map((transaction, index) => (
                             <Stack key={index} direction="row" spacing={1}>
                               {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}
                               <Typography>
@@ -368,9 +374,30 @@ const TelegramChannelSignalStrategy = () => {
                                 {formatCurrency(transaction.profit)}{" "}
                               </Typography>
                             </Stack>
-                          )
-                        )}
+                          ))}
                       </List>
+                      <Typography variant="body1" sx={{ display: "flex" }}>
+                        Hãy đặt lệnh :{" "}
+                        <Typography
+                          mb={1}
+                          fontWeight={600}
+                          sx={{
+                            color:
+                              transactions?.messages?.[0]?.message?.betType ===
+                              "UP"
+                                ? "success.main"
+                                : "error.main",
+                          }}
+                        >
+                          {formatCurrency(
+                            transactions?.messages?.[0]?.message?.betAmount
+                          )}{" "}
+                          {transactions?.messages?.[0]?.message?.betType ===
+                          "UP"
+                            ? "Tăng"
+                            : "Giảm"}
+                        </Typography>
+                      </Typography>
                     </Box>
                   </Paper>
                 </Grid>
@@ -402,7 +429,15 @@ const TelegramChannelSignalStrategy = () => {
                       id={`panel${index}a-header`}
                     >
                       <ListItemText
-                        primary={<Typography >{item.name} <TelegramIcon /></Typography>}
+                        primary={
+                          <Box
+                            display={"flex"}
+                            justifyContent={"space-between"}
+                            alignItems={"center"}
+                          >
+                            <Typography>{item.name}</Typography>
+                          </Box>
+                        }
                         secondary={
                           <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Box display="flex" alignItems={"center"}>
@@ -475,12 +510,7 @@ const TelegramChannelSignalStrategy = () => {
                               THẮNG : +0.95$
                             </Typography>
                           </Typography> */}
-                           <Typography variant="body1" sx={{ display: "flex" }}>
-                        Hãy đặt lệnh :{" "}
-                        <Typography mb={1} fontWeight={600} sx={{ color:transactions?.messages?.[0]?.message?.betType=== "UP" ?  "success.main" : "error.main" }}>
-                          {formatCurrency(transactions?.messages?.[0]?.message?.betAmount)} {transactions?.messages?.[0]?.message?.betType=== "UP" ? "Tăng" : "Giảm"} 
-                        </Typography>
-                      </Typography>
+
                           <Typography variant="body1">
                             🎉 Tổng hợp{" "}
                             {transactions?.messages?.[1]?.message?.histories
@@ -488,8 +518,13 @@ const TelegramChannelSignalStrategy = () => {
                             phiên giao dịch gần nhất (UTC+7):
                           </Typography>
                           <List>
-                            {sortData(transactions?.messages?.[1]?.message?.histories, "time", "desc")?.map(
-                              (transaction, index) => (
+                            {sortData(
+                              transactions?.messages?.[1]?.message?.histories,
+                              "time",
+                              "desc"
+                            )
+                              ?.reverse()
+                              ?.map((transaction, index) => (
                                 <Stack key={index} direction="row" spacing={1}>
                                   {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}
                                   <Typography>
@@ -519,9 +554,30 @@ const TelegramChannelSignalStrategy = () => {
                                     {formatCurrency(transaction.profit)}{" "}
                                   </Typography>
                                 </Stack>
-                              )
-                            )}
+                              ))}
                           </List>
+                          <Typography variant="body1" sx={{ display: "flex" }}>
+                            Hãy đặt lệnh :{" "}
+                            <Typography
+                              mb={1}
+                              fontWeight={600}
+                              sx={{
+                                color:
+                                  transactions?.messages?.[0]?.message
+                                    ?.betType === "UP"
+                                    ? "success.main"
+                                    : "error.main",
+                              }}
+                            >
+                              {formatCurrency(
+                                transactions?.messages?.[0]?.message?.betAmount
+                              )}{" "}
+                              {transactions?.messages?.[0]?.message?.betType ===
+                              "UP"
+                                ? "Tăng"
+                                : "Giảm"}
+                            </Typography>
+                          </Typography>
                         </Box>
                       </Typography>
                     </AccordionDetails>
@@ -687,7 +743,22 @@ const TelegramChannelSignalStrategy = () => {
                   </Box>
                 </Box>
               )}
-              <Box mt={2}>
+              <Box mt={2} display={"flex"} alignItems={"center"} gap={2}>
+                {selectedBot && (
+                  <Box>
+                    <IconButton
+                      onClick={() => {
+                        window.open(selectedBot?.url);
+                      }}
+                    >
+                      <img
+                        alt="Can't display"
+                        style={{ width: 48, height: 48 }}
+                        src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-icon-6896828_960_720.png"
+                      />
+                    </IconButton>
+                  </Box>
+                )}
                 <Box sx={{ width: "100%", direction: "rtl" }}>
                   <Box sx={{ cursor: "pointer" }}>
                     {openTrade === false && (

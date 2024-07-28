@@ -97,7 +97,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 
 const PortfoliosList = () => {
   const { data, setData, loading } = useContext(PortfoliosContext);
-  const {t }= useTranslation()
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { walletMode } = useContext(SettingsContext);
   const [dailyTarget, setDailyTarget] = useState({
@@ -132,8 +132,8 @@ const PortfoliosList = () => {
   const [duplicateOpen, setDuplicateOpen] = useState(false);
   const [sharePlanOpen, setSharePlanOpen] = useState(false);
   const [showAllLinkAccountId, setShowAllLinkAccountId] = useState(false);
-  const [changeState, setChangeState]= useState(false)
-  const [openCopyPlanPopup, setOpenCopyPlanPopup]= useState(false)
+  const [changeState, setChangeState] = useState(false);
+  const [openCopyPlanPopup, setOpenCopyPlanPopup] = useState(false);
   const handleDuplicateClose = () => {
     setDuplicateOpen(false);
   };
@@ -440,7 +440,7 @@ const PortfoliosList = () => {
   };
 
   const handleSearch = (e) => {
-    const filtered = data.filter(item =>
+    const filtered = data.filter((item) =>
       item.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setDataState(filtered);
@@ -474,17 +474,17 @@ const PortfoliosList = () => {
     })();
   }, [walletMode, selectedLinkAccount]);
 
-
   useEffect(() => {
-    if(showAllLinkAccountId=== true) {
+    if (showAllLinkAccountId === true) {
       setDataState(sortData(data, "createdAt", "desc"));
-    }
-    else {
-      setDataState(sortData(data, "createdAt", "desc")?.filter((item) => item?.linkAccountId === selectedLinkAccount))
+    } else {
+      setDataState(
+        sortData(data, "createdAt", "desc")?.filter(
+          (item) => item?.linkAccountId === selectedLinkAccount
+        )
+      );
     }
   }, [data, showAllLinkAccountId, selectedLinkAccount, changeState]);
-
-  
 
   // useEffect(() => {
   //   if (showAllLinkAccountId === true) {
@@ -656,8 +656,8 @@ const PortfoliosList = () => {
                     size={downLg ? "large" : "medium"}
                     fullWidth={downLg ? true : false}
                     endIcon={<ContentCopyIcon />}
-                    onClick={()=> {
-                      setOpenCopyPlanPopup(true)
+                    onClick={() => {
+                      setOpenCopyPlanPopup(true);
                     }}
                     // onClick={handleDialogOpen}
                   >
@@ -713,17 +713,30 @@ const PortfoliosList = () => {
                 </Box>
               )}
               {downLg && (
-                <Box>
-                  <FormControlLabel
-                    label="Show all account"
-                    control={
-                      <Checkbox
-                        checked={showAllLinkAccountId}
-                        onChange={handleChangeShowAllLinkAccountId}
-                      />
-                    }
-                  />
-                </Box>
+                <>
+                  <Box>
+                    <FormControlLabel
+                      label="Show all account"
+                      control={
+                        <Checkbox
+                          checked={showAllLinkAccountId}
+                          onChange={handleChangeShowAllLinkAccountId}
+                        />
+                      }
+                    />
+                  </Box>
+                  <Box>
+                    <FormControlLabel
+                      label="Select all"
+                      control={
+                        <Checkbox
+                          checked={checkedRows.every(Boolean)}
+                          onChange={handleToggleAllRows}
+                        />
+                      }
+                    />
+                  </Box>
+                </>
               )}
             </Box>
             <Box sx={{ position: "relative" }}>
@@ -786,9 +799,8 @@ const PortfoliosList = () => {
                               sx={{
                                 display: downLg ? "flex" : "",
                                 flexWrap: downLg ? "wrap" : "",
-                                marginBottom: "12px"
+                                marginBottom: "12px",
                               }}
-                              
                             >
                               {!downLg && (
                                 <StyledTableCell>
@@ -854,7 +866,15 @@ const PortfoliosList = () => {
                                     Lợi nhuận 7N
                                   </Typography>
                                 )}
-                                <Typography fontWeight={600} variant="body2" color={plan?.week_profit >= 0 ? "success.main" : "error.main"}>
+                                <Typography
+                                  fontWeight={600}
+                                  variant="body2"
+                                  color={
+                                    plan?.week_profit >= 0
+                                      ? "success.main"
+                                      : "error.main"
+                                  }
+                                >
                                   {formatCurrency(plan?.week_profit)}
                                 </Typography>
                               </StyledTableCell>
@@ -887,7 +907,15 @@ const PortfoliosList = () => {
                                     </Typography> */}
                                   </Box>
                                 )}
-                                <Typography fontWeight={600} variant="body2" color={plan?.total_profit >= 0 ? "success.main" : "error.main"}>
+                                <Typography
+                                  fontWeight={600}
+                                  variant="body2"
+                                  color={
+                                    plan?.total_profit >= 0
+                                      ? "success.main"
+                                      : "error.main"
+                                  }
+                                >
                                   {formatCurrency(plan?.total_profit)}
                                 </Typography>
                               </StyledTableCell>
@@ -1063,7 +1091,7 @@ const PortfoliosList = () => {
                                           Chiến lược tín hiệu
                                         </Typography>
                                       </Box>
-                                      {plan?.isCopy!== true && 
+                                      {plan?.isCopy !== true && (
                                         <Box
                                           flex={1}
                                           mb={downLg ? 1 : 0}
@@ -1079,13 +1107,18 @@ const PortfoliosList = () => {
                                             component="div"
                                             fontSize={14}
                                           >
-                                            {BudgetStrategyTypeTitle[plan?.lastData?.budgetStrategy?.bs?.budgetStrategyType]}
+                                            {
+                                              BudgetStrategyTypeTitle[
+                                                plan?.lastData?.budgetStrategy
+                                                  ?.bs?.budgetStrategyType
+                                              ]
+                                            }
                                           </Typography>
                                           <Typography fontSize={12}>
                                             Chiến lược vốn
                                           </Typography>
                                         </Box>
-                                      }
+                                      )}
                                       <Box
                                         flex={1}
                                         mb={downLg ? 1 : 0}
@@ -1226,12 +1259,12 @@ const PortfoliosList = () => {
           selectedPlan={selectedPlan}
           setData={setData}
         />
-        <OpenCopyPlanDialog 
+        <OpenCopyPlanDialog
           dataProps={data}
           setDataProps={setData}
           open={openCopyPlanPopup}
-          onClose={()=> {
-            setOpenCopyPlanPopup(false)
+          onClose={() => {
+            setOpenCopyPlanPopup(false);
           }}
           changeState={changeState}
           setChangeState={setChangeState}
