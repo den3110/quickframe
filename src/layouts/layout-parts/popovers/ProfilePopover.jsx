@@ -110,7 +110,7 @@ const ProfilePopover = () => {
             />
 
             <Box>
-              <H6 fontSize={14}>{linked?.d?.nn || "Unset"}</H6>
+              <H6 fontSize={14}>{user?.nickName || "Unset"}</H6>
               <Small color="text.secondary" display="block">
                 {user?.email}
               </Small>

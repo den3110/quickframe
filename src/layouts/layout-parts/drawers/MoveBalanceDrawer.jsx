@@ -111,7 +111,8 @@ export default function MoveBalanceDrawer(props) {
       }         
       if (mode === true) {
         const response = await userApi.postUserExchangeLinkAccountMoveBoUsdt(
-          data
+          data,
+          selectedLinkAccount
         );
         if (response?.data?.ok === false) {
           showToast(response?.data?.m, "error");

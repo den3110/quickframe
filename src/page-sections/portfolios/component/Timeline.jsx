@@ -83,6 +83,7 @@ const CustomTimeline = () => {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
+    setPage(1);
   };
 
   const handleChangePage = (event, value) => {
@@ -650,6 +651,7 @@ const CustomTimeline = () => {
                 <MenuItem value={6}>6</MenuItem>
                 <MenuItem value={12}>12</MenuItem>
                 <MenuItem value={24}>24</MenuItem>
+                    <MenuItem value={dataState.length}>Tất cả</MenuItem>
               </Select>
             </FormControl>
           </Box>

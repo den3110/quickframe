@@ -29,6 +29,7 @@ import {
   Paper,
   Container,
   CircularProgress,
+  Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
@@ -154,6 +155,47 @@ const NewPlanDrawer = ({
     useState(0);
   const [loseChangeMethodAfterWinStreak, setLoseChangeMethodAfterWinStreak] =
     useState(0);
+  // victor
+  const [victorEnabled, setVictorEnabled] = useState(false);
+  const [victorReverseSignal, setVictorReverseSignal] = useState(false);
+  const [victorEndVictorStreak, setVictorEndVictorStreak] = useState(false);
+  const [victorExactlyVictorStreak, setVictorExactlyVictorStreak] =
+    useState(false);
+  const [victorStreakEntryTarget, setVictorStreakEntryTarget] = useState(0);
+  const [victorTurnCount, setVictorTurnCount] = useState(0);
+  const [
+    victorChangeMethodAfterLoseStreak,
+    setVictorChangeMethodAfterLoseStreak,
+  ] = useState(0);
+  const [
+    victorChangeMethodAfterWinStreak,
+    setVictorChangeMethodAfterWinStreak,
+  ] = useState(0);
+  const [
+    victorChangeMethodAfterVictorStreak,
+    setVictorChangeMethodAfterVictorStreak,
+  ] = useState(0);
+  // advanced wait signal bot
+  const [runWhenWinTotal, setRunWhenWinTotal] = useState(0);
+  const [runWhenLoseTotal, setRunWhenLoseTotal] = useState(0);
+  const [runWhenWinStreak, setRunWhenWinStreak] = useState(0);
+  const [runWhenLoseStreak, setRunWhenLoseStreak] = useState(0);
+  const [runWhenProfit, setRunWhenProfit] = useState(0);
+  const [runWhenLoss, setRunWhenLoss] = useState(0);
+
+  const [stopWhenWinTotal, setStopWhenWinTotal] = useState(0);
+  const [stopWhenLoseTotal, setStopWhenLoseTotal] = useState(0);
+  const [stopWhenWinStreak, setStopWhenWinStreak] = useState(0);
+  const [stopWhenLoseStreak, setStopWhenLoseStreak] = useState(0);
+  const [stopWhenProfit, setStopWhenProfit] = useState(0);
+  const [stopWhenLoss, setStopWhenLoss] = useState(0);
+  const [waitSignalOtherPlanEnabled, setWaitSignalOtherPlanEnabled] = useState(false);
+  const [runWhenExactlyWinLose, setRunWhenExactlyWinLose] = useState(false);
+  const [getSignalToStopFromSignalPlan, setGetSignalToStopFromSignalPlan] =
+    useState(false);
+  const [botList, setBotList]= useState([])
+  const [botId, setBotId]= useState()
+  const [initBotId, setInitBotId]= useState()
   const [loading, setLoading] = useState();
 
   const handleTabChange = (event, newValue) => {
@@ -355,6 +397,18 @@ const NewPlanDrawer = ({
                     loseChangeMethodAfterLoseStreak,
                   lose_change_method_after_win_streak:
                     loseChangeMethodAfterWinStreak,
+                  victor_enabled: victorEnabled,
+                  victor_reverse_signal: victorReverseSignal,
+                  victor_end_victor_streak: victorEndVictorStreak,
+                  victor_exactly_victor_streak: victorExactlyVictorStreak,
+                  victor_streak_entry_target: victorStreakEntryTarget,
+                  victor_turn_count: victorTurnCount,
+                  victor_change_method_after_lose_streak:
+                    victorChangeMethodAfterLoseStreak,
+                  victor_change_method_after_win_streak:
+                    victorChangeMethodAfterWinStreak,
+                  victor_change_method_after_victor_streak:
+                    victorChangeMethodAfterVictorStreak,
                 },
               },
               take_profit_target: takeProfitTarget,
@@ -409,6 +463,29 @@ const NewPlanDrawer = ({
             break;
         }
       }
+      data = {
+        ...data,
+        is_waiting: true,
+        wait_signal_other_plan_enabled: waitSignalOtherPlanEnabled,
+        wait_signal_other_plan_data: {
+          botId: botId,
+          run_when_win_total: runWhenWinTotal,
+          run_when_lose_total: runWhenLoseTotal,
+          run_when_win_streak: runWhenWinStreak,
+          run_when_lose_streak: runWhenLoseStreak,
+          run_when_profit: runWhenProfit,
+          run_when_loss: runWhenLoss,
+          stop_when_win_total: stopWhenWinTotal,
+          stop_when_lose_total: stopWhenLoseTotal,
+          stop_when_win_streak: stopWhenWinStreak,
+          stop_when_lose_streak: stopWhenLoseStreak,
+          stop_when_profit: stopWhenProfit,
+          stop_when_loss: stopWhenLoss,
+          run_when_exactly_win_lose: runWhenExactlyWinLose,
+          get_signal_to_stop_from_signal_plan: getSignalToStopFromSignalPlan,
+        }
+      };
+      console.log(data)
       if (isEdit === true) {
         if (isFromLeaderboard) {
           response = await portfolioApi.usersBotCreate(data);
@@ -430,8 +507,7 @@ const NewPlanDrawer = ({
           setData({ ...selectedPlan, ...data });
         } else if (isEdit === true) {
           if (isFromCopyPlan) {
-          } 
-          else {
+          } else {
             let dataTemp = dataProps;
             const indexData = dataTemp?.findIndex(
               (item) => item?._id === selectedPlan?._id
@@ -469,6 +545,8 @@ const NewPlanDrawer = ({
         const response2 = await signalStrategyApi.userBudgetSignalList();
         const response3 = await signalStrategyApi.userBudgetTelegramSignal();
         const response4 = await userApi.getUserLinkAccountList();
+        const response5= await portfolioApi.userBotList({params: {type: "DEMO"}})
+        const response6= await portfolioApi.userBotList({params: {type: "LIVE"}})
         if (response1?.data?.ok === true) {
           setBudgetStrategy(response1?.data?.d?.[0]?._id);
           setDataBudgetStrategy(response1?.data?.d);
@@ -497,6 +575,10 @@ const NewPlanDrawer = ({
             response4?.data?.d?.filter((item) => item?.isLogin === true)
           );
         }
+        if(response5?.data?.ok=== true && response6?.data?.ok=== true) {
+          setInitBotId(response5?.data?.d?.[0]?._id)
+          setBotList(response5?.data?.d?.concat(response6?.data?.d))
+        }
       } catch (error) {
       } finally {
         setLoading(false);
@@ -506,7 +588,7 @@ const NewPlanDrawer = ({
 
   useEffect(() => {
     if (selectedTab === "Telegram Signal") {
-      // s
+      
     }
   }, [selectedTab]);
 
@@ -613,6 +695,31 @@ const NewPlanDrawer = ({
       setWinTotalTarget(selectedPlan?.win_total_target);
       setLoseTotalTarget(selectedPlan?.lose_total_target);
       setIsCopyPlan(selectedPlan?.isCopy);
+      setVictorEnabled(selectedPlan?.method_data?.feature_data?.victor_enabled);
+      setVictorReverseSignal(selectedPlan?.method_data?.feature_data?.victor_reverse_signal);
+      setVictorEndVictorStreak(selectedPlan?.method_data?.feature_data?.victor_end_victor_streak);
+      setVictorExactlyVictorStreak(selectedPlan?.method_data?.feature_data?.victor_exactly_victor_streak);
+      setVictorStreakEntryTarget(selectedPlan?.method_data?.feature_data?.victor_streak_entry_target);
+      setVictorTurnCount(selectedPlan?.method_data?.feature_data?.victor_turn_count);
+      setVictorChangeMethodAfterLoseStreak(selectedPlan?.method_data?.feature_data?.victor_change_method_after_lose_streak);
+      setVictorChangeMethodAfterWinStreak(selectedPlan?.method_data?.feature_data?.victor_change_method_after_win_streak);
+      setVictorChangeMethodAfterVictorStreak(selectedPlan?.method_data?.feature_data?.victor_change_method_after_victor_streak);
+      setRunWhenWinTotal(selectedPlan?.wait_signal_other_plan_data?.run_when_win_total);
+      setRunWhenLoseTotal(selectedPlan?.wait_signal_other_plan_data?.run_when_lose_total);
+      setRunWhenWinStreak(selectedPlan?.wait_signal_other_plan_data?.run_when_win_streak);
+      setRunWhenLoseStreak(selectedPlan?.wait_signal_other_plan_data?.run_when_lose_streak);
+      setRunWhenProfit(selectedPlan?.wait_signal_other_plan_data?.run_when_profit);
+      setRunWhenLoss(selectedPlan?.wait_signal_other_plan_data?.run_when_loss);
+      setStopWhenWinTotal(selectedPlan?.wait_signal_other_plan_data?.stop_when_win_total);
+      setStopWhenLoseTotal(selectedPlan?.wait_signal_other_plan_data?.stop_when_lose_total);
+      setStopWhenWinStreak(selectedPlan?.wait_signal_other_plan_data?.stop_when_win_streak);
+      setStopWhenLoseStreak(selectedPlan?.wait_signal_other_plan_data?.stop_when_lose_streak);
+      setStopWhenProfit(selectedPlan?.wait_signal_other_plan_data?.stop_when_profit);
+      setStopWhenLoss(selectedPlan?.wait_signal_other_plan_data?.stop_when_loss);
+      setRunWhenExactlyWinLose(selectedPlan?.wait_signal_other_plan_data?.run_when_exactly_win_lose);
+      setGetSignalToStopFromSignalPlan(selectedPlan?.wait_signal_other_plan_data?.get_signal_to_stop_from_signal_plan);
+      setBotId(selectedPlan?.wait_signal_other_plan_data?.botId);
+      setWaitSignalOtherPlanEnabled(selectedPlan?.wait_signal_other_plan_enabled)
       if (isFromLeaderboard === true) {
         setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
         setLinkAccountId(initLinkAccountId);
@@ -623,7 +730,7 @@ const NewPlanDrawer = ({
         setArraySignalStrategy(selectedPlan?.method_data?.method_list);
       }
       if (isFromCopyPlan) {
-        setPlanName(selectedPlan?.name)
+        setPlanName(selectedPlan?.name);
         setArraySignalStrategy(selectedPlan?.method_data?.method_list);
         setIsCopyPlan(isFromCopyPlan);
       }
@@ -672,6 +779,31 @@ const NewPlanDrawer = ({
       setWinTotalTarget(0);
       setLoseTotalTarget(0);
       setIsCopyPlan();
+      setVictorEnabled(false);
+      setVictorReverseSignal(false);
+      setVictorEndVictorStreak(false);
+      setVictorExactlyVictorStreak(false);
+      setVictorStreakEntryTarget(0);
+      setVictorTurnCount(0);
+      setVictorChangeMethodAfterLoseStreak(0);
+      setVictorChangeMethodAfterWinStreak(0);
+      setVictorChangeMethodAfterVictorStreak(0);
+      setRunWhenWinTotal(0);
+      setRunWhenLoseTotal(0);
+      setRunWhenWinStreak(0);
+      setRunWhenLoseStreak(0);
+      setRunWhenProfit(0);
+      setRunWhenLoss(0);
+      setStopWhenWinTotal(0);
+      setStopWhenLoseTotal(0);
+      setStopWhenWinStreak(0);
+      setStopWhenLoseStreak(0);
+      setStopWhenProfit(0);
+      setStopWhenLoss(0);
+      setRunWhenExactlyWinLose(false);
+      setGetSignalToStopFromSignalPlan(false);
+      setWaitSignalOtherPlanEnabled(false)
+      setBotId(initBotId)
     }
   }, [
     isEdit,
@@ -685,6 +817,7 @@ const NewPlanDrawer = ({
     isFromLeaderboard,
     walletMode,
     isFromCopyPlan,
+    initBotId
     // inView
   ]);
 
@@ -1503,6 +1636,7 @@ const NewPlanDrawer = ({
                                 >
                                   <Tab label="Win.S" />
                                   <Tab label="Lose.S" />
+                                  <Tab label="Victor.S" />
                                 </Tabs>
 
                                 <Box hidden={selectedTab1 !== 0}>
@@ -1728,9 +1862,137 @@ const NewPlanDrawer = ({
                                     </Grid>
                                   </FormGroup>
                                 </Box>
-
+                                {/*  */}
                                 <Box hidden={selectedTab1 !== 2}>
-                                  {/* Nội dung của tab Victor.S */}
+                                  <FormGroup>
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={victorEnabled}
+                                          onChange={(e) =>
+                                            setVictorEnabled(e.target.checked)
+                                          }
+                                        />
+                                      }
+                                      label="Kích hoạt Victor Signal"
+                                    />
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={victorReverseSignal}
+                                          onChange={(e) =>
+                                            setVictorReverseSignal(
+                                              e.target.checked
+                                            )
+                                          }
+                                        />
+                                      }
+                                      label="Đảo lệnh"
+                                    />
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={victorEndVictorStreak}
+                                          onChange={(e) =>
+                                            setVictorEndVictorStreak(
+                                              e.target.checked
+                                            )
+                                          }
+                                        />
+                                      }
+                                      label="Vào lệnh khi kết thúc chuỗi Victor"
+                                    />
+                                    <FormControlLabel
+                                      control={
+                                        <Checkbox
+                                          checked={victorExactlyVictorStreak}
+                                          onChange={(e) =>
+                                            setVictorExactlyVictorStreak(
+                                              e.target.checked
+                                            )
+                                          }
+                                        />
+                                      }
+                                      label="Vào lệnh khi đạt chính xác lượt Victor LT"
+                                    />
+
+                                    <Grid container spacing={2}>
+                                      <Grid item xs={12} sm={6}>
+                                        <TextField
+                                          fullWidth
+                                          label="Vào lệnh khi lượt Victor LT đạt"
+                                          variant="outlined"
+                                          value={victorStreakEntryTarget}
+                                          onChange={(e) =>
+                                            setVictorStreakEntryTarget(
+                                              e.target.value
+                                            )
+                                          }
+                                          margin="normal"
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} sm={6}>
+                                        <TextField
+                                          fullWidth
+                                          label="Số lượt vào (2 Thắng LT = 1 Lượt hoặc Win lệnh đầu chuỗi QLV)"
+                                          variant="outlined"
+                                          value={victorTurnCount}
+                                          onChange={(e) =>
+                                            setVictorTurnCount(e.target.value)
+                                          }
+                                          margin="normal"
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} sm={6}>
+                                        <TextField
+                                          fullWidth
+                                          label="Đổi phương pháp khi thua liên tiếp"
+                                          variant="outlined"
+                                          value={
+                                            victorChangeMethodAfterLoseStreak
+                                          }
+                                          onChange={(e) =>
+                                            setVictorChangeMethodAfterLoseStreak(
+                                              e.target.value
+                                            )
+                                          }
+                                          margin="normal"
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} sm={6}>
+                                        <TextField
+                                          fullWidth
+                                          label="Đổi phương pháp khi thắng liên tiếp"
+                                          variant="outlined"
+                                          value={
+                                            victorChangeMethodAfterWinStreak
+                                          }
+                                          onChange={(e) =>
+                                            setVictorChangeMethodAfterWinStreak(
+                                              e.target.value
+                                            )
+                                          }
+                                          margin="normal"
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} sm={6}>
+                                        <TextField
+                                          fullWidth
+                                          label="Đổi phương pháp khi Victor liên tiếp"
+                                          variant="outlined"
+                                          value={
+                                            victorChangeMethodAfterVictorStreak
+                                          }
+                                          onChange={(e) =>
+                                            setVictorChangeMethodAfterVictorStreak(
+                                              e.target.value
+                                            )
+                                          }
+                                          margin="normal"
+                                        />
+                                      </Grid>
+                                    </Grid>
+                                  </FormGroup>
                                 </Box>
                               </FormControl>
                             </Paper>
@@ -1966,6 +2228,268 @@ const NewPlanDrawer = ({
                     </Typography>
                   </AccordionSummary>
                   <Box p={2}>
+                  <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                      mb={1}
+                    >
+                      <Typography variant="h6">Đợi tín hiệu từ bot có sẵn</Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={waitSignalOtherPlanEnabled}
+                            onChange={() => setWaitSignalOtherPlanEnabled(!waitSignalOtherPlanEnabled)}
+                          />
+                        }
+                      />
+                    </Box>
+                    {waitSignalOtherPlanEnabled && 
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} md={12}>
+                          <TextField 
+                            onChange={(e)=> setBotId(e.target.value)}
+                            value={botId}
+                            size="small"
+                            fullWidth
+                            select
+                            name="wait_signal_from_other_bot_id"
+                            label={t("configuration_name_want_to_waiting")}
+                            SelectProps={{
+                              MenuProps: {
+                                sx: { "& .MuiPaper-root": { maxHeight: 260 } },
+                              },
+                            }}
+                            sx={{
+                              maxWidth: { sm: "100%" },
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            {isEdit
+                              ? botList
+                                  ?.filter((a) => a?._id !== selectedPlan?._id)
+                                  ?.map((option) => (
+                                    <MenuItem key={option?._id} value={option?._id}>
+                                      {t(option?.name)}
+                                    </MenuItem>
+                                  ))
+                              : botList?.map((option) => (
+                                  <MenuItem key={option?._id} value={option?._id}>
+                                    {t(option?.name)}
+                                  </MenuItem>
+                                ))}
+                          </TextField>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                          <Divider>
+                            <Chip label={t("condition_to_start")} />
+                          </Divider>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="run_when_win_total"
+                            type="number"
+                            label={t("start_when_win_total")}
+                            size="small"
+                            value={runWhenWinTotal}
+                            onChange={(e) =>
+                              setRunWhenWinTotal((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="run_when_lose_total"
+                            type="number"
+                            label={t("start_when_lose_total")}
+                            size="small"
+                            value={runWhenLoseTotal}
+                            onChange={(e) =>
+                              setRunWhenLoseTotal((e.target.value))
+                            }
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="run_when_win_streak"
+                            type="number"
+                            label={t("start_when_win_streak")}
+                            size="small"
+                            value={runWhenWinStreak}
+                            onChange={(e) =>
+                              setRunWhenWinStreak((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="run_when_lose_streak"
+                            type="number"
+                            label={t("start_when_lose_streak")}
+                            size="small"
+                            value={runWhenLoseStreak}
+                            onChange={(e) =>
+                              setRunWhenLoseStreak((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="run_when_profit"
+                            type="number"
+                            label={t("start_when_profit")}
+                            size="small"
+                            value={runWhenProfit}
+                            onChange={(e) =>
+                              setRunWhenProfit((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="run_when_loss"
+                            type="number"
+                            label={t("start_when_loss")}
+                            size="small"
+                            value={runWhenLoss}
+                            onChange={(e) =>
+                              setRunWhenLoss((e.target.value))
+                            }
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} md={12}>
+                          <Divider>
+                            <Chip label={t("stop_condition_to_wait_signal")} />
+                          </Divider>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="stop_when_win_total"
+                            type="number"
+                            label={t("stop_for_waiting_signal_when_win_total")}
+                            size="small"
+                            value={stopWhenWinTotal}
+                            onChange={(e) =>
+                              setStopWhenWinTotal((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="stop_when_lose_total"
+                            type="number"
+                            label={t("stop_for_waiting_signal_when_lose_total")}
+                            size="small"
+                            value={stopWhenLoseTotal}
+                            onChange={(e) =>
+                              setStopWhenLoseTotal((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="stop_when_win_streak"
+                            type="number"
+                            label={t("stop_for_waiting_signal_when_win_streak")}
+                            size="small"
+                            value={stopWhenWinStreak}
+                            onChange={(e) =>
+                              setStopWhenWinStreak((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="stop_when_lose_streak"
+                            type="number"
+                            label={t("stop_for_waiting_signal_when_lose_streak")}
+                            size="small"
+                            value={stopWhenLoseStreak}
+                            onChange={(e) =>
+                              setStopWhenLoseStreak((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="stop_when_profit"
+                            type="number"
+                            label={t("stop_for_waiting_signal_when_profit")}
+                            size="small"
+                            value={stopWhenProfit}
+                            onChange={(e) =>
+                              setStopWhenProfit((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            name="stop_when_loss"
+                            type="number"
+                            label={t("stop_for_waiting_signal_when_loss")}
+                            size="small"
+                            value={stopWhenLoss}
+                            onChange={(e) =>
+                              setStopWhenLoss((e.target.value))
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                          <FormControlLabel
+                            name="run_when_exactly_win_lose"
+                            control={
+                              <Checkbox
+                                checked={runWhenExactlyWinLose}
+                                onChange={(e) =>
+                                  setRunWhenExactlyWinLose(e.target.checked)
+                                }
+                              />
+                            }
+                            label={t(
+                              "wait_signal_from_other_start_when_exactly_enabled"
+                            )}
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                          <FormControlLabel
+                            name="get_signal_to_stop_from_signal_plan"
+                            control={
+                              <Checkbox
+                                checked={getSignalToStopFromSignalPlan}
+                                onChange={(e) =>
+                                  setGetSignalToStopFromSignalPlan(
+                                    e.target.checked
+                                  )
+                                }
+                              />
+                            }
+                            label={t(
+                              "wait_signal_from_other_get_stop_signal_based_on_navigation_bot_enabled"
+                            )}
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                          <Typography sx={{ color: "warning.main" }}>
+                            {t("note")}: {t("unused_targets_enter_0")}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    }
                     <Box
                       mt={2}
                       display={"flex"}

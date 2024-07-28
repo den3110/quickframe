@@ -52,6 +52,7 @@ const CopytradeHistory = () => {
   const { walletMode } = useContext(SettingsContext);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
+    setPage(1);
   };
 
   const handleChangePage = (event, value) => {
@@ -239,6 +240,7 @@ const CopytradeHistory = () => {
               <MenuItem value={6}>6</MenuItem>
               <MenuItem value={12}>12</MenuItem>
               <MenuItem value={24}>24</MenuItem>
+                    <MenuItem value={data.length}>Tất cả</MenuItem>
             </Select>
           </FormControl>
         </Box>

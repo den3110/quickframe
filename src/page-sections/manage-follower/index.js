@@ -85,6 +85,7 @@ function ManageFollowerPage() {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
+    setPage(1);
   };
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);

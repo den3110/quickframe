@@ -72,11 +72,11 @@ const LeaderBoard = () => {
       setDataUser(response?.data?.d);
     } catch (error) {
       if (error?.response?.status === 401) {
-        logoutFromSystem();
-        navigate("/login");
+        // logoutFromSystem();
+        // navigate("/login");
       } else if (error?.response?.status === 402) {
-        logoutToConnect();
-        navigate("/connect");
+        // logoutToConnect();
+        // navigate("/connect");
       }
     } finally {
       setLoading(false);

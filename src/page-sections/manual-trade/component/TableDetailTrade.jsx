@@ -66,6 +66,7 @@ const TableDetailTrade = ({dataState}) => {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
+    setPage(1);
   };
 
   const handleChangePage = (event, value) => {
@@ -559,6 +560,7 @@ const TableDetailTrade = ({dataState}) => {
                 <MenuItem value={6}>6</MenuItem>
                 <MenuItem value={12}>12</MenuItem>
                 <MenuItem value={24}>24</MenuItem>
+                <MenuItem value={dataProps.length}>Tất cả</MenuItem>
               </Select>
             </FormControl>
           </Box>
