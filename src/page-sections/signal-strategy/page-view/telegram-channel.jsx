@@ -255,7 +255,7 @@ const TelegramChannelSignalStrategy = () => {
                                       %
                                     </Typography>
                                   </Box>
-                                  <Typography fontSize={8}>|</Typography>
+                                  <Typography fontSize={8}>| &nbsp;</Typography>
                                   <Box display="flex" alignItems={"center"}>
                                     <Typography fontSize={12}>
                                       Chuỗi thắng / thua:&nbsp;
@@ -277,6 +277,30 @@ const TelegramChannelSignalStrategy = () => {
                                     >
                                       {item?.longest_lose_streak}
                                     </Typography>
+                                  </Box>
+
+                                  <Typography fontSize={8}> &nbsp;|&nbsp; </Typography>
+                                  <Box display="flex" alignItems={"center"}>
+                                    <Typography fontSize={12}>
+                                      VOL:&nbsp;
+                                    </Typography>
+                                    <Typography
+                                      fontWeight={600}
+                                      fontSize={12}
+                                      color={
+                                       "warning.main"
+                                      }
+                                    >
+                                      ${round2number(item?.volume)}
+                                    </Typography>
+                                    {/* <Typography fontSize={12}>/</Typography>
+                                    <Typography
+                                      fontWeight={600}
+                                      fontSize={12}
+                                      color={"error.main"}
+                                    >
+                                      {item?.longest_lose_streak}
+                                    </Typography> */}
                                   </Box>
                                 </Box>
                               }

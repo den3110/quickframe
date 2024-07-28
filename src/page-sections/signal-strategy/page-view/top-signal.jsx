@@ -37,6 +37,7 @@ import SearchIcon from "icons/SearchIcon";
 import sortData from "util/sortData";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import _ from "lodash";
+import { numberFormat } from "util/numberFormat";
 
 // STYLED COMPONENTS
 
@@ -260,6 +261,7 @@ const TopSignalPageView = () => {
                       <StyledTableCell>Chuỗi thua</StyledTableCell>
                       <StyledTableCell>Victor Streak</StyledTableCell>
                       <StyledTableCell>VOL</StyledTableCell>
+                      <StyledTableCell>PnL</StyledTableCell>
                       <StyledTableCell>Thao tác</StyledTableCell>
                     </TableRow>
                   </TableHead>
@@ -425,7 +427,7 @@ const TopSignalPageView = () => {
                                   : "error.main"
                               }
                             >
-                              {item?.win_streak}
+                              {item?.win_streak}/{item?.longest_win_streak}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell
@@ -446,7 +448,7 @@ const TopSignalPageView = () => {
                                   : "error.main"
                               }
                             >
-                              {item?.lose_streak}
+                              {item?.lose_streak}/{item?.longest_lose_streak}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell
@@ -473,9 +475,22 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography>VOL:</Typography>}
-                            <Typography fontWeight={600} fontSize={14}>
-                              {formatCurrency(item?.volume)}
+                            {downLg && <Typography >VOL:</Typography>}
+                            <Typography fontWeight={600} fontSize={14} color="warning.main">
+                              ${round2number(item?.volume)}
+                            </Typography>
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{
+                              width: downLg ? "100%" : "",
+                              display: downLg ? "flex" : "",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            {downLg && <Typography >PnL:</Typography>}
+                            <Typography fontWeight={600} fontSize={14} color={item?.profit >= 0 ?"success.main" : "error.main"}>
+                              {formatCurrency(item?.profit)}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell
