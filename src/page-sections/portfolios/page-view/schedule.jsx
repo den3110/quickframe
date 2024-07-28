@@ -3,16 +3,13 @@ import Layout from "../Layout";
 import {
   Box,
   Button,
+  CircularProgress,
   IconButton,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  Eventcalendar,
-  getJson,
-  setOptions /* localeImport */,
-} from "@mobiscroll/react";
+import { Eventcalendar } from "@mobiscroll/react";
 import { isDark } from "util/constants";
 import NewSchedule from "../page-sections/schedule/NewSchedule";
 import AddIcon from "@mui/icons-material/Add";
@@ -21,9 +18,11 @@ import DeleteBudgetStrategyIcon from "icons/budget-strategy/DeleteBudgetStrategy
 import DeleteSchedule from "../page-sections/schedule/DeleteSchedule";
 import portfolioApi from "api/portfolios/portfolioApi";
 import sortData from "util/sortData";
+import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 
 const PortfolioSchedule = () => {
   const theme = useTheme();
+  const [loading, setLoading] = useState();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [data, setData] = useState([]);
   const [myEvents, setEvents] = useState([]);
@@ -31,8 +30,8 @@ const PortfolioSchedule = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [deleteSchedule, setDeleteSchedule] = useState(false);
   const [resources, setResources] = useState([]);
-  const [selectedSchedule, setSelectedSchedule]= useState()
-  const [change, setChange]= useState(false)
+  const [selectedSchedule, setSelectedSchedule] = useState();
+  const [change, setChange] = useState(false);
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -49,6 +48,7 @@ const PortfolioSchedule = () => {
   useEffect(() => {
     (async () => {
       try {
+        setLoading(true);
         const response = await portfolioApi.userScheduleList();
         if (response?.data?.ok === true) {
           const apiData = response?.data?.d || [];
@@ -56,17 +56,22 @@ const PortfolioSchedule = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
 
   useEffect(() => {
-    const newResources = sortData(data, "createdAt", "desc").map((item, index) => ({
-      ...item,
-      id: index + 1,
-      name: item.name,
-      color: getRandomColor(), 
-    }));
+    const newResources = sortData(data, "createdAt", "desc").map(
+      (item, index) => ({
+        ...item,
+        id: index + 1,
+        name: item.name,
+        color: getRandomColor(),
+
+      })
+    );
     setResources(newResources);
 
     const today = new Date();
@@ -109,6 +114,8 @@ const PortfolioSchedule = () => {
           end: endDate,
           resource: newResources.find((r) => r.name === event.name)?.id || 1, // Match resource id based on name
           text: event.name,
+          botIds: event.botIds,
+          name: event.name
         };
       } else {
         const [hours, minutes] = event.start_time.split(":").map(Number);
@@ -130,11 +137,13 @@ const PortfolioSchedule = () => {
           end: endDate,
           resource: newResources.find((r) => r.name === event.name)?.id || 1, // Match resource id based on name
           text: event.name,
+          botIds: event.botIds,
+          name: event.name
+
         };
       }
     });
     setEvents(formattedEvents);
-
   }, [data, change]);
 
   const getRandomColor = () => {
@@ -159,7 +168,9 @@ const PortfolioSchedule = () => {
         justifyContent={"space-between"}
         alignItems={"center"}
       >
-        <Typography color={"success.main"} fontSize={14} fontWeight={600}>{resource?.name}</Typography>
+        <Typography color={"success.main"} fontSize={14} fontWeight={600}>
+          {resource?.name}
+        </Typography>
         <Box
           display={"flex"}
           justifyContent={"space-between"}
@@ -169,7 +180,7 @@ const PortfolioSchedule = () => {
             onClick={() => {
               toggleDrawer();
               setIsEdit(true);
-              setSelectedSchedule(resource)
+              setSelectedSchedule(resource);
             }}
           >
             <EditBudgetStrategy />
@@ -177,7 +188,7 @@ const PortfolioSchedule = () => {
           <IconButton
             onClick={() => {
               setDeleteSchedule(true);
-              setSelectedSchedule(resource)
+              setSelectedSchedule(resource);
             }}
           >
             <DeleteBudgetStrategyIcon />
@@ -205,7 +216,7 @@ const PortfolioSchedule = () => {
             <Box
               display={"flex"}
               justifyContent={"space-between"}
-              alignItems={"center"}
+              alignItefs={"center"}
               mb={2}
             >
               <Box>
@@ -226,23 +237,63 @@ const PortfolioSchedule = () => {
                 </Button>
               </Box>
             </Box>
-            <Box sx={{ overflow: "auto" }}>
-              <Eventcalendar
-                // drag
-                timeFormat="HH:mm"
-                cssClass={
-                  isDark(theme)
-                    ? "custom-background-dark"
-                    : "custom-background-light"
-                }
-                view={myView}
-                data={myEvents}
-                resources={resources}
-                renderResource={renderResource}
-                renderResourceHeader={renderResourceHeader}
-                renderHeader={renderHeader}
-              />
-            </Box>
+            {data?.length > 0 && (
+              <Box sx={{ overflow: "auto" }}>
+                <Eventcalendar
+                  onPageLoaded={()=> {
+                    setLoading(false)
+                  }}
+                  onPageLoading={()=> {
+                    setLoading(true)
+                  }}
+                  // ={()=> console.log("loading")}
+                  // onPageLoading={()=> setLoading(true)}
+                  // drag
+                  timeFormat="HH:mm"
+                  cssClass={
+                    isDark(theme)
+                      ? "custom-background-dark"
+                      : "custom-background-light"
+                  }
+                  view={myView}
+                  data={myEvents}
+                  resources={resources}
+                  renderResource={renderResource}
+                  renderResourceHeader={renderResourceHeader}
+                  renderHeader={renderHeader}
+                  onEventClick={(data) => {
+                    toggleDrawer();
+                    setIsEdit(true);
+                    setSelectedSchedule(data?.event);
+                  }}
+                />
+              </Box>
+            )}
+            {loading === false && data?.length <= 0 && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <EmptyPage
+                  title={"Danh mục hẹn giờ trống"}
+                  disableButton={true}
+                />
+              </Box>
+            )}
+            {loading === true && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>

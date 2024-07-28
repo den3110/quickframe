@@ -11,7 +11,7 @@ const StyledBox = styled(Box)(({
   ...(ellipsis && {
     overflow: "hidden",
     whiteSpace: "nowrap",
-    textOverflow: "ellipsis"
+    textOverflow: "ellipsis",
   })
 }));
 export const H1 = props => {

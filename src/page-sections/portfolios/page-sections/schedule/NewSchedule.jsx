@@ -314,12 +314,12 @@ export default function NewSchedule({
                   </Box>
                 )}
               >
-                {dataBotList.map((item, key) => (
+                {/* {dataBotList.map((item, key) => (
                   <MenuItem key={key} value={item._id}>
                     <Checkbox checked={packages.indexOf(item._id) > -1} />
                     <ListItemText primary={item.name} />
                   </MenuItem>
-                ))}
+                ))} */}
               </Select>
             </FormControl>
           </Box>

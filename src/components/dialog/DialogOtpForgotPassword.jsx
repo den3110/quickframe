@@ -11,6 +11,7 @@ import {
   TextField,
   InputAdornment,
   useTheme,
+  useMediaQuery
 } from "@mui/material";
 import { styled } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
@@ -34,6 +35,8 @@ const CustomDialogContent = styled(DialogContent)(({ theme }) => ({
 
 const DialogOtpForgotPassword = (props) => {
   const navigate = useNavigate();
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const downXss = useMediaQuery((theme) => theme.breakpoints.down("xss"));
   const { email, open, setOpen } = props;
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -130,25 +133,26 @@ const DialogOtpForgotPassword = (props) => {
             isInputNum
             renderInput={(props) => (
               <Box
-                component="input"
-                {...props}
-                sx={{
-                  all: "unset",
-                  minWidth: 56,
-                  height: 56,
-                  fontSize: 18,
-                  flexBasis: 70,
-                  borderRadius: 2,
-                  fontWeight: 600,
-                  background: theme.palette.background.t1,
-                  input: {
-                    textAlign: "center",
-                  },
-                  "::placeholder": {
-                    color: "text.primary",
-                  },
-                }}
-              />
+                  component="input"
+                  {...props}
+                  sx={{
+                    all: "unset",
+                    minWidth: (downLg && !downXss) ? 36 : (downXss ? 28 : 56),
+                    height: (downLg && !downXss) ? 36 : (downXss ? 28 : 56),
+                    fontSize: (downLg && !downXss) ? 14 : 18,
+                    flexBasis: 70,
+                    borderRadius: 2,
+                    fontWeight: 600,
+                    // background: "rgb(238, 239, 242)",
+                    background: theme.palette.background.cell,
+                    input: {
+                      textAlign: "center",
+                    },
+                    "::placeholder": {
+                      color: "text.primary",
+                    },
+                  }}
+                />
             )}
             containerStyle={{
               gap: "1rem",

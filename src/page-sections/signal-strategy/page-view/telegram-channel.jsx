@@ -40,6 +40,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AuthContext from "contexts/AuthContext";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import sortData from "util/sortData";
+import TelegramIcon from '@mui/icons-material/Telegram';
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -222,7 +223,7 @@ const TelegramChannelSignalStrategy = () => {
                             }}
                           >
                             <ListItemText
-                              primary={item.name}
+                              primary={<Typography onClick={()=> window.open(item?.url)}>{item.name} <TelegramIcon /></Typography>}
                               secondary={
                                 <Box
                                   sx={{ display: "flex", alignItems: "center" }}
@@ -377,7 +378,7 @@ const TelegramChannelSignalStrategy = () => {
                       id={`panel${index}a-header`}
                     >
                       <ListItemText
-                        primary={item.name}
+                        primary={<Typography onClick={()=> window.open(item?.url)}>{item.name} <TelegramIcon /></Typography>}
                         secondary={
                           <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Box display="flex" alignItems={"center"}>
