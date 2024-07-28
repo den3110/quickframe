@@ -261,7 +261,7 @@ const PortfoliosList = () => {
   };
 
   const handlePausePlan = async () => {
-    const selectedPlans = data.filter(
+    const selectedPlans = dataState.filter(
       (_, index) => checkedRows[index] === true
     );
     // setLoading(true);
@@ -301,7 +301,7 @@ const PortfoliosList = () => {
   };
 
   const handleResumePlan = async () => {
-    const selectedPlans = data.filter(
+    const selectedPlans = dataState.filter(
       (_, index) => checkedRows[index] === true
     );
     // setLoading(true);
@@ -318,7 +318,7 @@ const PortfoliosList = () => {
       // setData();
       showToast("Tiếp tục các gói đã chọn thành công", "success");
       setData(
-        data?.map((item, key) => {
+        dataState?.map((item, key) => {
           if (
             selectedPlans.some((obj) => obj._id === item._id) &&
             listResult[key] === true
@@ -409,7 +409,7 @@ const PortfoliosList = () => {
   };
 
   const handleRemovePlan = async () => {
-    const selectedPlans = data.filter(
+    const selectedPlans = dataState.filter(
       (_, index) => checkedRows[index] === true
     );
     // setLoading(true);
@@ -422,11 +422,11 @@ const PortfoliosList = () => {
       );
 
       const responses = await Promise.all(requests);
-      const listResult = responses?.map((item) => item.data.ok);
+      // const listResult = responses?.map((item) => item.data.ok);
       // setData();
       showToast("Xoá các gói đã chọn thành công", "success");
       setData(
-        data?.filter(
+        dataState?.filter(
           (item, key) => !selectedPlans.find((a) => a._id === item._id)
         )
       );
@@ -447,11 +447,11 @@ const PortfoliosList = () => {
 
   useEffect(() => {
     setCheckedRows(
-      data
+      dataState
         .slice(rowsPerPage * (page - 1), rowsPerPage * (page - 1) + rowsPerPage)
         ?.map((item) => false)
     );
-  }, [data, page, rowsPerPage]);
+  }, [data, page, rowsPerPage, dataState]);
 
   useEffect(() => {
     // Check if at least one row is checked to show the popup
@@ -473,13 +473,13 @@ const PortfoliosList = () => {
     })();
   }, [walletMode, selectedLinkAccount]);
 
-    console.log(changeState)
+
   useEffect(() => {
     if(showAllLinkAccountId=== true) {
-      setDataState(data);
+      setDataState(sortData(data, "createdAt", "desc"));
     }
     else {
-      setDataState(data?.filter((item) => item?.linkAccountId === selectedLinkAccount))
+      setDataState(sortData(data, "createdAt", "desc")?.filter((item) => item?.linkAccountId === selectedLinkAccount))
     }
   }, [data, showAllLinkAccountId, selectedLinkAccount, changeState]);
 
@@ -774,7 +774,7 @@ const PortfoliosList = () => {
                     )}
 
                     {loading === false &&
-                      sortData(dataState, "createdAt", "desc")
+                      dataState
                         .slice(
                           rowsPerPage * (page - 1),
                           rowsPerPage * (page - 1) + rowsPerPage
