@@ -263,12 +263,10 @@ const TelegramChannelSignalStrategy = () => {
                                       fontWeight={600}
                                       fontSize={12}
                                       color={
-                                        parseFloat(item?.win_streak) >= 0
-                                          ? "success.main"
-                                          : "error.main"
+                                       "success.main"
                                       }
                                     >
-                                      {item?.win_streak}
+                                      {item?.longest_win_streak}
                                     </Typography>
                                     <Typography fontSize={12}>/</Typography>
                                     <Typography
@@ -276,7 +274,7 @@ const TelegramChannelSignalStrategy = () => {
                                       fontSize={12}
                                       color={"error.main"}
                                     >
-                                      {item?.lose_streak}
+                                      {item?.longest_lose_streak}
                                     </Typography>
                                   </Box>
                                 </Box>
