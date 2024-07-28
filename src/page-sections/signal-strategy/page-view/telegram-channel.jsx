@@ -223,7 +223,7 @@ const TelegramChannelSignalStrategy = () => {
                             }}
                           >
                             <ListItemText
-                              primary={<Typography onClick={()=> window.open(item?.url)}>{item.name} <TelegramIcon /></Typography>}
+                              primary={<Typography>{item.name} <TelegramIcon /></Typography>}
                               secondary={
                                 <Box
                                   sx={{ display: "flex", alignItems: "center" }}
@@ -402,7 +402,7 @@ const TelegramChannelSignalStrategy = () => {
                       id={`panel${index}a-header`}
                     >
                       <ListItemText
-                        primary={<Typography onClick={()=> window.open(item?.url)}>{item.name} <TelegramIcon /></Typography>}
+                        primary={<Typography >{item.name} <TelegramIcon /></Typography>}
                         secondary={
                           <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Box display="flex" alignItems={"center"}>
@@ -475,6 +475,12 @@ const TelegramChannelSignalStrategy = () => {
                               THẮNG : +0.95$
                             </Typography>
                           </Typography> */}
+                           <Typography variant="body1" sx={{ display: "flex" }}>
+                        Hãy đặt lệnh :{" "}
+                        <Typography mb={1} fontWeight={600} sx={{ color:transactions?.messages?.[0]?.message?.betType=== "UP" ?  "success.main" : "error.main" }}>
+                          {formatCurrency(transactions?.messages?.[0]?.message?.betAmount)} {transactions?.messages?.[0]?.message?.betType=== "UP" ? "Tăng" : "Giảm"} 
+                        </Typography>
+                      </Typography>
                           <Typography variant="body1">
                             🎉 Tổng hợp{" "}
                             {transactions?.messages?.[1]?.message?.histories
