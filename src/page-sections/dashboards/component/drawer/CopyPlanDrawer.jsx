@@ -28,9 +28,10 @@ const CopyPlanDrawer = ({
   isAddNewCopyplan,
   setDataProps,
   dataProps,
-  changeState, 
+  changeState,
   setChangeState,
-  isFromCopyPlan
+  isFromCopyPlan,
+  isFromBudgetStrategy,
 }) => {
   const { copyCode } = selectedPlan;
   // const copyCode = 1
@@ -38,9 +39,10 @@ const CopyPlanDrawer = ({
   const { selectedLinkAccount } = useContext(AuthContext);
   const [loading, setLoading] = useState();
   const [openPoupScreen, setOpenPopupScreen] = useState(false);
-  const [dataPlan, setDataPlan]= useState()
-  const [isEdit, setIsEdit]= useState(false)
-  const [openDrawer, setOpenDrawer]= useState(false)
+  const [dataPlan, setDataPlan] = useState();
+  const [isEdit, setIsEdit] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [loadingSubmit, setLoadingSubmit]= useState()
   const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
@@ -48,7 +50,6 @@ const CopyPlanDrawer = ({
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const onClose = () => {
     setOpen(false);
-    
   };
 
   const handleSubmit = async () => {
@@ -57,24 +58,27 @@ const CopyPlanDrawer = ({
         name: selectedPlan?.name + " Copy",
         linkAccountId: selectedLinkAccount,
       };
+      setLoadingSubmit(true);
       const response = await portfolioApi.postUserBotCopyInfo(
         selectedPlan?.copyCode,
         payload
       );
       if (response?.data?.ok === true) {
         showToast("Copy gói thành công", "success");
-        if(isAddNewCopyplan=== true) {
-          setDataProps([response?.data?.d, ...dataProps])
-          setChangeState(prev=> !prev)
+        if (isAddNewCopyplan === true) {
+          setDataProps([response?.data?.d, ...dataProps]);
+          setChangeState((prev) => !prev);
         }
         setOpenPopupScreen(true);
-        setDataPlan(response?.data?.d)
+        setDataPlan(response?.data?.d);
         onClose();
       } else if (response?.data?.ok === false) {
         showToast(response?.data?.m, "error");
       }
     } catch (error) {
       showToast(error?.response?.data?.m, "errorf");
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
@@ -107,7 +111,31 @@ const CopyPlanDrawer = ({
         onClose={onClose}
       >
         <Box ref={ref} width={downLg ? "100%" : 480}>
-          {loading === true && (
+         
+
+          <Box>
+            <Box p={3}>
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+              >
+                <Typography variant="h6" gutterBottom>
+                  Review plan
+                </Typography>
+                <Box
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                >
+                  <IconButton onClick={onClose}>
+                    <CloseIcon />
+                  </IconButton>
+                </Box>
+              </Box>
+            </Box>
+            <Divider />
+            {loading === true && (
             <>
               <Box
                 height="100%"
@@ -120,29 +148,7 @@ const CopyPlanDrawer = ({
               </Box>
             </>
           )}
-          {loading === false && (
-            <Box>
-              <Box p={3}>
-                <Box
-                  display={"flex"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                >
-                  <Typography variant="h6" gutterBottom>
-                    Review plan
-                  </Typography>
-                  <Box
-                    display={"flex"}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                  >
-                    <IconButton onClick={onClose}>
-                      <CloseIcon />
-                    </IconButton>
-                  </Box>
-                </Box>
-              </Box>
-              <Divider />
+            {loading === false && (
               <Box p={3}>
                 <Typography
                   textAlign={"center"}
@@ -181,7 +187,8 @@ const CopyPlanDrawer = ({
                   <Box display="flex" justifyContent="space-between" my={2}>
                     <Typography fontSize={12}>Take Profit/Stoploss</Typography>
                     <Typography fontSize={14} fontWeight={600}>
-                      $0.00/$0.00
+                      {formatCurrency(data?.take_profit_target)}/
+                      {formatCurrency(data?.stop_loss_target)}
                     </Typography>
                   </Box>
                   <Divider />
@@ -206,6 +213,7 @@ const CopyPlanDrawer = ({
                 </Box>
                 <Box mt={3} textAlign="right">
                   <Button
+                    disabled={loadingSubmit}
                     variant="contained"
                     color="success"
                     onClick={handleSubmit}
@@ -214,8 +222,8 @@ const CopyPlanDrawer = ({
                   </Button>
                 </Box>
               </Box>
-            </Box>
-          )}
+            )}
+          </Box>
         </Box>
       </Drawer>
 
@@ -224,10 +232,10 @@ const CopyPlanDrawer = ({
         onClose={() => {
           setOpenPopupScreen(false);
         }}
-        onClick={()=> {
-          setOpenDrawer(true)
+        onClick={() => {
+          setOpenDrawer(true);
           setOpenPopupScreen(false);
-          setIsEdit(true)
+          setIsEdit(true);
         }}
         selectedBot={dataPlan}
         isAddNewCopyplan={isAddNewCopyplan}

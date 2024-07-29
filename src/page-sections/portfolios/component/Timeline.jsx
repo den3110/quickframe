@@ -53,6 +53,7 @@ import { constant } from "constant/constant";
 import FilterComponent from "./FilterComponent";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
+import { showToast } from "components/toast/toast";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -690,7 +691,19 @@ const CustomTimeline = () => {
                         horizontal: "right",
                       }}
                     >
-                      <MenuItem onClick={() => handleMenuClose(index)}>
+                      <MenuItem onClick={() => {
+                        handleMenuClose(index)
+                          navigator.clipboard.writeText(JSON.stringify(item))
+                        .then(() => {
+                          console.log('Copied to clipboard:', item);
+                        })
+                        .then(()=> {
+                          showToast("Copy dữ liệu thành công", "success")
+                        })
+                        .catch((err) => {
+                          alert('Failed to copy text:', err);
+                        })
+                      }}>
                         <Button>Copy dữ liệu</Button>
                       </MenuItem>
                       <MenuItem onClick={() => handleMenuClose(index)}>

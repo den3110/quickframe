@@ -18,6 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { showToast } from "components/toast/toast";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
+import { useTranslation } from "react-i18next";
 
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -34,6 +35,7 @@ export default function DeleteSignalStrategy({
   data,
 }) {
   const [deletePackages, setDeletePackages] = React.useState(false);
+  const {t }= useTranslation()
   const handleCheckboxChange = (event) => {
     setDeletePackages(event.target.checked);
   };
@@ -100,14 +102,13 @@ export default function DeleteSignalStrategy({
             variant="h6"
             fontWeight="bold"
           >
-            Bạn có chắc chắn muốn xóa chiến lược này không ?
+            {t("Are you sure you want to delete this strategy?")}
           </DialogContentText>
           <DialogContentText
             id="confirm-delete-dialog-description"
             align="center"
           >
-            Chiến lược này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành động
-            này.
+            {t("This strategy will be deleted immediately. You can’t undo this action.")}
           </DialogContentText>
           {selectedBot?.total_plans >= 2 && (
             <Box display="flex" justifyContent="center">

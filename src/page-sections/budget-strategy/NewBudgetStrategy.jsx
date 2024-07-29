@@ -40,6 +40,8 @@ const NewBudgetStrategy = ({
   selectedStrategy,
   setData,
   data: dataProps,
+  isFromCopyPlan,
+  isFromBudgetStrategy
 }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { decodedData } = useContext(JwtContext);
@@ -183,7 +185,7 @@ const NewBudgetStrategy = ({
       if (response?.data?.ok === true) {
         if (is_edit !== true) {
           setData(response?.data?.d);
-          showToast("Tạo chiến lược vốn thành công", "success");
+          showToast(t("Create Strategy successfully!"), "success");
           setStrategyName("");
           setAmount("1");
           setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
@@ -196,7 +198,7 @@ const NewBudgetStrategy = ({
           setCount2(0);
           onClose();
         } else if (is_edit === true) {
-          showToast("Cập nhật chiến vốn thành công", "success");
+          showToast(t("Update Strategy successfully!"), "success");
           const dataTemp = dataProps;
           const index = dataTemp?.findIndex(
             (item) => item?._id === selectedStrategy?._id
@@ -499,7 +501,7 @@ const NewBudgetStrategy = ({
               <CloseIcon />
             </Box>
           </Box>
-          <Typography variant="h6">Thiết lập chiến lược của bạn</Typography>
+          <Typography variant="h6">{t("Set up your strategy")}</Typography>
           <List>
             <Box
               sx={{
@@ -511,7 +513,7 @@ const NewBudgetStrategy = ({
               <ListItem sx={{ width: "100%" }}>
                 <TextField
                   inputProps={{ readOnly: readOnly }}
-                  label="Tên chiến lược"
+                  label={t("Strategy name")}
                   fullWidth
                   value={strategyName}
                   onChange={(e) => setStrategyName(e.target.value)}
@@ -525,7 +527,7 @@ const NewBudgetStrategy = ({
                         isDark(theme) ? "#1f2937" : "white",
                     }}
                   >
-                    Phương pháp vốn
+                    {t("Budget method")}
                   </InputLabel>
                   <Select
                     disabled={readOnly}
@@ -551,10 +553,10 @@ const NewBudgetStrategy = ({
                       error={isErrorInputAmount === true ? true : false}
                       helperText={
                         isErrorInputAmount === true
-                          ? "Giá trị lớn hơn 1,000,000 hoặc nhỏ hơn 1 không hợp lệ."
+                          ? t("The input value cannot be greater than 1000000 or less than 1")
                           : ""
                       }
-                      label="Thiết lập số tiền vào lệnh"
+                      label={t("Setup your trade amount")}
                       fullWidth
                       type="number"
                       value={amount}
@@ -566,7 +568,7 @@ const NewBudgetStrategy = ({
                   </ListItem>
                   <ListItem>
                     <Typography fontSize={12}>
-                      Hệ số vào lệnh là cố định và không thay đổi
+                      {t("The bet multiplier for each order is fixed and does not change")}
                     </Typography>
                   </ListItem>
                 </>
@@ -579,10 +581,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 1"
+                      label={`${t("Set row")} 1`}
                       fullWidth
                       type="text"
                       value={method1}
@@ -595,10 +597,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 2"
+                      label={`${t("Set row")} 2`}
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
                       type="text"
@@ -612,10 +614,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 3"
+                      label={`${t("Set row")} 3`}
                       defaultValue={"2-3-4-5-6-1"}
                       fullWidth
                       type="text"
@@ -637,10 +639,10 @@ const NewBudgetStrategy = ({
                         error={isErrormethod1 === true ? true : false}
                         helperText={
                           isErrormethod1 === true
-                            ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                            ? t("Value is invalid!")
                             : ""
                         }
-                        label="Đặt giá trị lệnh"
+                        label={t("3. Set order value")}
                         fullWidth
                         type="text"
                         value={method1}
@@ -651,8 +653,8 @@ const NewBudgetStrategy = ({
                       <Box display="flex" alignItems="center">
                         <Typography variant="body1" sx={{ marginRight: 2 }}>
                           {increaseValueType === IncreaseValueType.AFTER_LOSS
-                            ? "Khi thua sẽ tiến"
-                            : "Khi thắng sẽ tiến"}
+                            ? t("Khi thua sẽ tiến ")
+                            : t("Khi thắng sẽ tiến ")}
                         </Typography>
                         <Button
                           variant="outlined"
@@ -689,7 +691,7 @@ const NewBudgetStrategy = ({
                               isDark(theme) ? "#1f2937" : "white",
                           }}
                         >
-                          Tuỳ chọn nâng cao
+                          {t("Tuỳ chọn nâng cao")}
                         </InputLabel>
                         <Select
                           value={increaseValueType}
@@ -701,7 +703,7 @@ const NewBudgetStrategy = ({
                             .slice(0, 2)
                             .map(([item, key]) => (
                               <MenuItem key={key} value={item}>
-                                {IncreaseValueTypeTitle[item]}
+                                {t(IncreaseValueTypeTitle[item])}
                               </MenuItem>
                             ))}
                         </Select>
@@ -711,8 +713,8 @@ const NewBudgetStrategy = ({
                       <Box display="flex" alignItems="center">
                         <Typography variant="body1" sx={{ marginRight: 2 }}>
                           {increaseValueType === IncreaseValueType.AFTER_LOSS
-                            ? "Khi thắng sẽ lùi"
-                            : "Khi thua sẽ lùi"}
+                            ? t("Khi thắng sẽ lùi ")
+                            : t("Khi thua sẽ lùi ")}
                         </Typography>
                         <Button
                           variant="outlined"
@@ -751,7 +753,7 @@ const NewBudgetStrategy = ({
                             ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
                             : ""
                         }
-                        label="Đặt giá trị lệnh"
+                        label={t("3. Set order value")}
                         fullWidth
                         type="text"
                         value={method1}
@@ -795,10 +797,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 1"
+                      label={`${t("Set row")} 1`}
                       fullWidth
                       type="text"
                       value={method1}
@@ -811,10 +813,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 2"
+                      label={`${t("Set row")} 2`}
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
                       type="text"
@@ -832,10 +834,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 1"
+                      label={`${t("Set row")} 1`}
                       defaultValue={"1-1-2-6-4-3"}
                       fullWidth
                       type="text"
@@ -849,10 +851,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 2"
+                      label={`${t("Set row")} 2`}
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
                       type="text"
@@ -866,10 +868,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 3"
+                      label={`${t("Set row")} 3`}
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
                       type="text"
@@ -887,10 +889,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod1 === true ? true : false}
                       helperText={
                         isErrormethod1 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 1"
+                      label={`${t("Set row")} 1`}
                       defaultValue={"1-1-2-6-4-3"}
                       fullWidth
                       type="text"
@@ -904,10 +906,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod2 === true ? true : false}
                       helperText={
                         isErrormethod2 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 2"
+                      label={`${t("Set row")} 2`}
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
                       type="text"
@@ -921,10 +923,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod3 === true ? true : false}
                       helperText={
                         isErrormethod3 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 3"
+                      label={`${t("Set row")} 3`}
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
                       type="text"
@@ -938,10 +940,10 @@ const NewBudgetStrategy = ({
                       error={isErrormethod4 === true ? true : false}
                       helperText={
                         isErrormethod4 === true
-                          ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                          ? t("Value is invalid!")
                           : ""
                       }
-                      label="Cài đặt hàng 4"
+                      label={`${t("Set row")} 4`}
                       defaultValue={"1-2-4-8-17-35"}
                       fullWidth
                       type="text"
@@ -956,7 +958,7 @@ const NewBudgetStrategy = ({
               {decodedData?.data?.levelStaff >= 3 && (
                 <Box sx={{}}>
                   <Typography fontSize={14} variant="subtitle1">
-                    Chiến lược sử dụng
+                    {t("Usage Strategy")}
                   </Typography>
                   <FormGroup>
                     <FormControlLabel
@@ -971,7 +973,7 @@ const NewBudgetStrategy = ({
                         />
                       }
                       label=<Typography fontSize={14} variant="subtitle1">
-                        Chiến lược mặc định
+                        {t("Default Strategy")}
                       </Typography>
                     />
                   </FormGroup>
@@ -1005,7 +1007,7 @@ const NewBudgetStrategy = ({
                     gap={1}
                   >
                     <Typography fontSize={14}>
-                      Tìm hiểu về chiến lược {BudgetStrategyTypeTitle[type]}
+                      {t("Giải thích ngắn gọn về ")} {t("Strategy")} {BudgetStrategyTypeTitle[type]}
                     </Typography>
                     <Typography
                       color="primary"
@@ -1016,7 +1018,7 @@ const NewBudgetStrategy = ({
                         setSeeMore((prev) => !prev);
                       }}
                     >
-                      {seeMore === true ? "Ẩn" : "Xem thêm"}
+                      {seeMore === true ? t("Hide") : t("Learn more")}
                     </Typography>
                   </Box>
                 </ListItem>
@@ -1027,18 +1029,16 @@ const NewBudgetStrategy = ({
                   {type === BudgetStrategyType.CUSTOM_AUTOWIN && (
                     <Box>
                       <Box>
-                        <Typography fontSize={14}>Có 3 chuỗi</Typography>
+                        <Typography fontSize={14}>{t("There will be 3 sequences")}</Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Hàng 1 và 3 là index (giá trị lớn nhất = độ dài của
-                          hàng 2); hàng 2 là số tiền vào lệnh.
+                          {t("autowin_des_1")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Thắng thì dùng giá trị hàng 1, thua thì dùng giá trị
-                          hàng 3 làm vị trí cho hàng 2 vào lệnh tiếp theo.
+                          {t("autowin_des_2")}
                         </Typography>
                       </Box>
                     </Box>
@@ -1047,29 +1047,27 @@ const NewBudgetStrategy = ({
                     <Box>
                       <Box>
                         <Typography fontSize={14}>
-                          Nếu thua sẽ di chuyển sang phải và dùng giá trị mới để
-                          vào lệnh tiếp theo. Nếu thắng hoặc kết thúc chuỗi sẽ
-                          quay về đầu chuỗi.{" "}
+                          {t("explain_martingale_increase_after_loss")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          Chuỗi giá trị (số tiền vào lệnh):
+                          {t("Value chain (entry amount):")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Định dạng chuỗi: x-y-z-…
+                          {t("- String format: x-y-z-…")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Không giới hạn số bước lệnh
+                          {t("- Unlimited number of orders")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Giá trị mặc định: 1-2-4-8-17-35
+                          {t("- Default value: 1-2-4-8-17-35")}
                         </Typography>
                       </Box>
                     </Box>
@@ -1077,19 +1075,16 @@ const NewBudgetStrategy = ({
                   {type === BudgetStrategyType.VICTOR_2 && (
                     <Box>
                       <Box>
-                        <Typography fontSize={14}>Có 2 chuỗi</Typography>
+                        <Typography fontSize={14}>{t("There will be 2 sequences")}</Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Di chuyển từ trái sang phải khi thua ở chuỗi 1.
-                          Thắng tại vị trí nào thì di chuyển xuống chuỗi 2.
+                          {t("If you lose on sequence 1")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Nếu thắng ở chuỗi 2 thì quay trở về (1,1), nếu thua
-                          thì quay về vị trí tiếp theo ở chuỗi 1 (di chuyển chéo
-                          lên trên).
+                          {t("If you win in sequence 2")}
                         </Typography>
                       </Box>
                     </Box>
@@ -1097,30 +1092,26 @@ const NewBudgetStrategy = ({
                   {type === BudgetStrategyType.VICTOR_3 && (
                     <Box>
                       <Box>
-                        <Typography fontSize={14}>Có 3 chuỗi</Typography>
+                        <Typography fontSize={14}>{t("There will be 3 sequences")}</Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Di chuyển từ trái sang phải khi thua ở chuỗi 1, khi
-                          thắng sẽ di chuyển xuống chuỗi 2 cùng vị trí.
+                          {t("victor3_des_1")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Nếu thắng ở chuỗi 2 thì tiếp tục di chuyển xuống
-                          chuỗi 3 cùng vị trí, nếu thua trở lại vị trí tiếp theo
-                          ở chuỗi 1.
+                          {t("victor3_des_2")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Nếu thắng ở chuỗi 3 thì quay về vị trí (1,1), nếu
-                          thua trở lại vị trí tiếp theo ở chuỗi 1.
+                          {t("victor3_des_3")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Kết thúc chuỗi 1 sẽ quay về (1,1)
+                          {t("victor3_des_4")}
                         </Typography>
                       </Box>
                     </Box>
@@ -1128,32 +1119,26 @@ const NewBudgetStrategy = ({
                   {type === BudgetStrategyType.VICTOR_4 && (
                     <Box>
                       <Box>
-                        <Typography fontSize={14}>Có 4 chuỗi</Typography>
+                        <Typography fontSize={14}>{t("There will be 4 sequences")}</Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Di chuyển từ trái sang phải khi thua ở chuỗi 1, khi
-                          thắng sẽ di chuyển xuống chuỗi 2 cùng vị trí.
+                          {t("victor4_des_1")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Nếu thắng ở chuỗi 2 thì tiếp tục di chuyển xuống
-                          chuỗi 3 cùng vị trí, nếu thua trở lại vị trí tiếp theo
-                          ở chuỗi 1.
+                        {t("victor4_des_2")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Nếu thắng ở chuỗi 3 thì tiếp tục di chuyển xuống
-                          chuỗi 4 cùng vị trí, nếu thua trở lại vị trí tiếp theo
-                          ở chuỗi 1.
+                        {t("victor4_des_3")}
                         </Typography>
                       </Box>
                       <Box>
                         <Typography fontSize={14}>
-                          - Nếu thắng ở chuỗi 4 thì quay về vị trí (1,1), nếu
-                          thua trở lại vị trí tiếp theo ở chuỗi 1.
+                        {t("victor4_des_4")}
                         </Typography>
                       </Box>
                     </Box>
@@ -1169,7 +1154,7 @@ const NewBudgetStrategy = ({
             onClick={handleClose}
             sx={{ padding: "10px 16px" }}
           >
-            Đóng
+            {t("close")}
           </Button>
           <Button
             sx={{ padding: "10px 16px" }}
@@ -1179,7 +1164,7 @@ const NewBudgetStrategy = ({
             onClick={handleSave}
             disabled={disableButton}
           >
-            Lưu chiến lược
+            {t("Save Strategy")}
           </Button>
         </Box>
       </Box>

@@ -1,9 +1,4 @@
-import React, {
-  Fragment,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import {
   TableCell,
   TableContainer,
@@ -67,19 +62,20 @@ const CustomAutowinTable = () => {
   useEffect(() => {
     try {
       if (
-        dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString().split("-")
-          ?.length /
+        dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+          ?.toString()
+          .split("-")?.length /
           itemColumnTable <
         1
       ) {
         setItemColumnTable(
-          dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString().split("-")
-            ?.length
+          dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+            ?.toString()
+            .split("-")?.length
         );
       }
-    }
-    catch(e) {
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
   }, [dataStat?.lastData?.budgetStrategy?.bs?.method_data, itemColumnTable]);
 
@@ -108,26 +104,32 @@ const CustomAutowinTable = () => {
                 slidesPerView: 1,
               },
             }}
-          > 
+          >
             {console.log(dataStat?.lastData?.budgetStrategy)}
             {Array.from(
               Array(
-                isNumber(Math.ceil(
-                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
-                    "-"
-                  )?.length / itemColumnTable
-                )) ? Math.ceil(
-                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
-                    "-"
-                  )?.length / itemColumnTable
-                ) : 0
+                isNumber(
+                  Math.ceil(
+                    dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                      ?.toString()
+                      ?.split("-")?.length / itemColumnTable
+                  )
+                )
+                  ? Math.ceil(
+                      dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                        ?.toString()
+                        ?.split("-")?.length / itemColumnTable
+                    )
+                  : 0
               ).keys()
             )?.map((item, keyParent) => (
               <SwiperSlide key={keyParent}>
                 <Box display={"block"}>
                   {dataStat?.lastData?.budgetStrategy?.bs
-                    ?.budgetStrategyType !== BudgetStrategyType.FIBO_X_STEP && dataStat?.lastData?.budgetStrategy?.bs
-                    ?.budgetStrategyType !== BudgetStrategyType.CUSTOM_AUTOWIN &&
+                    ?.budgetStrategyType !== BudgetStrategyType.FIBO_X_STEP &&
+                    dataStat?.lastData?.budgetStrategy?.bs
+                      ?.budgetStrategyType !==
+                      BudgetStrategyType.CUSTOM_AUTOWIN &&
                     dataStat?.lastData?.budgetStrategy?.bs?.method_data?.map(
                       (item, key) => (
                         <Fragment key={key}>
@@ -165,24 +167,33 @@ const CustomAutowinTable = () => {
                                   <StyledTableCell
                                     align="center"
                                     sx={{
+                                      position: "relative",
                                       background:
-                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                          ?.row) ===
+                                        parseInt(
+                                          dataStat?.lastData.budgetStrategy?.bs
+                                            ?.row
+                                        ) ===
                                           parseInt(key) + 1 &&
-                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                          ?.index) ===
+                                        parseInt(
+                                          dataStat?.lastData.budgetStrategy?.bs
+                                            ?.index
+                                        ) ===
                                           parseInt(
                                             key2 + keyParent * itemColumnTable
                                           )
                                           ? theme.palette.success.buy
-                                          : parseInt(dataStat?.lastData.budgetStrategy
-                                              ?.bs?.index) ===
+                                          : parseInt(
+                                              dataStat?.lastData.budgetStrategy
+                                                ?.bs?.index
+                                            ) ===
                                               parseInt(
                                                 key2 +
                                                   keyParent * itemColumnTable
                                               ) &&
-                                            parseInt(dataStat?.lastData.budgetStrategy
-                                              ?.bs?.row) !==
+                                            parseInt(
+                                              dataStat?.lastData.budgetStrategy
+                                                ?.bs?.row
+                                            ) !==
                                               parseInt(key) + 1
                                           ? theme.palette.success[101]
                                           : "",
@@ -191,11 +202,15 @@ const CustomAutowinTable = () => {
                                     <StyledTypography
                                       sx={{
                                         color:
-                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                            ?.row) ===
+                                          parseInt(
+                                            dataStat?.lastData.budgetStrategy
+                                              ?.bs?.row
+                                          ) ===
                                             parseInt(key) + 1 &&
-                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                            ?.index) ===
+                                          parseInt(
+                                            dataStat?.lastData.budgetStrategy
+                                              ?.bs?.index
+                                          ) ===
                                             parseInt(
                                               key2 + keyParent * itemColumnTable
                                             )
@@ -205,18 +220,31 @@ const CustomAutowinTable = () => {
                                     >
                                       {round2number(item2)}
                                     </StyledTypography>
+                                    {parseInt(key) === 0 && <Box
+                                      sx={{
+                                        position: "absolute",
+                                        right: 4,
+                                        top: 4,
+                                      }}
+                                    >
+                                      <Typography fontSize={10}>
+                                        {parseInt(
+                                          key2 + keyParent * itemColumnTable
+                                        ) + parseInt(1)}
+                                      </Typography>
+                                    </Box>}
                                   </StyledTableCell>
                                 </Fragment>
                               ))}
                             {(keyParent + 1) * itemColumnTable >
-                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
-                                "-"
-                              )?.length &&
+                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                                ?.toString()
+                                ?.split("-")?.length &&
                               Array.from(
                                 Array(
-                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
-                                    "-"
-                                  )?.length -
+                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                                    ?.toString()
+                                    ?.split("-")?.length -
                                     keyParent * itemColumnTable +
                                     1
                                 ).keys()
@@ -229,16 +257,18 @@ const CustomAutowinTable = () => {
                     )}
 
                   {dataStat?.lastData?.budgetStrategy?.bs
-                    ?.budgetStrategyType === BudgetStrategyType.CUSTOM_AUTOWIN &&
-                    dataStat?.lastData?.budgetStrategy?.bs?.method_data
-                      
-                      ?.map((item, key) => (
+                    ?.budgetStrategyType ===
+                    BudgetStrategyType.CUSTOM_AUTOWIN &&
+                    dataStat?.lastData?.budgetStrategy?.bs?.method_data?.map(
+                      (item, key) => (
                         <Fragment key={key}>
                           <Box
                             display="flex"
                             style={{
                               backgroundColor:
-                                parseInt(dataStat?.lastData.budgetStrategy?.bs?.row) ===
+                                parseInt(
+                                  dataStat?.lastData.budgetStrategy?.bs?.row
+                                ) ===
                                 parseInt(key) + 1
                                   ? theme.palette.success[101]
                                   : theme.palette.background.cell,
@@ -247,15 +277,17 @@ const CustomAutowinTable = () => {
                             <StyledFirstTableCell align="center">
                               <StyledTypography
                                 color={
-                                  parseInt(dataStat?.lastData.budgetStrategy?.bs?.row) ===
+                                  parseInt(
+                                    dataStat?.lastData.budgetStrategy?.bs?.row
+                                  ) ===
                                   parseInt(key) + 1
                                     ? theme.palette.success.buy + "!important"
                                     : theme.palette.background.fcell
                                 }
                               >
-                                {parseInt(key)=== 0 && "Hàng win"}
-                                {parseInt(key)=== 1 && "Giá trị"}
-                                {parseInt(key)=== 2 && "Hàng lose"}
+                                {parseInt(key) === 0 && "Hàng win"}
+                                {parseInt(key) === 1 && "Giá trị"}
+                                {parseInt(key) === 2 && "Hàng lose"}
                               </StyledTypography>
                             </StyledFirstTableCell>
                             {item
@@ -269,24 +301,33 @@ const CustomAutowinTable = () => {
                                   <StyledTableCell
                                     align="center"
                                     sx={{
+                                      position: "relative",
                                       background:
-                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                          ?.row) ===
+                                        parseInt(
+                                          dataStat?.lastData.budgetStrategy?.bs
+                                            ?.row
+                                        ) ===
                                           parseInt(key) + 1 &&
-                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                          ?.index) ===
+                                        parseInt(
+                                          dataStat?.lastData.budgetStrategy?.bs
+                                            ?.index
+                                        ) ===
                                           parseInt(
                                             key2 + keyParent * itemColumnTable
                                           )
                                           ? theme.palette.success.buy
-                                          : parseInt(dataStat?.lastData.budgetStrategy
-                                              ?.bs?.index) ===
+                                          : parseInt(
+                                              dataStat?.lastData.budgetStrategy
+                                                ?.bs?.index
+                                            ) ===
                                               parseInt(
                                                 key2 +
                                                   keyParent * itemColumnTable
                                               ) &&
-                                            parseInt(dataStat?.lastData.budgetStrategy
-                                              ?.bs?.row) !==
+                                            parseInt(
+                                              dataStat?.lastData.budgetStrategy
+                                                ?.bs?.row
+                                            ) !==
                                               parseInt(key) + 1
                                           ? theme.palette.success[101]
                                           : "",
@@ -295,11 +336,15 @@ const CustomAutowinTable = () => {
                                     <StyledTypography
                                       sx={{
                                         color:
-                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                            ?.row) ===
+                                          parseInt(
+                                            dataStat?.lastData.budgetStrategy
+                                              ?.bs?.row
+                                          ) ===
                                             parseInt(key) + 1 &&
-                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                            ?.index) ===
+                                          parseInt(
+                                            dataStat?.lastData.budgetStrategy
+                                              ?.bs?.index
+                                          ) ===
                                             parseInt(
                                               key2 + keyParent * itemColumnTable
                                             )
@@ -309,18 +354,33 @@ const CustomAutowinTable = () => {
                                     >
                                       {round2number(item2)}
                                     </StyledTypography>
+                                    {parseInt(key) === 1 && 
+                                    <Box
+                                      sx={{
+                                        position: "absolute",
+                                        right: 4,
+                                        top: 4,
+                                      }}
+                                    >
+                                      <Typography fontSize={10}>
+                                        {parseInt(
+                                          key2 + keyParent * itemColumnTable
+                                        ) + parseInt(1)}
+                                      </Typography>
+                                    </Box>
+                                    }
                                   </StyledTableCell>
                                 </Fragment>
                               ))}
                             {(keyParent + 1) * itemColumnTable >
-                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
-                                "-"
-                              )?.length &&
+                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                                ?.toString()
+                                ?.split("-")?.length &&
                               Array.from(
                                 Array(
-                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
-                                    "-"
-                                  )?.length -
+                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                                    ?.toString()
+                                    ?.split("-")?.length -
                                     keyParent * itemColumnTable +
                                     1
                                 ).keys()
@@ -329,10 +389,11 @@ const CustomAutowinTable = () => {
                               ))}
                           </Box>
                         </Fragment>
-                      ))}
+                      )
+                    )}
 
-                      {/*  */}
-                      {dataStat?.lastData?.budgetStrategy?.bs
+                  {/*  */}
+                  {dataStat?.lastData?.budgetStrategy?.bs
                     ?.budgetStrategyType === BudgetStrategyType.FIBO_X_STEP &&
                     dataStat?.lastData?.budgetStrategy?.bs?.method_data
                       ?.slice(0, 1)
@@ -340,9 +401,11 @@ const CustomAutowinTable = () => {
                         <Fragment key={key}>
                           <Box
                             display="flex"
-                            style={{
+                            sx={{
                               backgroundColor:
-                                parseInt(dataStat?.lastData.budgetStrategy?.bs?.row) ===
+                                parseInt(
+                                  dataStat?.lastData.budgetStrategy?.bs?.row
+                                ) ===
                                 parseInt(key) + 1
                                   ? theme.palette.success[101]
                                   : theme.palette.background.cell,
@@ -351,7 +414,9 @@ const CustomAutowinTable = () => {
                             <StyledFirstTableCell align="center">
                               <StyledTypography
                                 color={
-                                  parseInt(dataStat?.lastData.budgetStrategy?.bs?.row) ===
+                                  parseInt(
+                                    dataStat?.lastData.budgetStrategy?.bs?.row
+                                  ) ===
                                   parseInt(key) + 1
                                     ? theme.palette.success.buy + "!important"
                                     : theme.palette.background.fcell
@@ -371,24 +436,33 @@ const CustomAutowinTable = () => {
                                   <StyledTableCell
                                     align="center"
                                     sx={{
+                                      position: "relative",
                                       background:
-                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                          ?.row) ===
+                                        parseInt(
+                                          dataStat?.lastData.budgetStrategy?.bs
+                                            ?.row
+                                        ) ===
                                           parseInt(key) + 1 &&
-                                        parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                          ?.index) ===
+                                        parseInt(
+                                          dataStat?.lastData.budgetStrategy?.bs
+                                            ?.index
+                                        ) ===
                                           parseInt(
                                             key2 + keyParent * itemColumnTable
                                           )
                                           ? theme.palette.success.buy
-                                          : parseInt(dataStat?.lastData.budgetStrategy
-                                              ?.bs?.index) ===
+                                          : parseInt(
+                                              dataStat?.lastData.budgetStrategy
+                                                ?.bs?.index
+                                            ) ===
                                               parseInt(
                                                 key2 +
                                                   keyParent * itemColumnTable
                                               ) &&
-                                            parseInt(dataStat?.lastData.budgetStrategy
-                                              ?.bs?.row) !==
+                                            parseInt(
+                                              dataStat?.lastData.budgetStrategy
+                                                ?.bs?.row
+                                            ) !==
                                               parseInt(key) + 1
                                           ? theme.palette.success[101]
                                           : "",
@@ -397,11 +471,15 @@ const CustomAutowinTable = () => {
                                     <StyledTypography
                                       sx={{
                                         color:
-                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                            ?.row) ===
+                                          parseInt(
+                                            dataStat?.lastData.budgetStrategy
+                                              ?.bs?.row
+                                          ) ===
                                             parseInt(key) + 1 &&
-                                          parseInt(dataStat?.lastData.budgetStrategy?.bs
-                                            ?.index) ===
+                                          parseInt(
+                                            dataStat?.lastData.budgetStrategy
+                                              ?.bs?.index
+                                          ) ===
                                             parseInt(
                                               key2 + keyParent * itemColumnTable
                                             )
@@ -411,18 +489,31 @@ const CustomAutowinTable = () => {
                                     >
                                       {round2number(item2)}
                                     </StyledTypography>
+                                    {parseInt(key) === 0 && <Box
+                                      sx={{
+                                        position: "absolute",
+                                        right: 4,
+                                        top: 4,
+                                      }}
+                                    >
+                                      <Typography fontSize={10}>
+                                        {parseInt(
+                                          key2 + keyParent * itemColumnTable
+                                        ) + parseInt(1)}
+                                      </Typography>
+                                    </Box>}
                                   </StyledTableCell>
                                 </Fragment>
                               ))}
                             {(keyParent + 1) * itemColumnTable >
-                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
-                                "-"
-                              )?.length &&
+                              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                                ?.toString()
+                                ?.split("-")?.length &&
                               Array.from(
                                 Array(
-                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]?.toString()?.split(
-                                    "-"
-                                  )?.length -
+                                  dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                                    ?.toString()
+                                    ?.split("-")?.length -
                                     keyParent * itemColumnTable +
                                     1
                                 ).keys()

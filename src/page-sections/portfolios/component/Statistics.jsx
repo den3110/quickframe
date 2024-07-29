@@ -37,7 +37,7 @@ const Statistics = () => {
         <Tabs value={selectedTab} onChange={handleChange} aria-label="tabs">
           <Tab value={0} label="Thống kê" />
           {dataStat?.autoType !== 1 && dataStat?.isCopy === false && (
-            <Tab value={1} label="Quản lý vốn" />
+            <Tab value={1} label={t("capital_management")} />
           )}
           <Tab value={2} label="Tín hiệu" />
         </Tabs>

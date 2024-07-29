@@ -1254,6 +1254,9 @@ const PortfoliosList = () => {
           setData={setData}
         />
         <SharePlan
+          title="Chia sẻ gói đầu tư"
+          title2={"Dễ dàng chia sẻ gói đầu tư hoàn hảo của bạn!"}
+          title3="Chia sẻ mã gói đầu tư cho bạn bè để cùng nhau giao dịch."
           open={sharePlanOpen}
           onClose={handleSharePlanClose}
           selectedPlan={selectedPlan}

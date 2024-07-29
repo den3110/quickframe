@@ -15,6 +15,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import { showToast } from "components/toast/toast";
+import { useTranslation } from "react-i18next";
 
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -24,7 +25,7 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
 
 export default function DeleteBudgetStrategy({ open, onClose, selectedStrategy, setChange }) {
   const [deletePackages, setDeletePackages] = React.useState(false);
-
+  const {t }= useTranslation()
   const handleCheckboxChange = (event) => {
     setDeletePackages(event.target.checked);
   };
@@ -89,14 +90,13 @@ export default function DeleteBudgetStrategy({ open, onClose, selectedStrategy, 
             variant="h6"
             fontWeight="bold"
           >
-            Bạn có chắc chắn muốn xóa chiến lược này không?
+            {t("Are you sure you want to delete this strategy?")}
           </DialogContentText>
           <DialogContentText
             id="confirm-delete-dialog-description"
             align="center"
           >
-            Chiến lược này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành
-            động này.
+            {t("This strategy will be deleted immediately. You can’t undo this action.")}
           </DialogContentText>
           {selectedStrategy?.total_plans >= 2 && 
             <Box display="flex" justifyContent="center">
@@ -108,7 +108,7 @@ export default function DeleteBudgetStrategy({ open, onClose, selectedStrategy, 
                     color="primary"
                   />
                 }
-                label={`Xóa ${selectedStrategy?.total_plans} gói sử dụng chiến lược này`}
+                label={`${t(`Delete ${selectedStrategy?.total_plans} plans using this strategy`, {amount: selectedStrategy?.total_plans})}`}
               />
             </Box>
           }
@@ -120,7 +120,7 @@ export default function DeleteBudgetStrategy({ open, onClose, selectedStrategy, 
             variant="contained"
             sx={{ textTransform: "none" }}
           >
-            Xác nhận & xóa
+            {t("Confirm & delete")}
           </Button>
         </DialogActions>
       </Dialog>

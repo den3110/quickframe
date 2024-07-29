@@ -41,6 +41,7 @@ import InsufficientBetBalance from "icons/duotone/InsufficientBetBalance";
 import { ManualTradeContext } from "contexts/ManualTradeContext";
 import { constant } from "constant/constant";
 import AuthContext from "contexts/AuthContext";
+import { showToast } from "components/toast/toast";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -568,7 +569,20 @@ const TableDetailTrade = ({dataState}) => {
                         horizontal: "right",
                       }}
                     >
-                      <MenuItem onClick={() => handleMenuClose(index)}>
+                      <MenuItem onClick={() => {
+                        handleMenuClose(index)
+                        navigator.clipboard.writeText(JSON.stringify(item))
+                        .then(() => {
+                          console.log('Copied to clipboard:', item);
+                          alert('Copied to clipboard');
+                        })
+                        .then(()=> {
+                          showToast("Copy dữ liệu thành công", "success")
+                        })
+                        .catch((err) => {
+                          alert('Failed to copy text:', err);
+                        })
+                      }}>
                         <Button>Copy dữ liệu</Button>
                       </MenuItem>
                       <MenuItem onClick={() => handleMenuClose(index)}>

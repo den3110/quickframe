@@ -32,11 +32,14 @@ import NewBotAIStringMethod from "../NewBotAIStringMethod";
 import DeleteSignalStrategy from "../DeleteSignalStrategy";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import sortData from "util/sortData";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 // import RefreshProvider from "contexts/RefreshContext";
 // import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 import { SignalMethodUsingTypesTitle } from "type/SignalMethodUsing";
 import { JwtContext } from "contexts/jwtContext";
 import { useTranslation } from "react-i18next";
+import CopyBudgetStrategy from "page-sections/budget-strategy/CopyBudgetStrategy";
+import SharePlan from "page-sections/portfolios/dialog/SharePlan";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -83,9 +86,18 @@ const SignalStrategyList = () => {
   const [page, setPage] = useState(1);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [openNewBotAI, setOpenNewBotAI] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [openNewBotAIStringMethod, setOpenNewBotAIStringMethod] =
     useState(false);
   const [anchorElMenu, setAnchorElMenu] = useState(null);
+  const [sharePlanOpen, setSharePlanOpen] = useState(false);
+  const handleSharePlanOpen = () => {
+    setSharePlanOpen(true);
+  };
+
+  const handleSharePlanClose = () => {
+    setSharePlanOpen(false);
+  };
   // const [loading, setLoading]= useState(false)
 
   const handleOpenDeleteBot = () => {
@@ -135,6 +147,16 @@ const SignalStrategyList = () => {
   const handleMenuClose = () => {
     setAnchorElMenu(null);
   };
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+
   const handleSearch = (e) => {
     const filtered = data.filter(item =>
       item.name.toLowerCase().includes(e.target.value.toLowerCase())
@@ -176,7 +198,8 @@ const SignalStrategyList = () => {
                   sx={{ mr: 2 }}
                   size={downLg ? "large" : "medium"}
                   fullWidth={downLg ? true : false}
-                  // onClick={handleDialogOpen}
+                  endIcon={<ContentCopyIcon />}
+                  onClick={handleDialogOpen}
                 >
                   Copy
                 </Button>
@@ -349,7 +372,11 @@ const SignalStrategyList = () => {
                                     >
                                       Edit Strategy
                                     </StyledMenuItem>
-                                    <StyledMenuItem>
+                                    <StyledMenuItem onClick={()=> {
+                                      setSelectedBot(row);
+                                      handleSharePlanOpen()
+                                      handleClose(index);
+                                    }}>
                                       Share Strategy
                                     </StyledMenuItem>
                                     <StyledMenuItem
@@ -461,6 +488,17 @@ const SignalStrategyList = () => {
           setIsEdit={setIsEditStringMethod}
           selectedBot={selectedBot}
           setChange={setChange}
+        />
+        <CopyBudgetStrategy title={"Sao chép Bot AI"} title2={"Thiết kế ngay Bot AI tối ưu hóa giao dịch!"} title3={"Nhập mã để bắt đầu giao dịch chuyên nghiệp"} open={dialogOpen} onClose={handleDialogClose} isFromSignalStrategy={true} />
+        <SharePlan
+          title="Chia sẻ Bot AI"
+          title2={"Dễ dàng chia sẻ Bot AI của bạn!"}
+          title3="Chia sẻ mã Bot AI cho bạn bè để cùng nhau giao dịch."
+          open={sharePlanOpen}
+          onClose={handleSharePlanClose}
+          selectedPlan={selectedBot}
+          setData={setData}    
+          isFromBudgetStrategy={true}
         />
         <DeleteSignalStrategy
           open={isDeleteBot}

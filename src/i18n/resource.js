@@ -759,6 +759,8 @@ export const resources = {
         "Are you sure you want to pause this plan?",
       "Assigning overlapping timer to plan(s): plan 5":
         "Assigning overlapping timer to plan(s): plan 5",
+      "Tuỳ chọn nâng cao" : "Advanced option",
+
       "At least one field must have value":
         "At least one field must have value",
       "Attach Image": "Attach Image",
@@ -1701,6 +1703,8 @@ export const resources = {
       "Immediately after phoning": "Immediately after phoning",
       "Immediately after posting to the website of the company.":
         "Immediately after posting to the website of the company.",
+        "Default Strategy": "Default Strategy",
+        "Usage Strategy": "Usage Strategy", 
       "Immediately after text messaging": "Immediately after text messaging",
       Import: "Copy",
       "Import Bot AI": "Copy Bot AI",
@@ -2827,6 +2831,7 @@ export const resources = {
       "TermAndTermination 1.3 text":
         "When the mutual responsibilities of the Client and the Company with respect to previously performed transactions are fulfilled and all debts of each Party are reimbursed, this Agreement is considered ended with respect to the Parties.",
       "Terms and Conditions": "Terms and Conditions",
+      "Loại chiến lược": "Strategy type",
       "Terms of use": "Terms of use",
       "TermsOfUse 1.1 text":
         "Upon registration, the Client agrees to submit accurate and trustworthy identity information in line with the Client's registration form requirements.",
@@ -3578,7 +3583,7 @@ export const resources = {
       dashboard: "Bảng điều khiển",
       portfolios: "Gói đầu tư",
       budget_strategy: "Chiến lược vốn",
-      signal_strategy: "Chiên lược tín hiệu",
+      signal_strategy: "Chiến lược tín hiệu",
       manage_followers: "Thống kê người theo",
       manual_trade: "Giao dịch thủ công",
       vip_member: "Thành viên vip",
@@ -5187,6 +5192,7 @@ export const resources = {
       "Khi thua sẽ tiến ": "Khi thua sẽ tiến",
       "Khi thắng sẽ lùi ": "Khi thắng sẽ lùi",
       "Khi thắng sẽ tiến ": "Khi thắng sẽ tiến ",
+      "Tuỳ chọn nâng cao" : "Tuỳ chọn nâng cao",
       L: "Thua",
       LAST_WEEK: "Tuần trước",
       LAST_WEEK_statistic: "Tuần trước",
@@ -5820,6 +5826,7 @@ export const resources = {
       "Scan to <b>copy plan</b>": "Quét để <b>sao chép gói</b>",
       "Scan to copy plan": "Quét để sao chép gói",
       "Scan to copy referal code": "Quét để sao chép mã giới thiệu",
+      "Default Strategy": "Chiến lược mặc định",
       Search: "Tìm kiếm",
       "Search Bot...": "Tìm kiếm ...",
       "Search Channel": "Tìm kiếm kênh",
@@ -6018,6 +6025,7 @@ export const resources = {
         "Hệ thống sẽ gửi tín hiệu đến kênh telegram khi\n                             lệnh được tạo",
       "TAKE PROFIT": "CHỐT LỜI",
       THIS_MONTH: "Tháng này",
+      "Usage Strategy": "Chiến lược sử dụng", 
       THIS_MONTH_statistic: "Tháng này",
       THIS_WEEK: "Tuần này",
       THIS_WEEK_statistic: "Tuần này",
@@ -6030,6 +6038,7 @@ export const resources = {
       TOTAL_WIN: "Tổng thắng",
       "TP/SL": "Chốt lời/Cắt lỗ",
       TRADE_LOCK: "Khóa giao dịch",
+      strategy_name: "Tên chiến lược",
       TRANSFER_IN: "Chuyển sang Live",
       "TRANSFER_IN USDT (Bep20)": "Chuyển sang Live",
       TRANSFER_OUT: "Nhận từ Live",
@@ -6131,6 +6140,7 @@ export const resources = {
         "Không thể tạo chiến lược vốn: số bước tiến/lùi nhiều hơn số giá trị trong chuỗi QLV.",
       "The page you’re looking for is currently under maintenance and will be back soon":
         "Trang bạn đang tìm kiếm hiện đang được bảo trì và sẽ sớm hoạt động trở lại",
+      "Loại chiến lược": "Loại chiến lược",
       "The page you’re looking for is currently under maintenance and will be back soon.":
         "Trang bạn đang tìm kiếm hiện đang được bảo trì và sẽ sớm hoạt động trở lại.",
       "The plan will take profit/stoploss when one of these conditions is reached.":

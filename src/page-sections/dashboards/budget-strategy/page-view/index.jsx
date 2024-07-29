@@ -40,6 +40,9 @@ import sortData from "util/sortData";
 import RefreshProvider from "contexts/RefreshContext";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { JwtContext } from "contexts/jwtContext";
+import SharePlan from "page-sections/portfolios/dialog/SharePlan";
+import CopyBudgetStrategy from "page-sections/budget-strategy/CopyBudgetStrategy";
+import { useTranslation } from "react-i18next";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -70,11 +73,11 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 }));
 
 const BudgetStrategyPage = () => {
-  const {decodedData }= useContext(JwtContext)
+  const { decodedData } = useContext(JwtContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
   const [data, setData] = useState([]);
-  const [dataState, setDataState]= useState([])
+  const [dataState, setDataState] = useState([]);
   const [loading, setLoading] = useState();
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
@@ -84,8 +87,18 @@ const BudgetStrategyPage = () => {
   const [isEditStrategy, setIsEditStrategy] = useState(false);
   const [isDeleteStrategy, setIsDeleteStrategy] = useState(false);
   const [selectedStrategy, setSelectedStrategy] = useState();
-  const [onlyView, setOnlyView]= useState(false)
+  const [onlyView, setOnlyView] = useState(false);
   const [change, setChange] = useState(false);
+  const { t } = useTranslation();
+  const [sharePlanOpen, setSharePlanOpen] = useState(false);
+  const handleSharePlanOpen = () => {
+    setSharePlanOpen(true);
+  };
+
+  const handleSharePlanClose = () => {
+    setSharePlanOpen(false);
+  };
+
   const handleOpenDeleteStrategy = () => {
     setIsDeleteStrategy(true);
   };
@@ -121,7 +134,7 @@ const BudgetStrategyPage = () => {
   };
 
   const handleSearch = (e) => {
-    const filtered = data.filter(item =>
+    const filtered = data.filter((item) =>
       item.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setDataState(filtered);
@@ -165,13 +178,13 @@ const BudgetStrategyPage = () => {
       >
         <Box sx={{ padding: downLg ? "10px" : "10px 24px" }}>
           <Typography variant="h6" fontWeight={600} mb={2}>
-            Chiến lược vốn ({data?.length})
+            {t("budget_strategy")} ({data?.length})
           </Typography>
           <Box
             sx={{
               padding: downLg ? "8px" : "20px",
               background: (theme) => (isDark(theme) ? "#1f2937" : "white"),
-              borderRadius: "10px"
+              borderRadius: "10px",
             }}
           >
             <Box
@@ -184,7 +197,7 @@ const BudgetStrategyPage = () => {
             >
               <TextField
                 variant="outlined"
-                placeholder="Tìm chiến lược vốn..."
+                placeholder={t("Search Strategy...")}
                 sx={{ width: downLg ? "100%" : 450 }}
                 InputProps={{
                   startAdornment: (
@@ -203,12 +216,12 @@ const BudgetStrategyPage = () => {
                   sx={{ mr: 2 }}
                   size={downLg ? "large" : "medium"}
                   fullWidth={downLg ? true : false}
-                  onClick={()=> {
-                    handleDialogOpen()
+                  onClick={() => {
+                    handleDialogOpen();
                   }}
-                  startIcon={<ContentCopyIcon />}
+                  endIcon={<ContentCopyIcon />}
                 >
-                  Copy
+                  {t("Copy")}
                 </Button>
                 <Button
                   variant="contained"
@@ -217,7 +230,7 @@ const BudgetStrategyPage = () => {
                   color="success"
                   onClick={handleOpenNewBudgetStrategy}
                 >
-                  New Strategy
+                  {t("New Strategy")}
                 </Button>
               </Box>
             </Box>
@@ -226,10 +239,10 @@ const BudgetStrategyPage = () => {
                 {!downLg && (
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>Strategy name</StyledTableCell>
-                      <StyledTableCell>Method Using</StyledTableCell>
-                      <StyledTableCell>Loại chiến lược</StyledTableCell>
-                      <StyledTableCell>Actions</StyledTableCell>
+                      <StyledTableCell>{t("strategy_name")}</StyledTableCell>
+                      <StyledTableCell>{t("Method Using")}</StyledTableCell>
+                      <StyledTableCell>{t("Loại chiến lược")}</StyledTableCell>
+                      <StyledTableCell>{t("Actions")}</StyledTableCell>
                     </TableRow>
                   </TableHead>
                 )}
@@ -271,7 +284,7 @@ const BudgetStrategyPage = () => {
                               {row.name}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
-                              Created:{" "}
+                              {t("Created")}:{" "}
                               {moment(row.createdAt).format(
                                 "DD-MM-YYYY, HH:mm:ss"
                               )}
@@ -291,9 +304,14 @@ const BudgetStrategyPage = () => {
                               borderBottom: downLg ? "none" : "",
                             }}
                           >
-                            <Typography fontSize={14} sx={{whiteSpace: "nowrap"}}>{row?.is_default === true
-                              ? "Chiến lược mặc định"
-                              : "Chiến lược tuỳ chỉnh"}</Typography>
+                            <Typography
+                              fontSize={14}
+                              sx={{ whiteSpace: "nowrap" }}
+                            >
+                              {row?.is_default === true
+                                ? "Chiến lược mặc định"
+                                : "Chiến lược tuỳ chỉnh"}
+                            </Typography>
                           </StyledTableCell>
                           <StyledTableCell
                             sx={{
@@ -320,7 +338,7 @@ const BudgetStrategyPage = () => {
                                 horizontal: "right",
                               }}
                             >
-                              {(decodedData?.data?._id === row?.userId) && (
+                              {decodedData?.data?._id === row?.userId && (
                                 <>
                                   <StyledMenuItem
                                     onClick={() => {
@@ -331,11 +349,17 @@ const BudgetStrategyPage = () => {
                                     }}
                                   >
                                     <EditBudgetStrategy />
-                                    Edit Strategy
+                                    {t("Edit Strategy")}
                                   </StyledMenuItem>
-                                  <StyledMenuItem>
+                                  <StyledMenuItem
+                                    onClick={() => {
+                                      setSelectedStrategy(row);
+                                      handleSharePlanOpen();
+                                      handleClose(index);
+                                    }}
+                                  >
                                     <ShareBudgetStrategy />
-                                    Share Strategy
+                                    {t("Send Strategy")}
                                   </StyledMenuItem>
                                   <StyledMenuItem
                                     onClick={() => {
@@ -345,25 +369,26 @@ const BudgetStrategyPage = () => {
                                     }}
                                   >
                                     <DeleteBudgetStrategyIcon />
-                                    Delete Strategy
+                                    {t("Delete Strategy")}
                                   </StyledMenuItem>
                                 </>
                               )}
-                              {
-                                (row?.is_default=== true && decodedData?.data?._id !== row?.userId) && <>
-                                  <StyledMenuItem
-                                    onClick={() => {
-                                      setSelectedStrategy(row);
-                                      setIsEditStrategy(true);
-                                      handleClose(index);
-                                      handleOpenNewBudgetStrategy();
-                                    }}
-                                  >
-                                    {/* <EditBudgetStrategy /> */}
-                                      View Strategy
-                                  </StyledMenuItem>
-                                </>
-                              }
+                              {row?.is_default === true &&
+                                decodedData?.data?._id !== row?.userId && (
+                                  <>
+                                    <StyledMenuItem
+                                      onClick={() => {
+                                        setSelectedStrategy(row);
+                                        setIsEditStrategy(true);
+                                        handleClose(index);
+                                        handleOpenNewBudgetStrategy();
+                                      }}
+                                    >
+                                      {/* <EditBudgetStrategy /> */}
+                                      {t("View Strateg")}y
+                                    </StyledMenuItem>
+                                  </>
+                                )}
                             </Menu>
                           </StyledTableCell>
                         </StyledTableRow>
@@ -382,10 +407,10 @@ const BudgetStrategyPage = () => {
               >
                 <EmptyPage
                   title={"Danh mục vốn đang trống"}
-                  subTitle={
-                    "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
-                  }
-                  titleButton={"Tạo chiến lược mới"}
+                  subTitle={t(
+                    "Start exploring investment opportunities and earn profits by start an investment plan today"
+                  )}
+                  titleButton={t("Create Your Strategy")}
                   actionClick={handleOpenNewBudgetStrategy}
                 />
               </Box>
@@ -397,7 +422,7 @@ const BudgetStrategyPage = () => {
                 alignItems={"center"}
                 gap={1}
               >
-                <Typography>Hiển thị kết quả:</Typography>
+                <Typography>{t("Show result")}:</Typography>
                 <FormControl variant="outlined" sx={{ minWidth: 60 }}>
                   <Select
                     value={rowsPerPage}
@@ -406,7 +431,7 @@ const BudgetStrategyPage = () => {
                     <MenuItem value={6}>6</MenuItem>
                     <MenuItem value={12}>12</MenuItem>
                     <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={dataState.length}>Tất cả</MenuItem>
+                    <MenuItem value={dataState.length}>{t("all")}</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -419,7 +444,25 @@ const BudgetStrategyPage = () => {
             </PaginationContainer>
           </Box>
         </Box>
-        <CopyBudgteStrategy open={dialogOpen} onClose={handleDialogClose} />
+        {/* copy strategy */}
+        <CopyBudgetStrategy
+          title={t("Import Budget Strategy")}
+          title2={t("Easy way to set up your superb strategy!")}
+          title3={t("Enter your shared Budget Strategy Code to start your ideal investment plan")}
+          open={dialogOpen}
+          onClose={handleDialogClose}
+          isFromBudgetStrategy={true}
+        />
+        <SharePlan
+          title={t("Share Budget Strategy")}
+          title2={t("Easy way to share your superb strategy!")}
+          title3={t("Share your Budget Strategy Code to your peers and trade together.")}
+          open={sharePlanOpen}
+          onClose={handleSharePlanClose}
+          selectedPlan={selectedStrategy}
+          setData={setData}
+          isFromBudgetStrategy={true}
+        />
         <NewBudgetStrategy
           is_edit={isEditStrategy}
           open={openNewBudgetStrategy}

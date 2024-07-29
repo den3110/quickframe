@@ -17,12 +17,13 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
 import { isDark } from "util/constants";
 import { ActionBotType } from "type/ActionBotType";
+import { useTranslation } from "react-i18next";
 // import AuthContext from "contexts/AuthContext";
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -30,13 +31,14 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   alignItems: "center",
 }));
 
-const SharePlan = ({ open, onClose, selectedPlan, setData }) => {
+const SharePlan = ({ open, onClose, selectedPlan, setData, title, title2, title3, isFromBudgetStrategy }) => {
+  const {t }= useTranslation()
   // const {selectedLinkAccount }= useContext(AuthContext)
   const [shareCode, setShareCode]= useState(selectedPlan?.shareCode)
 
   const handleCopySharecoee = () => {
     navigator.clipboard.writeText(shareCode);
-    showToast("Sao chép thành công", "success")
+    showToast(t("Copied to clipboard"), "success")
     onClose()
   };
 
@@ -75,7 +77,7 @@ const SharePlan = ({ open, onClose, selectedPlan, setData }) => {
         fullWidth
       >
         <CustomDialogTitle id="confirm-delete-dialog-title">
-          <span>Chia sẻ gói đầu tư</span>
+          <span>{title}</span>
           <IconButton
             edge="end"
             color="inherit"
@@ -98,10 +100,10 @@ const SharePlan = ({ open, onClose, selectedPlan, setData }) => {
                 color={"success.main"}
                 textAlign={"left"}
               >
-                Dễ dàng chia sẻ gói đầu tư hoàn hảo của bạn!
+                {title2}
               </Typography>
               <Typography fontSize={15} textAlign={"left"} mt={1.5} mb={2}>
-                Chia sẻ mã gói đầu tư cho bạn bè để cùng nhau giao dịch.
+                {title3}
               </Typography>
               <Box>
                 <Box
@@ -148,7 +150,7 @@ const SharePlan = ({ open, onClose, selectedPlan, setData }) => {
               color="primary"
               sx={{ textTransform: "none" }}
             >
-              Sao chép mã
+              {t("Copy Code")}
             </Button>
           </Box>
         </DialogActions>
