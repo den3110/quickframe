@@ -1,5 +1,14 @@
 import { useState, useEffect, useContext } from "react";
-import { Grid, TextField, Box, Checkbox } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Box,
+  Checkbox,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import * as Yup from "yup";
@@ -13,42 +22,51 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "contexts/AuthContext";
 import userApi from "api/user/userApi";
 import { constant } from "constant/constant";
+import { useTranslation } from "react-i18next";
 
 const LoginPageView = () => {
-  const {setAccessToken, setSelectedLinkAccount, setUser }= useContext(AuthContext)
+  const { setAccessToken, setSelectedLinkAccount, setUser } =
+    useContext(AuthContext);
+  const { i18n } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [siteId, setSiteId] = useState("");
-  const navigate= useNavigate()
+  const [language, setLanguage] = useState(
+    localStorage.getItem("lang") || "vi"
+  );
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadConfig = async () => {
       try {
-        const response = await fetch('/config.json');
+        const response = await fetch("/config.json");
         const config = await response.json();
         setSiteId(config.siteId);
       } catch (error) {
-        console.error('Failed to load config', error);
+        console.error("Failed to load config", error);
       }
     };
     loadConfig();
   }, []);
 
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language, i18n]);
+
   const initialValues = {
-    email: "", // Đã thay đổi từ "example@gmail.com" thành "" để trường email không có giá trị mặc định
+    email: "",
     password: "",
     remember: true,
+    language: language,
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Must be a valid email")
-      .max(255)
-      .required("Email is required"),
+    email: Yup.string().required("Email or Username is required"),
     password: Yup.string()
       .min(6, "Password should be of minimum 6 characters length")
-      .required("Password is required"),  
+      .required("Password is required"),
+    language: Yup.string().required("Language is required"),
   });
 
   const { errors, values, touched, handleBlur, handleChange, handleSubmit } =
@@ -66,39 +84,51 @@ const LoginPageView = () => {
           });
           if (response?.data?.ok === true) {
             localStorage.setItem("accessToken", response.data?.d.access_token);
-            localStorage.setItem("refreshToken", response.data?.d.refresh_token);
-            // window.location.href = window.location.origin;
-            setAccessToken(response?.data?.d?.access_token)
-            const response1= await userApi.getUserLinkAccountList()
-            const response2= userApi.getUserProfile();
-            // console.log("response1", response1)
-            if(response2?.data?.ok=== true) {
-              setUser({...response.data?.d, avatar: constant.URL_AVATAR_URER + response?.data?.d?.photo_token})
-              // localStorage.setItem("linkAccount", response1?.data?.d?.[0]?._id)
+            localStorage.setItem(
+              "refreshToken",
+              response.data?.d.refresh_token
+            );
+            localStorage.setItem("lang", values.language);
+            setAccessToken(response?.data?.d?.access_token);
+            const response1 = await userApi.getUserLinkAccountList();
+            const response2 = userApi.getUserProfile();
+            if (response2?.data?.ok === true) {
+              setUser({
+                ...response.data?.d,
+                avatar:
+                  constant.URL_AVATAR_URER + response?.data?.d?.photo_token,
+              });
             }
-            if(response1?.data?.ok=== true) {
-              if(response1?.data?.d?.length <= 0) {
-                navigate("/connect")
-              }
-              else if(response1?.data?.d?.find(item=> item?.isLogin=== true)) {
-                setSelectedLinkAccount(response1?.data?.d?.find(item=> item?.isLogin=== true)?._id)
-                localStorage.setItem("linkAccount", response1?.data?.d?.find(item=> item?.isLogin=== true)?._id)
-                navigate("/dashboard")
-              }
-              else {
-                navigate("/connect")
+            if (response1?.data?.ok === true) {
+              if (response1?.data?.d?.length <= 0) {
+                navigate("/connect");
+              } else if (
+                response1?.data?.d?.find((item) => item?.isLogin === true)
+              ) {
+                setSelectedLinkAccount(
+                  response1?.data?.d?.find((item) => item?.isLogin === true)
+                    ?._id
+                );
+                localStorage.setItem(
+                  "linkAccount",
+                  response1?.data?.d?.find((item) => item?.isLogin === true)
+                    ?._id
+                );
+                navigate("/dashboard");
+              } else {
+                navigate("/connect");
               }
             }
           } else {
             setErrorMessage(response?.data?.m);
           }
         } catch (error) {
-          if(error.response?.status=== 402) {
-            navigate("/connect")
-          };
-          if(error.response?.status!== 402) {
+          if (error.response?.status === 402) {
+            navigate("/connect");
+          }
+          if (error.response?.status !== 402) {
             setErrorMessage(
-              "Failed to login. Please check your email, password, and site ID."
+              "Failed to login. Please check your email or username, password, and site ID."
             );
           }
         } finally {
@@ -110,14 +140,7 @@ const LoginPageView = () => {
   return (
     <Layout login>
       <Box maxWidth={550} p={4}>
-        <H5
-          fontSize={{
-            sm: 30,
-            xs: 25,
-          }}
-        >
-          Sign In
-        </H5>
+        <H5 fontSize={{ sm: 30, xs: 25 }}>Sign In</H5>
 
         <Paragraph mt={1} mb={6} color="text.secondary">
           New user?{" "}
@@ -130,12 +153,12 @@ const LoginPageView = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <H6 fontSize={16} mb={1.5}>
-                Login with your email
+                Login with your email or username
               </H6>
 
               <TextField
                 fullWidth
-                placeholder="Enter your work email"
+                placeholder="Enter your email or username"
                 name="email"
                 onBlur={handleBlur}
                 value={values.email}
@@ -160,9 +183,7 @@ const LoginPageView = () => {
                   endAdornment: (
                     <FlexRowAlign
                       onClick={() => setShowPassword(!showPassword)}
-                      sx={{
-                        cursor: "pointer",
-                      }}
+                      sx={{ cursor: "pointer" }}
                     >
                       {showPassword ? (
                         <VisibilityOff fontSize="small" />
@@ -174,14 +195,37 @@ const LoginPageView = () => {
                 }}
               />
             </Grid>
+
             <Grid item xs={12}>
-              
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Your language
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  fullWidth
+                  name="language"
+                  value={values.language}
+                  onChange={(event) => {
+                    handleChange(event);
+                    setLanguage(event.target.value);
+                  }}
+                  onBlur={handleBlur}
+                  label="Your language"
+                  error={Boolean(touched.language && errors.language)}
+                  helperText={touched.language && errors.language}
+                >
+                  <MenuItem value="vi">Vietnamese</MenuItem>
+                  <MenuItem value="en">English</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12}>
               <FlexBetween my={1}>
                 <FlexBox alignItems="center" gap={1}>
                   <Checkbox
-                    sx={{
-                      p: 0,
-                    }}
+                    sx={{ p: 0 }}
                     name="remember"
                     value={values.remember}
                     onChange={handleChange}
@@ -194,10 +238,7 @@ const LoginPageView = () => {
                   href="/forget-password"
                   fontSize={13}
                   component={Link}
-                  sx={{
-                    color: "error.500",
-                    fontWeight: 500,
-                  }}
+                  sx={{ color: "error.500", fontWeight: 500 }}
                 >
                   Forget Password?
                 </Box>
