@@ -585,7 +585,7 @@ const TelegramChannelSignalStrategy = () => {
                 ))}
               </Box>
             )}
-            <Box position="absolute" bottom={16} right={downLg ? -8 : 16}>
+            <Box position={downLg ? "fixed" : "absolute"} bottom={downLg ? 70 : 16} right={downLg ? 8 : 16}>
               {openTrade === true && (
                 <Box
                   borderRadius={"10px"}

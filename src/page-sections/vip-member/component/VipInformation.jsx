@@ -54,7 +54,7 @@ function VIPInformation() {
           color: "#fff",
           // padding: "20px",
           backgroundImage:
-            'url("https://quickinvest.ai/static/media/07.d8642d0d575db73e0bfd.png")',
+            'url("/static/vip/bg3.png")',
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           borderRadius: 0
@@ -87,7 +87,7 @@ function VIPInformation() {
                 paddingLeft: 0,
                 paddingRight: 0,
                 backgroundImage:
-                  "url(https://quickinvest.ai/static/media/05.0716606d155186823795.png)",
+                  "url(/static/vip/bg1.png)",
                 backgroundPosition: "50%",
                 backgroundSize: "cover",
                 height: 134,
@@ -136,7 +136,7 @@ function VIPInformation() {
             <img
               width={"100%"}
               height={"100%"}
-              src="https://quickinvest.ai/static/media/12.d05f39a25debb79dbccf.png"
+              src="/static/vip/bg2.png"
               alt="Can't display"
               style={{
                 width: "100%",

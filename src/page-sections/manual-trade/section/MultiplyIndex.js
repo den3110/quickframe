@@ -27,7 +27,7 @@ const MultiplyIndex = () => {
   const [betAmount, setBetAmount] = useState(1);
   const [statusTrade, setStatusTrade] = useState();
   const [multiplier, setMultiplier] = useState(1);
-  const [isBrokerMode, setIsBrokerMode] = useState(false);
+  const [isBrokerMode, setIsBrokerMode] = useState(typeof JSON.parse(localStorage.getItem("brokerMode"))=== "boolean" ? JSON.parse(localStorage.getItem("brokerMode")) : false);
   // const [betType, setBetType] = useState("");
   const [customMultiplier, setCustomMultiplier] = useState("");
   const {selectedLinkAccount }= useContext(AuthContext)
@@ -41,6 +41,7 @@ const MultiplyIndex = () => {
   };
 
   const handleChangeBrokerMode = (e) => {
+    localStorage.setItem("brokerMode", e.target.checked)
     setIsBrokerMode(e.target.checked);
   };
 

@@ -70,6 +70,19 @@ const BottomMenuDialog = (props) => {
             </ListItemSecondaryAction>
           </ListItem>
           <Divider />
+          <ListItem onClick={()=> handleNavigate("/vip-member")} button>
+            <ListItemText
+              primary="Vip member"
+              secondary="Quản lý số liệu thống kê người giới thiệu trên sàn giao dịch"
+              primaryTypographyProps={{ style: { fontWeight: 'bold', fontFamily: "Manrope, sans-serif" } }}
+            />
+            <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="forward" sx={{ p: 0.5 }}>
+                <ArrowForwardIosIcon fontSize="small" />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+          
           {/* <ListItem onClick={()=> handleNavigate("/dashboard/referral")} button>
             <ListItemText
               primary="Giới thiệu"
