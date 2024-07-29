@@ -12,6 +12,8 @@ import {
   Select,
   MenuItem,
   Pagination,
+  Menu,
+  Button,
 } from "@mui/material";
 import {
   Timeline,
@@ -62,6 +64,7 @@ const TableDetailTrade = ({dataState}) => {
     setDataStat
   } = useContext(ManualTradeContext);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [anchorEls, setAnchorEls] = useState([]);
   const [page, setPage] = useState(1);
 
   const handleChangeRowsPerPage = (event) => {
@@ -181,6 +184,19 @@ const TableDetailTrade = ({dataState}) => {
         return theme.palette.success.buy;
     }
   };
+
+  const handleMenuOpen = (index, event) => {
+    const newAnchorEls = [...anchorEls];
+    newAnchorEls[index] = event.currentTarget;
+    setAnchorEls(newAnchorEls);
+  };
+
+  const handleMenuClose = (index) => {
+    const newAnchorEls = [...anchorEls];
+    newAnchorEls[index] = null;
+    setAnchorEls(newAnchorEls);
+  };
+
 
   useEffect(() => {
 
@@ -343,7 +359,7 @@ const TableDetailTrade = ({dataState}) => {
                       <Typography fontSize={14} fontWeight={600}>{userLinkAccountList?.find(row=> row?._id=== item?.linkAccountId)?.nickName}</Typography>
                     </Box>
                   </Box>
-                  <Card variant="outlined" sx={{ mb: 2 }}>
+                  <Card onClick={(event) => handleMenuOpen(index, event)} variant="outlined" sx={{ mb: 2 }}>
                     <Box
                       sx={{
                         display: "flex",
@@ -542,6 +558,25 @@ const TableDetailTrade = ({dataState}) => {
                     )} */}
                     </Box>
                   </Card>
+                  <Menu
+                      disableScrollLock
+                      anchorEl={anchorEls[index]}
+                      open={Boolean(anchorEls[index])}
+                      onClose={() => handleMenuClose(index)}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                    >
+                      <MenuItem onClick={() => handleMenuClose(index)}>
+                        <Button>Copy dữ liệu</Button>
+                      </MenuItem>
+                      <MenuItem onClick={() => handleMenuClose(index)}>
+                        
+                        <Button color="success">Xem chi tiết</Button>
+                      </MenuItem>
+                     
+                    </Menu>
                 </TimelineContent>
               </TimelineItem>
             ))}
