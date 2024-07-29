@@ -227,7 +227,7 @@ const CustomAutowinTable = () => {
                                         top: 4,
                                       }}
                                     >
-                                      <Typography fontSize={10}>
+                                      <Typography fontSize={10} color={"warning.main"}>
                                         {parseInt(
                                           key2 + keyParent * itemColumnTable
                                         ) + parseInt(1)}
@@ -362,7 +362,7 @@ const CustomAutowinTable = () => {
                                         top: 4,
                                       }}
                                     >
-                                      <Typography fontSize={10}>
+                                      <Typography fontSize={10} color={"warning.main"}>
                                         {parseInt(
                                           key2 + keyParent * itemColumnTable
                                         ) + parseInt(1)}
@@ -496,7 +496,7 @@ const CustomAutowinTable = () => {
                                         top: 4,
                                       }}
                                     >
-                                      <Typography fontSize={10}>
+                                      <Typography fontSize={10} color={"warning.main"}>
                                         {parseInt(
                                           key2 + keyParent * itemColumnTable
                                         ) + parseInt(1)}

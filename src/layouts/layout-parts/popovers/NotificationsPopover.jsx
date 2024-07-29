@@ -11,6 +11,7 @@ import notificationApi from "api/notification/notificationApi";
 import { showToast } from "components/toast/toast";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
 
 // DUMMY DATA SET
 const MESSAGES = [
@@ -84,24 +85,30 @@ const StyledTab = styled(Tab)({
 });
 const NotificationsPopover = () => {
   const anchorRef = useRef(null);
-  const [data, setData]= useState([])
+  const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
-  const {t }= useTranslation()
+  const { t } = useTranslation();
   const [tabValue, setTabValue] = useState("1");
-  const handleTabChange = (_, value) => setTabValue(value);
+  const { ref, inView } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
+  // const handleTabChange = (_, value) => setTabValue(value);
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await notificationApi.getUserNotification();
-        if (response?.data?.ok === true) {
-          setData(response?.data?.d)
-        } else if (response?.data?.ok === false) {
+    if (inView) {
+      (async () => {
+        try {
+          const response = await notificationApi.getUserNotification();
+          if (response?.data?.ok === true) {
+            setData(response?.data?.d);
+          } else if (response?.data?.ok === false) {
+          }
+        } catch (error) {
+          showToast(error?.response?.data?.m || t("unknown_error"), "error");
         }
-      } catch (error) {
-        showToast(error?.response?.data?.m || t("unknown_error"), "error")
-      }
-    })();
-  }, [t]);
+      })();
+    }
+  }, [t, inView]);
 
   // UNREAD MESSAGES LENGTH
   const UNREAD_MSG_LEN = MESSAGES.filter(
@@ -131,19 +138,25 @@ const NotificationsPopover = () => {
             <StyledTab value="2" label="Archived" />
           </TabList> */}
 
-          {data.length === 0 ? (
-            <Paragraph fontWeight="500" textAlign="center" p={2}>
-              There are no notifications
-            </Paragraph>
-          ) : (
-            <TabPanel value="1">
-              {data.map((msg) => (
-                <ListItem msg={msg} key={msg.id} onClose={()=> {
-                  setOpen(false)
-                }} />
-              ))}
-            </TabPanel>
-          )}
+          <Box ref={ref}>
+            {data.length === 0 ? (
+              <Paragraph fontWeight="500" textAlign="center" p={2}>
+                There are no notifications
+              </Paragraph>
+            ) : (
+              <TabPanel value="1">
+                {data.map((msg) => (
+                  <ListItem
+                    msg={msg}
+                    key={msg.id}
+                    onClose={() => {
+                      setOpen(false);
+                    }}
+                  />
+                ))}
+              </TabPanel>
+            )}
+          </Box>
         </TabContext>
       </PopoverLayout>
     </Fragment>
@@ -154,13 +167,13 @@ const NotificationsPopover = () => {
 
 function ListItem({ msg, onClose }) {
   const isNew = msg.type === "new_message";
-  const navigate= useNavigate()
+  const navigate = useNavigate();
 
   return (
     <FlexBox
-      onClick={()=> {
-        navigate(msg?.href)
-        onClose()
+      onClick={() => {
+        navigate(msg?.href);
+        onClose();
       }}
       p={2}
       gap={2}
@@ -176,14 +189,17 @@ function ListItem({ msg, onClose }) {
       }}
     >
       <FlexBox alignItems="center">
-        <Box
-        />
-        <Box dangerouslySetInnerHTML={{__html: msg.icon}}></Box>
+        <Box />
+        <Box dangerouslySetInnerHTML={{ __html: msg.icon }}></Box>
       </FlexBox>
 
       <Box>
         <Paragraph fontWeight={500}>{msg.title}</Paragraph>
-        <Small sx={{overflow: "hidden"}} ellipsis={true} color="text.secondary">
+        <Small
+          sx={{ overflow: "hidden" }}
+          ellipsis={true}
+          color="text.secondary"
+        >
           {msg.content}
         </Small>
       </Box>

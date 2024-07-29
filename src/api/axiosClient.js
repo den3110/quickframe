@@ -2,7 +2,7 @@ import axios from 'axios';
 import useRefreshToken from 'hooks/useRefreshToken';
 
 const axiosClient = axios.create({
-    baseURL: process.env.REACT_APP_BASE_API_URL, 
+    baseURL: window.location.hostname=== "localhost" ? process.env.REACT_APP_BASE_API_URL : "", 
     headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer "+ localStorage.getItem("accessToken")

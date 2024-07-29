@@ -125,7 +125,7 @@ const ProfilePopover = () => {
             Set Status
           </StyledSmall> */}
           <StyledSmall onClick={handleMenuItem("/dashboard/profile")}>
-            {t("Profile")} & {t("Account")}
+            {t("Profiles")} & {t("Account")}
           </StyledSmall>
           {downLg && (
             <StyledSmall onClick={() => {setOpen(false);setOpenDrawerListLinkAccount(true)}}>

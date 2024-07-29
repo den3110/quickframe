@@ -54,6 +54,7 @@ import FilterComponent from "./FilterComponent";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import { showToast } from "components/toast/toast";
+import OpenDetailTimeline from "./OpenDetailTimeline";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -72,8 +73,10 @@ const CustomTimeline = () => {
   // const [data, setData]= useState([])
   const { socket, isConnected } = useContext(SocketContext);
   const [openAccordion, setOpenAccordion] = useState(false);
+  const [selectedItem, setSelectedItem]= useState()
   const [dataState, setDataState] = useState([]);
   const [anchorEls, setAnchorEls] = useState([]);
+  const [openDetailTimelineDialog, setOpenDetailTimelineDialog]= useState(false)
   const {
     data: dataProps, // arr
     dataStat: dataStatProps, // obj
@@ -694,9 +697,6 @@ const CustomTimeline = () => {
                       <MenuItem onClick={() => {
                         handleMenuClose(index)
                           navigator.clipboard.writeText(JSON.stringify(item))
-                        .then(() => {
-                          console.log('Copied to clipboard:', item);
-                        })
                         .then(()=> {
                           showToast("Copy dữ liệu thành công", "success")
                         })
@@ -706,8 +706,11 @@ const CustomTimeline = () => {
                       }}>
                         <Button>Copy dữ liệu</Button>
                       </MenuItem>
-                      <MenuItem onClick={() => handleMenuClose(index)}>
-                        
+                      <MenuItem onClick={() => {
+                        handleMenuClose(index)
+                        setSelectedItem(item)
+                        setOpenDetailTimelineDialog(true)
+                      }}>             
                         <Button color="success">Xem chi tiết</Button>
                       </MenuItem>
                      
@@ -747,6 +750,7 @@ const CustomTimeline = () => {
             shape="rounded"
           />
         </PaginationContainer>
+        <OpenDetailTimeline open={openDetailTimelineDialog} setOpen={setOpenDetailTimelineDialog} />
       </Box>
     </Box>
   );
