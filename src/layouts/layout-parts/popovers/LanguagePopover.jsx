@@ -15,7 +15,7 @@ const IconWrapper = styled(Box)({
   }
 });
 
-const LanguagePopover = () => {
+const LanguagePopover = ({isFromLogin}) => {
   const { t, i18n } = useTranslation();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const anchorRef = useRef(null);
@@ -59,7 +59,7 @@ const LanguagePopover = () => {
       <IconButton onClick={handleOpen} ref={anchorRef}>
         <IconWrapper>
           <img alt={selectedLanguage.label} src={selectedLanguage.icon} />
-          {downLg && <Typography fontSize={13} ml={1} whiteSpace={"nowrap"}>{selectedLanguage.label}</Typography>}
+          {downLg && isFromLogin !== true && <Typography fontSize={13} ml={1} whiteSpace={"nowrap"}>{selectedLanguage.label}</Typography>}
         </IconWrapper>
       </IconButton>
 

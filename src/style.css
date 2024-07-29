@@ -7,6 +7,13 @@
 :root {
     --swiper-navigation-size: 24px !important;
 }
+
+.language-select-container {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
 .custom-calendar .rbc-month-row {
     min-height: 139px;
 }

@@ -8,6 +8,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  IconButton,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -23,7 +24,11 @@ import AuthContext from "contexts/AuthContext";
 import userApi from "api/user/userApi";
 import { constant } from "constant/constant";
 import { useTranslation } from "react-i18next";
-
+import LanguagePopover from "layouts/layout-parts/popovers/LanguagePopover";
+import { SettingsContext } from "contexts/settingsContext";
+import MenuLeft from "icons/MenuLeft";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import ThemeIcon from "icons/ThemeIcon";
 const LoginPageView = () => {
   const { setAccessToken, setSelectedLinkAccount, setUser } =
     useContext(AuthContext);
@@ -32,6 +37,7 @@ const LoginPageView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [siteId, setSiteId] = useState("");
+  const { settings, saveSettings } = useContext(SettingsContext);
   const [language, setLanguage] = useState(
     localStorage.getItem("lang") || "vi"
   );
@@ -53,6 +59,13 @@ const LoginPageView = () => {
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
+
+  const handleChangeTheme = (value) => {
+    saveSettings({
+      ...settings,
+      theme: value,
+    });
+  };
 
   const initialValues = {
     email: "",
@@ -139,6 +152,16 @@ const LoginPageView = () => {
 
   return (
     <Layout login>
+      <div className="language-select-container">
+        <IconButton
+          onClick={() => {
+            handleChangeTheme(settings.theme === "light" ? "dark" : "light");
+          }}
+        >
+          {settings.theme === "light" ? <DarkModeIcon /> : <ThemeIcon />}
+        </IconButton>
+        <LanguagePopover isFromLogin={true} />
+      </div>
       <Box maxWidth={550} p={4}>
         <H5 fontSize={{ sm: 30, xs: 25 }}>Sign In</H5>
 
@@ -194,31 +217,6 @@ const LoginPageView = () => {
                   ),
                 }}
               />
-            </Grid>
-
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Your language
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  fullWidth
-                  name="language"
-                  value={values.language}
-                  onChange={(event) => {
-                    handleChange(event);
-                    setLanguage(event.target.value);
-                  }}
-                  onBlur={handleBlur}
-                  label="Your language"
-                  error={Boolean(touched.language && errors.language)}
-                  helperText={touched.language && errors.language}
-                >
-                  <MenuItem value="vi">Vietnamese</MenuItem>
-                  <MenuItem value="en">English</MenuItem>
-                </Select>
-              </FormControl>
             </Grid>
 
             <Grid item xs={12}>
