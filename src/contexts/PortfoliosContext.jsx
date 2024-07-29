@@ -14,7 +14,7 @@ export const PortfoliosContext = createContext();
 export const PortfoliosProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const { walletMode } = useContext(SettingsContext);
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   const [change, setChange] = useState(false);
   // Load user profile from localStorage and check if the user is authenticated
   const getSpotBalanceUser = async () => {
@@ -32,9 +32,7 @@ export const PortfoliosProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if(walletMode) {
-      getSpotBalanceUser();
-    }
+    getSpotBalanceUser();
   }, [walletMode, change]);
 
   return (
