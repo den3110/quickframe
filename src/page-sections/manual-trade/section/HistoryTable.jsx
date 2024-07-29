@@ -31,7 +31,7 @@ import { ManualTradeContext } from "contexts/ManualTradeContext";
 const HistoryTable = () => {
   const {
     data,
-    setData,
+    // setData,
   } = useContext(ManualTradeContext);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   // const [data, setData] = useState([]); // Assuming you have a data state
@@ -47,7 +47,7 @@ const HistoryTable = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
-  const [selectedFilter, setSelectedFilter] = useState("");
+  // const [selectedFilter, setSelectedFilter] = useState("");
   const [openDateDialog, setOpenDateDialog] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState("all");
 

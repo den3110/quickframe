@@ -159,7 +159,8 @@ export const lightPalette = {
     paper: "#ffffff",
     cell: "#f9f9fa",
     fcell: "",
-    t1: "#eeeff2"
+    t1: "#eeeff2",
+    t2: "#eeeff2"
   }
 };
 
@@ -176,6 +177,7 @@ export const darkPalette = {
     paper: grey[800],
     cell: "#111827",
     fcell: "#323b49",
-    t1: "#323b49"
+    t1: "#323b49",
+    t2: "#1f2937"
   }
 };

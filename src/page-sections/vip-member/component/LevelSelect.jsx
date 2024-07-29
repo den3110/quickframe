@@ -19,6 +19,7 @@ function LevelSelect() {
     setLevel(event.target.value);
     if(event.target.value=== "level") {
         setSubLevel(1); 
+        // setNickNameContext(undefined)
         // setLevelContext(1)
     }
 };
@@ -29,10 +30,13 @@ function LevelSelect() {
 
   const handleSubmit= ()=> {
     if(level=== "level") {
-        setLevelContext(parseInt(subLevel))
+      setLevelContext(parseInt(subLevel))
+      setNickNameContext(undefined)
         setPageContext(1)
     }
     if(level=== "username") {
+        // setPageCOn
+        setLevelContext(undefined)
         setNickNameContext(subLevel)
         setPageContext(1)
     }
@@ -40,7 +44,11 @@ function LevelSelect() {
 
   useEffect(()=> {
     setLevelContext(1)
-  }, [setLevelContext])
+    return ()=> {
+      setLevelContext(1)
+      setNickNameContext(undefined)
+    }
+  }, [setLevelContext, setNickNameContext])
 
   return (
     <Box display="flex" alignItems="center" gap={1}>

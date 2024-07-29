@@ -404,6 +404,7 @@ const CandleShadow = ({
                 modules={[Navigation, Pagination]}
                 style={{ paddingBottom: "20px", overflowY: "unset" }}
                 className="waa"
+                initialSlide={5}
                 navigation
                 breakpoints={{
                   // when window width is >= 640px

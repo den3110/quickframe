@@ -183,8 +183,7 @@ const TableDetailTrade = ({dataState}) => {
   };
 
   useEffect(() => {
-    console.log();
-    // a hinh nhu la cai nay a
+
     if (isConnected && dataProps && dataStatProps) {
       let dataTemp = dataProps;
       let dataStatTemp = dataStatProps;

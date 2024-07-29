@@ -141,9 +141,11 @@ export const DashboardRoutes = [
     children: [
       {
         element: (
-          <SignalStrategyProvider>
-            <Outlet />
-          </SignalStrategyProvider>
+          <ManualTradeProvider>
+            <SignalStrategyProvider>
+              <Outlet />
+            </SignalStrategyProvider>
+          </ManualTradeProvider>
         ),
         children: [
           {

@@ -76,13 +76,7 @@ const Layout = ({ children }) => {
           </Typography>
         </StyledNavLink>
       </Box>
-      <Card
-        sx={{
-          display: "flex",
-        }}
-      >
-        <Box flexGrow={1}>{children}</Box>
-      </Card>
+      <Box>{children}</Box>
     </Box>
   );
 };

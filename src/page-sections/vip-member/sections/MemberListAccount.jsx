@@ -16,14 +16,15 @@ import {
   TableRow,
   Typography,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { VipMemberContext } from "..";
 import { isDark } from "util/constants";
-import sortData from "util/sortData";
-import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
-import moment from "moment";
-import { MoreVert } from "@mui/icons-material";
+// import sortData from "util/sortData";
+// import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
+// import moment from "moment/";
+// import { MoreVert } from "@mui/icons-material";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import numberWithCommas from "util/numberSeparatorThousand";
 import round2number from "util/round2number";
@@ -54,7 +55,7 @@ const MemberListAccount = () => {
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [dataState, setDataState] = useState({ c: [] });
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-
+  const theme= useTheme()
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
     setPage(1);
@@ -99,7 +100,7 @@ const MemberListAccount = () => {
           <LevelSelect />
         </Box>
       </Box>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{background: theme.palette.background.default}}>
         <Table>
           {!downLg && (
             <TableHead>
@@ -131,6 +132,9 @@ const MemberListAccount = () => {
                     display: downLg ? "flex" : "",
                     flexWrap: "wrap",
                     borderBottom: downLg ? "" : "none",
+                    marginBottom: "12px",
+                    background: theme.palette.background.t2,
+                    borderRadius: downLg ? "10px" : 0
                   }}
                   key={index}
                 >

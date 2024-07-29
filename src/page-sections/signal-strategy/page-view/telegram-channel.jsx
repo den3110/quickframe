@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import {
   Grid,
   Paper,
@@ -6,7 +6,7 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
+  // ListItemIcon,
   Box,
   Button,
   TextField,
@@ -19,6 +19,9 @@ import {
   AccordionSummary,
   AccordionDetails,
   IconButton,
+  FormGroup,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { green, red } from "@mui/material/colors";
 import TimerIcon from "@mui/icons-material/Timer";
@@ -42,6 +45,7 @@ import AuthContext from "contexts/AuthContext";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import sortData from "util/sortData";
 import TelegramIcon from "@mui/icons-material/Telegram";
+import TableInvest from "./component/TableInvest";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -59,7 +63,7 @@ const TelegramChannelSignalStrategy = () => {
   const [openTrade, setOpenTrade] = useState(false);
   const classes = useStyles();
   const theme = useTheme();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [dataBot, setDataBot] = useState([]);
   const dataBotInit = dataBot;
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,7 +77,12 @@ const TelegramChannelSignalStrategy = () => {
   const [selectedBot, setSelectedBot] = useState();
   const [transactions, setTransactions] = useState();
   const [expanded, setExpanded] = useState(false);
-  const [accordionData, setAccordionData] = useState([]);
+  // const [accordionData, setAccordionData] = useState([]);
+  const [isBrokerMode, setIsBrokerMode] = useState(
+    typeof JSON.parse(localStorage.getItem("brokerModeTele")) === "boolean"
+      ? JSON.parse(localStorage.getItem("brokerModeTele"))
+      : false
+  );
   const { setChange } = useContext(SpotBalanceContext);
   const { t } = useTranslation();
   const isDisableButtonTrade = statusTrade === "WAIT" || !statusTrade;
@@ -82,6 +91,11 @@ const TelegramChannelSignalStrategy = () => {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleChangeBrokerMode = (e) => {
+    localStorage.setItem("brokerModeTele", e.target.checked);
+    setIsBrokerMode(e.target.checked);
   };
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -97,7 +111,7 @@ const TelegramChannelSignalStrategy = () => {
       const data = {
         betType,
         amount: parseFloat(betAmount) * parseInt(multiplier),
-        isBrokerMode: false,
+        isBrokerMode: isBrokerMode,
         accountType: walletMode ? "LIVE" : "DEMO",
         linkAccountId: selectedLinkAccount,
       };
@@ -127,7 +141,6 @@ const TelegramChannelSignalStrategy = () => {
     if (isConnected) {
       socket.emit("CURRENT_SESSION_SUBCRIBE");
       socket.on("CURRENT_SESSION", (data) => {
-        // console.log("CURRENT_SESSION", data);
         setCountDown(data?.r_second);
         setStatusTrade(data?.ss_t);
       });
@@ -167,350 +180,184 @@ const TelegramChannelSignalStrategy = () => {
 
   return (
     <Layout>
-      <Box sx={{ paddingTop: "22px" }}>
-        <Box sx={{ padding: downLg ? 1 : "24px" }}>
-          <Typography variant="h6" gutterBottom>
-            Kênh Telegram
-          </Typography>
-          <Box
-            sx={{
-              maxHeight: "calc(-300px + 100vh)",
-              height: "calc(-300px + 100vh)",
-              border: downLg ? "none" : `1px solid ${theme.palette.border}`,
-              borderRadius: "10px",
-              position: "relative",
-            }}
-          >
-            {!downLg && (
-              <Grid container>
-                <Grid item xs={3}>
-                  <Paper>
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      placeholder="Tìm kiếm kênh..."
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      sx={{
-                        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                          {
-                            borderTop: "none",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            borderRadius: 0,
-                          },
-                      }}
-                    />
-                    <Box
-                      sx={{
-                        overflow: "auto",
-                        maxHeight: "calc(-300px - 32px - 12px + 100vh)",
-                      }}
-                    >
-                      <List>
-                        {filteredData.map((item, index) => (
-                          <ListItem
-                            onClick={() => {
-                              setSelectedBot(item);
-                            }}
-                            button
-                            key={index}
-                            sx={{
-                              backgroundColor:
-                                selectedBot._id === item._id
-                                  ? "success.bg"
-                                  : "transparent",
-                            }}
-                          >
-                            <ListItemText
-                              primary={
-                                <Box
-                                  display={"flex"}
-                                  justifyContent={"space-between"}
-                                  alignItems={"center"}
-                                >
-                                  <Typography>{item.name}</Typography>
-                                </Box>
-                              }
-                              secondary={
-                                <Box
-                                  sx={{ display: "flex", alignItems: "center" }}
-                                >
-                                  <Box display="flex" alignItems={"center"}>
-                                    <Typography fontSize={12}>
-                                      Tỉ lệ thắng:&nbsp;
-                                    </Typography>
-                                    <Typography
-                                      fontSize={12}
-                                      fontWeight={600}
-                                      sx={{
-                                        cursor: "pointer",
-                                      }}
-                                      color={
-                                        (item.win_day /
-                                          (item.win_day + item.lose_day)) *
-                                          100 >=
-                                        50
-                                          ? "success.main"
-                                          : "error.main"
-                                      }
-                                    >
-                                      {round2number(
-                                        (item.win_day /
-                                          (item.win_day + item.lose_day)) *
-                                          100
-                                      )}
-                                      %
-                                    </Typography>
-                                  </Box>
-                                  <Typography fontSize={8}>| &nbsp;</Typography>
-                                  <Box display="flex" alignItems={"center"}>
-                                    <Typography fontSize={12}>
-                                      Chuỗi thắng / thua:&nbsp;
-                                    </Typography>
-                                    <Typography
-                                      fontWeight={600}
-                                      fontSize={12}
-                                      color={"success.main"}
-                                    >
-                                      {item?.longest_win_streak}
-                                    </Typography>
-                                    <Typography fontSize={12}>/</Typography>
-                                    <Typography
-                                      fontWeight={600}
-                                      fontSize={12}
-                                      color={"error.main"}
-                                    >
-                                      {item?.longest_lose_streak}
-                                    </Typography>
-                                  </Box>
-
-                                  <Typography fontSize={8}>
-                                    {" "}
-                                    &nbsp;|&nbsp;{" "}
-                                  </Typography>
-                                  <Box display="flex" alignItems={"center"}>
-                                    <Typography fontSize={12}>
-                                      VOL:&nbsp;
-                                    </Typography>
-                                    <Typography
-                                      fontWeight={600}
-                                      fontSize={12}
-                                      color={"warning.main"}
-                                    >
-                                      ${round2number(item?.volume)}
-                                    </Typography>
-                                    {/* <Typography fontSize={12}>/</Typography>
-                                    <Typography
-                                      fontWeight={600}
-                                      fontSize={12}
-                                      color={"error.main"}
-                                    >
-                                      {item?.longest_lose_streak}
-                                    </Typography> */}
-                                  </Box>
-                                </Box>
-                              }
-                            />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Box>
-                  </Paper>
-                </Grid>
-                <Grid
-                  item
-                  xs={9}
-                  borderLeft={`1px solid ${theme.palette.border}`}
-                >
-                  <Paper sx={{ padding: "16px 8px 16px 24px" }}>
-                    <Typography variant="h6" gutterBottom>
-                      {selectedBot?.name}
-                    </Typography>
-                    <Box
-                      sx={{
-                        overflow: "auto",
-                        maxHeight: "calc(-300px - 32px - 32px - 12px + 100vh)",
-                      }}
-                    >
-                      <Typography variant="body1">
-                        🎉 Tổng hợp{" "}
-                        {transactions?.messages?.[1]?.message?.histories
-                          ?.length || 0}{" "}
-                        phiên giao dịch gần nhất (UTC+7):
-                      </Typography>
-                      <List>
-                        {sortData(
-                          transactions?.messages?.[1]?.message?.histories,
-                          "time",
-                          "desc"
-                        )
-                          ?.reverse()
-                          ?.map((transaction, index) => (
-                            <Stack key={index} direction="row" spacing={1}>
-                              {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}
-                              <Typography>
-                                {" "}
-                                {`${format(
-                                  new Date(transaction.time),
-                                  "HH:mm"
-                                )}`}
-                              </Typography>
-                              <Typography>{t("Session")} </Typography>
-                              <Typography sx={{ fontWeight: "bold" }}>
-                                {transaction.session}{" "}
-                              </Typography>
-                              <Typography>
-                                {transaction?.result === "WIN" ? "💚" : "🔥"}
-                              </Typography>
-                              {/* <Iconify icon={transaction.result === 1 ? 'noto:green-circle' : 'fluent-emoji:red-circle'} /> */}
-                              <Typography
-                                color={
-                                  transaction.profit > 0
-                                    ? "success.main"
-                                    : "error.main"
-                                }
-                              >
-                                {formatCurrency(transaction.profit)}{" "}
-                              </Typography>
-                            </Stack>
-                          ))}
-                      </List>
-                      <Typography variant="body1" sx={{ display: "flex" }}>
-                        Hãy đặt lệnh :{" "}
-                        <Typography
-                          mb={1}
-                          fontWeight={600}
+      <Box mb={2}>
+        <Card
+          sx={{
+            display: "flex",
+          }}
+        >
+          <Box width={"100%"} sx={{ paddingTop: "22px" }}>
+            <Box sx={{ padding: downLg ? 1 : "24px" }}>
+              <Typography variant="h6" gutterBottom>
+                Kênh Telegram
+              </Typography>
+              <Box
+                sx={{
+                  maxHeight: "calc(-300px + 100vh)",
+                  height: "calc(-300px + 100vh)",
+                  border: downLg ? "none" : `1px solid ${theme.palette.border}`,
+                  borderRadius: "10px",
+                  position: "relative",
+                }}
+              >
+                {!downLg && (
+                  <Grid container>
+                    <Grid item xs={3}>
+                      <Paper>
+                        <TextField
+                          fullWidth
+                          variant="outlined"
+                          placeholder="Tìm kiếm kênh..."
+                          value={searchTerm}
+                          onChange={handleSearchChange}
                           sx={{
-                            color:
-                              transactions?.messages?.[0]?.message?.betType ===
-                              "UP"
-                                ? "success.main"
-                                : "error.main",
+                            "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                              {
+                                borderTop: "none",
+                                borderLeft: "none",
+                                borderRight: "none",
+                                borderRadius: 0,
+                              },
                           }}
-                        >
-                          {formatCurrency(
-                            transactions?.messages?.[0]?.message?.betAmount
-                          )}{" "}
-                          {transactions?.messages?.[0]?.message?.betType ===
-                          "UP"
-                            ? "Tăng"
-                            : "Giảm"}
-                        </Typography>
-                      </Typography>
-                    </Box>
-                  </Paper>
-                </Grid>
-              </Grid>
-            )}
-            {downLg && (
-              <Box sx={{ overflow: "auto", maxHeight: "100%" }}>
-                <Box mb={1}>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    placeholder="Tìm kiếm kênh..."
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                  />
-                </Box>
-                {filteredData?.map((item, index) => (
-                  <Accordion
-                    onClick={() => {
-                      setSelectedBot(item);
-                    }}
-                    key={item.id}
-                    expanded={expanded === `panel${index}`}
-                    onChange={handleChange(`panel${index}`)}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls={`panel${index}a-content`}
-                      id={`panel${index}a-header`}
-                    >
-                      <ListItemText
-                        primary={
-                          <Box
-                            display={"flex"}
-                            justifyContent={"space-between"}
-                            alignItems={"center"}
-                          >
-                            <Typography>{item.name}</Typography>
-                          </Box>
-                        }
-                        secondary={
-                          <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <Box display="flex" alignItems={"center"}>
-                              <Typography fontSize={12}>
-                                Tỉ lệ thắng:&nbsp;
-                              </Typography>
-                              <Typography
-                                fontSize={12}
-                                fontWeight={600}
-                                sx={{
-                                  cursor: "pointer",
-                                }}
-                                color={
-                                  (item.win_day /
-                                    (item.win_day + item.lose_day)) *
-                                    100 >=
-                                  50
-                                    ? "success.main"
-                                    : "error.main"
-                                }
-                              >
-                                {round2number(
-                                  (item.win_day /
-                                    (item.win_day + item.lose_day)) *
-                                    100
-                                )}
-                                %
-                              </Typography>
-                            </Box>
-                            <Typography fontSize={8}>|</Typography>
-                            <Box display="flex" alignItems={"center"}>
-                              <Typography fontSize={12}>
-                                Chuỗi thắng / thua:&nbsp;
-                              </Typography>
-                              <Typography
-                                fontWeight={600}
-                                fontSize={12}
-                                color={
-                                  parseFloat(item?.win_streak) >= 0
-                                    ? "success.main"
-                                    : "error.main"
-                                }
-                              >
-                                {item?.win_streak}
-                              </Typography>
-                              <Typography fontSize={12}>/</Typography>
-                              <Typography
-                                fontWeight={600}
-                                fontSize={12}
-                                color={"error.main"}
-                              >
-                                {item?.lose_streak}
-                              </Typography>
-                            </Box>
-                          </Box>
-                        }
-                      />
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography>
+                        />
                         <Box
                           sx={{
                             overflow: "auto",
-                            maxHeight: "200px",
+                            maxHeight: "calc(-300px - 32px - 12px + 100vh)",
                           }}
                         >
-                          {/* <Typography variant="body1" sx={{ display: "flex" }}>
-                            Kết quả :{" "}
-                            <Typography sx={{ color: "success.main" }}>
-                              THẮNG : +0.95$
-                            </Typography>
-                          </Typography> */}
+                          <List>
+                            {filteredData.map((item, index) => (
+                              <ListItem
+                                onClick={() => {
+                                  setSelectedBot(item);
+                                }}
+                                button
+                                key={index}
+                                sx={{
+                                  backgroundColor:
+                                    selectedBot._id === item._id
+                                      ? "success.bg"
+                                      : "transparent",
+                                }}
+                              >
+                                <ListItemText
+                                  primary={
+                                    <Box
+                                      display={"flex"}
+                                      justifyContent={"space-between"}
+                                      alignItems={"center"}
+                                    >
+                                      <Typography>{item.name}</Typography>
+                                    </Box>
+                                  }
+                                  secondary={
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                      }}
+                                    >
+                                      <Box display="flex" alignItems={"center"}>
+                                        <Typography fontSize={12}>
+                                          Tỉ lệ thắng:&nbsp;
+                                        </Typography>
+                                        <Typography
+                                          fontSize={12}
+                                          fontWeight={600}
+                                          sx={{
+                                            cursor: "pointer",
+                                          }}
+                                          color={
+                                            (item.win_day /
+                                              (item.win_day + item.lose_day)) *
+                                              100 >=
+                                            50
+                                              ? "success.main"
+                                              : "error.main"
+                                          }
+                                        >
+                                          {round2number(
+                                            (item.win_day /
+                                              (item.win_day + item.lose_day)) *
+                                              100
+                                          )}
+                                          %
+                                        </Typography>
+                                      </Box>
+                                      <Typography fontSize={8}>
+                                        | &nbsp;
+                                      </Typography>
+                                      <Box display="flex" alignItems={"center"}>
+                                        <Typography fontSize={12}>
+                                          Chuỗi thắng / thua:&nbsp;
+                                        </Typography>
+                                        <Typography
+                                          fontWeight={600}
+                                          fontSize={12}
+                                          color={"success.main"}
+                                        >
+                                          {item?.longest_win_streak}
+                                        </Typography>
+                                        <Typography fontSize={12}>/</Typography>
+                                        <Typography
+                                          fontWeight={600}
+                                          fontSize={12}
+                                          color={"error.main"}
+                                        >
+                                          {item?.longest_lose_streak}
+                                        </Typography>
+                                      </Box>
 
+                                      <Typography fontSize={8}>
+                                        {" "}
+                                        &nbsp;|&nbsp;{" "}
+                                      </Typography>
+                                      <Box display="flex" alignItems={"center"}>
+                                        <Typography fontSize={12}>
+                                          VOL:&nbsp;
+                                        </Typography>
+                                        <Typography
+                                          fontWeight={600}
+                                          fontSize={12}
+                                          color={"warning.main"}
+                                        >
+                                          ${round2number(item?.volume)}
+                                        </Typography>
+                                        {/* <Typography fontSize={12}>/</Typography>
+                                      <Typography
+                                        fontWeight={600}
+                                        fontSize={12}
+                                        color={"error.main"}
+                                      >
+                                        {item?.longest_lose_streak}
+                                      </Typography> */}
+                                      </Box>
+                                    </Box>
+                                  }
+                                />
+                              </ListItem>
+                            ))}
+                          </List>
+                        </Box>
+                      </Paper>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={9}
+                      borderLeft={`1px solid ${theme.palette.border}`}
+                    >
+                      <Paper sx={{ padding: "16px 8px 16px 24px" }}>
+                        <Typography variant="h6" gutterBottom>
+                          {selectedBot?.name}
+                        </Typography>
+                        <Box
+                          sx={{
+                            overflow: "auto",
+                            maxHeight:
+                              "calc(-300px - 32px - 32px - 12px + 100vh)",
+                          }}
+                        >
                           <Typography variant="body1">
                             🎉 Tổng hợp{" "}
                             {transactions?.messages?.[1]?.message?.histories
@@ -579,214 +426,459 @@ const TelegramChannelSignalStrategy = () => {
                             </Typography>
                           </Typography>
                         </Box>
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-              </Box>
-            )}
-            <Box position={downLg ? "fixed" : "absolute"} bottom={downLg ? 70 : 16} right={downLg ? 8 : 16}>
-              {openTrade === true && (
-                <Box
-                  borderRadius={"10px"}
-                  boxShadow={3}
-                  border={`1px solid ${theme.palette.border}`}
-                  overflow={"hidden"}
-                >
-                  <Box position={"relative"} overflow={"hidden"}>
-                    <Card>
-                      <Box width={downLg ? "calc(100vw - 16px)" : "aaa"} p={2}>
-                        <Box display={"flex"} gap={1} mb={2}>
-                          <Box>
-                            <Typography
-                              variant="body2"
-                              fontSize={12}
-                              fontWeight={600}
-                            >
-                              Số tiền vào lệnh
-                            </Typography>
-                            <TextField
-                              sx={{ width: 120 }}
-                              className={classes.input}
-                              variant="outlined"
-                              fullWidth
-                              prefix="$"
-                              size="small"
-                              defaultValue={1}
-                              onChange={(e) => setBetAmount(e.target.value)}
-                              type="number"
-                              error={isErrorBetAmount ? true : false}
-                              helperText={
-                                isErrorBetAmount ? (
-                                  <Typography fontSize={8}>
-                                    Không thể nhập giá trị lớn hơn 1.000.000 và
-                                    nhỏ hơn 0
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                )}
+                {downLg && (
+                  <Box sx={{ overflow: "auto", maxHeight: "100%" }}>
+                    <Box mb={1}>
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        placeholder="Tìm kiếm kênh..."
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                      />
+                    </Box>
+                    {filteredData?.map((item, index) => (
+                      <Accordion
+                        onClick={() => {
+                          setSelectedBot(item);
+                        }}
+                        key={item.id}
+                        expanded={expanded === `panel${index}`}
+                        onChange={handleChange(`panel${index}`)}
+                      >
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls={`panel${index}a-content`}
+                          id={`panel${index}a-header`}
+                        >
+                          <ListItemText
+                            primary={
+                              <Box
+                                display={"flex"}
+                                justifyContent={"space-between"}
+                                alignItems={"center"}
+                              >
+                                <Typography>{item.name}</Typography>
+                              </Box>
+                            }
+                            secondary={
+                              <Box
+                                sx={{ display: "flex", alignItems: "center" }}
+                              >
+                                <Box display="flex" alignItems={"center"}>
+                                  <Typography fontSize={12}>
+                                    Tỉ lệ thắng:&nbsp;
                                   </Typography>
-                                ) : (
-                                  ""
-                                )
-                              }
-                            />
-                          </Box>
-                          <Box>
-                            <Typography
-                              variant="body2"
-                              fontSize={12}
-                              fontWeight={600}
-                            >
-                              Hệ số nhân
-                            </Typography>
+                                  <Typography
+                                    fontSize={12}
+                                    fontWeight={600}
+                                    sx={{
+                                      cursor: "pointer",
+                                    }}
+                                    color={
+                                      (item.win_day /
+                                        (item.win_day + item.lose_day)) *
+                                        100 >=
+                                      50
+                                        ? "success.main"
+                                        : "error.main"
+                                    }
+                                  >
+                                    {round2number(
+                                      (item.win_day /
+                                        (item.win_day + item.lose_day)) *
+                                        100
+                                    )}
+                                    %
+                                  </Typography>
+                                </Box>
+                                <Typography fontSize={8}>|</Typography>
+                                <Box display="flex" alignItems={"center"}>
+                                  <Typography fontSize={12}>
+                                    Chuỗi thắng / thua:&nbsp;
+                                  </Typography>
+                                  <Typography
+                                    fontWeight={600}
+                                    fontSize={12}
+                                    color={
+                                      parseFloat(item?.win_streak) >= 0
+                                        ? "success.main"
+                                        : "error.main"
+                                    }
+                                  >
+                                    {item?.win_streak}
+                                  </Typography>
+                                  <Typography fontSize={12}>/</Typography>
+                                  <Typography
+                                    fontWeight={600}
+                                    fontSize={12}
+                                    color={"error.main"}
+                                  >
+                                    {item?.lose_streak}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            }
+                          />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography>
                             <Box
+                              sx={{
+                                overflow: "auto",
+                                maxHeight: "200px",
+                              }}
+                            >
+                              {/* <Typography variant="body1" sx={{ display: "flex" }}>
+                              Kết quả :{" "}
+                              <Typography sx={{ color: "success.main" }}>
+                                THẮNG : +0.95$
+                              </Typography>
+                            </Typography> */}
+
+                              <Typography variant="body1">
+                                🎉 Tổng hợp{" "}
+                                {transactions?.messages?.[1]?.message?.histories
+                                  ?.length || 0}{" "}
+                                phiên giao dịch gần nhất (UTC+7):
+                              </Typography>
+                              <List>
+                                {sortData(
+                                  transactions?.messages?.[1]?.message
+                                    ?.histories,
+                                  "time",
+                                  "desc"
+                                )
+                                  ?.reverse()
+                                  ?.map((transaction, index) => (
+                                    <Stack
+                                      key={index}
+                                      direction="row"
+                                      spacing={1}
+                                    >
+                                      {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}
+                                      <Typography>
+                                        {" "}
+                                        {`${format(
+                                          new Date(transaction.time),
+                                          "HH:mm"
+                                        )}`}
+                                      </Typography>
+                                      <Typography>{t("Session")} </Typography>
+                                      <Typography sx={{ fontWeight: "bold" }}>
+                                        {transaction.session}{" "}
+                                      </Typography>
+                                      <Typography>
+                                        {transaction?.result === "WIN"
+                                          ? "💚"
+                                          : "🔥"}
+                                      </Typography>
+                                      {/* <Iconify icon={transaction.result === 1 ? 'noto:green-circle' : 'fluent-emoji:red-circle'} /> */}
+                                      <Typography
+                                        color={
+                                          transaction.profit > 0
+                                            ? "success.main"
+                                            : "error.main"
+                                        }
+                                      >
+                                        {formatCurrency(transaction.profit)}{" "}
+                                      </Typography>
+                                    </Stack>
+                                  ))}
+                              </List>
+                              <Typography
+                                variant="body1"
+                                sx={{ display: "flex" }}
+                              >
+                                Hãy đặt lệnh :{" "}
+                                <Typography
+                                  mb={1}
+                                  fontWeight={600}
+                                  sx={{
+                                    color:
+                                      transactions?.messages?.[0]?.message
+                                        ?.betType === "UP"
+                                        ? "success.main"
+                                        : "error.main",
+                                  }}
+                                >
+                                  {formatCurrency(
+                                    transactions?.messages?.[0]?.message
+                                      ?.betAmount
+                                  )}{" "}
+                                  {transactions?.messages?.[0]?.message
+                                    ?.betType === "UP"
+                                    ? "Tăng"
+                                    : "Giảm"}
+                                </Typography>
+                              </Typography>
+                            </Box>
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
+                    ))}
+                  </Box>
+                )}
+                <Box
+                  position={downLg ? "fixed" : "absolute"}
+                  bottom={downLg ? 70 : 16}
+                  right={downLg ? 8 : 16}
+                  sx={{zIndex: 10}}
+                >
+                  {openTrade === true && (
+                    <Box
+                      borderRadius={"10px"}
+                      boxShadow={3}
+                      border={`1px solid ${theme.palette.border}`}
+                      overflow={"hidden"}
+                    >
+                      <Box position={"relative"} overflow={"hidden"}>
+                        <Card>
+                          <Box
+                            width={downLg ? "calc(100vw - 16px)" : "aaa"}
+                            p={2}
+                          >
+                            <Box display={"flex"} gap={1} mb={1}>
+                              <Box>
+                                <Typography
+                                  variant="body2"
+                                  fontSize={12}
+                                  fontWeight={600}
+                                >
+                                  Số tiền vào lệnh
+                                </Typography>
+                                <TextField
+                                  sx={{ width: 120 }}
+                                  className={classes.input}
+                                  variant="outlined"
+                                  fullWidth
+                                  prefix="$"
+                                  size="small"
+                                  defaultValue={1}
+                                  onChange={(e) => setBetAmount(e.target.value)}
+                                  type="number"
+                                  error={isErrorBetAmount ? true : false}
+                                  helperText={
+                                    isErrorBetAmount ? (
+                                      <Typography fontSize={8}>
+                                        Không thể nhập giá trị lớn hơn 1.000.000
+                                        và nhỏ hơn 0
+                                      </Typography>
+                                    ) : (
+                                      ""
+                                    )
+                                  }
+                                />
+                              </Box>
+                              <Box>
+                                <Typography
+                                  variant="body2"
+                                  fontSize={12}
+                                  fontWeight={600}
+                                >
+                                  Hệ số nhân
+                                </Typography>
+                                <Box
+                                  display="flex"
+                                  justifyContent="space-between"
+                                  alignItems="start"
+                                  gap={1}
+                                >
+                                  <Button
+                                    onClick={() => {
+                                      setMultiplier(1);
+                                    }}
+                                    className={classes.button}
+                                    variant={
+                                      multiplier === 1
+                                        ? "contained"
+                                        : "outlined"
+                                    }
+                                  >
+                                    1x
+                                  </Button>
+                                  <Button
+                                    onClick={() => {
+                                      setMultiplier(2);
+                                    }}
+                                    className={classes.button}
+                                    variant={
+                                      multiplier === 2
+                                        ? "contained"
+                                        : "outlined"
+                                    }
+                                  >
+                                    2x
+                                  </Button>
+                                  <TextField
+                                    onChange={(e) => {
+                                      setMultiplier(parseFloat(e.target.value));
+                                    }}
+                                    type="number"
+                                    placeholder="Khác"
+                                    sx={{ width: 60 }}
+                                    className={classes.input}
+                                    variant="outlined"
+                                  >
+                                    Khác
+                                  </TextField>
+                                </Box>
+                              </Box>
+                              <Box mt={1}></Box>
+                            </Box>
+                            <FormGroup>
+                              <FormControlLabel
+                                control={
+                                  <Switch
+                                    checked={isBrokerMode}
+                                    onChange={handleChangeBrokerMode}
+                                  />
+                                }
+                                label="Chế độ chuyên gia"
+                              />
+                            </FormGroup>
+                            <Divider />
+                            <Box
+                              mt={2}
                               display="flex"
                               justifyContent="space-between"
-                              alignItems="start"
                               gap={1}
                             >
                               <Button
+                                disabled={isDisableButtonTrade}
+                                fullWidth
+                                variant="contained"
+                                color="error"
                                 onClick={() => {
-                                  setMultiplier(1);
+                                  handleSubmit("DOWN");
                                 }}
-                                className={classes.button}
-                                variant={
-                                  multiplier === 1 ? "contained" : "outlined"
-                                }
                               >
-                                1x
+                                Down
                               </Button>
                               <Button
-                                onClick={() => {
-                                  setMultiplier(2);
-                                }}
-                                className={classes.button}
-                                variant={
-                                  multiplier === 2 ? "contained" : "outlined"
-                                }
+                                fullWidth
+                                variant="contained"
+                                color="primary"
                               >
-                                2x
+                                {countDown}s
                               </Button>
-                              <TextField
-                                onChange={(e) => {
-                                  setMultiplier(parseFloat(e.target.value));
+                              <Button
+                                disabled={isDisableButtonTrade}
+                                onClick={() => {
+                                  handleSubmit("UP");
                                 }}
-                                type="number"
-                                placeholder="Khác"
-                                sx={{ width: 60 }}
-                                className={classes.input}
-                                variant="outlined"
+                                fullWidth
+                                variant="contained"
+                                color="success"
                               >
-                                Khác
-                              </TextField>
+                                Up
+                              </Button>
                             </Box>
                           </Box>
-                        </Box>
-                        <Divider />
+                        </Card>
                         <Box
-                          mt={2}
-                          display="flex"
-                          justifyContent="space-between"
-                          gap={1}
+                          position={"absolute"}
+                          sx={{
+                            background:
+                              "linear-gradient(154.83deg,#03c768 15.98%,#0062ff 85.83%)",
+                            fontSize: 9,
+                            height: 20,
+                            lineHeight: 2,
+                            right: -30,
+                            textAlign: "center",
+                            textTransform: "uppercase",
+                            top: 10,
+                            transform: "rotate(45deg)",
+                            width: 90,
+                            borderRadius: "12px",
+                            fontWeight: 600,
+                            minWidth: 70,
+                            overflow: "hidden",
+                            padding: "0 6px",
+                            whiteSpace: "nowrap",
+                            textOverflow: "ellipsis",
+                            color: "white",
+                          }}
                         >
-                          <Button
-                            disabled={isDisableButtonTrade}
-                            fullWidth
-                            variant="contained"
-                            color="error"
-                            onClick={() => {
-                              handleSubmit("DOWN");
-                            }}
-                          >
-                            Down
-                          </Button>
-                          <Button fullWidth variant="contained" color="primary">
-                            {countDown}s
-                          </Button>
-                          <Button
-                            disabled={isDisableButtonTrade}
-                            onClick={() => {
-                              handleSubmit("UP");
-                            }}
-                            fullWidth
-                            variant="contained"
-                            color="success"
-                          >
-                            Up
-                          </Button>
+                          {walletMode ? "LIVE" : "DEMO"}
                         </Box>
                       </Box>
-                    </Card>
-                    <Box
-                      position={"absolute"}
-                      sx={{
-                        background:
-                          "linear-gradient(154.83deg,#03c768 15.98%,#0062ff 85.83%)",
-                        fontSize: 9,
-                        height: 20,
-                        lineHeight: 2,
-                        right: -30,
-                        textAlign: "center",
-                        textTransform: "uppercase",
-                        top: 10,
-                        transform: "rotate(45deg)",
-                        width: 90,
-                        borderRadius: "12px",
-                        fontWeight: 600,
-                        minWidth: 70,
-                        overflow: "hidden",
-                        padding: "0 6px",
-                        whiteSpace: "nowrap",
-                        textOverflow: "ellipsis",
-                        color: "white",
-                      }}
-                    >
-                      {walletMode ? "LIVE" : "DEMO"}
                     </Box>
-                  </Box>
-                </Box>
-              )}
-              <Box mt={2} display={"flex"} alignItems={"center"} gap={2} flexDirection={"row-reverse"}>
-                
-                <Box sx={{  direction: "rtl", display: "flex", flexDirection: "row-reverse" }}>
-                  <Box sx={{ cursor: "pointer" }}>
-                    {openTrade === false && (
-                      <Toggle
-                        width={"2.5rem"}
-                        height={"2.5rem"}
-                        style={{ width: 48, height: 48 }}
-                        onClick={() => setOpenTrade((prev) => !prev)}
-                      />
-                    )}
-                    {openTrade === true && (
-                      <CloseIcon
-                        width={"2.5rem"}
-                        height={"2.5rem"}
-                        style={{ width: 48, height: 48 }}
-                        onClick={() => setOpenTrade((prev) => !prev)}
-                      />
-                    )}
-                  </Box>
-                </Box>
-                {selectedBot && (
-                  <Box>
-                    <IconButton
-                      onClick={() => {
-                        window.open(selectedBot?.url);
+                  )}
+                  <Box
+                    mt={2}
+                    display={"flex"}
+                    alignItems={"center"}
+                    gap={2}
+                    flexDirection={"row-reverse"}
+                  >
+                    <Box
+                      sx={{
+                        direction: "rtl",
+                        display: "flex",
+                        flexDirection: "row-reverse",
                       }}
                     >
-                      <img
-                        alt="Can't display"
-                        style={{ width: 48, height: 48 }}
-                        src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-icon-6896828_960_720.png"
-                      />
-                    </IconButton>
+                      <Box sx={{ cursor: "pointer" }}>
+                        {openTrade === false && (
+                          <Toggle
+                            width={"2.5rem"}
+                            height={"2.5rem"}
+                            style={{ width: 48, height: 48 }}
+                            onClick={() => setOpenTrade((prev) => !prev)}
+                          />
+                        )}
+                        {openTrade === true && (
+                          <CloseIcon
+                            width={"2.5rem"}
+                            height={"2.5rem"}
+                            style={{ width: 48, height: 48 }}
+                            onClick={() => setOpenTrade((prev) => !prev)}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                    {selectedBot && (
+                      <Box>
+                        <IconButton
+                          onClick={() => {
+                            window.open(selectedBot?.url);
+                          }}
+                        >
+                          <img
+                            alt="Can't display"
+                            style={{ width: 48, height: 48 }}
+                            src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-icon-6896828_960_720.png"
+                          />
+                        </IconButton>
+                      </Box>
+                    )}
                   </Box>
-                )}
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </Card>
+      </Box>
+      <Box width={"100%"}>
+        <Card
+          width={"100%"}
+          sx={{
+            display: "flex",
+          }}
+          mb={2}
+        >
+          <Box width={"100%"} sx={{ padding: downLg ? 1 : "24px" }}>
+            <TableInvest selectedBot={{...selectedBot}} />
+          </Box>
+        </Card>
       </Box>
     </Layout>
   );
 };
 
-export default TelegramChannelSignalStrategy;
+export default memo(TelegramChannelSignalStrategy);
