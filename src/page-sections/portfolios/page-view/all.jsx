@@ -461,17 +461,19 @@ const PortfoliosList = () => {
   }, [checkedRows]);
 
   useEffect(() => {
-    (async () => {
-      const response = await userApi.getUsersExchangeLinkAccountDailyTarget(
-        {
-          params: { accountType: walletMode ? "LIVE" : "DEMO" },
-        },
-        selectedLinkAccount
-      );
-      if (response?.data?.ok === true) {
-        setDailyTarget(response?.data?.d);
-      }
-    })();
+    if (selectedLinkAccount && walletMode) {
+      (async () => {
+        const response = await userApi.getUsersExchangeLinkAccountDailyTarget(
+          {
+            params: { accountType: walletMode ? "LIVE" : "DEMO" },
+          },
+          selectedLinkAccount
+        );
+        if (response?.data?.ok === true) {
+          setDailyTarget(response?.data?.d);
+        }
+      })();
+    }
   }, [walletMode, selectedLinkAccount]);
 
   useEffect(() => {
@@ -513,7 +515,7 @@ const PortfoliosList = () => {
                 <Box sx={{ width: "100%", paddingRight: "10px" }}>
                   <TextField
                     variant="outlined"
-                    placeholder="Tìm gói đầu tư..."
+                    placeholder={t("Search Plan...")}
                     sx={{ width: downLg ? "aaa" : 450 }}
                     InputProps={{
                       startAdornment: (
@@ -577,7 +579,7 @@ const PortfoliosList = () => {
                   {!downLg && (
                     <Box>
                       <FormControlLabel
-                        label="Show all account"
+                        label={t("Show all account")}
                         control={
                           <Checkbox
                             checked={showAllLinkAccountId}
@@ -677,7 +679,7 @@ const PortfoliosList = () => {
                       },
                     }}
                   >
-                    {downLg ? "" : "Tạo plan"}
+                    {downLg ? "" : t("Create Plan")}
                   </Button>
 
                   <Menu
@@ -716,7 +718,7 @@ const PortfoliosList = () => {
                 <>
                   <Box>
                     <FormControlLabel
-                      label="Show all account"
+                      label={t("Show all account")}
                       control={
                         <Checkbox
                           checked={showAllLinkAccountId}
@@ -727,7 +729,7 @@ const PortfoliosList = () => {
                   </Box>
                   <Box>
                     <FormControlLabel
-                      label="Select all"
+                      label={t("Select all")}
                       control={
                         <Checkbox
                           checked={checkedRows.every(Boolean)}
@@ -751,10 +753,10 @@ const PortfoliosList = () => {
                             onChange={handleToggleAllRows}
                           />
                         </StyledTableCell>
-                        <StyledTableCell>Tên gói</StyledTableCell>
+                        <StyledTableCell>{t("Plan Name")}</StyledTableCell>
                         <StyledTableCell>{t("7-days profit")}</StyledTableCell>
                         <StyledTableCell>
-                          <Typography>Lợi nhuận</Typography>
+                          <Typography>{t("profit")}</Typography>
                           <Typography
                             fontWeight={600}
                             fontSize={14}
@@ -842,7 +844,7 @@ const PortfoliosList = () => {
                                       variant="body2"
                                       color="textSecondary"
                                     >
-                                      Created:{" "}
+                                      {t("Created")}:{" "}
                                       {moment(plan.createdAt).format(
                                         "DD-MM-YYYY, HH:mm:ss"
                                       )}
@@ -892,7 +894,7 @@ const PortfoliosList = () => {
                                       variant="body2"
                                       color="textSecondary"
                                     >
-                                      Lợi nhuận
+                                      {t("profit")}
                                     </Typography>
                                     {/* <Typography
                                       fontWeight={600}
@@ -975,7 +977,7 @@ const PortfoliosList = () => {
                                       setSelectedPlan(plan);
                                     }}
                                   >
-                                    Sửa cấu hình
+                                    {t("edit_configuration")}
                                   </MenuItem>
                                   {/* <MenuItem
                                     onClick={() => {
@@ -993,7 +995,7 @@ const PortfoliosList = () => {
                                       handleClose(index);
                                     }}
                                   >
-                                    Chia sẻ thành tích
+                                    {t("Share Media")}
                                   </MenuItem>
                                   <MenuItem
                                     onClick={() => {
@@ -1002,7 +1004,7 @@ const PortfoliosList = () => {
                                       handleClose(index);
                                     }}
                                   >
-                                    Chia sẻ plan
+                                    {t("Share Plan")}
                                   </MenuItem>
                                   {/* <MenuItem onClick={() => handleClose(index)}>
                                     Copy plan to LIVE
@@ -1032,7 +1034,9 @@ const PortfoliosList = () => {
                                   </IconButton>
                                   {downLg && (
                                     <Typography>
-                                      {openRows[index] ? "Thu gọn" : "Xem thêm"}
+                                      {openRows[index]
+                                        ? t("See less")
+                                        : t("See more")}
                                     </Typography>
                                   )}
                                 </Box>
@@ -1088,7 +1092,7 @@ const PortfoliosList = () => {
                                           }
                                         </Typography>
                                         <Typography fontSize={12}>
-                                          Chiến lược tín hiệu
+                                          {t("signal_strategy")}
                                         </Typography>
                                       </Box>
                                       {plan?.isCopy !== true && (
@@ -1115,7 +1119,7 @@ const PortfoliosList = () => {
                                             }
                                           </Typography>
                                           <Typography fontSize={12}>
-                                            Chiến lược vốn
+                                            {t("budget_strategy")}
                                           </Typography>
                                         </Box>
                                       )}
@@ -1137,7 +1141,7 @@ const PortfoliosList = () => {
                                           ${plan?.margin_dense?.toFixed(2)}
                                         </Typography>
                                         <Typography fontSize={12}>
-                                          Hệ số vào lệnh
+                                          {t("entry_coefficient")}
                                         </Typography>
                                       </Box>
                                     </Box>
@@ -1162,11 +1166,11 @@ const PortfoliosList = () => {
                   }}
                 >
                   <EmptyPage
-                    title={"Danh mục đầu tư đang trống"}
-                    subTitle={
-                      "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
-                    }
-                    titleButton={"Tạo chiến lược mới"}
+                    title={t("Your portfolio is empty")}
+                    subTitle={t(
+                      "Start exploring investment opportunities and earn profits by start an investment plan today"
+                    )}
+                    titleButton={t("Create Your Strategy")}
                     actionClick={handleOpenPlanDrawer}
                   />
                 </Box>
@@ -1186,7 +1190,7 @@ const PortfoliosList = () => {
                 alignItems={"center"}
                 gap={1}
               >
-                <Typography>Hiển thị kết quả:</Typography>
+                <Typography>{t("Show result:")}</Typography>
                 <FormControl variant="outlined" sx={{ minWidth: 60 }}>
                   <Select
                     value={rowsPerPage}
@@ -1195,7 +1199,7 @@ const PortfoliosList = () => {
                     <MenuItem value={6}>6</MenuItem>
                     <MenuItem value={12}>12</MenuItem>
                     <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={dataState.length}>Tất cả</MenuItem>
+                    <MenuItem value={dataState.length}>{t("all")}</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -1254,9 +1258,11 @@ const PortfoliosList = () => {
           setData={setData}
         />
         <SharePlan
-          title="Chia sẻ gói đầu tư"
-          title2={"Dễ dàng chia sẻ gói đầu tư hoàn hảo của bạn!"}
-          title3="Chia sẻ mã gói đầu tư cho bạn bè để cùng nhau giao dịch."
+          title={t("Share Investment Plan")}
+          title2={t("Easy way to share your superb plan!")}
+          title3={t(
+            "Share your Investment Plan Code to your peers and trade together."
+          )}
           open={sharePlanOpen}
           onClose={handleSharePlanClose}
           selectedPlan={selectedPlan}

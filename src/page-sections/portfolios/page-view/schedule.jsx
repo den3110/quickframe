@@ -19,9 +19,11 @@ import DeleteSchedule from "../page-sections/schedule/DeleteSchedule";
 import portfolioApi from "api/portfolios/portfolioApi";
 import sortData from "util/sortData";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
+import { useTranslation } from "react-i18next";
 
 const PortfolioSchedule = () => {
   const theme = useTheme();
+  const {t} =useTranslation()
   const [loading, setLoading] = useState();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [data, setData] = useState([]);
@@ -221,7 +223,7 @@ const PortfolioSchedule = () => {
             >
               <Box>
                 <Typography fontSize={18} fontWeight={600}>
-                  Danh sách
+                  {t("Timer List")}
                 </Typography>
               </Box>
               <Box>
@@ -233,7 +235,7 @@ const PortfolioSchedule = () => {
                   color="success"
                   startIcon={<AddIcon />}
                 >
-                  New schedule
+                  {t("Add Timer")}
                 </Button>
               </Box>
             </Box>

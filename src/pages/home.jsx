@@ -8,10 +8,12 @@ import CheckBoxIcon from "icons/CheckBoxIcon";
 import BlankCheckBoxIcon from "icons/BlankCheckBoxIcon";
 import { COUNTRIES } from "__fakeData__/countries";
 import { Counter } from "components/counter";
+import { useTranslation } from "react-i18next";
 const Home = () => {
   const {
     palette
   } = useTheme();
+  const {t }= useTranslation()
   const [tabValue, setTabValue] = useState(0);
   const [country, setCountry] = useState(COUNTRIES[0].value);
   const handleTabChange = (_, newValue) => {
@@ -656,7 +658,7 @@ const Home = () => {
           </Typography>
 
           <Tabs value={tabValue} variant="scrollable" allowScrollButtonsMobile onChange={handleTabChange}>
-            <Tab icon={<HomeOutlined />} label="Overview" />
+            <Tab icon={<HomeOutlined />} label={t("Overview")} />
             <Tab icon={<HomeOutlined />} label="Projects" />
             <Tab icon={<HomeOutlined />} label="Campaigns" />
             <Tab icon={<HomeOutlined />} label="Documents" />

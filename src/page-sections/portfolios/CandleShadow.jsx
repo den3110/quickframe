@@ -357,6 +357,7 @@ const CandleShadow = ({
               >
                 <MenuItem value="UP">Long</MenuItem>
                 <MenuItem value="DOWN">Short</MenuItem>
+                <MenuItem value="NONE">Skip</MenuItem>
               </Select>
             </FormControl>
             cho bóng số {selectedBall - 80}

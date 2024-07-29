@@ -139,7 +139,7 @@ const LeaderBoard = () => {
             {t("top_efficient_plan")} <BunnyStar />
           </Typography>
           <Fragment>
-            <Tooltip title="Vuốt sang trái để xem thêm gói">
+            <Tooltip title={t("Swipe left to see more plans")}>
               <FlickAnimate />
             </Tooltip>
           </Fragment>

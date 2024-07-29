@@ -31,6 +31,7 @@ import copytradeApi from "api/copytrade/copytradeApi";
 import sortData from "util/sortData";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import formatCurrency from "util/formatCurrency";
+import { useTranslation } from "react-i18next";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -46,6 +47,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   }));
 
 const FollowerPlanDialog = (props) => {
+  const {t }= useTranslation()
     const theme = useTheme();
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { open, onClose, selected } = props;
@@ -242,7 +244,7 @@ const FollowerPlanDialog = (props) => {
                           fontWeight={600}
                           color="primary"
                         >
-                          {item?.isRunning=== true ? "Đang chạy" : "Tạm ngưng"}
+                          {item?.isRunning=== true ? t("On going") : t("COOL_DOWN")}
                         </Typography>
                       </Box>
                     </Box>

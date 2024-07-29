@@ -67,7 +67,7 @@ const DailyGoalDialog = ({
         selectedLinkAccount
       );
       if (response?.data?.ok === true) {
-        showToast("Thiết lập thành công", "success");
+        showToast(t("GoalSetting_Save_Successful"), "success");
         setDailyTarget({
           ...dailyTarget,
           take_profit_target: profitTarget,

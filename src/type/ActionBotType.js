@@ -13,7 +13,7 @@ export const ActionBotType = {
 export const ActionBotTypeMessageSucces = {
   PAUSE: "Tạm ngưng gói thành công",
   RESUME: "Tiêp tục gói thành công",
-  RESTART: "Khởi động lại gói thành công",
+  RESTART: "Restart plan successfully!",
   RESET: "Reset gói thành công",
   REMOVE: "Xoá gói thành công",
   START: "Khởi dộng gói thành công",

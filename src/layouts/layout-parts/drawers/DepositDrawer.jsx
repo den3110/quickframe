@@ -13,6 +13,7 @@ import QRCode from "react-qr-code";
 import { QrCode } from "@mui/icons-material";
 import AuthContext from "contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import { useInView } from "react-intersection-observer";
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: "350px",
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    
+
     padding: 10,
     borderRadius: "5px",
     marginBottom: 10,
@@ -57,64 +58,77 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DepositDrawer(props) {
-  const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
-  const {t }= useTranslation()
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const { t } = useTranslation();
   const { open, setOpen } = props;
   const classes = useStyles();
   const [address, setAddress] = React.useState();
-  const {selectedLinkAccount }= React.useContext(AuthContext)
+  const { selectedLinkAccount } = React.useContext(AuthContext);
+  const { ref, inView } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(address?.a);
-    showToast("Sao chép thành công", "success")
+    showToast("Sao chép thành công", "success");
   };
 
   const onClose = () => {
     setOpen(false);
-    props?.openWalletPopup()
+    props?.openWalletPopup();
   };
 
-  const handlePostAddress= async ()=> { 
+  const handlePostAddress = async () => {
     try {
-        const response= await userApi.postUserExchangeLinkAccountAddress({}, selectedLinkAccount)
-        if(response?.data?.ok=== true) {
-            setAddress(response?.data?.d)
-        }
-        else {
-            showToast(response?.data?.m, "error")
-        }
+      const response = await userApi.postUserExchangeLinkAccountAddress(
+        {},
+        selectedLinkAccount
+      );
+      if (response?.data?.ok === true) {
+        setAddress(response?.data?.d);
+      } else {
+        showToast(response?.data?.m, "error");
+      }
     } catch (error) {
-        showToast(error?.response?.data?.m, "error")
+      showToast(error?.response?.data?.m, "error");
     }
-  }
+  };
 
   React.useEffect(() => {
-    (async () => {
-      try {
-        const response = await userApi.getUserExchangeLinkAccountAddress({}, selectedLinkAccount);
-        if (response?.data?.ok === true) {
-          setAddress(response?.data?.d);
-        }
-        else {
+    if (inView && selectedLinkAccount) {
+      (async () => {
+        try {
+          const response = await userApi.getUserExchangeLinkAccountAddress(
+            {},
+            selectedLinkAccount
+          );
+          if (response?.data?.ok === true) {
+            setAddress(response?.data?.d);
+          } else {
             showToast(response?.data?.m, "error");
+          }
+        } catch (error) {
+          showToast(error?.response?.data?.m, "error");
         }
-      } catch (error) {
-        showToast(error?.response?.data?.m, "error");
-      }
-    })();
-  }, [selectedLinkAccount]);
+      })();
+    }
+  }, [selectedLinkAccount, inView]);
 
   const DrawerList = (
-    <Box sx={{ width: downLg ? "100%" : 448 }} role="presentation">
+    <Box ref={ref} sx={{ width: downLg ? "100%" : 448 }} role="presentation">
       <Box className={classes.header} sx={{ padding: "24px 16px" }}>
         <Typography variant="h6">{t("transaction_wallet")}</Typography>
         <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>
       </Box>
-     <Divider />
+      <Divider />
       {address?.a === null && (
         <Box
-          sx={{ padding: "24px 16px", height: downLg ? "70vh" : "calc(100vh - 89px)" }}
+          sx={{
+            padding: "24px 16px",
+            height: downLg ? "70vh" : "calc(100vh - 89px)",
+          }}
           display={"flex"}
           flexDirection={"column"}
           justifyContent={"space-between"}
@@ -125,25 +139,30 @@ export default function DepositDrawer(props) {
       )}
       {address?.a !== null && (
         <Box
-          sx={{ padding: "24px 16px", height: downLg ? "70vh" : "calc(100vh - 89px)" }}
+          sx={{
+            padding: "24px 16px",
+            height: downLg ? "70vh" : "calc(100vh - 89px)",
+          }}
           display={"flex"}
           flexDirection={"column"}
           justifyContent={"space-between"}
-        > 
+        >
           <Box>
             <Typography variant="h6" align="left" fontWeight={600} gutterBottom>
               Nạp USDT (BEP20)
             </Typography>
 
             <Box className={classes.qrCode}>
-              <QRCode
-                alt="QR Code"
-                size={200}
-                value={address?.a}
-              />
+              <QRCode alt="QR Code" size={200} value={address?.a} />
             </Box>
 
-            <Box className={classes.addressBox} sx={{backgroundColor: theme=> isDark(theme) ? "#5e666f" : "#f5f5f5",}}>
+            <Box
+              className={classes.addressBox}
+              sx={{
+                backgroundColor: (theme) =>
+                  isDark(theme) ? "#5e666f" : "#f5f5f5",
+              }}
+            >
               <Typography className={classes.addressText}>
                 {address?.a}
               </Typography>
@@ -166,7 +185,7 @@ export default function DepositDrawer(props) {
                 className={classes.backButton}
                 onClick={onClose}
                 startIcon={<ArrowBackIosNewIcon />}
-                sx={{padding: "10px"}}
+                sx={{ padding: "10px" }}
               >
                 Quay lại
               </Button>
@@ -176,7 +195,7 @@ export default function DepositDrawer(props) {
                 color="primary"
                 onClick={handleCopyAddress}
                 className={classes.copyButton}
-                sx={{padding: "10px"}}
+                sx={{ padding: "10px" }}
               >
                 Sao Chép Địa Chỉ Ví
               </Button>
@@ -189,7 +208,12 @@ export default function DepositDrawer(props) {
 
   return (
     <div>
-      <Drawer open={open} onClose={onClose} anchor={downLg ? "bottom" : "right"} sx={{zIndex: ""}}>
+      <Drawer
+        open={open}
+        onClose={onClose}
+        anchor={downLg ? "bottom" : "right"}
+        sx={{ zIndex: "" }}
+      >
         {DrawerList}
       </Drawer>
     </div>

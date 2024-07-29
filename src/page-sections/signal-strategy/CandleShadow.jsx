@@ -297,7 +297,7 @@ const CandleShadow = ({
     if (selectedCandle && is_new === false) {
       setSelectedBall(selectedCandle?.betIndex);
       setSelectedGridBall(selectedCandle?.conditions);
-      setLongShort(selectedCandle?.betType=== "UP" ? "UP" : "DOWN")
+      setLongShort(selectedCandle?.betType=== "UP" ? "UP" : (selectedCandle?.betType=== "DOWN" ? "DOWN" : "NONE"))
     }
   }, [selectedCandle, inView, is_new]);
 
@@ -358,12 +358,13 @@ const CandleShadow = ({
                 onChange={(e) => setLongShort(e.target.value)}
                 sx={{
                   "& .MuiSelect-select": {
-                    color: longShort=== "UP" ? "#0caf60" : "#fd4f4f",
+                    color: longShort=== "UP" ? "#0caf60" : (longShort=== "DOWN" ? "#fd4f4f" : ""),
                   },
                 }}
               >
                 <MenuItem value="UP">Buy</MenuItem>
                 <MenuItem value="DOWN">Sell</MenuItem>
+                <MenuItem value="NONE">Skip</MenuItem>
               </Select>
             </FormControl>
             cho bóng số {selectedBall - 80}

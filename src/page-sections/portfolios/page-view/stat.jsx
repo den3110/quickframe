@@ -96,16 +96,8 @@ const StatPortfolio = (props) => {
       } else {
         try {
           const today = new Date();
-          const firstDayOfMonth = new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            1
-          );
-          const lastDayOfMonth = new Date(
-            today.getFullYear(),
-            today.getMonth() + 1,
-            0
-          );
+          const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+          const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
           const payload = {
             // id:sele
             botId: id,
@@ -234,7 +226,7 @@ const StatPortfolio = (props) => {
                       fontWeight={600}
                       sx={{ cursor: "pointer" }}
                     >
-                      Hôm nay
+                      {t("TODAY_statistic")}
                     </Box>
                     <Box
                       onClick={() => {
@@ -251,7 +243,7 @@ const StatPortfolio = (props) => {
                       fontWeight={600}
                       sx={{ cursor: "pointer" }}
                     >
-                      Tuần này
+                      {t("THIS_WEEK")}
                     </Box>
                     <Box
                       onClick={() => {
@@ -268,7 +260,7 @@ const StatPortfolio = (props) => {
                       fontWeight={600}
                       sx={{ cursor: "pointer" }}
                     >
-                      Tháng này
+                      {t("THIS_MONTH")}
                     </Box>
                   </Box>
                 </Box>
@@ -293,7 +285,7 @@ const StatPortfolio = (props) => {
                             fontSize={10}
                             fontWeight={600}
                           >
-                            Tổng lợi nhuận
+                            {t("total_profit")}
                           </Typography>
                           <Typography
                             variant="body1"
@@ -336,7 +328,7 @@ const StatPortfolio = (props) => {
                             {stat.win}/{stat.lose}
                           </Typography>
                           <Typography variant="body1" fontSize={10}>
-                            Win Rate:{" "}
+                            {t("rate_win")}:{" "}
                             {round2number(
                               (stat.win / (stat.win + stat.lose)) * 100
                             )}
@@ -402,7 +394,7 @@ const StatPortfolio = (props) => {
                   {/* Calendar Section */}
                   <Grid item xs={12}>
                     <Typography variant="h6" mb={2}>
-                      {t("Lịch Sử KLGD & Lợi Nhuận")}
+                      {t("Trade History & Profit")}
                     </Typography>
                     <Card>
                       <Paper className="akslkwagdad">
@@ -451,7 +443,7 @@ const StatPortfolio = (props) => {
                         fontWeight={600}
                         sx={{ cursor: "pointer" }}
                       >
-                        Hôm nay
+                        {t("TODAY_statistic")}
                       </Box>
                       <Box
                         onClick={() => {
@@ -478,7 +470,7 @@ const StatPortfolio = (props) => {
                         fontWeight={600}
                         sx={{ cursor: "pointer" }}
                       >
-                        Tuần này
+                        {t("THIS_WEEK")}
                       </Box>
                       <Box
                         onClick={() => {
@@ -505,7 +497,7 @@ const StatPortfolio = (props) => {
                         fontWeight={600}
                         sx={{ cursor: "pointer" }}
                       >
-                        Tháng này
+                        {t("THIS_MONTH")}
                       </Box>
                     </Box>
                   </Box>
@@ -530,7 +522,7 @@ const StatPortfolio = (props) => {
                               fontSize={10}
                               fontWeight={600}
                             >
-                              Tổng lợi nhuận
+                              {t("total_profit")}
                             </Typography>
                             <Typography
                               variant="body1"
@@ -573,7 +565,7 @@ const StatPortfolio = (props) => {
                               {statGlobal.win}/{statGlobal.lose}
                             </Typography>
                             <Typography variant="body1" fontSize={10}>
-                              Win Rate:{" "}
+                              {t("rate_win")}:{" "}
                               {round2number(
                                 (statGlobal.win / (statGlobal.win + statGlobal.lose)) * 100
                               )}
@@ -639,7 +631,7 @@ const StatPortfolio = (props) => {
                     {/* Calendar Section */}
                     <Grid item xs={12}>
                       <Typography variant="h6" mb={2}>
-                        {t("Lịch Sử KLGD & Lợi Nhuận")}
+                        {t("Trade History & Profit")}
                       </Typography>
                       <Card>
                         <Paper>

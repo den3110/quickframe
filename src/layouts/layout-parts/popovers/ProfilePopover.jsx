@@ -25,6 +25,7 @@ import { SettingsContext } from "contexts/settingsContext";
 import LanguagePopover from "./LanguagePopover";
 import UserlinkAccountPopover from "./UserlinkAccountPopover";
 import UserLinkAccountListDrawer from "../drawers/UserLinkAccountListDrawer";
+import { useTranslation } from "react-i18next";
 
 // STYLED COMPONENTS
 const StyledButtonBase = styled(ButtonBase)(({ theme }) => ({
@@ -50,6 +51,7 @@ const ProfilePopover = () => {
   const { linked } = useContext(ConnectExchangeContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const anchorRef = useRef(null);
+  const {t }= useTranslation()
   const navigate = useNavigate();
   const { settings, saveSettings } = useContext(SettingsContext);
   const [open, setOpen] = useState(false);
@@ -123,7 +125,7 @@ const ProfilePopover = () => {
             Set Status
           </StyledSmall> */}
           <StyledSmall onClick={handleMenuItem("/dashboard/profile")}>
-            Profile & Account
+            {t("Profile")} & {t("Account")}
           </StyledSmall>
           {downLg && (
             <StyledSmall onClick={() => {setOpen(false);setOpenDrawerListLinkAccount(true)}}>

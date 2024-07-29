@@ -3,9 +3,11 @@ import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
 import AuthContext from "contexts/AuthContext";
 import React, { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ActionBotType } from "type/ActionBotType";
 
 const RunningPlan = (props) => {
+  const {t }= useTranslation()
   const {setData, data, plan, dataState, changeState }= props
   const [isRunning, setIsRunning] = useState();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -43,7 +45,7 @@ const RunningPlan = (props) => {
         color={isRunning ? "success" : "primary"}
         sx={{ width: downLg ? "100%" : 100 }}
       >
-        {isRunning=== true ? "Đang chạy" : "Tạm ngưng"}
+        {isRunning=== true ? t("On going") : t("COOL_DOWN")}
       </Button>
       <Switch onChange={handleChangeIsRunning} checked={isRunning === true ? true : false} />
     </>

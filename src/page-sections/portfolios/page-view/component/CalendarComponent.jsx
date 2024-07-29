@@ -16,6 +16,7 @@ import CustomDaySlot from "./canlendarComponent/CusomDaySlot";
 import CustomToolbar from "./canlendarComponent/CustomToolbar";
 import CustomEvent from "./canlendarComponent/CustomEvent";
 import CustomDateHeader from "./canlendarComponent/CustomHeader";
+import { useTranslation } from "react-i18next";
 
 
 const localizer = momentLocalizer(moment);
@@ -24,6 +25,7 @@ const localizer = momentLocalizer(moment);
 
 
 const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
+  const {t }= useTranslation()
   const { walletMode } = useContext(SettingsContext);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [mode, setMode] = useState(true);
@@ -224,9 +226,9 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
           popup
           toolbar={false}
           messages={{
-            week: "Tuần",
-            day: "Ngày",
-            month: "Tháng",
+            week: t("week"),
+            day: t("date"),
+            month: t("Month"),
           }}
           date={currentDate}
           firstDayOfWeek={1}

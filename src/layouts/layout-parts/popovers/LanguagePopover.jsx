@@ -1,12 +1,6 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useRef, useState, useEffect } from "react";
 import { Box, IconButton, MenuItem, Popover, styled, Typography, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
-
-// ==============================================================
-
-// ==============================================================
-// LANGUAGE OPTIONS
-
 
 // STYLED COMPONENTS
 const IconWrapper = styled(Box)({
@@ -20,20 +14,33 @@ const IconWrapper = styled(Box)({
     objectFit: "cover"
   }
 });
+
 const LanguagePopover = () => {
-  const {t }= useTranslation()
+  const { t, i18n } = useTranslation();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const {
-    i18n
-  } = useTranslation();
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleChangeLanguage = language => {
+
+  const handleChangeLanguage = (language) => {
     i18n.changeLanguage(language);
+    localStorage.setItem('language', language);
     setOpen(false);
   };
+
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('language');
+    const defaultLanguage = 'vi';
+    if (storedLanguage && (storedLanguage === 'en' || storedLanguage === 'vi')) {
+      i18n.changeLanguage(storedLanguage);
+    } else {
+      i18n.changeLanguage(defaultLanguage);
+      localStorage.setItem('language', defaultLanguage);
+    }
+  }, [i18n]);
+
   const languageOptions = {
     en: {
       icon: "/static/flags/usa-round.png",
@@ -44,8 +51,11 @@ const LanguagePopover = () => {
       label: t("Vietnamese")
     }
   };
+
   const selectedLanguage = languageOptions[i18n.language];
-  return <Fragment>
+
+  return (
+    <Fragment>
       <IconButton onClick={handleOpen} ref={anchorRef}>
         <IconWrapper>
           <img alt={selectedLanguage.label} src={selectedLanguage.icon} />
@@ -53,19 +63,30 @@ const LanguagePopover = () => {
         </IconWrapper>
       </IconButton>
 
-      <Popover keepMounted open={open} onClose={handleClose} anchorEl={anchorRef.current} anchorOrigin={{
-      horizontal: "center",
-      vertical: "bottom"
-    }} PaperProps={{
-      sx: {
-        width: 110,
-        py: 1
-      }
-    }}>
-        {Object.keys(languageOptions).map(language => <MenuItem key={languageOptions[language].label} onClick={() => handleChangeLanguage(language)}>
+      <Popover
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        anchorEl={anchorRef.current}
+        anchorOrigin={{
+          horizontal: "center",
+          vertical: "bottom"
+        }}
+        PaperProps={{
+          sx: {
+            width: 110,
+            py: 1
+          }
+        }}
+      >
+        {Object.keys(languageOptions).map((language) => (
+          <MenuItem key={languageOptions[language].label} onClick={() => handleChangeLanguage(language)}>
             {languageOptions[language].label}
-          </MenuItem>)}
+          </MenuItem>
+        ))}
       </Popover>
-    </Fragment>;
+    </Fragment>
+  );
 };
+
 export default LanguagePopover;

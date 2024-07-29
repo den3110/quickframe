@@ -221,22 +221,22 @@ const Statistics = () => {
       <Card variant="outlined">
         <CardContent>
           <Box>
-            <Typography variant="h6">Thống kê</Typography>
+            <Typography variant="h6">{t("statics")}</Typography>
             <Grid container spacing={2}>
               <StatisticCard
-                title="Thắng/Thua hôm nay"
+                title={t("Today W/L")}
                 value={renderWinLoseRate(true)}
                 percentage={`${renderWinLoseRate()}% Tỉ lệ thắng`}
               />
               <StatisticCard
-                title="Lợi nhuận hôm nay"
+                title={t("Today Profit")}
                 value={renderDayProfit()}
-                percentage="Lợi nhuận hôm nay"
+                percentage={t("Today Profit")}
                 hidden={true}
                 color={renderColorDayProfit()}
               />
               <StatisticCard
-                title="KLGD 7N"
+                title={t("7-days volume")}
                 value={renderWeekVolume()}
                 color={renderColorWeekProfitVolume()}
               />

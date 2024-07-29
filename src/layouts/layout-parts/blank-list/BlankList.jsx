@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button, Typography, Link } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EmptyPage = ({ title, subTitle, titleButton, actionClick, disableButton }) => {
   const classes = useStyles();
+  const {t} =useTranslation()
 
   return (
     <Box className={classes.container}>
@@ -68,7 +70,7 @@ const EmptyPage = ({ title, subTitle, titleButton, actionClick, disableButton })
               <Box component="span" className={classes.linkIcon}>
                 +
               </Box>
-              Sao chép gói đầu tư được chia sẻ
+              {t("Copy a share plan")}
             </Typography>
           </Link>
         </>

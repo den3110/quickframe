@@ -153,7 +153,7 @@ export const resources = {
       exchange_wallet: "Exchange wallet",
       reward_wallet: "Reward wallet",
       account_not_logged_in: "Account not logged in",
-      month: "Month",
+      Month: "Month",
       copied: "Copied",
       deposit: "Deposit",
       withdraw: "Withdraw",
@@ -481,6 +481,7 @@ export const resources = {
       donate_bot: "Donate bot configuration",
       the_donated_configuration_can_only_edit:
         "The donated configuration can only edit capital management",
+        "Click the button below to initiate the password change process. You will need to verify your email and set a new password.": "Click the button below to initiate the password change process. You will need to verify your email and set a new password.",
       the_donated_configuration_can_not_edit:
         "The donated configuration can not edit",
       click_edit_configuration_to_finish:
@@ -1136,6 +1137,7 @@ export const resources = {
       "Didn’t receive a confirmation email?":
         "Didn’t receive a confirmation email?",
       "Disconnect Now!": "Disconnect Now!",
+      "Order entry time": "Order entry time",
       "Discover investment opportunities and multiply your profits by developing an investment plan today.":
         "Discover investment opportunities and multiply your profits by developing an investment plan today.",
       "Dispute Resolution": "Dispute Resolution",
@@ -1277,6 +1279,7 @@ export const resources = {
       "Enter plan name...": "Enter plan name...",
       "Enter strategy name": "Enter strategy name",
       "Enter withdrawal amount": "Enter withdrawal amount",
+      week: "Week",
       "Enter your Exchange URL below for verification.":
         "Enter your Exchange URL below for verification.",
       "Enter your email, choose your password, nickname and your promoter’s affiliate ID code (optional).":
@@ -1626,6 +1629,8 @@ export const resources = {
       "High Sentiment": "High Sentiment",
       "Highest win rate": "Highest win rate",
       "History Status": "Status History",
+      "Show all account": "Show all account",
+      "Select all": "Select all",
       "How To Activate Manual Trading": "How To Activate Manual Trading",
       "How To Activate Manual Trading description":
         "In this step-by-step tutorial, we'll guide you through the activation process and provide valuable tips to optimize your manual trading experience on Quickinvest. By following these steps, you'll gain the confidence and knowledge to execute trades efficiently and effectively.",
@@ -3675,6 +3680,7 @@ export const resources = {
       history_copy_trade: "L.sử Copy Trade",
       history_my_trade: "L.sử Trade",
       time: "Thời gian",
+      "Order entry time": "Thời gian vào lệnh",
       bet_type: "Lệnh vào",
       result: "Kết quả",
       bet_amount: "Giá trị ($)",
@@ -3746,6 +3752,7 @@ export const resources = {
       this_is_required_information: "Đây là thông tin bắt buộc",
       orders_value: "Giá trị vào lệnh",
       capital_management: "Quản lý vốn",
+      "Show all account": "Hiển thị tất cả tài khoản",
       martingale: "Martingale",
       fibo1step: "Fibo 1 Step",
       fibo2step: "Fibo 2 Step",
@@ -4052,6 +4059,7 @@ export const resources = {
       are_u_want_to_del_config: "Bạn có chắc chắn muốn xoá cấu hình ?",
       are_u_want_to_del_history_config:
         "Bạn có chắc chắn muốn xoá lịch sử cấu hình ?",
+        // delete: "Xoá",
       are_u_want_to_del_method: "Bạn có chắc chắn muốn xoá phương pháp ?",
       can_find_log_over_1000: "Không thể tìm lớn hơn 1000 phiên",
       "captcha-email": "Hệ thống captcha đang bận, vui lòng báo với Support",
@@ -4662,6 +4670,7 @@ export const resources = {
         "Dễ dàng chia sẻ gói đầu tư hoàn hảo của bạn!",
       "Easy way to share your superb plan! ":
         "Dễ dàng chia sẻ gói đầu tư hoàn hảo của bạn!",
+      "Select all": "Chọn tất cả",
       "Easy way to share your superb strategy!":
         "Dễ dàng chia sẻ chiến lược hoàn hảo của bạn!",
       Edit: "Chỉnh sửa",
@@ -5165,7 +5174,7 @@ export const resources = {
       "Invalid data": "Dữ liệu không hợp lệ",
       "Invest confidently with Quickinvest":
         "Hãy tự tin đầu tư với Quickinvest <span class='text-success'>rồi theo dõi lợi nhuận của bạn tăng lên.</span>",
-      Invested: "Khoản đầu tư",
+      Invested: "Ngân sách đầu tư",
       "Invested Amount": "Tiền vốn",
       "Invested Amt": "Khoản đầu tư",
       "Investment Name": "Tên gói đầu tư",
@@ -6226,6 +6235,7 @@ export const resources = {
       "This strategy will be deleted immediately. You can’t undo this action.":
         "Chiến lược này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành động này.",
       "This week": "Tuần này",
+      week: "Tuần",
       "Thriving to provide the best possible trading experience to all traders, Quickinvest is owing unique features, and effective money-making strategies.":
         "Hướng đến cung cấp trải nghiệm giao dịch tốt nhất cho tất cả các nhà giao dịch, Quickinvest sở hữu tính năng độc đáo và chiến lược kiếm tiền hiệu quả.",
       Thursday: "Thứ năm",
@@ -6714,6 +6724,7 @@ export const resources = {
       "“{{botName}}” use method: {{methodName}}":
         "“{{botName}}” sử dụng phương pháp: {{methodName}}",
       "🌟 Go to New Version": "🌟 Chuyển sang phiên bản mới",
+      "Click the button below to initiate the password change process. You will need to verify your email and set a new password.": "Nhấp vào nút bên dưới để bắt đầu quá trình thay đổi mật khẩu. Bạn sẽ cần phải xác minh email của mình và đặt mật khẩu mới."
     },
   },
 };

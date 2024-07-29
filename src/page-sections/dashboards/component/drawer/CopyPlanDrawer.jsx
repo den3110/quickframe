@@ -20,6 +20,7 @@ import numberWithCommas from "util/numberSeparatorThousand";
 import AuthContext from "contexts/AuthContext";
 import CopySuccessPopup from "../popup/CopySuccessPopup";
 import NewPlanDrawer from "page-sections/portfolios/drawer/NewPlanDrawer";
+import { useTranslation } from "react-i18next";
 
 const CopyPlanDrawer = ({
   selectedPlan = { copyCode: null },
@@ -43,6 +44,7 @@ const CopyPlanDrawer = ({
   const [isEdit, setIsEdit] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [loadingSubmit, setLoadingSubmit]= useState()
+  const {t} = useTranslation()
   const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
@@ -156,15 +158,14 @@ const CopyPlanDrawer = ({
                   color="success.main"
                   gutterBottom
                 >
-                  Easy to set up plan - Easy to multiply earnings
+                  {t("DrawerCopyPlan_title")}
                 </Typography>
                 <Typography
                   textAlign={"center"}
                   variant="body2"
                   color="textSecondary"
                 >
-                  Simply save and you’ll have an excellent investing strategy
-                  right away.
+                  {t("DrawerCopyPlan_subtitle")}
                 </Typography>
                 <Box mt={4} p={3} border="1px solid #e0e0e0" borderRadius="8px">
                   <Typography fontWeight={600} variant="h6" gutterBottom>
@@ -172,20 +173,20 @@ const CopyPlanDrawer = ({
                   </Typography>
                   <Divider />
                   <Box display="flex" justifyContent="space-between" my={2}>
-                    <Typography fontSize={12}>Allocated Budget</Typography>
+                    <Typography fontSize={12}>{t("Allocated Budget")}</Typography>
                     <Typography variant="h6">
                       {numberWithCommas(formatCurrency(data?.budget_amount))}
                     </Typography>
                   </Box>
                   <Divider />
                   <Box display="flex" justifyContent="space-between" my={2}>
-                    <Typography fontSize={12}>Account Type</Typography>
+                    <Typography fontSize={12}>{t("account_type")}</Typography>
                     <Typography fontSize={14} fontWeight={600}>
                       {data?.accountType}
                     </Typography>
                   </Box>
                   <Box display="flex" justifyContent="space-between" my={2}>
-                    <Typography fontSize={12}>Take Profit/Stoploss</Typography>
+                    <Typography fontSize={12}>{t("Take Profit/Stoploss")}</Typography>
                     <Typography fontSize={14} fontWeight={600}>
                       {formatCurrency(data?.take_profit_target)}/
                       {formatCurrency(data?.stop_loss_target)}
@@ -193,19 +194,19 @@ const CopyPlanDrawer = ({
                   </Box>
                   <Divider />
                   <Box display="flex" justifyContent="space-between" my={2}>
-                    <Typography fontSize={12}>Budget Strategy</Typography>
+                    <Typography fontSize={12}>{t("budget_strategy")}</Typography>
                     <Typography fontSize={14} fontWeight={600}>
                       {BudgetStrategyTypeTitle[data?.budget_strategy_type]}
                     </Typography>
                   </Box>
                   <Box display="flex" justifyContent="space-between" my={2}>
-                    <Typography fontSize={12}>Signal Strategy</Typography>
+                    <Typography fontSize={12}>{t("signal_strategy")}</Typography>
                     <Typography fontSize={14} fontWeight={600}>
                       {AutoTypesTitleValue[data?.auto_type]}
                     </Typography>
                   </Box>
                   <Box display="flex" justifyContent="space-between" my={2}>
-                    <Typography fontSize={12}>Base Amount</Typography>
+                    <Typography fontSize={12}>{t("Base Amount")}</Typography>
                     <Typography fontSize={14} fontWeight={600}>
                       {formatCurrency(data?.margin_dense)}
                     </Typography>
@@ -218,7 +219,7 @@ const CopyPlanDrawer = ({
                     color="success"
                     onClick={handleSubmit}
                   >
-                    Confirm & Save
+                    {t("Confirm & Save")}
                   </Button>
                 </Box>
               </Box>

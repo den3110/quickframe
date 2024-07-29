@@ -7,8 +7,11 @@ import { useContext } from "react";
 import formatCurrency from "util/formatCurrency";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 const InfoCard = ({ title, value, tooltip, setIsHidden, isHidden }) => {
+  const {t }= useTranslation()
+
     return (
       <Card variant="outlined" style={{ borderRadius: 16 }}>
         <Box sx={{ padding: "8px 12px" }}>
@@ -83,19 +86,20 @@ const CustomToolbar = ({
     setIsHiddenProfit,
     setIsHiddenVolume,
   }) => {
+    const {t }= useTranslation()
     const monthNames = [
-        "Tháng 1",
-        "Tháng 2",
-        "Tháng 3",
-        "Tháng 4",
-        "Tháng 5",
-        "Tháng 6",
-        "Tháng 7",
-        "Tháng 8",
-        "Tháng 9",
-        "Tháng 10",
-        "Tháng 11",
-        "Tháng 12",
+        `${t("Month")} 1`,
+        `${t("Month")} 2`,
+        `${t("Month")} 3`,
+        `${t("Month")} 4`,
+        `${t("Month")} 5`,
+        `${t("Month")} 6`,
+        `${t("Month")} 7`,
+        `${t("Month")} 8`,
+        `${t("Month")} 9`,
+        `${t("Month")} 10`,
+        `${t("Month")} 11`,
+        `${t("Month")} 12`,
       ];
       
     const theme = useTheme();
@@ -155,7 +159,7 @@ const CustomToolbar = ({
         <Box>
           <Box>
             <Typography variant="body1" fontSize={14}>
-              Thời gian
+              {t("time")}
             </Typography>
           </Box>
           <Box
@@ -172,6 +176,7 @@ const CustomToolbar = ({
             </IconButton>
             <Typography variant="h5" fontWeight={600} color={"success.main"}>
               {label}
+              {console.log(label)}
             </Typography>
             <IconButton onClick={() => onNavigate("NEXT")}>
               <ChevronRight />
@@ -234,20 +239,20 @@ const CustomToolbar = ({
               <Grid container spacing={1}>
                 <Grid item xs={6}>
                   <InfoCard
-                    title="Tổng lợi nhuận"
+                    title={t("total_profit")}
                     value={renderTotalProfit()}
                     isHidden={isHiddenProfit}
                     setIsHidden={setIsHiddenProfit}
-                    tooltip={"Tổng lợi nhuận"}
+                    tooltip={t("total_profit")}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <InfoCard
-                    title="Tổng KLGD"
+                    title={t("Total Vol")}
                     value={renderTotalVolume()}
                     isHidden={isHiddenVolume}
                     setIsHidden={setIsHiddenVolume}
-                    tooltip={"Tổng KLGD"}
+                    tooltip={t("Total Vol")}
                   />
                 </Grid>
               </Grid>

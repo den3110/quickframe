@@ -26,6 +26,7 @@ import ShareArchievement from "../dialog/ShareArchievement";
 import AddIcon from "@mui/icons-material/Add";
 import { SignalFeatureTypes } from "type/SignalFeatureTypes";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
+import { useTranslation } from "react-i18next";
 
 const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -43,6 +44,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const {t }= useTranslation()
   const open = Boolean(anchorEl);
   const menuOpen = Boolean(menuAnchorEl);
 
@@ -169,7 +171,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
                   style={{ marginRight: "8px" }}
                   onClick={() => handleChangeIsRunning("PAUSE")}
                 >
-                  {downLg ? "" : "Tạm ngưng"}
+                  {downLg ? "" : t("COOL_DOWN")}
                 </Button>
               )}
               {isRunning === true && isPause && (
@@ -223,7 +225,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
               style={{ marginRight: "8px" }}
               onClick={() => handleNewPlan()}
             >
-              {downLg ? "" : "Tạo plan"}
+              {downLg ? "" : t("Create Plan")}
             </Button>
           )}
         </Box>
@@ -253,7 +255,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
               // isEditSingle=
             }}
           >
-            Chỉnh sửa gói đầu tư
+            {t("Edit Plan")}
           </MenuItem>
           <MenuItem
             onClick={(e) => {
@@ -262,7 +264,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
               setIsShareArchievement(true);
             }}
           >
-            Khoe thành tích
+            {t("Share Media")}
           </MenuItem>
           <MenuItem
             onClick={async (e) => {
@@ -270,9 +272,9 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
               await resetPnlToday();
             }}
           >
-            Đặt lại PnL hôm nay
+            {t("Reset today P/L")}
           </MenuItem>
-          <MenuItem onClick={handleSubMenuClick}>Xóa gói đầu tư</MenuItem>
+          <MenuItem onClick={handleSubMenuClick}>{t("Delete Plan")}</MenuItem>
         </Box>
       </Popover>
       <NewPlanDrawer

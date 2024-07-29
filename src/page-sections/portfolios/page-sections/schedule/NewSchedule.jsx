@@ -23,6 +23,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { showToast } from "components/toast/toast";
 import portfolioApi from "api/portfolios/portfolioApi";
 import moment from "moment-timezone";
+import { useTranslation } from "react-i18next";
+import { useInView } from "react-intersection-observer";
 
 export default function NewSchedule({
   open,
@@ -34,9 +36,14 @@ export default function NewSchedule({
   setIsEdit,
   setChange
 }) {
+  const {t }= useTranslation()
   const [startTime, setStartTime] = useState(() => {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+  });
+  const { ref, inView } = useInView({
+    /* Optional options */
+    threshold: 0,
   });
 
   const [endTime, setEndTime] = useState(() => {
@@ -119,21 +126,23 @@ export default function NewSchedule({
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await portfolioApi.userBotList();
-        if (response?.data?.ok === true) {
-          setDataBotList(response?.data?.d);
-          setFirstBot(response?.data?.d?.[0]?._id);
-          setPackages([response?.data?.d?.[0]?._id]);
-        } else if (response?.data?.ok === false) {
-          showToast(response?.data?.m);
+    if(inView) {
+      (async () => {
+        try {
+          const response = await portfolioApi.userBotList();
+          if (response?.data?.ok === true) {
+            setDataBotList(response?.data?.d);
+            setFirstBot(response?.data?.d?.[0]?._id);
+            setPackages([response?.data?.d?.[0]?._id]);
+          } else if (response?.data?.ok === false) {
+            showToast(response?.data?.m);
+          }
+        } catch (error) {
+          showToast(error?.response?.data?.m, "error");
         }
-      } catch (error) {
-        showToast(error?.response?.data?.m, "error");
-      }
-    })();
-  }, []);
+      })();
+    }
+  }, [inView]);
 
   useEffect(() => {
     const now = new Date();
@@ -208,6 +217,7 @@ export default function NewSchedule({
       onClose={handleClose}
     >
       <Box
+        ref={ref}
         sx={{
           width: downLg ? "100%" : 850,
           padding: 2,
@@ -223,7 +233,7 @@ export default function NewSchedule({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="h6">Thiết lập hẹn giờ</Typography>
+            <Typography variant="h6">{t("Set up timer configuration")}</Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
@@ -231,7 +241,7 @@ export default function NewSchedule({
           <Divider sx={{ marginY: 2 }} />
           <Box>
             <TextField
-              label="Tên hẹn giờ"
+              label={t("Timer name")}
               variant="outlined"
               fullWidth
               margin="normal"
@@ -243,7 +253,7 @@ export default function NewSchedule({
                 <Box sx={{ display: "flex", gap: 1, width: "100%" }}>
                   <Box flex={1}>
                     <TimePicker
-                      label="Thời gian bắt đầu (UTC+7)"
+                      label={`${t("Start time")} (UTC+7)`}
                       value={startTime}
                       onChange={setStartTime}
                       renderInput={(params) => (
@@ -268,7 +278,7 @@ export default function NewSchedule({
                       <Typography variant="body2">Disable</Typography>
                     </Box>
                     <TimePicker
-                      label="Thời gian ngưng (UTC+7)"
+                      label={`${t("Pause time")} (UTC+7)`}
                       value={endTime}
                       onChange={setEndTime}
                       renderInput={(params) => (
@@ -282,12 +292,12 @@ export default function NewSchedule({
               </LocalizationProvider>
             </Box>
             <FormControl fullWidth margin="normal">
-              <InputLabel>Chọn gói</InputLabel>
+              <InputLabel>{t("Select Plans")}</InputLabel>
               <Select
                 multiple
                 value={packages}
                 onChange={handlePackageChange}
-                label="Chọn gói"
+                label={t("Select Plans")}
                 renderValue={(selected) => (
                   <Box
                     sx={{
@@ -341,7 +351,7 @@ export default function NewSchedule({
             onClick={handleAdd}
             disabled={isButtonDisabled}
           >
-            {isEdit === true ? "Sửa cấu hình" : "Thêm cấu hình"}
+            {isEdit === true ? t("edit_configuration") : t("add_configuration")}
           </Button>
         </Box>
       </Box>

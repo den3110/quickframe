@@ -11,10 +11,12 @@ import moment from "moment";
 import DownloadIcon from "icons/DownloadIcon";
 // import round2number from "util/round2number";
 import formatCurrency from "util/formatCurrency";
+import { useTranslation } from "react-i18next";
 
 const ShareArchievement = forwardRef(({ open, handleClose, selectedPlan }, canvasRef) => {
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const [count, setCount] = useState(1);
+    const {t }= useTranslation()
     const handleDownload = () => {
       if (canvasRef.current) {
         const canvas = canvasRef.current;
@@ -218,7 +220,7 @@ const ShareArchievement = forwardRef(({ open, handleClose, selectedPlan }, canva
               startIcon={<DownloadIcon />}
               size={downLg ? "small" : "large"}
             >
-              Tải về
+              {t("Download")}
             </Button>
           </div>
         </Box>

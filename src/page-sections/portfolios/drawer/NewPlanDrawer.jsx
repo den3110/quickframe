@@ -30,6 +30,7 @@ import {
   Container,
   CircularProgress,
   Divider,
+  Skeleton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
@@ -52,6 +53,7 @@ import userApi from "api/user/userApi";
 import { constant } from "constant/constant";
 import Backdrop from "components/backdrop/Backdrop";
 import { useTranslation } from "react-i18next";
+import PortfoliosContext from "contexts/PortfoliosContext";
 
 const NewPlanDrawer = ({
   open,
@@ -73,11 +75,12 @@ const NewPlanDrawer = ({
     threshold: 0,
   });
   const { t } = useTranslation();
-  const { selectedLinkAccount } = useContext(AuthContext);
+  const { selectedLinkAccount, userLinkAccountList, dataSelectedLinkAccount } = useContext(AuthContext);
   const [idPlan, setIdPlan] = useState();
   const { setChange } = useContext(GlobalContext);
   const { decodedData } = useContext(JwtContext);
   const { walletMode } = useContext(SettingsContext);
+  const {data }= useContext(PortfoliosContext)
   const [step, setStep] = useState(1);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
@@ -538,53 +541,59 @@ const NewPlanDrawer = ({
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const response1 = await budgetStrategyApi.userBudgetStrategyList();
-        const response2 = await signalStrategyApi.userBudgetSignalList();
-        const response3 = await signalStrategyApi.userBudgetTelegramSignal();
-        const response4 = await userApi.getUserLinkAccountList();
-        const response5= await portfolioApi.userBotList({params: {type: "DEMO"}})
-        const response6= await portfolioApi.userBotList({params: {type: "LIVE"}})
-        if (response1?.data?.ok === true) {
-          setBudgetStrategy(response1?.data?.d?.[0]?._id);
-          setDataBudgetStrategy(response1?.data?.d);
-          setDataBudgetStrategyDefault(response1?.data?.d);
+    if(inView) {
+      (async () => {
+        try {
+          setLoading(true);
+          const response1 = await budgetStrategyApi.userBudgetStrategyList();
+          const response2 = await signalStrategyApi.userBudgetSignalList();
+          const response3 = await signalStrategyApi.userBudgetTelegramSignal();
+          // const response4 = await userApi.getUserLinkAccountList();
+          if (response1?.data?.ok === true) {
+            setBudgetStrategy(response1?.data?.d?.[0]?._id);
+            setDataBudgetStrategy(response1?.data?.d);
+            setDataBudgetStrategyDefault(response1?.data?.d);
+          }
+          if (response2?.data?.ok === true) {
+            setSignalStrategy(response2?.data?.d?.[0]?._id);
+            setDataSignalStrategy(response2?.data?.d);
+          }
+          if (response3?.data?.ok === true) {
+            setSignalStrategy(response2?.data?.d?.[0]?._id);
+            setDataSignalStrategyTelegramSignal(response3?.data?.d);
+          } 
+        } catch (error) {
+        } finally {
+          setLoading(false);
         }
-        if (response2?.data?.ok === true) {
-          setSignalStrategy(response2?.data?.d?.[0]?._id);
-          setDataSignalStrategy(response2?.data?.d);
-        }
-        if (response3?.data?.ok === true) {
-          setSignalStrategy(response2?.data?.d?.[0]?._id);
-          setDataSignalStrategyTelegramSignal(response3?.data?.d);
-        }
-        if (response4?.data?.ok === true) {
-          setInitLinkAccountId(
-            response4?.data?.d?.filter(
-              (item) =>
-                item?.isLogin === true && item?._id === selectedLinkAccount
-            )?.[0]?._id
-          );
-          setLinkAccountId(
-            response4?.data?.d?.filter((item) => item?.isLogin === true)?.[0]
-              ?._id
-          );
-          setUserLinkAccountListState(
-            response4?.data?.d?.filter((item) => item?.isLogin === true)
-          );
-        }
-        if(response5?.data?.ok=== true && response6?.data?.ok=== true) {
-          setInitBotId(response5?.data?.d?.[0]?._id)
-          setBotList(response5?.data?.d?.concat(response6?.data?.d))
-        }
-      } catch (error) {
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [isEdit, selectedLinkAccount]);
+      })();
+    }
+  }, [isEdit, selectedLinkAccount, inView]);
+
+  useEffect(()=> {
+    try {
+      setInitLinkAccountId(
+        userLinkAccountList?.filter(
+          (item) =>
+            item?.isLogin === true && item?._id === selectedLinkAccount
+        )?.[0]?._id
+      );
+      setLinkAccountId(
+        userLinkAccountList?.filter((item) => item?.isLogin === true)?.[0]
+          ?._id
+      );
+      setUserLinkAccountListState(
+        userLinkAccountList?.filter((item) => item?.isLogin === true)
+      );
+    } catch (error) {
+      console.log(error)
+    }
+  }, [userLinkAccountList, selectedLinkAccount])
+
+  useEffect(()=> {
+    setInitBotId(data?.[0]?._id)
+    setBotList(data)
+  }, [data])
 
   useEffect(() => {
     if (selectedTab === "Telegram Signal") {
@@ -858,7 +867,7 @@ const NewPlanDrawer = ({
                       alignItems: "center",
                     }}
                   >
-                    Bước 1 : Thông tin gói đầu tư
+                    {t("Step 1: Plan profile")}
                     <Typography
                       color={
                         walletMode ? theme.palette.success.main : "primary"
@@ -877,10 +886,10 @@ const NewPlanDrawer = ({
               </AppBar>
 
               <Box mt={1}>
-                <Typography variant="subtitle1">Tên gói</Typography>
+                <Typography variant="subtitle1">{t("Plan name")}</Typography>
                 <TextField
                   fullWidth
-                  placeholder="Nhập tên gói (VD : Mua xe, mua nhà)..."
+                  placeholder={`${t("Enter plan name")} (VD : Mua xe, mua nhà)...`}
                   required
                   margin="normal"
                   value={planName}
@@ -900,7 +909,7 @@ const NewPlanDrawer = ({
                     alignItems="center"
                   >
                     <Typography variant="subtitle1">
-                      Ngân sách đầu tư
+                      {t("Invested")}
                     </Typography>
                     <Box ml={2} display="flex" alignItems="center">
                       <Button
@@ -965,7 +974,7 @@ const NewPlanDrawer = ({
                       mt={2}
                     >
                       <Typography variant="subtitle1">
-                        Thời gian vào lệnh
+                        {t("Order entry time")}
                       </Typography>
                       <Box ml={2} display="flex" alignItems="center">
                         <Button
@@ -1030,7 +1039,7 @@ const NewPlanDrawer = ({
                 <AppBar position="static" color="default">
                   <Toolbar>
                     <Typography variant="h6" style={{ flexGrow: 1 }}>
-                      Bước 2 : Thiết lập gói đầu tư
+                      {t("Step 2: Setup your plan")}
                     </Typography>
                   </Toolbar>
                 </AppBar>
@@ -1088,6 +1097,7 @@ const NewPlanDrawer = ({
                     {t("linked_account")}
                   </Typography>
                   <FormControl variant="outlined" fullWidth margin="normal">
+                    {loading=== false && 
                     <Select
                       value={linkAccountId}
                       onChange={(e) => {
@@ -1157,10 +1167,13 @@ const NewPlanDrawer = ({
                           </MenuItem>
                         ))}
                     </Select>
+                    }
+                    {loading=== true && 
+                    <Skeleton height={56} />}
                   </FormControl>
                 </Box>
                 <Box className="akaskwas" flex={1}>
-                  <Typography variant="subtitle1">Loại tài khoản</Typography>
+                  <Typography variant="subtitle1">{t("account_type")}</Typography>
                   <FormControl variant="outlined" fullWidth margin="normal">
                     <Select
                       value={accountType}
@@ -1231,7 +1244,7 @@ const NewPlanDrawer = ({
                   </>
                 )}
                 <Box sx={{ width: "100%" }} mt={2}>
-                  <Typography variant="subtitle1">Hệ số vào lệnh</Typography>
+                  <Typography variant="subtitle1">{t("Base Amount")}</Typography>
                   <Box mt={2} display="flex" alignItems="center" height={56}>
                     <Button
                       variant="contained"
@@ -1296,7 +1309,7 @@ const NewPlanDrawer = ({
                     <>
                       {" "}
                       <Box mt={1}>
-                        <Typography variant="subtitle1">Chọn Bot</Typography>
+                        <Typography variant="subtitle1">{t("Select Bot...")}</Typography>
                         <FormControl
                           variant="outlined"
                           fullWidth
@@ -1373,18 +1386,22 @@ const NewPlanDrawer = ({
                       selectedTab === "Telegram Signal") && (
                       <Box sx={{ width: "100%" }} fullWidth>
                         <Typography variant="subtitle1">
-                          Chiến lược vốn*
+                         {t("budget_strategy")}*
                         </Typography>
                         <FormControl
                           variant="outlined"
                           fullWidth
                           margin="normal"
                         >
+                          {loading=== true && 
+                          <Skeleton animation="wave" sx={{height: 56}} />}
+                          {loading=== false &&
                           <Select
                             value={budgetStrategy}
                             onChange={(e) => setBudgetStrategy(e.target.value)}
                             renderValue={(value) => (
-                              <>
+                              <> 
+                              {console.log(dataBudgetStrategy)}
                                 {loading === true && <>Loading...</>}
                                 {loading === false &&
                                   dataBudgetStrategy?.find(
@@ -1394,13 +1411,14 @@ const NewPlanDrawer = ({
                             )}
                             size="medium"
                           >
-                            {dataBudgetStrategy?.map((item, key) => (
+                            {loading === false && dataBudgetStrategy?.map((item, key) => (
                               <MenuItem key={key} value={item?._id}>
                                 {item?.name}
                               </MenuItem>
                             ))}
                             {/* Thêm các tùy chọn khác nếu cần */}
                           </Select>
+                          }
                         </FormControl>
                       </Box>
                     )}
@@ -1412,32 +1430,118 @@ const NewPlanDrawer = ({
                             "Leader username*"}
                           {selectedTab === "Telegram Signal" && "Tín hiệu*"}
                         </Typography>
-                        {selectedTab === "Bot AI" && (
-                          <FormControl
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                          >
-                            {featureType ===
-                            SignalFeatureTypes.SINGLE_METHOD ? (
-                              <>
+                        <>
+                            {loading=== false && <>
+                              {selectedTab === "Bot AI" && (
+                            <FormControl
+                              variant="outlined"
+                              fullWidth
+                              margin="normal"
+                            >
+                              {featureType ===
+                              SignalFeatureTypes.SINGLE_METHOD ? (
+                                <>
+                                  <Select
+                                    value={signalStrategy}
+                                    onChange={(e) =>
+                                      setSignalStrategy(e.target.value)
+                                    }
+                                    size="medium"
+                                  >
+                                    {dataSignalStrategy?.map((item, key) => (
+                                      <MenuItem key={key} value={item?._id}>
+                                        {item?.name}
+                                      </MenuItem>
+                                    ))}
+                                  </Select>
+                                </>
+                              ) : (
+                                <>
+                                  <Select
+                                    multiple
+                                    value={arraySignalStrategy}
+                                    onChange={(e) =>
+                                      setArraySignalStrategy(e.target.value)
+                                    }
+                                    size="medium"
+                                    renderValue={(selected) => (
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          flexWrap: "wrap",
+                                          gap: 0.5,
+                                        }}
+                                      >
+                                        {selected.map((value) => (
+                                          <Chip
+                                            key={value}
+                                            label={
+                                              dataSignalStrategy.find(
+                                                (item) => item._id === value
+                                              )?.name
+                                            }
+                                          />
+                                        ))}
+                                      </Box>
+                                    )}
+                                  >
+                                    {dataSignalStrategy?.map((item, key) => (
+                                      <MenuItem key={key} value={item?._id}>
+                                        <Checkbox
+                                          checked={
+                                            arraySignalStrategy.indexOf(
+                                              item._id
+                                            ) > -1
+                                          }
+                                        />
+                                        <ListItemText primary={item.name} />
+                                      </MenuItem>
+                                    ))}
+                                  </Select>
+                                </>
+                              )}
+                            </FormControl>
+                          )}
+                          {/*  */}
+                          {selectedTab === "Follow Leader" && (
+                            <Box sx={{ width: "100%" }} mt={2}>
+                              <MuiChipsInput
+                                value={arraySignalStrategy}
+                                onChange={(value) =>
+                                  setArraySignalStrategy(value)
+                                }
+                                placeholder={t("Press enter to add...")}
+                                sx={{ width: "100%" }}
+                                size={"medium"}
+                              />
+                            </Box>
+                          )}
+                          {/*  */}
+                          {/* {console.log("signalStrategy", signalStrategy)} */}
+                          {/*  */}
+                          {selectedTab === "Telegram Signal" && (
+                            <Box sx={{ width: "100%" }} mt={2} mb={1}>
+                              {featureType ===
+                              SignalFeatureTypes.SINGLE_METHOD ? (
                                 <Select
+                                  fullWidth
                                   value={signalStrategy}
                                   onChange={(e) =>
                                     setSignalStrategy(e.target.value)
                                   }
                                   size="medium"
                                 >
-                                  {dataSignalStrategy?.map((item, key) => (
-                                    <MenuItem key={key} value={item?._id}>
-                                      {item?.name}
-                                    </MenuItem>
-                                  ))}
+                                  {dataSignalStrategyTelegramSignal?.map(
+                                    (item, key) => (
+                                      <MenuItem key={key} value={item?._id}>
+                                        {item?.name}
+                                      </MenuItem>
+                                    )
+                                  )}
                                 </Select>
-                              </>
-                            ) : (
-                              <>
+                              ) : (
                                 <Select
+                                  fullWidth
                                   multiple
                                   value={arraySignalStrategy}
                                   onChange={(e) =>
@@ -1452,144 +1556,65 @@ const NewPlanDrawer = ({
                                         gap: 0.5,
                                       }}
                                     >
-                                      {selected.map((value) => (
-                                        <Chip
-                                          key={value}
-                                          label={
-                                            dataSignalStrategy.find(
-                                              (item) => item._id === value
-                                            )?.name
-                                          }
-                                        />
-                                      ))}
+                                      {selected?.length > 0 &&
+                                        selected.map((value) => (
+                                          <Chip
+                                            sx={{
+                                              // height: allowSelectedTab ? "" : 50,
+                                              display:
+                                                dataSignalStrategyTelegramSignal.find(
+                                                  (item) => item._id === value
+                                                )
+                                                  ? "aa"
+                                                  : "none",
+                                            }}
+                                            key={value}
+                                            label={
+                                              <Box>
+                                                <Box>
+                                                  {dataSignalStrategyTelegramSignal.find(
+                                                    (item) => item._id === value
+                                                  )?.name || ""}
+                                                </Box>
+                                                {/* {!allowSelectedTab && (
+                                              <Box fontSize={12}>
+                                                {
+                                                  dataSignalStrategyTelegramSignal.find(
+                                                    (item) => item._id === value
+                                                  )?.url
+                                                }
+                                              </Box>
+                                            )} */}
+                                              </Box>
+                                            }
+                                          />
+                                        ))}
                                     </Box>
                                   )}
                                 >
-                                  {dataSignalStrategy?.map((item, key) => (
-                                    <MenuItem key={key} value={item?._id}>
-                                      <Checkbox
-                                        checked={
-                                          arraySignalStrategy.indexOf(
-                                            item._id
-                                          ) > -1
-                                        }
-                                      />
-                                      <ListItemText primary={item.name} />
-                                    </MenuItem>
-                                  ))}
-                                </Select>
-                              </>
-                            )}
-                          </FormControl>
-                        )}
-                        {/*  */}
-                        {selectedTab === "Follow Leader" && (
-                          <Box sx={{ width: "100%" }} mt={2}>
-                            <MuiChipsInput
-                              value={arraySignalStrategy}
-                              onChange={(value) =>
-                                setArraySignalStrategy(value)
-                              }
-                              placeholder="Nhấn enter để thêm"
-                              sx={{ width: "100%" }}
-                              size={"medium"}
-                            />
-                          </Box>
-                        )}
-                        {/*  */}
-                        {/* {console.log("signalStrategy", signalStrategy)} */}
-                        {/*  */}
-                        {selectedTab === "Telegram Signal" && (
-                          <Box sx={{ width: "100%" }} mt={2} mb={1}>
-                            {featureType ===
-                            SignalFeatureTypes.SINGLE_METHOD ? (
-                              <Select
-                                fullWidth
-                                value={signalStrategy}
-                                onChange={(e) =>
-                                  setSignalStrategy(e.target.value)
-                                }
-                                size="medium"
-                              >
-                                {dataSignalStrategyTelegramSignal?.map(
-                                  (item, key) => (
-                                    <MenuItem key={key} value={item?._id}>
-                                      {item?.name}
-                                    </MenuItem>
-                                  )
-                                )}
-                              </Select>
-                            ) : (
-                              <Select
-                                fullWidth
-                                multiple
-                                value={arraySignalStrategy}
-                                onChange={(e) =>
-                                  setArraySignalStrategy(e.target.value)
-                                }
-                                size="medium"
-                                renderValue={(selected) => (
-                                  <Box
-                                    sx={{
-                                      display: "flex",
-                                      flexWrap: "wrap",
-                                      gap: 0.5,
-                                    }}
-                                  >
-                                    {selected?.length > 0 &&
-                                      selected.map((value) => (
-                                        <Chip
-                                          sx={{
-                                            // height: allowSelectedTab ? "" : 50,
-                                            display:
-                                              dataSignalStrategyTelegramSignal.find(
-                                                (item) => item._id === value
-                                              )
-                                                ? "aa"
-                                                : "none",
-                                          }}
-                                          key={value}
-                                          label={
-                                            <Box>
-                                              <Box>
-                                                {dataSignalStrategyTelegramSignal.find(
-                                                  (item) => item._id === value
-                                                )?.name || ""}
-                                              </Box>
-                                              {/* {!allowSelectedTab && (
-                                            <Box fontSize={12}>
-                                              {
-                                                dataSignalStrategyTelegramSignal.find(
-                                                  (item) => item._id === value
-                                                )?.url
-                                              }
-                                            </Box>
-                                          )} */}
-                                            </Box>
+                                  {dataSignalStrategyTelegramSignal?.map(
+                                    (item, key) => (
+                                      <MenuItem key={key} value={item?._id}>
+                                        <Checkbox
+                                          checked={
+                                            arraySignalStrategy.indexOf(
+                                              item._id
+                                            ) > -1
                                           }
                                         />
-                                      ))}
-                                  </Box>
-                                )}
-                              >
-                                {dataSignalStrategyTelegramSignal?.map(
-                                  (item, key) => (
-                                    <MenuItem key={key} value={item?._id}>
-                                      <Checkbox
-                                        checked={
-                                          arraySignalStrategy.indexOf(
-                                            item._id
-                                          ) > -1
-                                        }
-                                      />
-                                      <ListItemText primary={item.name} />
-                                    </MenuItem>
-                                  )
-                                )}
-                              </Select>
-                            )}
-                          </Box>
-                        )}
+                                        <ListItemText primary={item.name} />
+                                      </MenuItem>
+                                    )
+                                  )}
+                                </Select>
+                              )}
+                            </Box>
+                          )}
+                            </>}
+                          {loading=== true && <Box mt={2} mb={1}>
+                            <Skeleton height={56} />
+                          </Box>}
+                        </>
                       </Box>
                     )}
                   </Box>
@@ -1612,7 +1637,7 @@ const NewPlanDrawer = ({
                                         }
                                       />
                                     }
-                                    label="Xáo trộn thứ tự phương pháp"
+                                    label={t("shuffle_method_order")}
                                   />
                                   <FormControlLabel
                                     control={
@@ -1625,7 +1650,7 @@ const NewPlanDrawer = ({
                                         }
                                       />
                                     }
-                                    label="Không lặp lại phương pháp ở lượt sau"
+                                    label={t("dont_repeat_method_next_turn")}
                                   />
                                 </FormGroup>
 
@@ -1650,7 +1675,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Kích hoạt Win Signal"
+                                      label={t("active_win_signal")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1663,7 +1688,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Đảo lệnh"
+                                      label={t("reverse_order")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1674,7 +1699,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Vào lệnh khi kết thúc chuỗi thắng"
+                                      label={t("enter_at_the_end_of_the_winning_streak")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1687,14 +1712,14 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Vào lệnh khi đạt chính xác lượt thắng LT"
+                                      label={t("order_when_exactly_winning_streak")}
                                     />
 
                                     <Grid container spacing={2}>
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Vào lệnh khi lượt thắng LT đạt"
+                                          label={t("order_when_winning_streak_reached")}
                                           variant="outlined"
                                           value={winStreakEntryTarget}
                                           onChange={(e) =>
@@ -1708,7 +1733,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Số lượt vào (1 Thắng = 1 Lượt)"
+                                          label={t("win_number_of_entries")}
                                           variant="outlined"
                                           value={winTurnCount}
                                           onChange={(e) =>
@@ -1720,7 +1745,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Đổi phương pháp khi thua liên tiếp"
+                                          label={t("change_method_when_losing_streak")}
                                           variant="outlined"
                                           value={winChangeMethodAfterLoseStreak}
                                           onChange={(e) =>
@@ -1734,7 +1759,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Đổi phương pháp khi thắng liên tiếp"
+                                          label={t("change_method_when_winning_streak")}
                                           variant="outlined"
                                           value={winChangeMethodAfterWinStreak}
                                           onChange={(e) =>
@@ -1760,7 +1785,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Kích hoạt Lose Signal"
+                                      label={t("active_lose_signal")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1773,7 +1798,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Đảo lệnh"
+                                      label={t("reverse_signal")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1786,7 +1811,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Vào lệnh khi kết thúc chuỗi thua"
+                                      label={t("enter_at_the_end_of_the_losing_streak")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1799,14 +1824,14 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Vào lệnh khi đạt chính xác lượt thua LT"
+                                      label={t("order_when_exactly_losing_streak")}
                                     />
 
                                     <Grid container spacing={2}>
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Vào lệnh khi lượt thua LT đạt"
+                                          label={t("order_when_losing_streak_reached")}
                                           variant="outlined"
                                           value={loseStreakEntryTarget}
                                           onChange={(e) =>
@@ -1820,7 +1845,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Số lượt vào (1 Thắng = 1 Lượt)"
+                                          label={t("win_number_of_entries")}
                                           variant="outlined"
                                           value={loseTurnCount}
                                           onChange={(e) =>
@@ -1832,7 +1857,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Đổi phương pháp khi thua liên tiếp"
+                                          label={t("change_method_when_losing_streak")}
                                           variant="outlined"
                                           value={
                                             loseChangeMethodAfterLoseStreak
@@ -1848,7 +1873,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Đổi phương pháp khi thắng liên tiếp"
+                                          label={t("change_method_when_winning_streak")}
                                           variant="outlined"
                                           value={loseChangeMethodAfterWinStreak}
                                           onChange={(e) =>
@@ -1874,7 +1899,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Kích hoạt Victor Signal"
+                                      label={t("active_victor_signal")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1887,7 +1912,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Đảo lệnh"
+                                      label={t("reverse_signal")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1913,14 +1938,14 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label="Vào lệnh khi đạt chính xác lượt Victor LT"
+                                      label={t("order_when_exactly_victor_streak")}
                                     />
 
                                     <Grid container spacing={2}>
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Vào lệnh khi lượt Victor LT đạt"
+                                          label={t("order_when_victor_streak_reached")}
                                           variant="outlined"
                                           value={victorStreakEntryTarget}
                                           onChange={(e) =>
@@ -1934,7 +1959,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Số lượt vào (2 Thắng LT = 1 Lượt hoặc Win lệnh đầu chuỗi QLV)"
+                                          label={t("victor_number_of_entries")}
                                           variant="outlined"
                                           value={victorTurnCount}
                                           onChange={(e) =>
@@ -1946,7 +1971,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Đổi phương pháp khi thua liên tiếp"
+                                          label={t("change_method_when_losing_streak")}
                                           variant="outlined"
                                           value={
                                             victorChangeMethodAfterLoseStreak
@@ -1962,7 +1987,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Đổi phương pháp khi thắng liên tiếp"
+                                          label={t("change_method_when_winning_streak")}
                                           variant="outlined"
                                           value={
                                             victorChangeMethodAfterWinStreak
@@ -1978,7 +2003,7 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label="Đổi phương pháp khi Victor liên tiếp"
+                                          label={t("change_method_when_victor_streak")}
                                           variant="outlined"
                                           value={
                                             victorChangeMethodAfterVictorStreak
@@ -2011,7 +2036,7 @@ const NewPlanDrawer = ({
                             <TextField
                               type="number"
                               fullWidth
-                              label="Đổi khi tổng thắng đạt"
+                              label={t("change_when_win_total")}
                               variant="outlined"
                               defaultValue="0"
                               margin="normal"
@@ -2025,7 +2050,7 @@ const NewPlanDrawer = ({
                             <TextField
                               type="number"
                               fullWidth
-                              label="Đổi khi tổng thua đạt"
+                              label={t("change_when_lose_total")}
                               variant="outlined"
                               defaultValue="0"
                               margin="normal"
@@ -2039,7 +2064,7 @@ const NewPlanDrawer = ({
                             <TextField
                               type="number"
                               fullWidth
-                              label="Đổi khi thắng liên tiếp"
+                              label={t("change_when_win_streak")}
                               variant="outlined"
                               defaultValue="0"
                               margin="normal"
@@ -2053,7 +2078,7 @@ const NewPlanDrawer = ({
                             <TextField
                               type="number"
                               fullWidth
-                              label="Đổi khi thua liên tiếp"
+                              label={t("change_when_lose_streak")}
                               variant="outlined"
                               defaultValue="0"
                               margin="normal"
@@ -2065,7 +2090,7 @@ const NewPlanDrawer = ({
                             <TextField
                               type="number"
                               fullWidth
-                              label="Đổi khi lãi ($)"
+                              label={t("change_when_profit")}
                               variant="outlined"
                               defaultValue="0"
                               margin="normal"
@@ -2077,7 +2102,7 @@ const NewPlanDrawer = ({
                             <TextField
                               type="number"
                               fullWidth
-                              label="Đổi khi lỗ ($)"
+                              label={t("change_when_loss")}
                               variant="outlined"
                               defaultValue="0"
                               margin="normal"
@@ -2121,12 +2146,10 @@ const NewPlanDrawer = ({
               >
                 <Box>
                   <Typography variant="h6">
-                    Điều Kiện Chốt Lời/Cắt Lỗ
+                    {t("Take Profit/Stoploss Conditions")}
                   </Typography>
                   <Typography variant="body2">
-                    Gói của bạn sẽ tự động chốt lời hoặc cắt lỗ khi một trong
-                    các điều kiện sau được đáp ứng. Lợi nhuận hàng ngày được cài
-                    lại vào 00:00 GMT.
+                    {t("The plan will take profit/stoploss when one of these conditions is reached.")}
                   </Typography>
                 </Box>
                 <FormControlLabel
@@ -2145,7 +2168,7 @@ const NewPlanDrawer = ({
                       <TextField
                         type="number"
                         fullWidth
-                        label="Mục tiêu chốt lời ($)"
+                        label={t("take_profit_target")}
                         variant="outlined"
                         defaultValue="0"
                         value={takeProfitTarget}
@@ -2156,7 +2179,7 @@ const NewPlanDrawer = ({
                       <TextField
                         type="number"
                         fullWidth
-                        label="Mục tiêu cắt lỗ ($)"
+                        label={t("stop_loss_target")}
                         variant="outlined"
                         defaultValue="0"
                         value={stopLossTarget}
@@ -2167,7 +2190,7 @@ const NewPlanDrawer = ({
                       <TextField
                         type="number"
                         fullWidth
-                        label="Dừng khi thắng LT"
+                        label={t("win_streak_target")}
                         variant="outlined"
                         defaultValue="0"
                         value={winStreakTarget}
@@ -2178,7 +2201,7 @@ const NewPlanDrawer = ({
                       <TextField
                         type="number"
                         fullWidth
-                        label="Dừng khi thua LT"
+                        label={t("lose_streak_target")}
                         variant="outlined"
                         defaultValue="0"
                         value={loseStreakTarget}
@@ -2189,7 +2212,7 @@ const NewPlanDrawer = ({
                       <TextField
                         type="number"
                         fullWidth
-                        label="Dừng khi thắng tổng"
+                        label={t("win_total_target")}
                         variant="outlined"
                         defaultValue="0"
                         value={winTotalTarget}
@@ -2200,7 +2223,7 @@ const NewPlanDrawer = ({
                       <TextField
                         type="number"
                         fullWidth
-                        label="Dừng khi thua tổng"
+                        label={t("lose_total_target")}
                         variant="outlined"
                         defaultValue="0"
                         value={loseTotalTarget}
@@ -2209,7 +2232,7 @@ const NewPlanDrawer = ({
                     </Grid>
                     <Grid item xs={12}>
                       <Alert severity="warning">
-                        Các mục tiêu không sử dụng hãy nhập số 0
+                        {t("unused_targets_enter_0")}
                       </Alert>
                     </Grid>
                   </Grid>
@@ -2224,7 +2247,7 @@ const NewPlanDrawer = ({
                     id="advanced-header"
                   >
                     <Typography fontWeight={600}>
-                      Nâng cao (Tùy chọn)
+                      {t("Advanced (Optional)")}
                     </Typography>
                   </AccordionSummary>
                   <Box p={2}>
@@ -2235,7 +2258,7 @@ const NewPlanDrawer = ({
                       gap={1}
                       mb={1}
                     >
-                      <Typography variant="h6">Đợi tín hiệu từ bot có sẵn</Typography>
+                      <Typography variant="h6">{t("wait_signal_from_other_bot")}</Typography>
                       <FormControlLabel
                         control={
                           <Switch
@@ -2497,7 +2520,7 @@ const NewPlanDrawer = ({
                       alignItems={"center"}
                       gap={1}
                     >
-                      <Typography variant="h6">Chế độ chuyên gia</Typography>
+                      <Typography variant="h6">{t("Expert Mode")}</Typography>
                       <FormControlLabel
                         control={
                           <Switch
@@ -2515,10 +2538,9 @@ const NewPlanDrawer = ({
                       gap={1}
                     >
                       <Box>
-                        <Typography variant="h6">Chế độ riêng tư</Typography>
+                        <Typography variant="h6">{t("FormCreatePlan_advanced_privateMode_label")}</Typography>
                         <Typography variant="body2">
-                          Người dùng khác sẽ không thể sao chép gói khi bạn bật
-                          Chế độ riêng tư
+                         {t("FormCreatePlan_advanced_privateMode_desc")}
                         </Typography>
                       </Box>
                       <FormControlLabel
@@ -2538,9 +2560,9 @@ const NewPlanDrawer = ({
                       gap={1}
                     >
                       <Box>
-                        <Typography variant="h6">Tín hiệu đảo lệnh</Typography>
+                        <Typography variant="h6">{t("FormCreatePlan_advanced_reverseSignal_label")}</Typography>
                         <Typography variant="body2">
-                          Lệnh bạn mở sẽ ngược lại với tín hiệu nhận được
+                          {t("FormCreatePlan_advanced_reverseSignal_desc")}
                         </Typography>
                       </Box>
                       <FormControlLabel
@@ -2584,7 +2606,7 @@ const NewPlanDrawer = ({
                 fullWidth
                 sx={{ padding: "10px" }}
               >
-                Bước tiếp theo
+                {t("Next Step")}
               </Button>
             </Box>
           </>
@@ -2596,7 +2618,7 @@ const NewPlanDrawer = ({
               <AppBar position="static" color="default">
                 <Toolbar>
                   <Typography variant="h6" style={{ flexGrow: 1 }}>
-                    View & confirm your plan!
+                    {t("FormCreatePlan_review_title")}
                   </Typography>
                   <IconButton edge="end" color="inherit" onClick={onClose}>
                     <CloseIcon />
@@ -2608,17 +2630,17 @@ const NewPlanDrawer = ({
                 <Typography variant="subtitle1">{planName}</Typography>
                 <Box mt={2} display="flex" justifyContent="space-between">
                   <Box sx={{ width: "calc(100% / 3)" }}>
-                    <Typography variant="body2">Allocated Budget</Typography>
+                    <Typography variant="body2">{t("Allocated Budget")}</Typography>
                     <Typography variant="subtitle1">
                       ${investmentFund?.toFixed(2)}
                     </Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
-                    <Typography variant="body2">Base Amount</Typography>
+                    <Typography variant="body2">{t("Base Amount")}</Typography>
                     <Typography variant="subtitle1">${baseAmount}</Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
-                    <Typography variant="body2">Account Type</Typography>
+                    <Typography variant="body2">{t("account_type")}</Typography>
                     <Typography variant="subtitle1">{accountType}</Typography>
                   </Box>
                 </Box>
@@ -2627,18 +2649,18 @@ const NewPlanDrawer = ({
                 <Box mt={2} display="flex" justifyContent="space-between">
                   <Box sx={{ width: "calc(100% / 3)" }}>
                     <Typography variant="body2">
-                      Take Profit/Stoploss
+                      {t("Take Profit/Stoploss")}
                     </Typography>
                     <Typography variant="subtitle1">
                       ${investmentFund?.toFixed(2)}
                     </Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
-                    <Typography variant="body2">Budget Strategy</Typography>
+                    <Typography variant="body2">{t("budget_strategy")}</Typography>
                     <Typography variant="subtitle1">${baseAmount}</Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
-                    <Typography variant="body2">Signal Strategy</Typography>
+                    <Typography variant="body2">{t("signal_strategy")}</Typography>
                     <Typography variant="subtitle1">{selectedTab}</Typography>
                   </Box>
                 </Box>
@@ -2659,7 +2681,7 @@ const NewPlanDrawer = ({
                 variant="outlined"
                 sx={{ padding: "10px" }}
               >
-                Back
+                {t("Back")}
               </Button>
               <Button
                 variant="contained"
@@ -2669,7 +2691,7 @@ const NewPlanDrawer = ({
                 onClick={handleConfirmAndSave}
                 disabled={loadingSubmit}
               >
-                Confirm & Save
+                {t("Confirm & Save")}
               </Button>
             </Box>
           </>

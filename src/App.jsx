@@ -26,6 +26,7 @@ import SocketProvider from "contexts/SocketContext";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { authApi } from "api";
+import { PortfoliosProvider } from "contexts/PortfoliosContext";
 
 const App = () => {
   const { settings } = useSettings();
@@ -80,11 +81,13 @@ const App = () => {
             <SpotBalanceProvider>
               <GlobalProvider>
                 <SocketProvider>
+                <PortfoliosProvider>
                   <RTL>
                     <Toast />
                     <CssBaseline />
                     <RouterProvider router={router} />
                   </RTL>
+                </PortfoliosProvider>
                 </SocketProvider>
               </GlobalProvider>
             </SpotBalanceProvider>

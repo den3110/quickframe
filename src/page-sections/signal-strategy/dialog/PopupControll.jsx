@@ -2,10 +2,12 @@ import { Box, Button, Divider, useMediaQuery } from "@mui/material";
 import React from "react";
 import AddIcon from "@mui/icons-material/Add"
 import { isDark } from "util/constants";
+import { useTranslation } from "react-i18next";
 
 const PopupControllSignalStategy = ({ onClickNewPlan }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-
+  const {t }= useTranslation()
+  
   return (
     <Box
       sx={{
@@ -34,7 +36,7 @@ const PopupControllSignalStategy = ({ onClickNewPlan }) => {
             },
           }}
         >
-          Tạo plan
+          {t("Create Plan")}
         </Button>
       </Box>
       {downLg && <Divider />}

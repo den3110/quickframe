@@ -21,6 +21,7 @@ import OtpInput from "react-otp-input";
 import { showToast } from "components/toast/toast";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "api";
+import { useTranslation } from "react-i18next";
 
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -34,6 +35,7 @@ const CustomDialogContent = styled(DialogContent)(({ theme }) => ({
 }));
 
 const DialogOtpForgotPassword = (props) => {
+  const {t}= useTranslation()
   const navigate = useNavigate();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const downXss = useMediaQuery((theme) => theme.breakpoints.down("xss"));
@@ -116,7 +118,7 @@ const DialogOtpForgotPassword = (props) => {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <CustomDialogTitle>
-        <Typography variant="h6">Reset your password</Typography>
+        <Typography variant="h6">{t("Reset your password")}</Typography>
         <IconButton onClick={handleClose}>
           <CloseIcon />
         </IconButton>
@@ -174,7 +176,7 @@ const DialogOtpForgotPassword = (props) => {
         </Typography>
         <TextField
           fullWidth
-          label="New Password"
+          label={t("new_password")}
           type={showPassword ? "text" : "password"}
           value={newPassword}
           onChange={handlePasswordChange}
@@ -191,7 +193,7 @@ const DialogOtpForgotPassword = (props) => {
         />
         <TextField
           fullWidth
-          label="Confirm New Password"
+          label={t("Confirm new password")}
           type={showConfirmPassword ? "text" : "password"}
           value={confirmPassword}
           onChange={handleConfirmPasswordChange}

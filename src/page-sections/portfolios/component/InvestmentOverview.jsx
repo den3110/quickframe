@@ -16,8 +16,10 @@ import portfolioApi from "api/portfolios/portfolioApi";
 import { useParams } from "react-router-dom";
 import { showToast } from "components/toast/toast";
 import AuthContext from "contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const InvestmentOverview = (props) => {
+  const {t }= useTranslation()
   const { dataStat } = useContext(PortfolioDetailContext);
   const { selectedLinkAccount } = useContext(AuthContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -33,7 +35,7 @@ const InvestmentOverview = (props) => {
       await portfolioApi.userBotAction(id, payload);
       // setData()
       // setIsRunning(ActionBotTypeStatus[action]);
-      showToast(ActionBotTypeMessageSucces[action], "success");
+      showToast(t(ActionBotTypeMessageSucces[action]), "success");
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }
@@ -197,7 +199,7 @@ const InvestmentOverview = (props) => {
                 color: "white",
               }}
             >
-              Đang chạy
+              {t("On going")}
             </Box>
           )}
       </Card>

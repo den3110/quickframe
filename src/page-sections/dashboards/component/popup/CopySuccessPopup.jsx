@@ -94,14 +94,13 @@ export default function CopySuccessPopup({
             variant="h6"
             fontWeight="bold"
           >
-            Sao chép gói thành công
+            {t("Import plan successfully")}
           </DialogContentText>
           <DialogContentText
             id="confirm-delete-dialog-description"
             align="center"
           >
-            Start exploring investment opportunities and earn profits by start
-            an investment plan today
+           {t("Start exploring investment opportunities and earn profits by start an investment plan today")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -114,7 +113,7 @@ export default function CopySuccessPopup({
                 variant="outlined"
                 sx={{ textTransform: "none" }}
               >
-                Chạy gói ngay
+                {t("Start Plan Now")}
               </Button>
             </Box>
             <Box sx={{width: "100%"}}>
@@ -124,7 +123,7 @@ export default function CopySuccessPopup({
                 variant="contained"
                 sx={{ textTransform: "none" }}
               >
-                Sửa plan
+                {t("edit_configuration")}
               </Button>
             </Box>
           </Box>

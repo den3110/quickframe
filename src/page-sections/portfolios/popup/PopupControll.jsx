@@ -6,9 +6,11 @@ import CachedIcon from "@mui/icons-material/Cached";
 import ReplayIcon from "@mui/icons-material/Replay";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { isDark } from "util/constants";
+import { useTranslation } from "react-i18next";
 
 const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const {t }= useTranslation()
 
   return (
     <Box
@@ -39,7 +41,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
             },
           }}
         >
-          Tạm ngưng
+          {t("COOL_DOWN")}
         </Button>
         <Button
           onClick={onClickStart}
@@ -52,7 +54,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
             },
           }}
         >
-          Tiếp tục
+          {t("continue")}
         </Button>
         <Button
           startIcon={<CachedIcon />}
@@ -65,7 +67,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
             },
           }}
         >
-          Khởi động lại
+          {t("Restart Plan")}
         </Button>
         <Button
           startIcon={<ReplayIcon />}
@@ -78,7 +80,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
             },
           }}
         >
-          Cài lại
+          {t("Reset")}
         </Button>
         <Button
           onClick={onClickDelete}
@@ -92,7 +94,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
             },
           }}
         >
-          Xoá
+          {t("delete")}
         </Button>
       </Box>
       {downLg && <Divider />}

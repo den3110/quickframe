@@ -15,8 +15,11 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { VipMemberContext } from "..";
 import formatCurrency from "util/formatCurrency";
 import numberWithCommas from "util/numberSeparatorThousand";
+import { useTranslation } from "react-i18next";
 
 const InfoCard = ({ title, value, tooltip }) => {
+  const {t }= useTranslation()
+
   return (
     <Card variant="outlined" style={{ borderRadius: 16 }}>
       <Box sx={{ padding: 1 }}>
@@ -45,6 +48,7 @@ const InfoCard = ({ title, value, tooltip }) => {
 function VIPInformation() {
   const {dataOverview }= useContext(VipMemberContext)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const {t }= useTranslation()
   
   return (
     <Box mb={downLg ? 2 : 4} >
@@ -125,9 +129,9 @@ function VIPInformation() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <InfoCard
-                  title="KLGD F1 (Tuần này)"
+                  title={t("F1 volume (This Week)")}
                   value={`${formatCurrency(dataOverview?.current_week_f1_vol)?.replace("+", "")} /${numberWithCommas(formatCurrency(dataOverview?.current_week_f1_nextrankvol)?.replace("+", ""))}`}
-                  tooltip={"KLGD F1 (Tuần này)"}
+                  tooltip={t("F1 volume (This Week)")}
                 />
               </Grid>
             </Grid>
