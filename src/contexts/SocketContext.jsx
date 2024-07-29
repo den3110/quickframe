@@ -13,13 +13,21 @@ export const SocketContext = createContext();
 
 export const useSocket = () => useContext(SocketContext);
 
+
+
 const SocketProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const socketRef = useRef();
 
+  const getWebSocketUrl = () =>{
+    return window.location.hostname.indexOf("localhost") > -1
+      ? process.env.REACT_APP_BASE_SOCKET_URL
+      : `${window.location.protocol}//ws.${window.location.hostname}`
+  }
+
   useEffect(() => {
     try {
-      socketRef.current = io(process.env.REACT_APP_BASE_SOCKET_URL, {transports: ["websocket"],auth: {
+      socketRef.current = io( getWebSocketUrl(), {transports: ["websocket"],auth: {
           token: localStorage.getItem('accessToken'),
         }, query: {token: localStorage.getItem('accessToken'),}});
 

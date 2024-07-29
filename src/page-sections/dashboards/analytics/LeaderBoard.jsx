@@ -625,7 +625,7 @@ const LeaderBoard = () => {
                         #{parseInt(index) + 4}
                       </Typography>
                       <ListItemAvatar>
-                        <Avatar alt={item.name} src={item.photoUrl ? `/users/avatar/${item.photoUrl}` : ""} />
+                        <Avatar alt={item.name} src={item.photoUrl ? `/api/users/avatar/${item.photoUrl}` : ""} />
                       </ListItemAvatar>
                       <ListItemText primary={item.name} />
                     </Box>
