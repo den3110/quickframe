@@ -27,6 +27,11 @@ export const AuthProvider = ({ children }) => {
         console.error('Failed to load user profile', error);
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem("linkAccount")
+        setUserLinkAccountList([])
+        setSelectedLinkAccount(undefined)
+        setDataSelectedLinkAccount(undefined)
+        setAccessToken(undefined)
       }
     }
     setLoading(false);

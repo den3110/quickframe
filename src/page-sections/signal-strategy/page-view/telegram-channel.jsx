@@ -585,7 +585,7 @@ const TelegramChannelSignalStrategy = () => {
                 ))}
               </Box>
             )}
-            <Box position="absolute" bottom={16} right={16}>
+            <Box position="absolute" bottom={16} right={downLg ? -8 : 16}>
               {openTrade === true && (
                 <Box
                   borderRadius={"10px"}
@@ -595,7 +595,7 @@ const TelegramChannelSignalStrategy = () => {
                 >
                   <Box position={"relative"} overflow={"hidden"}>
                     <Card>
-                      <Box p={2}>
+                      <Box width={downLg ? "calc(100vw - 16px)" : "aaa"} p={2}>
                         <Box display={"flex"} gap={1} mb={2}>
                           <Box>
                             <Typography
@@ -743,23 +743,9 @@ const TelegramChannelSignalStrategy = () => {
                   </Box>
                 </Box>
               )}
-              <Box mt={2} display={"flex"} alignItems={"center"} gap={2}>
-                {selectedBot && (
-                  <Box>
-                    <IconButton
-                      onClick={() => {
-                        window.open(selectedBot?.url);
-                      }}
-                    >
-                      <img
-                        alt="Can't display"
-                        style={{ width: 48, height: 48 }}
-                        src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-icon-6896828_960_720.png"
-                      />
-                    </IconButton>
-                  </Box>
-                )}
-                <Box sx={{ width: "100%", direction: "rtl" }}>
+              <Box mt={2} display={"flex"} alignItems={"center"} gap={2} flexDirection={"row-reverse"}>
+                
+                <Box sx={{  direction: "rtl", display: "flex", flexDirection: "row-reverse" }}>
                   <Box sx={{ cursor: "pointer" }}>
                     {openTrade === false && (
                       <Toggle
@@ -779,6 +765,21 @@ const TelegramChannelSignalStrategy = () => {
                     )}
                   </Box>
                 </Box>
+                {selectedBot && (
+                  <Box>
+                    <IconButton
+                      onClick={() => {
+                        window.open(selectedBot?.url);
+                      }}
+                    >
+                      <img
+                        alt="Can't display"
+                        style={{ width: 48, height: 48 }}
+                        src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-icon-6896828_960_720.png"
+                      />
+                    </IconButton>
+                  </Box>
+                )}
               </Box>
             </Box>
           </Box>

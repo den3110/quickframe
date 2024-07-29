@@ -10,6 +10,7 @@ import NotificationsIcon from "icons/NotificationsIcon";
 import notificationApi from "api/notification/notificationApi";
 import { showToast } from "components/toast/toast";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 // DUMMY DATA SET
 const MESSAGES = [
@@ -137,7 +138,9 @@ const NotificationsPopover = () => {
           ) : (
             <TabPanel value="1">
               {data.map((msg) => (
-                <ListItem msg={msg} key={msg.id} />
+                <ListItem msg={msg} key={msg.id} onClose={()=> {
+                  setOpen(false)
+                }} />
               ))}
             </TabPanel>
           )}
@@ -149,10 +152,16 @@ const NotificationsPopover = () => {
 
 // ListItem component props
 
-function ListItem({ msg }) {
+function ListItem({ msg, onClose }) {
   const isNew = msg.type === "new_message";
+  const navigate= useNavigate()
+
   return (
     <FlexBox
+      onClick={()=> {
+        navigate(msg?.href)
+        onClose()
+      }}
       p={2}
       gap={2}
       alignItems="center"
