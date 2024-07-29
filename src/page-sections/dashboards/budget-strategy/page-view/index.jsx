@@ -156,7 +156,7 @@ const BudgetStrategyPage = () => {
       functionProps={async () => await fetchUserBudgetStrategy()}
     >
       <Box
-        pt={2}
+        pt={downLg ? 0 : 2}
         pb={4}
         sx={{
           background: (theme) =>
@@ -164,13 +164,14 @@ const BudgetStrategyPage = () => {
         }}
       >
         <Box sx={{ padding: downLg ? "10px" : "10px 24px" }}>
-          <Typography variant="h6" fontWeight={600} gutterBottom>
+          <Typography variant="h6" fontWeight={600} mb={2}>
             Chiến lược vốn ({data?.length})
           </Typography>
           <Box
             sx={{
               padding: downLg ? "8px" : "20px",
               background: (theme) => (isDark(theme) ? "#1f2937" : "white"),
+              borderRadius: "10px"
             }}
           >
             <Box
