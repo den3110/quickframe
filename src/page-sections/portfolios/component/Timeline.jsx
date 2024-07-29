@@ -14,6 +14,8 @@ import {
   Pagination,
   Button,
   CircularProgress,
+  Popover,
+  Menu,
 } from "@mui/material";
 import {
   Timeline,
@@ -49,7 +51,7 @@ import round2number from "util/round2number";
 import AuthContext from "contexts/AuthContext";
 import { constant } from "constant/constant";
 import FilterComponent from "./FilterComponent";
-import FilterListIcon from '@mui/icons-material/FilterList';
+import FilterListIcon from "@mui/icons-material/FilterList";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
@@ -69,8 +71,9 @@ const CustomTimeline = () => {
   // const [data, setData]= useState([])
   const { socket, isConnected } = useContext(SocketContext);
   const [openAccordion, setOpenAccordion] = useState(false);
-  const [dataState, setDataState]= useState([])
-  const { 
+  const [dataState, setDataState] = useState([]);
+  const [anchorEls, setAnchorEls] = useState([]);
+  const {
     data: dataProps, // arr
     dataStat: dataStatProps, // obj
     loading,
@@ -94,7 +97,6 @@ const CustomTimeline = () => {
     setOpenAccordion(!openAccordion);
   };
 
-  
   const renderBetType = (type) => {
     switch (type) {
       case "started_bot":
@@ -106,7 +108,7 @@ const CustomTimeline = () => {
       case "resume_bot":
         return "Tiếp tục bot";
       case "betsession_is_invalid":
-        return "Phiên đặt cược không hợp lệ"
+        return "Phiên đặt cược không hợp lệ";
       case "pause_bot":
         return "Tạm ngưng bot";
       case "stop_plan_take_profit_target":
@@ -193,6 +195,18 @@ const CustomTimeline = () => {
           />
         );
     }
+  };
+
+  const handleMenuOpen = (index, event) => {
+    const newAnchorEls = [...anchorEls];
+    newAnchorEls[index] = event.currentTarget;
+    setAnchorEls(newAnchorEls);
+  };
+
+  const handleMenuClose = (index) => {
+    const newAnchorEls = [...anchorEls];
+    newAnchorEls[index] = null;
+    setAnchorEls(newAnchorEls);
   };
 
   const renderBackgroundTypeIcon = (data) => {
@@ -359,13 +373,17 @@ const CustomTimeline = () => {
     }
   }, [isConnected, id, socket]);
 
-  useEffect(()=> {
-    setDataState(dataProps)
-  }, [dataProps])
+  useEffect(() => {
+    setDataState(dataProps);
+  }, [dataProps]);
 
   return (
     <Box>
-      <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+      >
         <Typography variant="h6" gutterBottom>
           Quá trình đầu tư
         </Typography>
@@ -373,12 +391,27 @@ const CustomTimeline = () => {
           <FilterListIcon /> Bộ lọc
         </Button>
       </Box>
-      <FilterComponent openAccordion={openAccordion} setOpenAccordion={setOpenAccordion} handleAccordionToggle={handleAccordionToggle} data={dataProps} setData={setDataState} />
+      <FilterComponent
+        openAccordion={openAccordion}
+        setOpenAccordion={setOpenAccordion}
+        handleAccordionToggle={handleAccordionToggle}
+        data={dataProps}
+        setData={setDataState}
+      />
       <Box>
-        {loading=== true && <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+        {loading === true && (
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <CircularProgress />
-          </Box>}
-        {loading=== false && 
+          </Box>
+        )}
+        {loading === false && (
           <Timeline className="askskaa" sx={{ padding: downLg ? 0 : "" }}>
             {dataState
               ?.slice(
@@ -396,7 +429,9 @@ const CustomTimeline = () => {
                 >
                   <TimelineSeparator>
                     <TimelineDot
-                      style={{ backgroundColor: renderBackgroundTypeIcon(item) }}
+                      style={{
+                        backgroundColor: renderBackgroundTypeIcon(item),
+                      }}
                     >
                       {renderTypeIcon(item)}
                     </TimelineDot>
@@ -407,6 +442,7 @@ const CustomTimeline = () => {
                       width="100%"
                       display={"flex"}
                       flexDirection={"row-reverse"}
+                      
                     >
                       <Box
                         display={"flex"}
@@ -433,7 +469,7 @@ const CustomTimeline = () => {
                         </Typography>
                       </Box>
                     </Box>
-                    <Card variant="outlined" sx={{ mb: 2 }}>
+                    <Card onClick={(event) => handleMenuOpen(index, event)} variant="outlined" sx={{ mb: 2 }}>
                       <Box
                         sx={{
                           display: "flex",
@@ -441,6 +477,7 @@ const CustomTimeline = () => {
                           padding: downLg ? 1 : 2.5,
                           flexWrap: downLg ? "wrap" : "",
                         }}
+                        
                       >
                         {/* row 1 */}
                         <Box
@@ -448,7 +485,9 @@ const CustomTimeline = () => {
                           sx={{ width: downLg ? "calc(100% * 2 / 3)" : "20%" }}
                         >
                           <Typography fontSize={12} fontWeight={600} mb={1}>
-                            {moment(item.betTime).format("DD/MM/YYYY, HH:mm:ss")}
+                            {moment(item.betTime).format(
+                              "DD/MM/YYYY, HH:mm:ss"
+                            )}
                           </Typography>
                           <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Typography fontSize={12}>
@@ -543,7 +582,11 @@ const CustomTimeline = () => {
                           {item?.message === "stop_plan_take_profit_target" &&
                             item?.result === "ACTION_BOT" && (
                               <>
-                                <Typography fontSize={12} fontWeight={600} mb={1}>
+                                <Typography
+                                  fontSize={12}
+                                  fontWeight={600}
+                                  mb={1}
+                                >
                                   $1.00/-$1.00
                                 </Typography>
                                 <Typography fontSize={12}>
@@ -580,7 +623,11 @@ const CustomTimeline = () => {
                           {item?.message === "stop_plan_take_profit_target" &&
                             item?.result === "ACTION_BOT" && (
                               <Box>
-                                <Typography fontSize={12} fontWeight={600} mb={1}>
+                                <Typography
+                                  fontSize={12}
+                                  fontWeight={600}
+                                  mb={1}
+                                >
                                   Thủ công
                                 </Typography>
                                 <Typography fontSize={12}>Mô tả</Typography>
@@ -594,7 +641,8 @@ const CustomTimeline = () => {
                             flex: downLg ? 1 : "aaa",
                           }}
                         >
-                          {(item?.betType === "UP" || item?.betType === "DOWN") &&
+                          {(item?.betType === "UP" ||
+                            item?.betType === "DOWN") &&
                             item.result &&
                             item.message === "success" && (
                               <>
@@ -632,12 +680,36 @@ const CustomTimeline = () => {
                       )} */}
                       </Box>
                     </Card>
+                    <Menu
+                      disableScrollLock
+                      anchorEl={anchorEls[index]}
+                      open={Boolean(anchorEls[index])}
+                      onClose={() => handleMenuClose(index)}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                    >
+                      <MenuItem onClick={() => handleMenuClose(index)}>
+                        <Button>Copy dữ liệu</Button>
+                      </MenuItem>
+                      <MenuItem onClick={() => handleMenuClose(index)}>
+                        
+                        <Button color="success">Xem chi tiết</Button>
+                      </MenuItem>
+                     
+                    </Menu>
                   </TimelineContent>
                 </TimelineItem>
               ))}
           </Timeline>
-        }
-        {loading=== false && dataState?.length <= 0 && <EmptyPage title="Danh mục quá trình đầu tư trống" disableButton={true} />}
+        )}
+        {loading === false && dataState?.length <= 0 && (
+          <EmptyPage
+            title="Danh mục quá trình đầu tư trống"
+            disableButton={true}
+          />
+        )}
         <PaginationContainer>
           <Box
             display={"flex"}
@@ -651,7 +723,7 @@ const CustomTimeline = () => {
                 <MenuItem value={6}>6</MenuItem>
                 <MenuItem value={12}>12</MenuItem>
                 <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={dataState.length}>Tất cả</MenuItem>
+                <MenuItem value={dataState.length}>Tất cả</MenuItem>
               </Select>
             </FormControl>
           </Box>

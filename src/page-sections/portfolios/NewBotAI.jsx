@@ -35,6 +35,7 @@ import { showToast } from "components/toast/toast";
 import DeleteIcon from "icons/DeleteIcon";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
 import PortfoliosContext from "contexts/PortfoliosContext";
+import { useTranslation } from "react-i18next";
 
 const shapeStyles = { width: 40, height: 40 };
 const shapeCircleStyles = { borderRadius: "50%" };
@@ -70,6 +71,7 @@ const NewBotAI = ({
   // const [initTargetConditions, setInitTargetConditions]= useState([])
   const [selectedCandle, setSelectedCandle] = useState();
   const [selectedBallProps, setSelectedBallProps] = useState();
+  const {t }= useTranslation()
   // const [conditions, setConditions] = useState([]);
   const [anchorEls, setAnchorEls] = useState([]);
 
@@ -264,7 +266,7 @@ const NewBotAI = ({
             >
               <Close />
             </IconButton>
-            <Typography variant="h6">Thiết lập mô hình nến của bạn</Typography>
+            <Typography variant="h6">{t("FrmCandlePattern_title")}</Typography>
           </Box>
           <TextField
             fullWidth

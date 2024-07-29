@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Box, Card, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { NavLink, useLocation } from "react-router-dom";
 import PortfoliosContext from "contexts/PortfoliosContext";
+import { useTranslation } from "react-i18next";
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
   "&.active-custom": {
@@ -15,6 +16,7 @@ const Layout = ({ children }) => {
   const { data } = useContext(PortfoliosContext);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const location= useLocation()
+  const {t }= useTranslation()
   const [selectedLink, setSelectedLink]= useState(location.pathname)
 
   useEffect(()=> {
@@ -39,7 +41,7 @@ const Layout = ({ children }) => {
             fontWeight={"600"}
             sx={{ "&:hover": { color: theme.palette.primary } }}
           >
-            Danh sách ({data?.length})
+            {t("My Portfolio")} ({data?.length})
           </Typography>
         </StyledNavLink>
         <StyledNavLink
@@ -53,7 +55,7 @@ const Layout = ({ children }) => {
             fontWeight={"600"}
             sx={{ "&:hover": { color: theme.palette.primary },  "&:active": { color: theme.palette.primary } }}
           >
-            Thống kê
+            {t("statics")}
           </Typography>
         </StyledNavLink>
         <StyledNavLink
@@ -67,7 +69,7 @@ const Layout = ({ children }) => {
             fontWeight={"600"}
             sx={{ "&:hover": { color: theme.palette.primary },  "&:active": { color: theme.palette.primary } }}
           >
-            Hẹn giờ
+            {t("timer")}
           </Typography>
         </StyledNavLink>
       </Box>

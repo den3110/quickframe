@@ -31,6 +31,7 @@ import {
 import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import { showToast } from "components/toast/toast";
 import { JwtContext } from "contexts/jwtContext";
+import { useTranslation } from "react-i18next";
 
 const NewBudgetStrategy = ({
   open,
@@ -49,6 +50,7 @@ const NewBudgetStrategy = ({
     IncreaseValueType.AFTER_LOSS
   );
   const [type, setType] = useState(BudgetStrategyType.ALL_ORDERS);
+  const {t }= useTranslation()
   const [amount, setAmount] = useState("1");
   const [method1, setMethod1] = useState("1-1-2-6-4-3");
   const [method2, setMethod2] = useState("1-2-4-8-17-35");
@@ -764,7 +766,7 @@ const NewBudgetStrategy = ({
                               isDark(theme) ? "#1f2937" : "white",
                           }}
                         >
-                          Option
+                          {t("option")}
                         </InputLabel>
                         <Select
                           disabled={readOnly}
@@ -775,7 +777,7 @@ const NewBudgetStrategy = ({
                           {Object.entries(IncreaseValueType)?.map(
                             ([item, key]) => (
                               <MenuItem key={key} value={item}>
-                                {IncreaseValueTypeTitle[item]}
+                                {t(IncreaseValueTypeTitle[item])}
                               </MenuItem>
                             )
                           )}

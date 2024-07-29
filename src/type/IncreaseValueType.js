@@ -5,7 +5,7 @@ export const IncreaseValueType = {
   };
   
 export const IncreaseValueTypeTitle = {
-  AFTER_LOSS: "Increase after a loss",
-  AFTER_WIN: "Increase after a win",
-  ALWAYS: "Always Increase",
+  AFTER_LOSS: "increase_after_a_loss",
+  AFTER_WIN: "increase_after_a_win",
+  ALWAYS: "always_increase",
 };

@@ -14,8 +14,10 @@ import formatCurrency from "util/formatCurrency";
 import CustomAutowinTable from "./TableCustomAutowin";
 import SignalBubble from "./SignalBubble";
 import { isDark } from "util/constants";
+import { useTranslation } from "react-i18next";
 
 const Statistics = () => {
+  const {t }= useTranslation()
   const [selectedTab, setSelectedTab] = useState(0);
   const { dataStat, loading } = useContext(
     PortfolioDetailContext
@@ -77,7 +79,7 @@ const Statistics = () => {
                           color={dataStat?.week_volume > 0 ? "success.main" : "error.main"}
                         />
                         <StatisticCard
-                          title="Lợi nhuận 7N"
+                          title={t("7-days profit")}
                           value={formatCurrency(dataStat?.week_profit)}
                           color={dataStat?.week_profit > 0 ? "success.main" : "error.main"}
                         />

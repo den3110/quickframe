@@ -36,6 +36,7 @@ import sortData from "util/sortData";
 // import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 import { SignalMethodUsingTypesTitle } from "type/SignalMethodUsing";
 import { JwtContext } from "contexts/jwtContext";
+import { useTranslation } from "react-i18next";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -70,6 +71,7 @@ const SignalStrategyList = () => {
   const { data, setData, loading, setChange } = useContext(
     SignalStrategyContext
   );
+  const {t }= useTranslation()
   const [dataState, setDataState]= useState([])
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
@@ -216,7 +218,7 @@ const SignalStrategyList = () => {
                     }}
                   >
                     <InsertChart />
-                    Mô hình nến mới
+                    {t(" New Candle Pattern")}
                   </MenuItem>
                 </Menu>
               </Box>

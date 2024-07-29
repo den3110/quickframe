@@ -320,14 +320,14 @@ const LeaderBoard = () => {
                     </Typography>
                     {
                       item?.isPrivate=== true && 
-                      <Button sx={{cursor: "context-menu"}} disableRipple variant="outlined">Gói riêng tư</Button>
+                      <Button sx={{cursor: "context-menu"}} disableRipple variant="outlined">{t("Private plan")}</Button>
                     }
                     {
                       item?.isPrivate=== false && 
                       <Button variant={"contained"} onClick={()=> {
                         setSelectedPlan(item)
                         setOpenCopyPlan(true)
-                      }}>Copy plan</Button>
+                      }}>{t("Copy plan")}</Button>
                     }
                   </Box>
                 </Box>

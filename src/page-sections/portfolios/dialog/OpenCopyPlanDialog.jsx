@@ -19,6 +19,7 @@ import { showToast } from "components/toast/toast";
 import { isDark } from "util/constants";
 import AuthContext from "contexts/AuthContext";
 import CopyPlanDrawer from "page-sections/dashboards/component/drawer/CopyPlanDrawer";
+import { useTranslation } from "react-i18next";
 // import AuthContext from "contexts/AuthContext";
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -39,6 +40,7 @@ const OpenCopyPlanDialog = ({
   const [shareCode, setShareCode] = useState("");
   const [dataState, setDataState] = useState();
   const [loading, setLoading] = useState();
+  const {t }= useTranslation()
 
   const handleClose = () => {
     onClose();
@@ -87,7 +89,7 @@ const OpenCopyPlanDialog = ({
         fullWidth
       >
         <CustomDialogTitle id="confirm-delete-dialog-title">
-          <span>Copy Investment Plan</span>
+          <span>{t("Import Investment Plan")}</span>
           <IconButton
             edge="end"
             color="inherit"
@@ -110,10 +112,10 @@ const OpenCopyPlanDialog = ({
                 color={"success.main"}
                 textAlign={"left"}
               >
-                Easy way to set up your superb plan!
+                {t("Easy way to set up your superb plan!")}
               </Typography>
               <Typography fontSize={15} textAlign={"left"} mt={1.5} mb={2}>
-                Enter your shared plan code to start your ideal investment plan
+                {t("Enter your shared plan code to start your ideal investment plan")}
               </Typography>
               <Box>
                 <Box
@@ -143,7 +145,7 @@ const OpenCopyPlanDialog = ({
                       height: "100%",
                       // color: theme=> isDark(theme)
                     }}
-                    placeholder="Enter code"
+                    placeholder={t("Enter code")}
                     //   color="text.main"
                     fontWeight={600}
                     InputProps={{
@@ -157,7 +159,7 @@ const OpenCopyPlanDialog = ({
                     sx={{ cursor: "pointer" }}
                     fontWeight={600}
                   >
-                    Paste
+                    {t("PASTE")}
                   </Typography>
                 </Box>
               </Box>
@@ -179,7 +181,7 @@ const OpenCopyPlanDialog = ({
               color="primary"
               sx={{ textTransform: "none" }}
             >
-              Copy now
+              {t("Import Now")}
             </Button>
           </Box>
         </DialogActions>

@@ -545,7 +545,7 @@ const PortfoliosList = () => {
                     >
                       {dailyTarget?.stop_loss_target === 0 &&
                         dailyTarget?.take_profit_target === 0 &&
-                        "Mục tiêu ngày"}
+                        t("Daily Goal")}
                       {(dailyTarget?.stop_loss_target !== 0 ||
                         dailyTarget?.take_profit_target !== 0) && (
                         <Box display={"flex"} alignItems={"center"} mr={0.5}>
@@ -603,7 +603,7 @@ const PortfoliosList = () => {
                     >
                       {dailyTarget?.stop_loss_target === 0 &&
                         dailyTarget?.take_profit_target === 0 &&
-                        "Mục tiêu ngày"}
+                        t("Daily Goal")}
                       {(dailyTarget?.stop_loss_target !== 0 ||
                         dailyTarget?.take_profit_target !== 0) && (
                         <>
@@ -707,7 +707,7 @@ const PortfoliosList = () => {
                       }}
                     >
                       <InsertChart />
-                      Mô hình nến mới
+                      {t(" New Candle Pattern")}
                     </MenuItem>
                   </Menu>
                 </Box>
@@ -752,7 +752,7 @@ const PortfoliosList = () => {
                           />
                         </StyledTableCell>
                         <StyledTableCell>Tên gói</StyledTableCell>
-                        <StyledTableCell>Lợi nhuận 7N</StyledTableCell>
+                        <StyledTableCell>{t("7-days profit")}</StyledTableCell>
                         <StyledTableCell>
                           <Typography>Lợi nhuận</Typography>
                           <Typography
@@ -768,7 +768,7 @@ const PortfoliosList = () => {
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell>{t("linked_account")}</StyledTableCell>
-                        <StyledTableCell>Thao tác</StyledTableCell>
+                        <StyledTableCell>{t("Actions")}</StyledTableCell>
                         <StyledTableCell></StyledTableCell>
                       </TableRow>
                     </TableHead>
@@ -863,7 +863,7 @@ const PortfoliosList = () => {
                                     variant="body2"
                                     color="textSecondary"
                                   >
-                                    Lợi nhuận 7N
+                                    {t("7-days profit")}
                                   </Typography>
                                 )}
                                 <Typography

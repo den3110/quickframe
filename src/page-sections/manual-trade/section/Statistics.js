@@ -3,9 +3,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Typography,
-  Switch,
+  // Switch,
   Grid,
-  Paper,
+  // Paper,
   Card,
   CardContent,
 } from "@mui/material";
@@ -15,8 +15,10 @@ import { ManualTradeContext } from "contexts/ManualTradeContext";
 import round2number from "util/round2number";
 import formatCurrency from "util/formatCurrency";
 import CountUp from "react-countup";
+import { useTranslation } from "react-i18next";
 
 const Statistics = () => {
+  const {t }= useTranslation()
   const { walletMode } = useContext(SettingsContext);
   const { dataStat } = useContext(ManualTradeContext);
   const dayWinLiveRef = useRef(0);
@@ -239,7 +241,7 @@ const Statistics = () => {
                 color={renderColorWeekProfitVolume()}
               />
               <StatisticCard
-                title="Lợi nhuận 7N"
+                title={t("7-days profit")}
                 value={renderWeekProfit()}
                 color={renderColorWeekProfit()}
               />

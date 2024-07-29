@@ -12,6 +12,7 @@ import {
   useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTranslation } from "react-i18next";
 const BoxFlex = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
@@ -21,6 +22,7 @@ const BoxFlex = styled(Box)(({ theme }) => ({
 const CopyBudgteStrategy = ({ open, onClose }) => {
   const theme= useTheme()
   const [code, setCode] = useState("");
+  const {t }= useTranslation()
 
   const handleCodeChange = (event) => {
     setCode(event.target.value);
@@ -55,7 +57,7 @@ const CopyBudgteStrategy = ({ open, onClose }) => {
             fullWidth
             value={code}
             onChange={handleCodeChange}
-            placeholder="Enter Code"
+            placeholder={t("Enter Code")}
             InputProps={{
               endAdornment: (
                 <Button

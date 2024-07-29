@@ -28,6 +28,7 @@ import { showToast } from "components/toast/toast";
 import DeleteIcon from "icons/DeleteIcon";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
 import { JwtContext } from "contexts/jwtContext";
+import { useTranslation } from "react-i18next";
 
 const shapeStyles = { width: 40, height: 40 };
 const shapeCircleStyles = { borderRadius: "50%" };
@@ -50,6 +51,7 @@ const NewBotAI = ({
   initState,
 }) => {
   const { setData } = useContext(SignalStrategyContext);
+  const {t }= useTranslation()
   const [goals, setGoals] = useState([
     { type: "win_streak", count: 1 },
     { type: "lose_streak", count: 1 },
@@ -282,7 +284,7 @@ const NewBotAI = ({
             >
               <Close />
             </IconButton>
-            <Typography variant="h6">Thiết lập mô hình nến của bạn</Typography>
+            <Typography variant="h6">{t("FrmCandlePattern_title")}</Typography>
           </Box>
           <TextField
             inputProps={{ readOnly: readOnly }}

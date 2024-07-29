@@ -38,6 +38,7 @@ import sortData from "util/sortData";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import _ from "lodash";
 import { numberFormat } from "util/numberFormat";
+import { useTranslation } from "react-i18next";
 
 // STYLED COMPONENTS
 
@@ -57,6 +58,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const TopSignalPageView = () => {
+  const {t }= useTranslation()
   const theme = useTheme();
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -263,7 +265,7 @@ const TopSignalPageView = () => {
                       <StyledTableCell>Victor Streak</StyledTableCell>
                       <StyledTableCell>VOL</StyledTableCell>
                       <StyledTableCell>PnL</StyledTableCell>
-                      <StyledTableCell>Thao tác</StyledTableCell>
+                      <StyledTableCell>{t("Actions")}</StyledTableCell>
                     </TableRow>
                   </TableHead>
                 )}
