@@ -31,6 +31,7 @@ const CopyBudgetStrategy = ({
   onClose,
   dataProps,
   setDataProps,
+  setData: setDataParent,
   setChangeState,
   changeState,
   setChange,
@@ -87,6 +88,7 @@ const CopyBudgetStrategy = ({
         }
       }
     } catch (error) {
+      
       showToast(error?.response?.data?.m, "error");
     } finally {
     }
@@ -175,10 +177,11 @@ const CopyBudgetStrategy = ({
           setDataProps={setDataProps}
           setChangeState={setChangeState}
           changeState={changeState}
-          isFromCopyPlan={false}
+          isFromCopyPlan={true}
           selectedStrategy={data}
           is_edit={isEdit}
           setIsEdit={setIsEdit}
+          setData={setDataParent}
         />
       )}
       {isFromSignalStrategy && (

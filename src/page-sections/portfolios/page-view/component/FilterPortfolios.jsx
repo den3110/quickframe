@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { AutoTypesTitleValueFilter } from "type/AutoTypes";
 import { JwtContext } from "contexts/jwtContext";
 import AuthContext from "contexts/AuthContext";
+import { constant } from "constant/constant";
 
 const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
   const { decodedData } = useContext(JwtContext);
@@ -304,7 +305,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
           <Box>
             <Typography>{t("Show all account")}</Typography>
             <FormControl component="fieldset" key="accountLinked">
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={
                   <Checkbox
                     checked={isAllAccountsChecked}
@@ -312,7 +313,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
                   />
                 }
                 label={t("Show all account")}
-              />
+              /> */}
               {userLinkAccountList?.map((item, key) => (
                 <FormControlLabel
                   key={key}
@@ -323,7 +324,33 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
                       value={item._id}
                     />
                   }
-                  label={item.nickName}
+                  label={
+                    <Box display={"flex"} alignItems={"center"} gap={0.5}>
+                      <img
+                        style={{
+                          width: 32,
+                          height: 32,
+                          border: "10px",
+                          overflow: "hidden",
+                        }}
+                        src={
+                          constant.URL_ASSETS_LOGO +
+                          "/" +
+                          item?.clientId +
+                          ".ico"
+                        }
+                        alt="Can't open"
+                      />{" "}
+                      <Typography
+                        fontSize={14}
+                        textOverflow={"ellipsis"}
+                        overflow={"hidden"}
+                        whiteSpace={"nowrap"}
+                      >
+                        {item?.nickName}
+                      </Typography>
+                    </Box>
+                  }
                 />
               ))}
             </FormControl>

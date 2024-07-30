@@ -174,7 +174,7 @@ const NewBudgetStrategy = ({
         break;
     }
     try {
-      if (is_edit === true) {
+      if (is_edit === true && isFromCopyPlan!== true) {
         response = await budgetStrategyApi.userBudgetStrategyUpdate(
           idBudegetStrategy,
           data
@@ -183,7 +183,7 @@ const NewBudgetStrategy = ({
         response = await budgetStrategyApi.userBudgetStrategyCreate(data);
       }
       if (response?.data?.ok === true) {
-        if (is_edit !== true) {
+        if (is_edit !== true || (is_edit=== true && isFromCopyPlan=== true)) {
           setData(response?.data?.d);
           showToast(t("Create Strategy successfully!"), "success");
           setStrategyName("");
@@ -197,7 +197,7 @@ const NewBudgetStrategy = ({
           setCount(0);
           setCount2(0);
           onClose();
-        } else if (is_edit === true) {
+        } else if (is_edit === true && isFromCopyPlan!== true) {
           showToast(t("Update Strategy successfully!"), "success");
           const dataTemp = dataProps;
           const index = dataTemp?.findIndex(
@@ -211,6 +211,7 @@ const NewBudgetStrategy = ({
         showToast(response?.data?.m, "error");
       }
     } catch (error) {
+      console.log(error)
       showToast(error?.response?.data?.m);
     }
   };
@@ -519,120 +520,66 @@ const NewBudgetStrategy = ({
                   onChange={(e) => setStrategyName(e.target.value)}
                 />
               </ListItem>
-              <ListItem>
-                <FormControl fullWidth>
-                  <InputLabel
-                    sx={{
-                      background: (theme) =>
-                        isDark(theme) ? "#1f2937" : "white",
-                    }}
-                  >
-                    {t("Budget method")}
-                  </InputLabel>
-                  <Select
-                    disabled={readOnly}
-                    value={type}
-                    onChange={(e) => handleSetType(e)}
-                    size={"small"}
-                  >
-                    {Object.entries(BudgetStrategyType)?.map(([item, key]) => (
-                      <MenuItem key={key} value={item}>
-                        {BudgetStrategyTypeTitle[item]}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </ListItem>
-            </Box>
-            <>
-              {type === BudgetStrategyType.ALL_ORDERS && (
-                <>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrorInputAmount === true ? true : false}
-                      helperText={
-                        isErrorInputAmount === true
-                          ? t("The input value cannot be greater than 1000000 or less than 1")
-                          : ""
-                      }
-                      label={t("Setup your trade amount")}
-                      fullWidth
-                      type="number"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      InputProps={{
-                        startAdornment: <Typography>$</Typography>,
+              {
+                selectedStrategy?.is_copy !== true &&
+                <ListItem>
+                  <FormControl fullWidth>
+                    <InputLabel
+                      sx={{
+                        background: (theme) =>
+                          isDark(theme) ? "#1f2937" : "white",
                       }}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <Typography fontSize={12}>
-                      {t("The bet multiplier for each order is fixed and does not change")}
-                    </Typography>
-                  </ListItem>
-                </>
-              )}
-              {type === BudgetStrategyType.CUSTOM_AUTOWIN && (
-                <>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod1 === true ? true : false}
-                      helperText={
-                        isErrormethod1 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 1`}
-                      fullWidth
-                      type="text"
-                      value={method1}
-                      onChange={(e) => setMethod1(e.target.value)}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod2 === true ? true : false}
-                      helperText={
-                        isErrormethod2 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 2`}
-                      defaultValue={"1-2-4-8-17-35"}
-                      fullWidth
-                      type="text"
-                      value={method2}
-                      onChange={(e) => setMethod2(e.target.value)}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod3 === true ? true : false}
-                      helperText={
-                        isErrormethod3 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 3`}
-                      defaultValue={"2-3-4-5-6-1"}
-                      fullWidth
-                      type="text"
-                      value={method3}
-                      onChange={(e) => setMethod3(e.target.value)}
-                    />
-                  </ListItem>
-                </>
-              )}
-              {type === BudgetStrategyType.FIBO_X_STEP && (
-                <>
-                  <Box
-                    display={"flex"}
-                    flexDirection={downLg ? "column" : "row"}
-                  >
+                    >
+                      {t("Budget method")}
+                    </InputLabel>
+                    <Select
+                      disabled={readOnly}
+                      value={type}
+                      onChange={(e) => handleSetType(e)}
+                      size={"small"}
+                    >
+                      {Object.entries(BudgetStrategyType)?.map(([item, key]) => (
+                        <MenuItem key={key} value={item}>
+                          {BudgetStrategyTypeTitle[item]}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </ListItem>
+              }
+            </Box>
+            {selectedStrategy?.is_copy !== true &&
+              <>
+                {type === BudgetStrategyType.ALL_ORDERS && (
+                  <>
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrorInputAmount === true ? true : false}
+                        helperText={
+                          isErrorInputAmount === true
+                            ? t("The input value cannot be greater than 1000000 or less than 1")
+                            : ""
+                        }
+                        label={t("Setup your trade amount")}
+                        fullWidth
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        InputProps={{
+                          startAdornment: <Typography>$</Typography>,
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <Typography fontSize={12}>
+                        {t("The bet multiplier for each order is fixed and does not change")}
+                      </Typography>
+                    </ListItem>
+                  </>
+                )}
+                {type === BudgetStrategyType.CUSTOM_AUTOWIN && (
+                  <>
                     <ListItem>
                       <TextField
                         inputProps={{ readOnly: readOnly }}
@@ -642,7 +589,7 @@ const NewBudgetStrategy = ({
                             ? t("Value is invalid!")
                             : ""
                         }
-                        label={t("3. Set order value")}
+                        label={`${t("Set row")} 1`}
                         fullWidth
                         type="text"
                         value={method1}
@@ -650,502 +597,561 @@ const NewBudgetStrategy = ({
                       />
                     </ListItem>
                     <ListItem>
-                      <Box display="flex" alignItems="center">
-                        <Typography variant="body1" sx={{ marginRight: 2 }}>
-                          {increaseValueType === IncreaseValueType.AFTER_LOSS
-                            ? t("Khi thua sẽ tiến ")
-                            : t("Khi thắng sẽ tiến ")}
-                        </Typography>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          onClick={handleDecrement}
-                          sx={{ minWidth: "36px", padding: "6px" }}
-                        >
-                          <RemoveIcon />
-                        </Button>
-                        <Typography variant="body1" sx={{ margin: "0 16px" }}>
-                          {count}
-                        </Typography>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          onClick={handleIncrement}
-                          sx={{ minWidth: "36px", padding: "6px" }}
-                        >
-                          <AddIcon />
-                        </Button>
-                      </Box>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod2 === true ? true : false}
+                        helperText={
+                          isErrormethod2 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 2`}
+                        defaultValue={"1-2-4-8-17-35"}
+                        fullWidth
+                        type="text"
+                        value={method2}
+                        onChange={(e) => setMethod2(e.target.value)}
+                      />
                     </ListItem>
-                  </Box>
-                  <Box
-                    display={"flex"}
-                    mt={2}
-                    flexDirection={downLg ? "column" : "row"}
-                  >
-                    <ListItem sx={{ order: downLg ? 2 : 1 }}>
-                      <FormControl fullWidth>
-                        <InputLabel
-                          sx={{
-                            background: (theme) =>
-                              isDark(theme) ? "#1f2937" : "white",
-                          }}
-                        >
-                          {t("Tuỳ chọn nâng cao")}
-                        </InputLabel>
-                        <Select
-                          value={increaseValueType}
-                          onChange={(e) => setIncreaseValueType(e.target.value)}
-                          size="small"
-                          disabled={readOnly}
-                        >
-                          {Object.entries(IncreaseValueType)
-                            .slice(0, 2)
-                            .map(([item, key]) => (
-                              <MenuItem key={key} value={item}>
-                                {t(IncreaseValueTypeTitle[item])}
-                              </MenuItem>
-                            ))}
-                        </Select>
-                      </FormControl>
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod3 === true ? true : false}
+                        helperText={
+                          isErrormethod3 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 3`}
+                        defaultValue={"2-3-4-5-6-1"}
+                        fullWidth
+                        type="text"
+                        value={method3}
+                        onChange={(e) => setMethod3(e.target.value)}
+                      />
                     </ListItem>
-                    <ListItem sx={{ order: downLg ? 1 : 2 }}>
-                      <Box display="flex" alignItems="center">
-                        <Typography variant="body1" sx={{ marginRight: 2 }}>
-                          {increaseValueType === IncreaseValueType.AFTER_LOSS
-                            ? t("Khi thắng sẽ lùi ")
-                            : t("Khi thua sẽ lùi ")}
-                        </Typography>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          onClick={handleDecrement2}
-                          sx={{ minWidth: "36px", padding: "6px" }}
-                        >
-                          <RemoveIcon />
-                        </Button>
-                        <Typography variant="body1" sx={{ margin: "0 16px" }}>
-                          {count2}
-                        </Typography>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          onClick={handleIncrement2}
-                          sx={{ minWidth: "36px", padding: "6px" }}
-                        >
-                          <AddIcon />
-                        </Button>
-                      </Box>
-                    </ListItem>
-                  </Box>
-                </>
-              )}
-              {/* {console.log("method 1", method1)} */}
-              {type === BudgetStrategyType.MARTINGALE && (
-                <>
-                  <Box display={"flex"}>
+                  </>
+                )}
+                {type === BudgetStrategyType.FIBO_X_STEP && (
+                  <>
+                    <Box
+                      display={"flex"}
+                      flexDirection={downLg ? "column" : "row"}
+                    >
+                      <ListItem>
+                        <TextField
+                          inputProps={{ readOnly: readOnly }}
+                          error={isErrormethod1 === true ? true : false}
+                          helperText={
+                            isErrormethod1 === true
+                              ? t("Value is invalid!")
+                              : ""
+                          }
+                          label={t("3. Set order value")}
+                          fullWidth
+                          type="text"
+                          value={method1}
+                          onChange={(e) => setMethod1(e.target.value)}
+                        />
+                      </ListItem>
+                      <ListItem>
+                        <Box display="flex" alignItems="center">
+                          <Typography variant="body1" sx={{ marginRight: 2 }}>
+                            {increaseValueType === IncreaseValueType.AFTER_LOSS
+                              ? t("Khi thua sẽ tiến ")
+                              : t("Khi thắng sẽ tiến ")}
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleDecrement}
+                            sx={{ minWidth: "36px", padding: "6px" }}
+                          >
+                            <RemoveIcon />
+                          </Button>
+                          <Typography variant="body1" sx={{ margin: "0 16px" }}>
+                            {count}
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleIncrement}
+                            sx={{ minWidth: "36px", padding: "6px" }}
+                          >
+                            <AddIcon />
+                          </Button>
+                        </Box>
+                      </ListItem>
+                    </Box>
+                    <Box
+                      display={"flex"}
+                      mt={2}
+                      flexDirection={downLg ? "column" : "row"}
+                    >
+                      <ListItem sx={{ order: downLg ? 2 : 1 }}>
+                        <FormControl fullWidth>
+                          <InputLabel
+                            sx={{
+                              background: (theme) =>
+                                isDark(theme) ? "#1f2937" : "white",
+                            }}
+                          >
+                            {t("Tuỳ chọn nâng cao")}
+                          </InputLabel>
+                          <Select
+                            value={increaseValueType}
+                            onChange={(e) => setIncreaseValueType(e.target.value)}
+                            size="small"
+                            disabled={readOnly}
+                          >
+                            {Object.entries(IncreaseValueType)
+                              .slice(0, 2)
+                              .map(([item, key]) => (
+                                <MenuItem key={key} value={item}>
+                                  {t(IncreaseValueTypeTitle[item])}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </FormControl>
+                      </ListItem>
+                      <ListItem sx={{ order: downLg ? 1 : 2 }}>
+                        <Box display="flex" alignItems="center">
+                          <Typography variant="body1" sx={{ marginRight: 2 }}>
+                            {increaseValueType === IncreaseValueType.AFTER_LOSS
+                              ? t("Khi thắng sẽ lùi ")
+                              : t("Khi thua sẽ lùi ")}
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleDecrement2}
+                            sx={{ minWidth: "36px", padding: "6px" }}
+                          >
+                            <RemoveIcon />
+                          </Button>
+                          <Typography variant="body1" sx={{ margin: "0 16px" }}>
+                            {count2}
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleIncrement2}
+                            sx={{ minWidth: "36px", padding: "6px" }}
+                          >
+                            <AddIcon />
+                          </Button>
+                        </Box>
+                      </ListItem>
+                    </Box>
+                  </>
+                )}
+                {/* {console.log("method 1", method1)} */}
+                {type === BudgetStrategyType.MARTINGALE && (
+                  <>
+                    <Box display={"flex"}>
+                      <ListItem>
+                        <TextField
+                          inputProps={{ readOnly: readOnly }}
+                          error={isErrormethod1 === true ? true : false}
+                          helperText={
+                            isErrormethod1 === true
+                              ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                              : ""
+                          }
+                          label={t("3. Set order value")}
+                          fullWidth
+                          type="text"
+                          value={method1}
+                          onChange={(e) => setMethod1(e.target.value)}
+                        />
+                      </ListItem>
+                      <ListItem sx={{ width: "100%", overflow: "hidden" }}>
+                        <FormControl fullWidth>
+                          <InputLabel
+                            sx={{
+                              background: (theme) =>
+                                isDark(theme) ? "#1f2937" : "white",
+                            }}
+                          >
+                            {t("option")}
+                          </InputLabel>
+                          <Select
+                            disabled={readOnly}
+                            value={increaseValueType}
+                            onChange={(e) => setIncreaseValueType(e.target.value)}
+                            size="small"
+                          >
+                            {Object.entries(IncreaseValueType)?.map(
+                              ([item, key]) => (
+                                <MenuItem key={key} value={item}>
+                                  {t(IncreaseValueTypeTitle[item])}
+                                </MenuItem>
+                              )
+                            )}
+                          </Select>
+                        </FormControl>
+                      </ListItem>
+                    </Box>
+                  </>
+                )}
+                {type === BudgetStrategyType.VICTOR_2 && (
+                  <>
                     <ListItem>
                       <TextField
                         inputProps={{ readOnly: readOnly }}
                         error={isErrormethod1 === true ? true : false}
                         helperText={
                           isErrormethod1 === true
-                            ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
+                            ? t("Value is invalid!")
                             : ""
                         }
-                        label={t("3. Set order value")}
+                        label={`${t("Set row")} 1`}
                         fullWidth
                         type="text"
                         value={method1}
                         onChange={(e) => setMethod1(e.target.value)}
                       />
                     </ListItem>
-                    <ListItem sx={{ width: "100%", overflow: "hidden" }}>
-                      <FormControl fullWidth>
-                        <InputLabel
-                          sx={{
-                            background: (theme) =>
-                              isDark(theme) ? "#1f2937" : "white",
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod2 === true ? true : false}
+                        helperText={
+                          isErrormethod2 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 2`}
+                        defaultValue={"1-2-4-8-17-35"}
+                        fullWidth
+                        type="text"
+                        value={method2}
+                        onChange={(e) => setMethod2(e.target.value)}
+                      />
+                    </ListItem>
+                  </>
+                )}
+                {type === BudgetStrategyType.VICTOR_3 && (
+                  <>
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod1 === true ? true : false}
+                        helperText={
+                          isErrormethod1 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 1`}
+                        defaultValue={"1-1-2-6-4-3"}
+                        fullWidth
+                        type="text"
+                        value={method1}
+                        onChange={(e) => setMethod1(e.target.value)}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod2 === true ? true : false}
+                        helperText={
+                          isErrormethod2 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 2`}
+                        defaultValue={"1-2-4-8-17-35"}
+                        fullWidth
+                        type="text"
+                        value={method2}
+                        onChange={(e) => setMethod2(e.target.value)}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod3 === true ? true : false}
+                        helperText={
+                          isErrormethod3 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 3`}
+                        defaultValue={"1-2-4-8-17-35"}
+                        fullWidth
+                        type="text"
+                        value={method3}
+                        onChange={(e) => setMethod3(e.target.value)}
+                      />
+                    </ListItem>
+                  </>
+                )}
+                {type === BudgetStrategyType.VICTOR_4 && (
+                  <>
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod1 === true ? true : false}
+                        helperText={
+                          isErrormethod1 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 1`}
+                        defaultValue={"1-1-2-6-4-3"}
+                        fullWidth
+                        type="text"
+                        value={method1}
+                        onChange={(e) => setMethod1(e.target.value)}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod2 === true ? true : false}
+                        helperText={
+                          isErrormethod2 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 2`}
+                        defaultValue={"1-2-4-8-17-35"}
+                        fullWidth
+                        type="text"
+                        value={method2}
+                        onChange={(e) => setMethod2(e.target.value)}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod3 === true ? true : false}
+                        helperText={
+                          isErrormethod3 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 3`}
+                        defaultValue={"1-2-4-8-17-35"}
+                        fullWidth
+                        type="text"
+                        value={method3}
+                        onChange={(e) => setMethod3(e.target.value)}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        error={isErrormethod4 === true ? true : false}
+                        helperText={
+                          isErrormethod4 === true
+                            ? t("Value is invalid!")
+                            : ""
+                        }
+                        label={`${t("Set row")} 4`}
+                        defaultValue={"1-2-4-8-17-35"}
+                        fullWidth
+                        type="text"
+                        value={method4}
+                        onChange={(e) => setMethod4(e.target.value)}
+                      />
+                    </ListItem>
+                  </>
+                )}
+                <ListItem>
+                  {decodedData?.data?.levelStaff >= 3 && (
+                    <Box sx={{}}>
+                      <Typography fontSize={14} variant="subtitle1">
+                        {t("Usage Strategy")}
+                      </Typography>
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              disabled={readOnly}
+                              checked={isDefaultStrategy}
+                              onChange={(e) =>
+                                setIsDefaultStrategy(e.target.checked)
+                              }
+                              name="gilad"
+                            />
+                          }
+                          label=<Typography fontSize={14} variant="subtitle1">
+                            {t("Default Strategy")}
+                          </Typography>
+                        />
+                      </FormGroup>
+                    </Box>
+                  )}
+                </ListItem>
+                {/* <ListItem>
+                  <Box fullWidth sx={{ width: "100%" }}>
+                    <Accordion
+                      fullWidth
+                      expanded={expanded}
+                      onChange={() => setExpanded(!expanded)}
+                    >
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Typography>Nâng cao (Tùy chọn)</Typography>
+                      </AccordionSummary>
+                    </Accordion>
+                  </Box>
+                </ListItem> */}
+                {type !== BudgetStrategyType.ALL_ORDERS &&
+                  type !== BudgetStrategyType.FIBO_X_STEP && (
+                    <ListItem>
+                      <Box
+                        display={"flex"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                        gap={1}
+                      >
+                        <Typography fontSize={14}>
+                          {t("Giải thích ngắn gọn về ")} {t("Strategy")} {BudgetStrategyTypeTitle[type]}
+                        </Typography>
+                        <Typography
+                          color="primary"
+                          fontWeight={600}
+                          sx={{ cursor: "pointer" }}
+                          fontSize={14}
+                          onClick={() => {
+                            setSeeMore((prev) => !prev);
                           }}
                         >
-                          {t("option")}
-                        </InputLabel>
-                        <Select
-                          disabled={readOnly}
-                          value={increaseValueType}
-                          onChange={(e) => setIncreaseValueType(e.target.value)}
-                          size="small"
-                        >
-                          {Object.entries(IncreaseValueType)?.map(
-                            ([item, key]) => (
-                              <MenuItem key={key} value={item}>
-                                {t(IncreaseValueTypeTitle[item])}
-                              </MenuItem>
-                            )
-                          )}
-                        </Select>
-                      </FormControl>
+                          {seeMore === true ? t("Hide") : t("Learn more")}
+                        </Typography>
+                      </Box>
                     </ListItem>
-                  </Box>
-                </>
-              )}
-              {type === BudgetStrategyType.VICTOR_2 && (
-                <>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod1 === true ? true : false}
-                      helperText={
-                        isErrormethod1 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 1`}
-                      fullWidth
-                      type="text"
-                      value={method1}
-                      onChange={(e) => setMethod1(e.target.value)}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod2 === true ? true : false}
-                      helperText={
-                        isErrormethod2 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 2`}
-                      defaultValue={"1-2-4-8-17-35"}
-                      fullWidth
-                      type="text"
-                      value={method2}
-                      onChange={(e) => setMethod2(e.target.value)}
-                    />
-                  </ListItem>
-                </>
-              )}
-              {type === BudgetStrategyType.VICTOR_3 && (
-                <>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod1 === true ? true : false}
-                      helperText={
-                        isErrormethod1 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 1`}
-                      defaultValue={"1-1-2-6-4-3"}
-                      fullWidth
-                      type="text"
-                      value={method1}
-                      onChange={(e) => setMethod1(e.target.value)}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod2 === true ? true : false}
-                      helperText={
-                        isErrormethod2 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 2`}
-                      defaultValue={"1-2-4-8-17-35"}
-                      fullWidth
-                      type="text"
-                      value={method2}
-                      onChange={(e) => setMethod2(e.target.value)}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod3 === true ? true : false}
-                      helperText={
-                        isErrormethod3 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 3`}
-                      defaultValue={"1-2-4-8-17-35"}
-                      fullWidth
-                      type="text"
-                      value={method3}
-                      onChange={(e) => setMethod3(e.target.value)}
-                    />
-                  </ListItem>
-                </>
-              )}
-              {type === BudgetStrategyType.VICTOR_4 && (
-                <>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod1 === true ? true : false}
-                      helperText={
-                        isErrormethod1 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 1`}
-                      defaultValue={"1-1-2-6-4-3"}
-                      fullWidth
-                      type="text"
-                      value={method1}
-                      onChange={(e) => setMethod1(e.target.value)}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod2 === true ? true : false}
-                      helperText={
-                        isErrormethod2 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 2`}
-                      defaultValue={"1-2-4-8-17-35"}
-                      fullWidth
-                      type="text"
-                      value={method2}
-                      onChange={(e) => setMethod2(e.target.value)}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod3 === true ? true : false}
-                      helperText={
-                        isErrormethod3 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 3`}
-                      defaultValue={"1-2-4-8-17-35"}
-                      fullWidth
-                      type="text"
-                      value={method3}
-                      onChange={(e) => setMethod3(e.target.value)}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      inputProps={{ readOnly: readOnly }}
-                      error={isErrormethod4 === true ? true : false}
-                      helperText={
-                        isErrormethod4 === true
-                          ? t("Value is invalid!")
-                          : ""
-                      }
-                      label={`${t("Set row")} 4`}
-                      defaultValue={"1-2-4-8-17-35"}
-                      fullWidth
-                      type="text"
-                      value={method4}
-                      onChange={(e) => setMethod4(e.target.value)}
-                    />
-                  </ListItem>
-                </>
-              )}
-            </>
-            <ListItem>
-              {decodedData?.data?.levelStaff >= 3 && (
-                <Box sx={{}}>
-                  <Typography fontSize={14} variant="subtitle1">
-                    {t("Usage Strategy")}
-                  </Typography>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          disabled={readOnly}
-                          checked={isDefaultStrategy}
-                          onChange={(e) =>
-                            setIsDefaultStrategy(e.target.checked)
-                          }
-                          name="gilad"
-                        />
-                      }
-                      label=<Typography fontSize={14} variant="subtitle1">
-                        {t("Default Strategy")}
-                      </Typography>
-                    />
-                  </FormGroup>
-                </Box>
-              )}
-            </ListItem>
-            {/* <ListItem>
-              <Box fullWidth sx={{ width: "100%" }}>
-                <Accordion
-                  fullWidth
-                  expanded={expanded}
-                  onChange={() => setExpanded(!expanded)}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>Nâng cao (Tùy chọn)</Typography>
-                  </AccordionSummary>
-                </Accordion>
-              </Box>
-            </ListItem> */}
-            {type !== BudgetStrategyType.ALL_ORDERS &&
-              type !== BudgetStrategyType.FIBO_X_STEP && (
-                <ListItem>
-                  <Box
-                    display={"flex"}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                    gap={1}
-                  >
-                    <Typography fontSize={14}>
-                      {t("Giải thích ngắn gọn về ")} {t("Strategy")} {BudgetStrategyTypeTitle[type]}
-                    </Typography>
-                    <Typography
-                      color="primary"
-                      fontWeight={600}
-                      sx={{ cursor: "pointer" }}
-                      fontSize={14}
-                      onClick={() => {
-                        setSeeMore((prev) => !prev);
-                      }}
-                    >
-                      {seeMore === true ? t("Hide") : t("Learn more")}
-                    </Typography>
-                  </Box>
-                </ListItem>
-              )}
-            {seeMore === true && (
-              <>
-                <ListItem>
-                  {type === BudgetStrategyType.CUSTOM_AUTOWIN && (
-                    <Box>
-                      <Box>
-                        <Typography fontSize={14}>{t("There will be 3 sequences")}</Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("autowin_des_1")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("autowin_des_2")}
-                        </Typography>
-                      </Box>
-                    </Box>
                   )}
-                  {type === BudgetStrategyType.MARTINGALE && (
-                    <Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("explain_martingale_increase_after_loss")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("Value chain (entry amount):")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("- String format: x-y-z-…")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("- Unlimited number of orders")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("- Default value: 1-2-4-8-17-35")}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  )}
-                  {type === BudgetStrategyType.VICTOR_2 && (
-                    <Box>
-                      <Box>
-                        <Typography fontSize={14}>{t("There will be 2 sequences")}</Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("If you lose on sequence 1")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("If you win in sequence 2")}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  )}
-                  {type === BudgetStrategyType.VICTOR_3 && (
-                    <Box>
-                      <Box>
-                        <Typography fontSize={14}>{t("There will be 3 sequences")}</Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("victor3_des_1")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("victor3_des_2")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("victor3_des_3")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("victor3_des_4")}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  )}
-                  {type === BudgetStrategyType.VICTOR_4 && (
-                    <Box>
-                      <Box>
-                        <Typography fontSize={14}>{t("There will be 4 sequences")}</Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                          {t("victor4_des_1")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                        {t("victor4_des_2")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                        {t("victor4_des_3")}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography fontSize={14}>
-                        {t("victor4_des_4")}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  )}
-                </ListItem>
+                {seeMore === true && (
+                  <>
+                    <ListItem>
+                      {type === BudgetStrategyType.CUSTOM_AUTOWIN && (
+                        <Box>
+                          <Box>
+                            <Typography fontSize={14}>{t("There will be 3 sequences")}</Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("autowin_des_1")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("autowin_des_2")}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
+                      {type === BudgetStrategyType.MARTINGALE && (
+                        <Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("explain_martingale_increase_after_loss")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("Value chain (entry amount):")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("- String format: x-y-z-…")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("- Unlimited number of orders")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("- Default value: 1-2-4-8-17-35")}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
+                      {type === BudgetStrategyType.VICTOR_2 && (
+                        <Box>
+                          <Box>
+                            <Typography fontSize={14}>{t("There will be 2 sequences")}</Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("If you lose on sequence 1")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("If you win in sequence 2")}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
+                      {type === BudgetStrategyType.VICTOR_3 && (
+                        <Box>
+                          <Box>
+                            <Typography fontSize={14}>{t("There will be 3 sequences")}</Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("victor3_des_1")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("victor3_des_2")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("victor3_des_3")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("victor3_des_4")}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
+                      {type === BudgetStrategyType.VICTOR_4 && (
+                        <Box>
+                          <Box>
+                            <Typography fontSize={14}>{t("There will be 4 sequences")}</Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                              {t("victor4_des_1")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                            {t("victor4_des_2")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                            {t("victor4_des_3")}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography fontSize={14}>
+                            {t("victor4_des_4")}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
+                    </ListItem>
+                  </>
+                )}
               </>
-            )}
+            }
           </List>
         </Box>
         <Box display={"flex"} alignItems={"center"} gap={1} pl={2} pr={2}>

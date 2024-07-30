@@ -452,6 +452,7 @@ const BudgetStrategyPage = () => {
           title3={t("Enter your shared Budget Strategy Code to start your ideal investment plan")}
           open={dialogOpen}
           onClose={handleDialogClose}
+          setData={setData}
           isFromBudgetStrategy={true}
         />
         <SharePlan

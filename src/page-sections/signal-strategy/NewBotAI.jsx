@@ -298,620 +298,781 @@ const NewBotAI = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <Box>
-            {goals.map((goal, index) => (
-              <Box
-                key={index}
-                sx={{ display: "flex", alignItems: "center", mb: 1 }}
-              >
-                <FormControlLabel
-                  onChange={() => {
-                    const updateGoals = [...goals];
-                    const index = updateGoals.findIndex(
-                      (item) => item.type === goal.type
-                    );
-
-                    if (index !== -1) {
-                      if (updateGoals[index].count <= 0) {
-                        updateGoals[index] = { ...goal, count: 1 };
-                      } else {
-                        updateGoals[index] = { ...goal, count: 0 };
-                      }
-
-                      setGoals(updateGoals);
-                    }
-                  }}
-                  control={
-                    <Checkbox
-                      disabled={readOnly}
-                      checked={goal.count <= 0 ? false : true}
-                    />
-                  }
-                  label={`${t("Skip the rest of board 5 when:")} ${
-                    goal.type === "win_streak"
-                      ? t("Win Streak")
-                      : t("Lose Streak")
-                  }`}
-                />
-                <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
-                  <IconButton
-                    disabled={readOnly}
-                    onClick={() => handleDecrementGoal(index)}
-                    sx={{
-                      backgroundColor: (theme) =>
-                        isDark(theme) ? "rgb(50, 59, 73)" : "#f0f0f0",
-                    }}
+          {selectedBot?.is_copy !== true && (
+            <>
+              <Box>
+                {goals.map((goal, index) => (
+                  <Box
+                    key={index}
+                    sx={{ display: "flex", alignItems: "center", mb: 1 }}
                   >
-                    <Remove />
-                  </IconButton>
-                  <TextField
-                    inputProps={{ readOnly: readOnly }}
-                    type="number"
-                    value={goal.count}
-                    onChange={(e) =>
-                      handleGoalChange(
-                        index,
-                        "count",
-                        Math.max(0, Number(e.target.value))
-                      )
-                    }
-                    sx={{ width: 50, mx: 1 }}
-                  />
-                  <IconButton
-                    disabled={readOnly}
-                    onClick={() => handleIncrementGoal(index)}
-                    sx={{
-                      backgroundColor: (theme) =>
-                        isDark(theme) ? "rgb(50, 59, 73)" : "#f0f0f0",
-                    }}
-                  >
-                    <Add />
-                  </IconButton>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-          {/* <Box sx={{ mb: 2 }}>
-            <Button
-              onClick={() => {handleOpenCandleShadow(false);setIsNew(true)}}
-              variant="contained"
-              color="primary"
-            >
-              + Thêm bóng nến
-            </Button>
-          </Box> */}
-          {decodedData?.data?.levelStaff >= 3 && (
-            <Box sx={{}}>
-              <Typography fontSize={14} variant="subtitle1">
-                {t("Usage Strategy")}
-              </Typography>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      disabled={readOnly}
-                      checked={isDefault}
-                      onChange={(e) => setIsDefault(e.target.checked)}
-                      name="gilad"
-                    />
-                  }
-                  label=<Typography fontSize={14} variant="subtitle1">
-                    {t("Default Strategy")}
-                  </Typography>
-                />
-              </FormGroup>
-            </Box>
-          )}
-          <Typography mt={2}>Chọn một bóng nến muốn thêm</Typography>
-          <CardContent>
-            <Grid
-              container
-              spacing={1}
-              direction="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Grid item xs={10} md={10}>
-                <Grid container spacing={3} sx={{ justifyContent: "center" }}>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(81);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 81, key: 0 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 81)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 81)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={1} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(85);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 85, key: 1 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 85)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 85)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={5} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(89);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 89, key: 2 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 89)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 89)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={9} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(93);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 93, key: 3 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 93)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 93)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={13} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(97);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 97, key: 4 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 97)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 97)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={17} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={10} md={10}>
-                <Grid container spacing={3} sx={{ justifyContent: "center" }}>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={2} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={6} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={10} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={14} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={18} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={10} md={10}>
-                <Grid container spacing={3} sx={{ justifyContent: "center" }}>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      aria-label="cart"
-                      disabled={readOnly}
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(83);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 83, key: 5 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 83)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 83)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={3} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(87);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 87, key: 6 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 87)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 87)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={7} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(91);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 91, key: 7 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 91)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 91)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={11} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(95);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 95, key: 8 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 95)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 95)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={15} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        // addBubbleOption(1);
-                        setSelectedBallProps(99);
-                        handleOpenCandleShadow();
-                        setIsNew(true);
-                        setIsEdit(false);
-                        setSelectedCandle({ betIndex: 99, key: 9 });
-                      }}
-                    >
-                      <Badge
-                        color="warning"
-                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
-                        overlap="circular"
-                        badgeContent={
-                          targetConditions?.filter((a) => a.betIndex === 99)
-                            .length > 0
-                            ? targetConditions?.filter((a) => a.betIndex === 99)
-                                ?.length
-                            : "0"
-                        }
-                      >
-                        <Bubble number={19} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={10} md={10}>
-                <Grid container spacing={3} sx={{ justifyContent: "center" }}>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={4} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={8} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={12} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={16} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                  <Grid item xs={2} md={2}>
-                    <IconButton disabled aria-label="cart">
-                      <Badge color="warning"
-                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
-                        <Bubble bgcolor="#36454F" number={20} />
-                      </Badge>
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </CardContent>
-          <CardContent sx={{ padding: "0" }}>
-            <CardHeader
-              sx={{ padding: 0 }}
-              titleTypographyProps={{ variant: "body1" }}
-              title={t("conditions_added")}
-              action={
-                <Stack spacing={1} direction="row">
-                  <Button
-                    disabled={readOnly}
-                    startIcon={<DeleteIcon icon={"entypo:trash"} />}
-                    onClick={handleDeleteAllTargetCondition}
-                    size="small"
-                    variant="contained"
-                    color="error"
-                  >
-                    Xoá tất cả
-                  </Button>
-                </Stack>
-              }
-            />
-            <Grid container spacing={1}>
-              {targetConditions?.map((value, index) => {
-                const current = { color: "info.main", textcolor: "black" };
+                    <FormControlLabel
+                      onChange={() => {
+                        const updateGoals = [...goals];
+                        const index = updateGoals.findIndex(
+                          (item) => item.type === goal.type
+                        );
 
-                if (value.betType === "UP") {
-                  current.color = "success.main";
-                  current.textcolor = "black";
-                }
-                if (value.betType === "DOWN") {
-                  current.color = "error.main";
-                  current.textcolor = "white";
-                }
+                        if (index !== -1) {
+                          if (updateGoals[index].count <= 0) {
+                            updateGoals[index] = { ...goal, count: 1 };
+                          } else {
+                            updateGoals[index] = { ...goal, count: 0 };
+                          }
 
-                return (
-                  <Grid item xs={3} md={1} key={index}>
-                    <IconButton
-                      disabled={readOnly}
-                      aria-label="cart"
-                      onClick={() => {
-                        setSelectedCandle({ ...value, key: index });
-                        handleOpenCandleShadow();
-                        setIsEdit(true);
-                        // setTargetConditions(initTargetConditions)
+                          setGoals(updateGoals);
+                        }
                       }}
-                    >
-                      <Badge
-                        color="primary"
-                        overlap="circular"
-                        badgeContent={value.conditions.length}
-                      >
-                        <Bubble
-                          number={value.betIndex - 80}
-                          bgcolor={current.color}
-                          textcolor={current.textcolor}
+                      control={
+                        <Checkbox
+                          disabled={readOnly}
+                          checked={goal.count <= 0 ? false : true}
                         />
-                      </Badge>
-                    </IconButton>
+                      }
+                      label={`${t("Skip the rest of board 5 when:")} ${
+                        goal.type === "win_streak"
+                          ? t("Win Streak")
+                          : t("Lose Streak")
+                      }`}
+                    />
+                    <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
+                      <IconButton
+                        disabled={readOnly}
+                        onClick={() => handleDecrementGoal(index)}
+                        sx={{
+                          backgroundColor: (theme) =>
+                            isDark(theme) ? "rgb(50, 59, 73)" : "#f0f0f0",
+                        }}
+                      >
+                        <Remove />
+                      </IconButton>
+                      <TextField
+                        inputProps={{ readOnly: readOnly }}
+                        type="number"
+                        value={goal.count}
+                        onChange={(e) =>
+                          handleGoalChange(
+                            index,
+                            "count",
+                            Math.max(0, Number(e.target.value))
+                          )
+                        }
+                        sx={{ width: 50, mx: 1 }}
+                      />
+                      <IconButton
+                        disabled={readOnly}
+                        onClick={() => handleIncrementGoal(index)}
+                        sx={{
+                          backgroundColor: (theme) =>
+                            isDark(theme) ? "rgb(50, 59, 73)" : "#f0f0f0",
+                        }}
+                      >
+                        <Add />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+
+              {/* <Box sx={{ mb: 2 }}>
+                <Button
+                  onClick={() => {handleOpenCandleShadow(false);setIsNew(true)}}
+                  variant="contained"
+                  color="primary"
+                >
+                  + Thêm bóng nến
+                </Button>
+              </Box> */}
+              {decodedData?.data?.levelStaff >= 3 && (
+                <Box sx={{}}>
+                  <Typography fontSize={14} variant="subtitle1">
+                    {t("Usage Strategy")}
+                  </Typography>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          disabled={readOnly}
+                          checked={isDefault}
+                          onChange={(e) => setIsDefault(e.target.checked)}
+                          name="gilad"
+                        />
+                      }
+                      label=<Typography fontSize={14} variant="subtitle1">
+                        {t("Default Strategy")}
+                      </Typography>
+                    />
+                  </FormGroup>
+                </Box>
+              )}
+              <Typography mt={2}>Chọn một bóng nến muốn thêm</Typography>
+              <CardContent>
+                <Grid
+                  container
+                  spacing={1}
+                  direction="column"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Grid item xs={10} md={10}>
+                    <Grid
+                      container
+                      spacing={3}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(81);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 81, key: 0 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 81)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 81
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={1} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(85);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 85, key: 1 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 85)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 85
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={5} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(89);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 89, key: 2 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 89)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 89
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={9} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(93);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 93, key: 3 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 93)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 93
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={13} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(97);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 97, key: 4 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 97)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 97
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={17} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                    </Grid>
                   </Grid>
-                );
-              })}
-            </Grid>
-          </CardContent>
-          {/* <List>
-            {targetConditions?.length > 0 && targetConditions.map((condition, index) => (
-              <ListItem key={index} sx={{ marginBottom: 1 }}>
-                <ListItemText
-                  primary={`Bóng ${condition.betIndex } | Điều kiện: ${
-                    condition.conditions?.length
-                  } | Lệnh : ${condition.betType === "UP" ? "🟢" : "🔴"}`}
+                  <Grid item xs={10} md={10}>
+                    <Grid
+                      container
+                      spacing={3}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={2} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={6} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={10} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={14} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={18} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={10} md={10}>
+                    <Grid
+                      container
+                      spacing={3}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          aria-label="cart"
+                          disabled={readOnly}
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(83);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 83, key: 5 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 83)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 83
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={3} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(87);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 87, key: 6 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 87)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 87
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={7} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(91);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 91, key: 7 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 91)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 91
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={11} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(95);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 95, key: 8 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 95)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 95
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={15} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            // addBubbleOption(1);
+                            setSelectedBallProps(99);
+                            handleOpenCandleShadow();
+                            setIsNew(true);
+                            setIsEdit(false);
+                            setSelectedCandle({ betIndex: 99, key: 9 });
+                          }}
+                        >
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                            badgeContent={
+                              targetConditions?.filter((a) => a.betIndex === 99)
+                                .length > 0
+                                ? targetConditions?.filter(
+                                    (a) => a.betIndex === 99
+                                  )?.length
+                                : "0"
+                            }
+                          >
+                            <Bubble number={19} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={10} md={10}>
+                    <Grid
+                      container
+                      spacing={3}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={4} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={8} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={12} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={16} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                      <Grid item xs={2} md={2}>
+                        <IconButton disabled aria-label="cart">
+                          <Badge
+                            color="warning"
+                            sx={{
+                              "& .MuiBadge-badge": {
+                                color: "#fff",
+                                backgroundColor: "orange",
+                              },
+                            }}
+                            overlap="circular"
+                          >
+                            <Bubble bgcolor="#36454F" number={20} />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </CardContent>
+              <CardContent sx={{ padding: "0" }}>
+                <CardHeader
+                  sx={{ padding: 0 }}
+                  titleTypographyProps={{ variant: "body1" }}
+                  title={t("conditions_added")}
+                  action={
+                    <Stack spacing={1} direction="row">
+                      <Button
+                        disabled={readOnly}
+                        startIcon={<DeleteIcon icon={"entypo:trash"} />}
+                        onClick={handleDeleteAllTargetCondition}
+                        size="small"
+                        variant="contained"
+                        color="error"
+                      >
+                        Xoá tất cả
+                      </Button>
+                    </Stack>
+                  }
                 />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    sx={{
-                      backgroundColor: (theme) =>
-                        isDark(theme) ? "rgb(50, 59, 73)" : "#f0f0f0",
-                      mr: 1,
-                    }}
-                    onClick={() => {
-                      setSelectedCandle({ ...condition, key: index });
-                      handleOpenCandleShadow()
-                      setIsEdit(true)
-                      // setTargetConditions(initTargetConditions)
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    edge="end"
-                    sx={{
-                      backgroundColor: (theme) =>
-                        isDark(theme) ? "rgb(50, 59, 73)" : "#f0f0f0",
-                    }}
-                    onClick={(event) => handleMenuOpen(event, index)}
-                  >
-                    <MoreVert />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEls[index]}
-                    open={Boolean(anchorEls[index])}
-                    onClose={() => handleMenuClose(index)}
-                  >
-                    <MenuItem onClick={() => handleEditCondition(index)}>
-                      <Edit sx={{ marginRight: 1 }} /> Sửa
-                    </MenuItem>
-                    <MenuItem onClick={() => handleDeleteCondition(index)}>
-                      <CloseIcon sx={{ marginRight: 1 }} /> Xoá
-                    </MenuItem>
-                  </Menu>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List> */}
+                <Grid container spacing={1}>
+                  {targetConditions?.map((value, index) => {
+                    const current = { color: "info.main", textcolor: "black" };
+
+                    if (value.betType === "UP") {
+                      current.color = "success.main";
+                      current.textcolor = "black";
+                    }
+                    if (value.betType === "DOWN") {
+                      current.color = "error.main";
+                      current.textcolor = "white";
+                    }
+
+                    return (
+                      <Grid item xs={3} md={1} key={index}>
+                        <IconButton
+                          disabled={readOnly}
+                          aria-label="cart"
+                          onClick={() => {
+                            setSelectedCandle({ ...value, key: index });
+                            handleOpenCandleShadow();
+                            setIsEdit(true);
+                            // setTargetConditions(initTargetConditions)
+                          }}
+                        >
+                          <Badge
+                            color="primary"
+                            overlap="circular"
+                            badgeContent={value.conditions.length}
+                          >
+                            <Bubble
+                              number={value.betIndex - 80}
+                              bgcolor={current.color}
+                              textcolor={current.textcolor}
+                            />
+                          </Badge>
+                        </IconButton>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </CardContent>
+              {/* <List>
+                {targetConditions?.length > 0 && targetConditions.map((condition, index) => (
+                  <ListItem key={index} sx={{ marginBottom: 1 }}>
+                    <ListItemText
+                      primary={`Bóng ${condition.betIndex } | Điều kiện: ${
+                        condition.conditions?.length
+                      } | Lệnh : ${condition.betType === "UP" ? "🟢" : "🔴"}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        sx={{
+                          backgroundColor: (theme) =>
+                            isDark(theme) ? "rgb(50, 59, 73)" : "#f0f0f0",
+                          mr: 1,
+                        }}
+                        onClick={() => {
+                          setSelectedCandle({ ...condition, key: index });
+                          handleOpenCandleShadow()
+                          setIsEdit(true)
+                          // setTargetConditions(initTargetConditions)
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        edge="end"
+                        sx={{
+                          backgroundColor: (theme) =>
+                            isDark(theme) ? "rgb(50, 59, 73)" : "#f0f0f0",
+                        }}
+                        onClick={(event) => handleMenuOpen(event, index)}
+                      >
+                        <MoreVert />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEls[index]}
+                        open={Boolean(anchorEls[index])}
+                        onClose={() => handleMenuClose(index)}
+                      >
+                        <MenuItem onClick={() => handleEditCondition(index)}>
+                          <Edit sx={{ marginRight: 1 }} /> Sửa
+                        </MenuItem>
+                        <MenuItem onClick={() => handleDeleteCondition(index)}>
+                          <CloseIcon sx={{ marginRight: 1 }} /> Xoá
+                        </MenuItem>
+                      </Menu>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List> */}
+            </>
+          )}
         </Box>
         <Box
           sx={{
@@ -942,19 +1103,21 @@ const NewBotAI = ({
           </Button>
         </Box>
       </Box>
-      <CandleShadow
-        open={openCandleShadow}
-        onClose={handleCloseCandleShadow}
-        setTargetConditions={setTargetConditions}
-        targetConditions={targetConditions}
-        selectedCandle={selectedCandle}
-        is_edit={is_edit}
-        is_new={isNew}
-        setIsNew={setIsNew}
-        setIsEdit={setIsEdit}
-        initState={initState}
-        selectedBallProps={selectedBallProps}
-      />
+      {selectedBot?.is_copy !== true && (
+        <CandleShadow
+          open={openCandleShadow}
+          onClose={handleCloseCandleShadow}
+          setTargetConditions={setTargetConditions}
+          targetConditions={targetConditions}
+          selectedCandle={selectedCandle}
+          is_edit={is_edit}
+          is_new={isNew}
+          setIsNew={setIsNew}
+          setIsEdit={setIsEdit}
+          initState={initState}
+          selectedBallProps={selectedBallProps}
+        />
+      )}
     </Drawer>
   );
 };

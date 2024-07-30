@@ -29,8 +29,7 @@ const NewBotAIStringMethod = ({
   setIsEdit,
   selectedBot,
   setChange,
-  isFromCopyPlan
-
+  isFromCopyPlan,
 }) => {
   const { decodedData } = useContext(JwtContext);
   const theme = useTheme();
@@ -42,7 +41,7 @@ const NewBotAIStringMethod = ({
   const [allResults, setAllResults] = useState(false);
   const [isDefault, setIsDefault] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
-  const {t }= useTranslation()
+  const { t } = useTranslation();
 
   const isDisableButton = name?.length <= 0 || chainSignal?.length <= 0;
   const handleChangeChainSignal = (value) => {
@@ -60,7 +59,7 @@ const NewBotAIStringMethod = ({
 
   const handleSubmit = async () => {
     try {
-      setReadOnly(true)
+      setReadOnly(true);
       const data = {
         name,
         sources: {
@@ -81,7 +80,7 @@ const NewBotAIStringMethod = ({
       }
       if (response?.data?.ok === true) {
         showToast(
-          (is_edit === true && isFromCopyPlan !== true)
+          is_edit === true && isFromCopyPlan !== true
             ? "Lưu phương pháp thành công"
             : "Tạo phương pháp thành công",
           "success"
@@ -95,11 +94,10 @@ const NewBotAIStringMethod = ({
         showToast(response?.data?.m, "error");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       showToast(error?.response?.data?.m, "error");
-    }
-    finally {
-      setReadOnly(false)
+    } finally {
+      setReadOnly(false);
     }
   };
 
@@ -173,74 +171,79 @@ const NewBotAIStringMethod = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-
-          <Typography variant="subtitle1">2. {t("Strategy")}*</Typography>
-          <Select
-            disabled={readOnly}
-            value={strategy}
-            onChange={(e) => setStrategy(e.target.value)}
-            fullWidth
-          >
-            <MenuItem value="STRING_METHOD">String method</MenuItem>
-          </Select>
-
-          <Typography variant="subtitle1">3. {t("Set pattern")}</Typography>
-          <MuiChipsInput
-            value={chainSignal}
-            onChange={handleChangeChainSignal}
-            placeholder={t("Press enter to add...")}
-            disabled={readOnly}
-          />
-          <Typography variant="subtitle1">
-            4. {t("Use both waiting and resulting candles")}
-          </Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
+          {selectedBot?.is_copy !== true && (
+            <>
+              <Typography variant="subtitle1">2. {t("Strategy")}*</Typography>
+              <Select
                 disabled={readOnly}
-                checked={allResults}
-                onChange={handleChangeAllResult}
+                value={strategy}
+                onChange={(e) => setStrategy(e.target.value)}
+                fullWidth
+              >
+                <MenuItem value="STRING_METHOD">String method</MenuItem>
+              </Select>
+
+              <Typography variant="subtitle1">3. {t("Set pattern")}</Typography>
+              <MuiChipsInput
+                value={chainSignal}
+                onChange={handleChangeChainSignal}
+                placeholder={t("Press enter to add...")}
+                disabled={readOnly}
               />
-            }
-            label="All results"
-          />
-          <Typography
-            variant="body2"
-            sx={{ color: "text.secondary", marginTop: 2 }}
-          >
-            * s = SELL, b = BUY <br />
-            * {t("The resulting string and the wanted signal are separated by -")}
-            <br />
-            * Nhiều chuỗi có thể kết hợp và các chuỗi dài hơn được ưu tiên. Một
-            chuỗi hợp lệ phải có ký tự 's' hoặc 'b' và ký tự 'x' không nằm ở đầu
-            chuỗi.
-            <br />
-            * Ngoài ra, chuỗi tín hiệu có thể được rút ngắn nếu chuỗi bị trùng
-            lặp hoặc quá dài như sau:
-            <br />
-            s-bbbbb → s-5b, sxx-b → s2x-b
-          </Typography>
-          {decodedData?.data?.levelStaff >= 3 && (
-            <Box sx={{}}>
-              <Typography fontSize={14} variant="subtitle1">
-                {t("Usage strategy")}
+              <Typography variant="subtitle1">
+                4. {t("Use both waiting and resulting candles")}
               </Typography>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      disabled={readOnly}
-                      checked={isDefault}
-                      onChange={(e) => setIsDefault(e.target.checked)}
-                      name="gilad"
-                    />
-                  }
-                  label=<Typography fontSize={14} variant="subtitle1">
-                    {t("Default Strategy")}
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    disabled={readOnly}
+                    checked={allResults}
+                    onChange={handleChangeAllResult}
+                  />
+                }
+                label="All results"
+              />
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary", marginTop: 2 }}
+              >
+                * s = SELL, b = BUY <br />*{" "}
+                {t(
+                  "The resulting string and the wanted signal are separated by -"
+                )}
+                <br />
+                * Nhiều chuỗi có thể kết hợp và các chuỗi dài hơn được ưu tiên.
+                Một chuỗi hợp lệ phải có ký tự 's' hoặc 'b' và ký tự 'x' không
+                nằm ở đầu chuỗi.
+                <br />
+                * Ngoài ra, chuỗi tín hiệu có thể được rút ngắn nếu chuỗi bị
+                trùng lặp hoặc quá dài như sau:
+                <br />
+                s-bbbbb → s-5b, sxx-b → s2x-b
+              </Typography>
+              {decodedData?.data?.levelStaff >= 3 && (
+                <Box sx={{}}>
+                  <Typography fontSize={14} variant="subtitle1">
+                    {t("Usage strategy")}
                   </Typography>
-                />
-              </FormGroup>
-            </Box>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          disabled={readOnly}
+                          checked={isDefault}
+                          onChange={(e) => setIsDefault(e.target.checked)}
+                          name="gilad"
+                        />
+                      }
+                      label=<Typography fontSize={14} variant="subtitle1">
+                        {t("Default Strategy")}
+                      </Typography>
+                    />
+                  </FormGroup>
+                </Box>
+              )}
+            </>
           )}
         </Box>
 
