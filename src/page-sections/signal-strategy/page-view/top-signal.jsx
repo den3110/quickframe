@@ -162,7 +162,7 @@ const TopSignalPageView = () => {
           100}, "desc"))
         break;
       case 2:
-        setDataState(_.orderBy(data, function(e) { return e?.win_streak}, "desc"))
+        setDataState(_.orderBy(data, function(e) { return e?.longest_win_streak}, "desc"))
         break;
       case 3:
         setDataState(_.orderBy(data, function(e) { return e?.volume}, "desc"))
@@ -430,7 +430,8 @@ const TopSignalPageView = () => {
                                   : "error.main"
                               }
                             >
-                              {item?.win_streak}/{item?.longest_win_streak}
+                              {/* {item?.win_streak}/{item?.longest_win_streak} */}
+                              {item?.longest_win_streak}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell
@@ -451,7 +452,8 @@ const TopSignalPageView = () => {
                                   : "error.main"
                               }
                             >
-                              {item?.lose_streak}/{item?.longest_lose_streak}
+                              {/* {item?.lose_streak}/{item?.longest_lose_streak} */}
+                              {item?.longest_lose_streak}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell

@@ -503,6 +503,7 @@ const SignalStrategyList = () => {
           open={dialogOpen}
           onClose={handleDialogClose}
           isFromSignalStrategy={true}
+          setChange={setChange}
         />
         <SharePlan
           title={t("Share Bot AI")}

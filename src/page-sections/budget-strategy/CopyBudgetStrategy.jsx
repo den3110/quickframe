@@ -19,6 +19,7 @@ import NewBotAI from "page-sections/signal-strategy/NewBotAI";
 import NewBotAIStringMethod from "page-sections/signal-strategy/NewBotAIStringMethod";
 import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import { showToast } from "components/toast/toast";
+import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 const BoxFlex = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
@@ -32,6 +33,7 @@ const CopyBudgetStrategy = ({
   setDataProps,
   setChangeState,
   changeState,
+  setChange,
   isFromSignalStrategy,
   isFromBudgetStrategy,
   title,
@@ -57,18 +59,21 @@ const CopyBudgetStrategy = ({
       let response;
       // const result= await i
       if (isFromBudgetStrategy) {
-        // response= await budgetStrategyApi.userBudgetSignalGenerateShareCode(selectedData?._id);
-        // if(response?.data?.ok=== true) {
-        //   setData(response?.data?.d)
-        //   setOpenCopyPlan(true);
-        //   onClose();
-        // }
-        // else {
-        //   showToast(response?.data?.m, "error")
-        // }
+        response = await budgetStrategyApi.userBudgetStrategyCopy(
+          selectedData?._id
+        );
+        if (response?.data?.ok === true) {
+          setData(response?.data?.d);
+          setOpenCopyPlan(true);
+          setInitState(true)
+          setIsEdit(true);
+          onClose();
+        } else {
+          showToast(response?.data?.m, "error");
+        }
       }
       if (isFromSignalStrategy) {
-        response = await budgetStrategyApi.userBudgetSignalGenerateShareCode(
+        response = await signalStrategyApi.userBudgetSignalCopy(
           selectedData?._id
         );
         if (response?.data?.ok === true) {
@@ -188,6 +193,7 @@ const CopyBudgetStrategy = ({
               setIsEdit={setIsEdit}
               selectedBot={data}
               isFromCopyPlan={true}
+              setChange={setChange}
               // setChange={setChange}
             />
           )}

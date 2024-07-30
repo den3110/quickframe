@@ -29,6 +29,8 @@ const NewBotAIStringMethod = ({
   setIsEdit,
   selectedBot,
   setChange,
+  isFromCopyPlan
+
 }) => {
   const { decodedData } = useContext(JwtContext);
   const theme = useTheme();
@@ -69,7 +71,7 @@ const NewBotAIStringMethod = ({
         type: strategy,
       };
       let response;
-      if (is_edit === true) {
+      if (is_edit === true && isFromCopyPlan !== true) {
         response = await signalStrategyApi.userBudgetSignalUpdate(
           idBotAI,
           data
@@ -79,7 +81,7 @@ const NewBotAIStringMethod = ({
       }
       if (response?.data?.ok === true) {
         showToast(
-          is_edit === true
+          (is_edit === true && isFromCopyPlan !== true)
             ? "Lưu phương pháp thành công"
             : "Tạo phương pháp thành công",
           "success"
@@ -93,6 +95,7 @@ const NewBotAIStringMethod = ({
         showToast(response?.data?.m, "error");
       }
     } catch (error) {
+      console.log(error)
       showToast(error?.response?.data?.m, "error");
     }
     finally {

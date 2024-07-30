@@ -28,6 +28,14 @@ const signalStrategyApi = {
   userBudgetSignalTeleSignalInfo(id, data) {
     const url= `/users/budget-signal/tele-signal-info/` + id
     return axiosClient.get(url, data)
+  },
+  userBudgetSignalGenerateShareCode(id, data) {
+    const url= `/users/budget-signal/generate-share-code/` + id
+    return axiosClient.put(url, data)
+  },
+  userBudgetSignalCopy(id, data) {
+    const url= `/users/budget-signal/copy/` + id
+    return axiosClient.post(url, data)
   }
   
 };

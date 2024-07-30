@@ -428,6 +428,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 81)
@@ -456,6 +457,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 85)
@@ -484,6 +486,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 89)
@@ -512,6 +515,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 93)
@@ -540,6 +544,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 97)
@@ -559,35 +564,40 @@ const NewBotAI = ({
                 <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={2} />
                       </Badge>
                     </IconButton>
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={6} />
                       </Badge>
                     </IconButton>
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={10} />
                       </Badge>
                     </IconButton>
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={14} />
                       </Badge>
                     </IconButton>
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={18} />
                       </Badge>
                     </IconButton>
@@ -611,6 +621,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 83)
@@ -639,6 +650,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 87)
@@ -667,6 +679,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 91)
@@ -695,6 +708,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 95)
@@ -723,6 +737,7 @@ const NewBotAI = ({
                     >
                       <Badge
                         color="warning"
+                        sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }}
                         overlap="circular"
                         badgeContent={
                           targetConditions?.filter((a) => a.betIndex === 99)
@@ -742,35 +757,40 @@ const NewBotAI = ({
                 <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={4} />
                       </Badge>
                     </IconButton>
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={8} />
                       </Badge>
                     </IconButton>
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={12} />
                       </Badge>
                     </IconButton>
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={16} />
                       </Badge>
                     </IconButton>
                   </Grid>
                   <Grid item xs={2} md={2}>
                     <IconButton disabled aria-label="cart">
-                      <Badge color="warning" overlap="circular">
+                      <Badge color="warning"
+                      sx={{ "& .MuiBadge-badge": { color: "#fff", backgroundColor: "orange" } }} overlap="circular">
                         <Bubble bgcolor="#36454F" number={20} />
                       </Badge>
                     </IconButton>

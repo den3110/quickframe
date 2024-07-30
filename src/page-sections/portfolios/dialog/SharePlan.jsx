@@ -25,6 +25,7 @@ import { isDark } from "util/constants";
 import { ActionBotType } from "type/ActionBotType";
 import { useTranslation } from "react-i18next";
 import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
+import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 // import AuthContext from "contexts/AuthContext";
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -55,13 +56,22 @@ const SharePlan = ({ open, onClose, selectedPlan, setData, title, title2, title3
         response= await portfolioApi.userBotAction(selectedPlan?._id, payload);
       }
       if(isFromBudgetStrategy) {
-        // response= await budgetStrategyApi.userBudgetSignalGenerateShareCode(selectedPlan?._id);
+        response= await budgetStrategyApi.userBudgetStrategyGenerateShareCode(selectedPlan?._id);
       }
       if(isFromSignalStrategy) {
-        // response= await budgetStrategyApi.userBudgetSignalGenerateShareCode(selectedPlan?._id);
+        response= await signalStrategyApi.userBudgetSignalGenerateShareCode(selectedPlan?._id);
       }
       if(response?.data?.ok=== true) {
-        setShareCode(response?.data?.err_code)
+        if(isFromPortfolios) {
+          setShareCode(response?.data?.err_code)
+        }
+        if(isFromBudgetStrategy) {
+          setShareCode(response?.data?.d?.shareCode)
+
+        }
+        if(isFromSignalStrategy) {
+          setShareCode(response?.data?.d?.shareCode)
+        }
       }
       else if(response?.data?.d=== false) {
         showToast(response?.data?.m, "error")

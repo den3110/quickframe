@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -44,10 +44,13 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
     live: true,
   });
 
-  const [accountLinkedFilter, setAccountLinkedFilter] = useState({
-    showAll: false,
-    linkedAccount: true,
-  });
+  const [accountLinkedFilter, setAccountLinkedFilter] = useState([]);
+
+  useEffect(() => {
+    if (selectedLinkAccount) {
+      setAccountLinkedFilter([selectedLinkAccount]);
+    }
+  }, [selectedLinkAccount]);
 
   const handleFilterTypeChange = (event) => {
     setSelectedFilterTypes(event.target.value);
@@ -73,12 +76,12 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
       [event.target.name]: event.target.checked,
     });
   };
-  
+
   const handleAccountLinkedChange = (event) => {
-    setAccountLinkedFilter({
-      ...accountLinkedFilter,
-      [event.target.name]: event.target.checked,
-    });
+    const { value, checked } = event.target;
+    setAccountLinkedFilter((prev) =>
+      checked ? [...prev, value] : prev.filter((item) => item !== value)
+    );
   };
 
   const handleCheckboxChange = (filterType) => (event) => {
@@ -126,11 +129,8 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
           );
           break;
         case "accountLinked":
-          const { showAll, linkedAccount } = accountLinkedFilter;
-          filteredData = filteredData.filter(
-            (item) =>
-              showAll ||
-              (linkedAccount && item.linkAccountId === selectedLinkAccount)
+          filteredData = filteredData.filter((item) =>
+            accountLinkedFilter.includes(item.linkAccountId)
           );
           break;
         default:
@@ -161,10 +161,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
       demo: false,
       live: false,
     });
-    setAccountLinkedFilter({
-      showAll: false,
-      linkedAccount: true,
-    });
+    setAccountLinkedFilter([selectedLinkAccount]);
     setData(data);
     setPage(1);
     onClose();
@@ -290,6 +287,19 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
           </Box>
         );
       case "accountLinked":
+        const handleAllAccountsChange = (event) => {
+          const { checked } = event.target;
+          if (checked) {
+            setAccountLinkedFilter(userLinkAccountList.map((item) => item._id));
+          } else {
+            setAccountLinkedFilter([]);
+          }
+        };
+
+        const isAllAccountsChecked =
+          userLinkAccountList.length > 0 &&
+          accountLinkedFilter.length === userLinkAccountList.length;
+
         return (
           <Box>
             <Typography>{t("Show all account")}</Typography>
@@ -297,23 +307,25 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={accountLinkedFilter.showAll}
-                    onChange={handleAccountLinkedChange}
-                    name="showAll"
+                    checked={isAllAccountsChecked}
+                    onChange={handleAllAccountsChange}
                   />
                 }
-                label={t("All")}
+                label={t("Show all account")}
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={accountLinkedFilter.linkedAccount}
-                    onChange={handleAccountLinkedChange}
-                    name="linkedAccount"
-                  />
-                }
-                label={t("Current linked account")}
-              />
+              {userLinkAccountList?.map((item, key) => (
+                <FormControlLabel
+                  key={key}
+                  control={
+                    <Checkbox
+                      checked={accountLinkedFilter.includes(item._id)}
+                      onChange={handleAccountLinkedChange}
+                      value={item._id}
+                    />
+                  }
+                  label={item.nickName}
+                />
+              ))}
             </FormControl>
           </Box>
         );
@@ -321,6 +333,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
         return null;
     }
   };
+
   const allFilters = ["isRunning", "autoType", "accountType", "accountLinked"];
 
   return (
@@ -376,14 +389,14 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
                       />
                       <Box ml={1}>
                         {t(
-                    value === "isRunning"
-                      ? "On Going Plan"
-                      : value === "autoType"
-                      ? "Loại gói"
-                      : value === "accountType"
-                      ? "Account Type"
-                      : "linked_account"
-                  )}
+                          value === "isRunning"
+                            ? "On Going Plan"
+                            : value === "autoType"
+                            ? "Loại gói"
+                            : value === "accountType"
+                            ? "Account Type"
+                            : "linked_account"
+                        )}
                       </Box>
                     </Box>
                   ))}
@@ -419,7 +432,9 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t("Cancel")}</Button>
-        <Button onClick={applyFilters}>{t("apply")}</Button>
+        <Button variant="contained" onClick={applyFilters}>
+          {t("Apply")}
+        </Button>
       </DialogActions>
     </Dialog>
   );

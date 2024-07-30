@@ -62,7 +62,8 @@ export const warning = {
   700: "#B75F19",
   800: "#93440F",
   900: "#7A3109",
-  main: "#FEBF06"
+  main: "#FEBF06",
+  orange: "#ffa500"
 };
 export const error = {
   25: "#FEF6F8",

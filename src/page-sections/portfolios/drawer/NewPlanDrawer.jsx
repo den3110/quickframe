@@ -84,6 +84,7 @@ const NewPlanDrawer = ({
   const { walletMode } = useContext(SettingsContext);
   const {data }= useContext(PortfoliosContext)
   const [step, setStep] = useState(1);
+  const [defaultPlan, setDefaultPlan]= useState(false)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
   const [planName, setPlanName] = useState("");
@@ -490,6 +491,9 @@ const NewPlanDrawer = ({
           get_signal_to_stop_from_signal_plan: getSignalToStopFromSignalPlan,
         }
       };
+      if(decodedData?.data?.levelStaff >= 3) {
+        data= {...data, is_default: defaultPlan}
+      }
       if (isEdit === true) {
         if (isFromLeaderboard) {
           response = await portfolioApi.usersBotCreate(data);
@@ -618,6 +622,7 @@ const NewPlanDrawer = ({
       setLinkAccountId(selectedPlan?.linkAccountId);
       setBetSecond(selectedPlan?.bet_second);
       setAutoType(selectedPlan?.autoType);
+      setDefaultPlan(selectedPlan?.is_default)
       setSelectedTab(
         selectedPlan?.autoType === 1
           ? "Follow Leader"
@@ -757,6 +762,7 @@ const NewPlanDrawer = ({
       setBetSecond(25);
       setAutoType(AutoTypes.BOT);
       setSelectedTab("Bot AI");
+      setDefaultPlan(false)
       setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
       setBudgetStrategy(dataBudgetStrategy?.[0]?._id);
       setLinkAccountId(userLinkAccountListState?.[0]?._id);
@@ -2264,6 +2270,24 @@ const NewPlanDrawer = ({
                     </Typography>
                   </AccordionSummary>
                   <Box p={2}>
+                  {decodedData?.data?.levelStaff >= 3 &&
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                      mb={1}
+                    >
+                      <Typography variant="h6">{t("Default Plan")}</Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={defaultPlan}
+                            onChange={() => setDefaultPlan(!defaultPlan)}
+                          />
+                        }
+                      />
+                    </Box>}
                   <Box
                       display={"flex"}
                       justifyContent={"space-between"}
