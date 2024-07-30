@@ -25,10 +25,8 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
   const { t } = useTranslation();
   const theme = useTheme();
 
-  // State to manage selected filter types
   const [selectedFilterTypes, setSelectedFilterTypes] = useState([]);
 
-  // States for various filters
   const [runningFilters, setRunningFilters] = useState({
     running: false,
     paused: false,
@@ -45,12 +43,10 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
     live: false,
   });
 
-  // Handle changes for filter type selection
   const handleFilterTypeChange = (event) => {
     setSelectedFilterTypes(event.target.value);
   };
 
-  // Handle changes for different filters
   const handleRunningChange = (event) => {
     setRunningFilters({
       ...runningFilters,
@@ -73,7 +69,6 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
   };
 
   const handleCheckboxChange = (filterType) => (event) => {
-    // const value = event.target.value;
     setSelectedFilterTypes((prevSelected) => {
       if (prevSelected.includes(filterType)) {
         return prevSelected.filter((v) => v !== filterType);
@@ -83,7 +78,6 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
     });
   };
 
-  // Apply filters based on selected filter types
   const applyFilters = () => {
     let filteredData = [...data];
 
@@ -151,7 +145,6 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
     onClose();
   };
 
-  // Render filter options based on filter type
   const renderFilterOptions = (filterType) => {
     switch (filterType) {
       case "isRunning":
@@ -276,11 +269,6 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
     }
   };
   const allFilters = ["isRunning", "autoType", "accountType"];
-  // Get remaining filter options that can be added
-  const getRemainingFilterOptions = () => {
-    const allFilters = ["isRunning", "autoType", "accountType"];
-    return allFilters.filter((f) => !selectedFilterTypes.includes(f));
-  };
 
   return (
     <Dialog fullWidth open={open} onClose={onClose}>
