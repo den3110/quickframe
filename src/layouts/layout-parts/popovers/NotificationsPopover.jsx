@@ -178,7 +178,7 @@ function ListItem({ msg, onClose, onClick }) {
         borderBottom: 1,
         cursor: "pointer",
         borderColor: "divider",
-        backgroundColor: msg?.is_read ? "grey.700" : "transparent",
+        backgroundColor: msg?.is_read=== false ? "grey.700" : "transparent",
         "&:hover": {
           backgroundColor: "action.hover",
         },
