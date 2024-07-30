@@ -54,7 +54,6 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
   }, [selectedLinkAccount]);
 
   const handleFilterTypeChange = (event) => {
-    console.log('click ' + event.target.value);
     setSelectedFilterTypes(event.target.value);
   };
 
@@ -432,10 +431,9 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
               )}
             >
               {allFilters?.map((option) => (
-                <MenuItem key={option} value={option}>
+                <MenuItem key={option} value={option} onClick={handleCheckboxChange(option)}>
                   <Checkbox
                     checked={selectedFilterTypes.includes(option)}
-                    onChange={handleCheckboxChange(option)}
                     value={option}
                   />
                   {t(
