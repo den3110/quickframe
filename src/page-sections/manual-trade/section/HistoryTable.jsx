@@ -27,8 +27,10 @@ import {
 import { AdapterDateFns } from "@mui/x-date-pickers-pro/AdapterDateFns";
 import TableDetailTrade from "../component/TableDetailTrade";
 import { ManualTradeContext } from "contexts/ManualTradeContext";
+import { useTranslation } from "react-i18next";
 
 const HistoryTable = () => {
+  const {t }= useTranslation()
   const {
     data,
     // setData,
@@ -37,7 +39,7 @@ const HistoryTable = () => {
   // const [data, setData] = useState([]); // Assuming you have a data state
   const toggleFilterVisibility = () => {
     setIsFilterVisible(!isFilterVisible);
-  };
+  };  
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState(null);
@@ -157,7 +159,7 @@ const HistoryTable = () => {
               alignItems: "center",
             }}
           >
-            <Typography onClick={toggleFilterVisibility} variant="body1">Bộ lọc</Typography>
+            <Typography onClick={toggleFilterVisibility} variant="body1">{t("Filters")}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Box display={"flex"} alignItems={"center"} gap={2}>
@@ -166,14 +168,14 @@ const HistoryTable = () => {
                 aria-haspopup="true"
                 onClick={(event) => handleClick(event, "time")}
               >
-                Thời gian: Gần đây
+                {t("time")}: Gần đây
               </Button>
               <Button
                 aria-controls="amount-menu"
                 aria-haspopup="true"
                 onClick={(event) => handleClick(event, "amount")}
               >
-                Số tiền vào lệnh:{" "}
+                {t("Trade amount")}:{" "}
                 {selectedAmount === "all" ? "Tất cả" : selectedAmount}
               </Button>
 
@@ -260,7 +262,7 @@ const HistoryTable = () => {
                     gutterBottom
                     sx={{ fontSize: "16px" }}
                   >
-                    Số tiền vào lệnh
+                    {t("Trade amount")}
                   </Typography>
                   <RadioGroup
                     value={selectedAmount}

@@ -117,7 +117,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
               marginBottom: 2,
             }}
           >
-            <Typography variant="h6">Thiết lập bot nâng cao của bạn</Typography>
+            <Typography variant="h6">{t("Set up your Bot AI")}</Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
@@ -140,14 +140,14 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
             <MenuItem value="STRING_METHOD">String method</MenuItem>
           </Select>
 
-          <Typography variant="subtitle1">3. Đặt chuỗi mẫu tín hiệu</Typography>
+          <Typography variant="subtitle1">3. {t("Set pattern")}</Typography>
           <MuiChipsInput
             value={chainSignal}
             onChange={handleChangeChainSignal}
-            placeholder="Nhấn enter để thêm"
+            placeholder={t("Press enter to add...")}
           />
           <Typography variant="subtitle1">
-            4. Sử dụng cả nến chờ và kết quả
+            4. {t("Use both waiting and resulting candles")}
           </Typography>
           <FormControlLabel
             control={
@@ -160,15 +160,9 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
             sx={{ color: "text.secondary", marginTop: 2 }}
           >
             * s = SELL, b = BUY <br />
-            * Chiến lược String method có bao gồm thêm ký tự 'x' đại diện cho
-            kết quả bất kì (s hoặc b) và ký tự 'x' này phải được đặt trước dấu
-            -. Chuỗi kết quả và tín hiệu mong muốn được phân tách bằng -<br />
-            * Nhiều chuỗi có thể kết hợp và các chuỗi dài hơn được ưu tiên. Một
-            chuỗi hợp lệ phải có ký tự 's' hoặc 'b' và ký tự 'x' không nằm ở đầu
-            chuỗi.
+            * {t("The resulting string and the wanted signal are separated by -")}
             <br />
-            * Ngoài ra, chuỗi tín hiệu có thể được rút ngắn nếu chuỗi bị trùng
-            lặp hoặc quá dài như sau:
+            * {t("Multiple strings can be combined, and longer strings take precedence.")}
             <br />
             s-bbbbb → s-5b, sxx-b → s2x-b
           </Typography>
@@ -204,7 +198,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
           }}
         >
           <Button variant="outlined" onClick={handleClose} sx={{ padding: "10px" }}>
-            Đóng
+            {t("Close")}
           </Button>
           <Button
             variant="contained"
@@ -214,7 +208,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
             disabled={isDisableButton}
             onClick={handleSubmit}
           >
-            {is_edit=== true ? "Lưu bot" : t("Create Bot")}
+            {is_edit=== true ? t("Save Bot") : t("Create Bot")}
           </Button>
         </Box>
       </Box>

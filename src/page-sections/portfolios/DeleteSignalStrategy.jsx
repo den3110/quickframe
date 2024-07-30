@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { showToast } from "components/toast/toast";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
+import { useTranslation } from "react-i18next";
 
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -24,6 +25,7 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
 }));
 
 export default function DeleteSignalStrategy({ open, onClose, selectedBot, setChange, setData, data }) {
+  const {t }= useTranslation()
 
   const handleDeletBudgetStrategy= async ()=> {
     try {
@@ -91,7 +93,7 @@ export default function DeleteSignalStrategy({ open, onClose, selectedBot, setCh
             variant="contained"
             sx={{ textTransform: "none" }}
           >
-            Xác nhận & xóa
+            {t("Confirm & delete")}
           </Button>
         </DialogActions>
       </Dialog>

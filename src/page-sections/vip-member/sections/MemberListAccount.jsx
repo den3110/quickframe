@@ -29,6 +29,7 @@ import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import numberWithCommas from "util/numberSeparatorThousand";
 import round2number from "util/round2number";
 import LevelSelect from "../component/LevelSelect";
+import { useTranslation } from "react-i18next";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -51,6 +52,8 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const MemberListAccount = () => {
+  const {t }= useTranslation()
+
   const { data, loading, page, setPage } = useContext(VipMemberContext);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [dataState, setDataState] = useState({ c: [] });
@@ -238,13 +241,13 @@ const MemberListAccount = () => {
           alignItems={"center"}
           gap={1}
         >
-          <Typography>Hiển thị kết quả:</Typography>
+          <Typography>{t("Show result:")}:</Typography>
           <FormControl variant="outlined" sx={{ minWidth: 60 }}>
             <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
               <MenuItem value={6}>6</MenuItem>
               <MenuItem value={12}>12</MenuItem>
               <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={dataState?.t?.length}>Tất cả</MenuItem>
+                    <MenuItem value={dataState?.t?.length}>{t("All")}</MenuItem>
             </Select>
           </FormControl>
         </Box>

@@ -35,7 +35,7 @@ const Statistics = () => {
         padding={1}
       >
         <Tabs value={selectedTab} onChange={handleChange} aria-label="tabs">
-          <Tab value={0} label="Thống kê" />
+          <Tab value={0} label={t("statics")} />
           {dataStat?.autoType !== 1 && dataStat?.isCopy === false && (
             <Tab value={1} label={t("capital_management")} />
           )}
@@ -59,17 +59,17 @@ const Statistics = () => {
                 <Card variant="outlined">
                   <CardContent>
                     <Box>
-                      <Typography variant="h6">Thống kê</Typography>
+                      <Typography variant="h6">{t("statics")}</Typography>
                       <Grid container spacing={2}>
                         <StatisticCard
-                          title="Thắng/Thua hôm nay"
+                          title={t("Today win/lose")}
                           value={`${dataStat?.win_day}/${dataStat?.lose_day}`}
-                          percentage={`${formatCurrency(dataStat?.win_day / (dataStat?.lose_day  + dataStat?.win_day) * 100)?.replaceAll("$", "")}% Tỉ lệ thắng`}
+                          percentage={`${formatCurrency(dataStat?.win_day / (dataStat?.lose_day  + dataStat?.win_day) * 100)?.replaceAll("$", "")}% ${t("Win rate")}`}
                         />
                         <StatisticCard
-                          title="Lợi nhuận hôm nay"
+                          title={t("day_profit")}
                           value={formatCurrency(dataStat?.day_profit)}
-                          percentage="Lợi nhuận hôm nay"
+                          percentage={t("day_profit")}
                           color={dataStat?.day_profit > 0 ? "success.main" : "error.main"}
                           hidden={true}
                         />

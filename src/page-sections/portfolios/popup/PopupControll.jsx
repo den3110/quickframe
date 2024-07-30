@@ -7,8 +7,9 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { isDark } from "util/constants";
 import { useTranslation } from "react-i18next";
+import StopIcon from '@mui/icons-material/Stop';
 
-const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
+const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestart, onClickReset, onClickPause }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const {t }= useTranslation()
 
@@ -30,7 +31,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
     >
       <Box sx={{ display: "flex", gap: 1, alignItems: "center", justifyContent: downLg ? "center" : "", padding: 1 }}>
         <Button
-          onClick={onClickStop}
+          onClick={onClickPause}
           startIcon={<PauseIcon />}
           color="warning"
           sx={{
@@ -43,6 +44,22 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
         >
           {t("COOL_DOWN")}
         </Button>
+        {/*  */}
+        <Button
+          onClick={onClickStop}
+          startIcon={<StopIcon />}
+          color="secondary"
+          sx={{
+            fontSize: downLg ? 10 : "",
+            flexDirection: downLg ? "column" : "row",
+            "& .MuiButton-startIcon": {
+              margin: downLg ? 0 : "",
+            },
+          }}
+        >
+          {t("Stop")}
+        </Button>
+        {/*  */}
         <Button
           onClick={onClickStart}
           startIcon={<PlayArrowIcon />}
@@ -57,6 +74,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
           {t("continue")}
         </Button>
         <Button
+          onClick={onClickRestart}
           startIcon={<CachedIcon />}
           color="success"
           sx={{
@@ -70,6 +88,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete }) => {
           {t("Restart Plan")}
         </Button>
         <Button
+          onClick={onClickReset}
           startIcon={<ReplayIcon />}
           color={"info"}
           sx={{

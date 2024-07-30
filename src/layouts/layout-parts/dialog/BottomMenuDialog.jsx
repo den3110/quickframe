@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, List, ListItem, ListItemText, IconButton, Slide, Divider, ListItemSecondaryAction } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -10,6 +11,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 const BottomMenuDialog = (props) => {
+  const {t }= useTranslation()
   const { open, setOpen, onClose } = props;
   const navigate= useNavigate()
   const handleNavigate= (link)=> {
@@ -46,7 +48,7 @@ const BottomMenuDialog = (props) => {
         <List>
           <ListItem onClick={()=> handleNavigate("/manage-follower")} button>
             <ListItemText
-              primary="Thống kê người theo"
+              primary={t("manage_follower")}
               secondary="Quản lý thống kê người theo dõi đầu tư của bạn"
               primaryTypographyProps={{ style: { fontWeight: 'bold', fontFamily: "Manrope, sans-serif" } }}
             />

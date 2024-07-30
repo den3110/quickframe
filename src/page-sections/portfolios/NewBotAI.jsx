@@ -850,7 +850,7 @@ const NewBotAI = ({
             color="primary"
             sx={{ padding: "10px" }}
           >
-            {initState === true ? "Lưu Bot" : t("Create Bot")}
+            {initState === true ? t("Save Bot") : t("Create Bot")}
           </Button>
         </Box>
       </Box>

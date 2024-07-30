@@ -51,6 +51,7 @@ import { TableInvestContext } from "./TableInvest";
 import FilterComponent from "page-sections/portfolios/component/FilterComponent";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import InsufficientBetBalance from "icons/duotone/InsufficientBetBalance";
+import { useTranslation } from "react-i18next";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -62,6 +63,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 
 const TimelineTele = () => {
   const { id } = useParams();
+  const {t}= useTranslation()
   const theme = useTheme();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [countDown, setCountDown] = useState();
@@ -367,10 +369,10 @@ const TimelineTele = () => {
     <Box className="ajsmkwaklww">
       <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
         <Typography variant="h6" gutterBottom>
-          Quá trình đầu tư
+          {t("Plan Timeline")}
         </Typography>
         <Button onClick={handleAccordionToggle}>
-          <FilterListIcon /> Bộ lọc
+          <FilterListIcon /> {t("Filters")}
         </Button>
       </Box>
       <FilterComponent openAccordion={openAccordion} setOpenAccordion={setOpenAccordion} handleAccordionToggle={handleAccordionToggle} data={dataProps} setData={setDataState} />
@@ -452,7 +454,7 @@ const TimelineTele = () => {
                           </Typography>
                           <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Typography fontSize={12}>
-                              Thời gian (UTC + 7){" "}
+                              {t("time")} (UTC + 7){" "}
                             </Typography>
                             {item?.message === "success" &&
                               item?.bet_second > 0 && (
@@ -535,7 +537,7 @@ const TimelineTele = () => {
                                 ${round2number(item.betAmount)}
                               </Typography>
                               <Typography fontSize={12}>
-                                Số tiền vào lệnh
+                                {t("Trade amount")}
                               </Typography>
                             </>
                           )}
@@ -610,7 +612,7 @@ const TimelineTele = () => {
                                 >
                                   {formatCurrency(item?.winAmount)}
                                 </Typography>
-                                <Typography fontSize={12}>Thu nhập</Typography>
+                                <Typography fontSize={12}>{t("Payout")}</Typography>
                               </>
                             )}
                           {!item.result && item.message === "success" && (
@@ -621,9 +623,9 @@ const TimelineTele = () => {
                                 mb={1}
                                 color={"warning.main"}
                               >
-                                Chờ {countDown}s
+                                {t("Wait")} {countDown}s
                               </Typography>
-                              <Typography fontSize={12}>Thu nhập</Typography>
+                              <Typography fontSize={12}>{t("Payout")}</Typography>
                             </>
                           )}
                         </Box>
@@ -645,13 +647,13 @@ const TimelineTele = () => {
             alignItems={"center"}
             gap={1}
           >
-            <Typography>Hiển thị kết quả:</Typography>
+            <Typography>{t("Show result:")}:</Typography>
             <FormControl variant="outlined" sx={{ minWidth: 60 }}>
               <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
                 <MenuItem value={6}>6</MenuItem>
                 <MenuItem value={12}>12</MenuItem>
                 <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={dataState.length}>Tất cả</MenuItem>
+                    <MenuItem value={dataState.length}>{t("All")}</MenuItem>
               </Select>
             </FormControl>
           </Box>

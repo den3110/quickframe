@@ -19,6 +19,7 @@ import {
 import React, { useState } from "react";
 import moment from "moment";
 import UnblockFollowerDialog from "../dialog/UnblockFollowerDialog";
+import { useTranslation } from "react-i18next";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "16px",
@@ -36,6 +37,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const ListUserBlock = ({ data, setData, dataProps, setChange }) => {
+  const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [selected, setSelected] = useState();
@@ -116,13 +118,13 @@ const ListUserBlock = ({ data, setData, dataProps, setChange }) => {
           alignItems={"center"}
           gap={1}
         >
-          <Typography>Hiển thị kết quả:</Typography>
+          <Typography>{t("Show result:")}:</Typography>
           <FormControl variant="outlined" sx={{ minWidth: 60 }}>
             <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
               <MenuItem value={6}>6</MenuItem>
               <MenuItem value={12}>12</MenuItem>
               <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={data.length}>Tất cả</MenuItem>
+                    <MenuItem value={data.length}>{t("All")}</MenuItem>
             </Select>
           </FormControl>
         </Box>

@@ -132,7 +132,7 @@ export default function DeleteSignalStrategy({
             variant="contained"
             sx={{ textTransform: "none" }}
           >
-            Xác nhận & xóa
+            {t("Confirm & delete")}
           </Button>
         </DialogActions>
       </Dialog>

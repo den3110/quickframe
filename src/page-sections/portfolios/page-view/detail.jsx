@@ -18,6 +18,7 @@ import RefreshProvider from "contexts/RefreshContext";
 import { showToast } from "components/toast/toast";
 import StatPortfolio from "./stat";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
+import { useTranslation } from "react-i18next";
 
 const TabPanel = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -48,6 +49,7 @@ const a11yProps = (index) => {
 export const PortfolioDetailContext = createContext();
 
 const PortfolioDetail = (props) => {
+  const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [change, setChange] = useState(false);
   const { isConnected, socket } = useContext(SocketContext);
@@ -190,9 +192,9 @@ const PortfolioDetail = (props) => {
             {...props}
           />
           <Tabs value={value} onChange={handleChange} aria-label="tabs example">
-            <Tab label="Quá trình đầu tư" {...a11yProps(0)} />
+            <Tab label={t("Plan Timeline")} {...a11yProps(0)} />
             {props?.isSignalStrategy !== true && (
-              <Tab label="Thống kê" {...a11yProps(1)} />
+              <Tab label={t("statics")} {...a11yProps(1)} />
             )}
           </Tabs>
           <TabPanel value={value} index={0}>

@@ -52,7 +52,7 @@ import axiosClient from "api/axiosClient";
 import { showToast } from "components/toast/toast";
 import userApi from "api/user/userApi";
 import { SettingsContext } from "contexts/settingsContext";
-import { ActionBotType } from "type/ActionBotType";
+import { ActionBotType, ActionBotTypeMessageSucces } from "type/ActionBotType";
 import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 import sortData from "util/sortData";
 import { useNavigate } from "react-router-dom";
@@ -301,6 +301,46 @@ const PortfoliosList = () => {
     }
   };
 
+  const handleStopPlan = async () => {
+    const selectedPlans = dataState.filter(
+      (_, index) => checkedRows[index] === true
+    );
+    // setLoading(true);
+
+    try {
+      const requests = selectedPlans.map((plan, index) =>
+        axiosClient.post(`/users/bot/action/${plan?._id}`, {
+          action: ActionBotType.STOP,
+        })
+      );
+
+      const responses = await Promise.all(requests);
+      const listResult = responses?.map((item) => item.data.ok);
+      // setData();
+      setData(
+        data?.map((item, key) => {
+          if (
+            selectedPlans.some((obj) => obj._id === item._id) &&
+            listResult[key] === true
+          ) {
+            return { ...item, isRunning: false };
+          }
+          // if(selectedPlans.some(obj=> obj._id=== item._id) && listResult[key]=== false) {
+          //   return ({...item, isRunning: false})
+          // }
+          else {
+            return { ...item };
+          }
+        })
+      );
+      showToast(ActionBotTypeMessageSucces[ActionBotType.STOP], "success");
+    } catch (error) {
+      console.error("Error sending requests:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
   const handleResumePlan = async () => {
     const selectedPlans = dataState.filter(
       (_, index) => checkedRows[index] === true
@@ -346,14 +386,14 @@ const PortfoliosList = () => {
     try {
       const requests = selectedPlans.map((plan, index) =>
         axiosClient.post(`/users/bot/action/${plan?._id}`, {
-          action: ActionBotType.RESUME,
+          action: ActionBotType.RESTART,
         })
       );
 
       const responses = await Promise.all(requests);
       const listResult = responses?.map((item) => item.data.ok);
       // setData();
-      showToast("Tiếp tục các gói đã chọn thành công", "success");
+      showToast(ActionBotTypeMessageSucces[ActionBotType.RESTART], "success");
       setData(
         data?.map((item, key) => {
           if (
@@ -382,14 +422,14 @@ const PortfoliosList = () => {
     try {
       const requests = selectedPlans.map((plan, index) =>
         axiosClient.post(`/users/bot/action/${plan?._id}`, {
-          action: ActionBotType.RESUME,
+          action: ActionBotType.RESET,
         })
       );
 
       const responses = await Promise.all(requests);
       const listResult = responses?.map((item) => item.data.ok);
       // setData();
-      showToast("Tiếp tục các gói đã chọn thành công", "success");
+      showToast(ActionBotTypeMessageSucces[ActionBotType.RESET], "success");
       setData(
         data?.map((item, key) => {
           if (
@@ -1177,9 +1217,12 @@ const PortfoliosList = () => {
               )}
               {showPopup === true && (
                 <PopupControll
-                  onClickStop={handlePausePlan}
+                  onClickPause={handlePausePlan}
                   onClickStart={handleResumePlan}
                   onClickDelete={handleRemovePlan}
+                  onClickReset={handleResetPlan}
+                  onClickRestart={handleRestartPlan}
+                  onClickStop={handleStopPlan}
                 />
               )}
             </Box>

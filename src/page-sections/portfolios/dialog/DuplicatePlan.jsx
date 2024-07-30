@@ -14,12 +14,13 @@ import {
   InputLabel,
   OutlinedInput,
   styled,
-  Switch,
+  // Switch,
 } from "@mui/material";
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
+import { useTranslation } from "react-i18next";
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
@@ -27,6 +28,7 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
 }));
 
 const DuplicatePlan = ({ open, onClose, selectedPlan, setData }) => {
+  const {t }= useTranslation()
   const [planName, setPlanName] = useState("");
   const [isRunning, setIsRunning] = useState(false); 
   const isDisableButton= planName?.length <= 0
@@ -42,7 +44,7 @@ const DuplicatePlan = ({ open, onClose, selectedPlan, setData }) => {
         const response= await portfolioApi.usersBotCreate(data);
         if(response?.data?.ok=== true) {
             setData(prev=> ([data, ...prev]))
-            showToast("Nhân bản gói thành công", "success")
+            showToast(t("Clone the plan successfully!"), "success")
             onClose()
         }
         else if(response?.data?.ok=== false) {
@@ -64,7 +66,7 @@ const DuplicatePlan = ({ open, onClose, selectedPlan, setData }) => {
         fullWidth
       >
         <CustomDialogTitle id="confirm-delete-dialog-title">
-          <span>Tạo bản sao gói</span>
+          <span>{t("Duplicate Plan")}</span>
           <IconButton
             edge="end"
             color="inherit"
@@ -83,11 +85,11 @@ const DuplicatePlan = ({ open, onClose, selectedPlan, setData }) => {
             <Box>
               <FormControl fullWidth>
                 <InputLabel htmlFor="component-outlined">
-                  Nhập tên gói
+                  {t("Enter plan name")}
                 </InputLabel>
                 <OutlinedInput
                   id="component-outlined"
-                  label="Name"
+                  label={t("name")}
                   value={planName}
                   onChange={(e) => setPlanName(e.target.value)}
                 />
@@ -100,7 +102,7 @@ const DuplicatePlan = ({ open, onClose, selectedPlan, setData }) => {
                         onChange={handleChange}
                     />
                     }
-                    label={`Chạy gói này ngay sau khi  "Xác nhận và Lưu"`}
+                    label={t("Start this plan after “Confirm & Save”")}
                 />
               </Box>
             </Box>
@@ -114,7 +116,7 @@ const DuplicatePlan = ({ open, onClose, selectedPlan, setData }) => {
             sx={{ textTransform: "none" }}
             disabled={isDisableButton}
           >
-            Xác nhận & Lưu
+            {t("Confirm & Save")}
           </Button>
         </DialogActions>
       </Dialog>

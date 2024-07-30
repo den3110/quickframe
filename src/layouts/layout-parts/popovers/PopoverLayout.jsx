@@ -36,11 +36,7 @@ const PopoverLayout = props => {
 
       {children}
 
-      {!hiddenViewButton ? <Box p={1} pb={0.5}>
-          <Button variant="text" fullWidth disableRipple>
-            Mark read all
-          </Button>
-        </Box> : null}
+      
     </Popover>;
 };
 export default PopoverLayout;

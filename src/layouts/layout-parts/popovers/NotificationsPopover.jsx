@@ -1,5 +1,13 @@
-import { Fragment, useEffect, useRef, useState } from "react";
-import { Avatar, Badge, Box, IconButton, styled, Tab } from "@mui/material";
+import { Fragment, memo, useEffect, useRef, useState } from "react";
+import {
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  IconButton,
+  styled,
+  Tab,
+} from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 // CUSTOM COMPONENTS
 import PopoverLayout from "./PopoverLayout";
@@ -13,79 +21,11 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 
-// DUMMY DATA SET
-const MESSAGES = [
-  {
-    id: "5e8883f1b51cc1956a5a1ec0",
-    createdAt: Date.now(),
-    title: "Your order is placed",
-    type: "new_message",
-    name: "Brain Warner",
-    message: "Changed an issue from in this project",
-    image: "/static/avatar/001-man.svg",
-  },
-  {
-    id: "5e8883f7ed1486d665d8be1e",
-    createdAt: Date.now(),
-    description: "You have 32 unread messages",
-    title: "New message received",
-    type: "new_message",
-    name: "Kiara Hamptoon",
-    message: "Nice Work! You really nailed it. Keep it Up Man",
-    image: "/static/avatar/002-girl.svg",
-  },
-  {
-    id: "5e8883fca0e8612044248ecf",
-    createdAt: Date.now(),
-    description: "Dummy text",
-    title: "Your item is shipped",
-    type: "item_shipped",
-    name: "Ruby Walton",
-    message: "Nice Work! You really nailed it. Keep it Up Man",
-    image: "/static/avatar/004-woman.svg",
-  },
-];
-const ARCHIVES = [
-  {
-    id: "5e8883f1b51cc1956a5a1ec0",
-    createdAt: Date.now(),
-    title: "Your order is placed",
-    type: "",
-    name: "Brain Warner",
-    message: "Changed an issue from in this project",
-    image: "/static/avatar/001-man.svg",
-  },
-  {
-    id: "5e8883f7ed1486d665d8be1e",
-    createdAt: Date.now(),
-    description: "You have 32 unread messages",
-    title: "New message received",
-    type: "",
-    name: "Kiara Hamptoon",
-    message: "Nice Work! You really nailed it. Keep it Up Man",
-    image: "/static/avatar/002-girl.svg",
-  },
-  {
-    id: "5e8883fca0e8612044248ecf",
-    createdAt: Date.now(),
-    description: "Dummy text",
-    title: "Your item is shipped",
-    type: "item_shipped",
-    name: "Ruby Walton",
-    message: "Nice Work! You really nailed it. Keep it Up Man",
-    image: "/static/avatar/004-woman.svg",
-  },
-];
-
-// STYLED COMPONENT
-const StyledTab = styled(Tab)({
-  flex: 1,
-  marginLeft: 0,
-  marginRight: 0,
-});
-const NotificationsPopover = () => {
+const NotificationsPopover = (props) => {
+  const { hiddenViewButton } = props;
   const anchorRef = useRef(null);
   const [data, setData] = useState([]);
+  const [unReadNotification, setUnReadNotification] = useState();
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState("1");
@@ -93,31 +33,79 @@ const NotificationsPopover = () => {
     /* Optional options */
     threshold: 0,
   });
-  // const handleTabChange = (_, value) => setTabValue(value);
-  useEffect(() => {
-    if (inView) {
-      (async () => {
-        try {
-          const response = await notificationApi.getUserNotification();
-          if (response?.data?.ok === true) {
-            setData(response?.data?.d);
-          } else if (response?.data?.ok === false) {
+
+  const handleReadNotification = async (selectedNotification) => {
+    try {
+      const response = await notificationApi.userReadNotification(
+        selectedNotification?._id,
+        {}
+      );
+      if (response?.data?.ok === true) {
+        const dataTemp = data;
+        const findIndex = data?.findIndex(
+          (item) => item?._id === selectedNotification?._id
+        );
+        if (findIndex !== -1) {
+          if (
+            dataTemp?.find(
+              (item) =>
+                item?._id === selectedNotification?._id &&
+                item?.is_read === false
+            )
+          ) {
+            setUnReadNotification((prev) => parseInt(prev) - 1);
+            dataTemp[findIndex] = { ...dataTemp[findIndex], is_read: true };
           }
-        } catch (error) {
-          showToast(error?.response?.data?.m || t("unknown_error"), "error");
         }
-      })();
+      }
+    } catch (error) {
+      showToast();
+    } finally {
     }
-  }, [t, inView]);
+  };
+
+  const handleReadAllNotification = async () => {
+    setUnReadNotification(0)
+    setOpen(false);
+    try {
+      const response = await notificationApi.userReadAllNotification();
+      if (response?.data?.ok === true) {
+        setUnReadNotification(0)
+      }
+      // assumption
+      else {
+        setUnReadNotification(0)
+      }
+    } catch (error) {
+      console.log(error)
+      // assumption 
+      setUnReadNotification(0)
+      showToast();
+    } finally {
+    }
+  };
+  // const handleTabChange = (_, value) => setTabValue(value);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await notificationApi.getUserNotification();
+        if (response?.data?.ok === true) {
+          setData(response?.data?.d);
+          setUnReadNotification(response?.data?.no_read_count);
+        } else if (response?.data?.ok === false) {
+        }
+      } catch (error) {
+        showToast(error?.response?.data?.m || t("unknown_error"), "error");
+      }
+    })();
+  }, [t]);
 
   // UNREAD MESSAGES LENGTH
-  const UNREAD_MSG_LEN = MESSAGES.filter(
-    (item) => item.type === "new_message"
-  ).length;
   return (
     <Fragment>
       <IconButton ref={anchorRef} onClick={() => setOpen(true)}>
-        <Badge color="error" badgeContent={0}>
+        <Badge color="error" badgeContent={unReadNotification}>
           <NotificationsIcon
             sx={{
               color: "grey.400",
@@ -147,6 +135,7 @@ const NotificationsPopover = () => {
               <TabPanel value="1">
                 {data.map((msg) => (
                   <ListItem
+                    onClick={handleReadNotification}
                     msg={msg}
                     key={msg.id}
                     onClose={() => {
@@ -154,6 +143,13 @@ const NotificationsPopover = () => {
                     }}
                   />
                 ))}
+                {!hiddenViewButton ? (
+                  <Box p={1} pb={0.5}>
+                    <Button onClick={handleReadAllNotification} variant="text" fullWidth disableRipple>
+                      Mark read all
+                    </Button>
+                  </Box>
+                ) : null}
               </TabPanel>
             )}
           </Box>
@@ -165,13 +161,14 @@ const NotificationsPopover = () => {
 
 // ListItem component props
 
-function ListItem({ msg, onClose }) {
+function ListItem({ msg, onClose, onClick }) {
   const isNew = msg.type === "new_message";
   const navigate = useNavigate();
 
   return (
     <FlexBox
       onClick={() => {
+        onClick(msg);
         navigate(msg?.href);
         onClose();
       }}
@@ -206,4 +203,4 @@ function ListItem({ msg, onClose }) {
     </FlexBox>
   );
 }
-export default NotificationsPopover;
+export default memo(NotificationsPopover);

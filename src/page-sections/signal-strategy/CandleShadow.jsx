@@ -352,7 +352,7 @@ const CandleShadow = ({
             display={"flex"}
             alignItems={"center"}
           >
-            Tôi muốn
+            {t("I want")}
             <FormControl sx={{ mx: 1 }}>
               <Select
                 size={"small"}
@@ -369,7 +369,7 @@ const CandleShadow = ({
                 <MenuItem value="NONE">Skip</MenuItem>
               </Select>
             </FormControl>
-            cho bóng số {selectedBall - 80}
+            {t("for the number")} {selectedBall - 80}
           </Typography>
           {/* <Box sx={{ display: "flex", flexWrap: "wrap", maxWidth: 300 }}>
             <Box
@@ -433,7 +433,7 @@ const CandleShadow = ({
                   <SwiperSlide key={tableIndex}>
                     <Box sx={{ mb: 2 }}>
                       <Typography variant="body2" mb={1}>
-                        Bảng {table}
+                        {t("board")} {table}
                       </Typography>
                       <Box
                         sx={{
@@ -491,7 +491,7 @@ const CandleShadow = ({
                 {[1, 2, 3, 4, 5].map((table, tableIndex) => (
                   <Box key={table} sx={{ mb: 2 }}>
                     <Typography variant="body2" mb={1}>
-                      Bảng {table}
+                      {t("board")} {table}
                     </Typography>
                     <Box
                       sx={{
@@ -549,7 +549,7 @@ const CandleShadow = ({
               onClick={handleCloseCandleShadow}
               sx={{ padding: "10px" }}
             >
-              Đóng
+              {t("Close")}
             </Button>
             <Button
               fullWidth
@@ -558,7 +558,7 @@ const CandleShadow = ({
               sx={{ padding: "10px" }}
               onClick={() => handleSave()}
             >
-              Lưu
+              {t("save")}
             </Button>
           </Box>
           <Box
@@ -584,7 +584,7 @@ const CandleShadow = ({
               sx={{ padding: "10px" }}
               onClick={() => handleCopy()}
             >
-              Thêm một bản sao
+              {t("Duplicate Plan")}
             </Button>
           </Box>
         </Box>

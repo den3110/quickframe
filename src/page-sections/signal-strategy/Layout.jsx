@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Box, Card, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { NavLink, useLocation } from "react-router-dom";
 import SignalStrategyContext from "contexts/SignalStrategyContext";
+import { useTranslation } from "react-i18next";
 
 const StyledNavLink = styled(NavLink)`
   &.active-custom {
@@ -16,6 +17,7 @@ const Layout = ({ children }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const location= useLocation()
   const [selectedLink, setSelectedLink]= useState(location.pathname)
+  const {t }= useTranslation()
 
   useEffect(()=> {
     setSelectedLink(location.pathname)
@@ -42,7 +44,7 @@ const Layout = ({ children }) => {
             fontWeight={"600"}
             sx={{ "&:hover": { color: theme.palette.primary.main }, whiteSpace: "nowrap" }}
           >
-            Danh sách ({data?.length})
+            {t("Signal List")} ({data?.length})
           </Typography>
         </StyledNavLink>
         <StyledNavLink
@@ -57,7 +59,7 @@ const Layout = ({ children }) => {
             fontWeight={"600"} 
             sx={{ "&:hover": { color: theme.palette.primary.main }, whiteSpace: "nowrap" }}
           >
-            Xếp hạng
+            {t("Top Signal")}
           </Typography>
         </StyledNavLink>
         <StyledNavLink
@@ -72,7 +74,7 @@ const Layout = ({ children }) => {
             fontWeight={"600"}
             sx={{ "&:hover": { color: theme.palette.primary.main } , whiteSpace: "nowrap" }}
           >
-            Kênh Telegram
+            {t("Telegram Channel")}
           </Typography>
         </StyledNavLink>
       </Box>

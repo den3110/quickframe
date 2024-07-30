@@ -156,7 +156,7 @@ const NewBotAIStringMethod = ({
               marginBottom: 2,
             }}
           >
-            <Typography variant="h6">Thiết lập bot nâng cao của bạn</Typography>
+            <Typography variant="h6">{t("Set up your Bot AI")}</Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
@@ -171,7 +171,7 @@ const NewBotAIStringMethod = ({
             onChange={(e) => setName(e.target.value)}
           />
 
-          <Typography variant="subtitle1">2. Chiến lược*</Typography>
+          <Typography variant="subtitle1">2. {t("Strategy")}*</Typography>
           <Select
             disabled={readOnly}
             value={strategy}
@@ -181,15 +181,15 @@ const NewBotAIStringMethod = ({
             <MenuItem value="STRING_METHOD">String method</MenuItem>
           </Select>
 
-          <Typography variant="subtitle1">3. Đặt chuỗi mẫu tín hiệu</Typography>
+          <Typography variant="subtitle1">3. {t("Set pattern")}</Typography>
           <MuiChipsInput
             value={chainSignal}
             onChange={handleChangeChainSignal}
-            placeholder="Nhấn enter để thêm"
+            placeholder={t("Press enter to add...")}
             disabled={readOnly}
           />
           <Typography variant="subtitle1">
-            4. Sử dụng cả nến chờ và kết quả
+            4. {t("Use both waiting and resulting candles")}
           </Typography>
           <FormControlLabel
             control={
@@ -206,9 +206,8 @@ const NewBotAIStringMethod = ({
             sx={{ color: "text.secondary", marginTop: 2 }}
           >
             * s = SELL, b = BUY <br />
-            * Chiến lược String method có bao gồm thêm ký tự 'x' đại diện cho
-            kết quả bất kì (s hoặc b) và ký tự 'x' này phải được đặt trước dấu
-            -. Chuỗi kết quả và tín hiệu mong muốn được phân tách bằng -<br />
+            * {t("The resulting string and the wanted signal are separated by -")}
+            <br />
             * Nhiều chuỗi có thể kết hợp và các chuỗi dài hơn được ưu tiên. Một
             chuỗi hợp lệ phải có ký tự 's' hoặc 'b' và ký tự 'x' không nằm ở đầu
             chuỗi.
@@ -221,7 +220,7 @@ const NewBotAIStringMethod = ({
           {decodedData?.data?.levelStaff >= 3 && (
             <Box sx={{}}>
               <Typography fontSize={14} variant="subtitle1">
-                Chiến lược sử dụng
+                {t("Usage strategy")}
               </Typography>
               <FormGroup>
                 <FormControlLabel
@@ -259,7 +258,7 @@ const NewBotAIStringMethod = ({
             onClick={handleClose}
             sx={{ padding: "10px" }}
           >
-            Đóng
+            {t("Close")}
           </Button>
           <Button
             variant="contained"
@@ -271,7 +270,7 @@ const NewBotAIStringMethod = ({
             }
             onClick={handleSubmit}
           >
-            {is_edit === true ? "Lưu bot" : t("Create Bot")}
+            {is_edit === true ? t("Save Bot") : t("Create Bot")}
           </Button>
         </Box>
       </Box>

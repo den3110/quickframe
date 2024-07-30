@@ -3,10 +3,12 @@ import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
 import { constant } from "constant/constant";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const SelectDirectLinkAccount = ({plan, userLinkAccountList, setData, data}) => {
   const [linkAccountIdSelected, setLinkAccountIdSelected]= useState(plan?.linkAccountId) 
-
+  const {t }= useTranslation()
+  
 //   const {id }= useParams()
   useEffect(()=> {
     setLinkAccountIdSelected(plan?.linkAccountId)
@@ -20,7 +22,7 @@ const SelectDirectLinkAccount = ({plan, userLinkAccountList, setData, data}) => 
         }
         const response= await portfolioApi.postUserBotLinkAccount(plan?._id, payload)
         if(response?.data?.ok=== true) {
-            showToast("Cập nhật bot thành công", "success")
+            showToast(t("update_successful"), "success")
             // console.log(linkAccountIdSelected, e.target.value)
             const tempData= data
             // console.log("temp data 1", tempData)

@@ -214,22 +214,22 @@ const TopSignalPageView = () => {
                 <Box sx={{width: "100%"}}>
                   <FormControl fullWidth variant="outlined">
                     <InputLabel id="demo-simple-select-outlined-label">
-                      Bộ lọc
+                      {t("Filters")}
                     </InputLabel>
                     <Select
                       labelId="demo-simple-select-outlined-label"
                       id="demo-simple-select-outlined"
                       value={selection}
                       onChange={handleChange}
-                      label="Bộ lọc"
+                      label={t("Filters")}
                     >
                       <MenuItem value={1}>
-                        Tỷ lệ thắng cao nhất
+                        {t("Highest win rate")}
                       </MenuItem>
                       <MenuItem value={2}>
-                        Chuỗi thắng nhiều nhất
+                        {t("Most win streak")}
                       </MenuItem>
-                      <MenuItem value={3}>KLGD hàng đầu</MenuItem>
+                      <MenuItem value={3}>{t("Top Volume")}</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
@@ -259,12 +259,12 @@ const TopSignalPageView = () => {
                       )}
                       <StyledTableCell>{t("Bot Name")}</StyledTableCell>
                       {/* <StyledTableCell>Loại tài khoản</StyledTableCell> */}
-                      <StyledTableCell>Thắng/Thua</StyledTableCell>
-                      <StyledTableCell>Chuỗi thắng</StyledTableCell>
-                      <StyledTableCell>Chuỗi thua</StyledTableCell>
-                      <StyledTableCell>Victor Streak</StyledTableCell>
-                      <StyledTableCell>VOL</StyledTableCell>
-                      <StyledTableCell>PnL</StyledTableCell>
+                      <StyledTableCell>{t("Win/Lose")}</StyledTableCell>
+                      <StyledTableCell>{t("Win streak")}</StyledTableCell>
+                      <StyledTableCell>{t("Lose streak")}</StyledTableCell>
+                      <StyledTableCell>{t("victor_streak")}</StyledTableCell>
+                      <StyledTableCell>{t("Volume")}</StyledTableCell>
+                      <StyledTableCell>{t("PnL")}</StyledTableCell>
                       <StyledTableCell>{t("Actions")}</StyledTableCell>
                     </TableRow>
                   </TableHead>
@@ -378,14 +378,14 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography>Thắng/Thua:</Typography>}
+                            {downLg && <Typography>{t("Win/Lose")}:</Typography>}
                             <Typography fontWeight={600} fontSize={14}>
                               {item.win_day}/{item.lose_day}
                             </Typography>
                             {!downLg && (
                               <Box display={"flex"} alignItems={"center"}>
                                 <Typography fontSize={12}>
-                                  Tỉ lệ thắng:
+                                  {t("Win rate:")}
                                 </Typography>
                                 <Typography
                                   fontSize={12}
@@ -420,7 +420,7 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography>Chuỗi thắng:</Typography>}
+                            {downLg && <Typography>{t("Win streak")}:</Typography>}
                             <Typography
                               fontWeight={600}
                               fontSize={14}
@@ -441,7 +441,7 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography>Chuỗi thua:</Typography>}
+                            {downLg && <Typography>{t("Lose streak")}:</Typography>}
                             <Typography
                               fontWeight={600}
                               fontSize={14}
@@ -463,7 +463,7 @@ const TopSignalPageView = () => {
                             }}
                           >
                             {downLg && (
-                              <Typography>Victor Streak :</Typography>
+                              <Typography>{t("victor_streak")} :</Typography>
                             )}
                             <Typography fontWeight={600} fontSize={14}>
                               {item?.victor_streak}/
@@ -478,7 +478,7 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography >VOL:</Typography>}
+                            {downLg && <Typography >{t("Volume")}:</Typography>}
                             <Typography fontWeight={600} fontSize={14} color="warning.main">
                               ${round2number(item?.volume)}
                             </Typography>
@@ -491,7 +491,7 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography >PnL:</Typography>}
+                            {downLg && <Typography >{t("PnL")}:</Typography>}
                             <Typography fontWeight={600} fontSize={14} color={item?.profit >= 0 ?"success.main" : "error.main"}>
                               {formatCurrency(item?.profit)}
                             </Typography>
@@ -552,11 +552,11 @@ const TopSignalPageView = () => {
                 }}
               >
                 <EmptyPage
-                  title={"Danh mục tín hiệu đang trống"}
+                  title={t("Pattern is empty")}
                   subTitle={
-                    "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
+                    t("Start exploring investment opportunities and earn profits by start an investment plan today")
                   }
-                  titleButton={"Tạo chiến lược mới"}
+                  titleButton={t("Create Your Strategy")}
                   disableButton={true}
                   // actionClick={handleMenuClick}
                 />
@@ -569,7 +569,7 @@ const TopSignalPageView = () => {
                 alignItems={"center"}
                 gap={1}
               >
-                <Typography>Hiển thị kết quả:</Typography>
+                <Typography>{t("Show result:")}:</Typography>
                 <FormControl variant="outlined" sx={{ minWidth: 60 }}>
                   <Select
                     value={rowsPerPage}
@@ -578,7 +578,7 @@ const TopSignalPageView = () => {
                     <MenuItem value={6}>6</MenuItem>
                     <MenuItem value={12}>12</MenuItem>
                     <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={dataState.length}>Tất cả</MenuItem>
+                    <MenuItem value={dataState.length}>{t("All")}</MenuItem>
                   </Select>
                 </FormControl>
               </Box>

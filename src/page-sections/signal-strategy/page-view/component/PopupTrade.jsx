@@ -8,6 +8,7 @@ import { SocketContext } from "contexts/SocketContext";
 import Toggle from "icons/duotone/Toggle";
 import React, { memo, useContext, useEffect, useState } from "react";
 import CloseIcon from "icons/duotone/CloseIcon";
+import { useTranslation } from "react-i18next";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 const PopupTrade = ({selectedBot}) => {
+    const {t }= useTranslation()
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const [openTrade, setOpenTrade] = useState(false);
     const theme= useTheme()
@@ -100,7 +102,7 @@ const PopupTrade = ({selectedBot}) => {
                 <Box display={"flex"} gap={1} mb={1}>
                   <Box>
                     <Typography variant="body2" fontSize={12} fontWeight={600}>
-                      Số tiền vào lệnh
+                     {t("Trade amount")}
                     </Typography>
                     <TextField
                       sx={{ width: 120 }}
@@ -116,8 +118,7 @@ const PopupTrade = ({selectedBot}) => {
                       helperText={
                         isErrorBetAmount ? (
                           <Typography fontSize={8}>
-                            Không thể nhập giá trị lớn hơn 1.000.000 và nhỏ hơn
-                            0
+                            {t("Value is invalid")}
                           </Typography>
                         ) : (
                           ""
@@ -127,7 +128,7 @@ const PopupTrade = ({selectedBot}) => {
                   </Box>
                   <Box>
                     <Typography variant="body2" fontSize={12} fontWeight={600}>
-                      Hệ số nhân
+                      {t("Multiply")}
                     </Typography>
                     <Box
                       display="flex"
@@ -158,12 +159,12 @@ const PopupTrade = ({selectedBot}) => {
                           setMultiplier(parseFloat(e.target.value));
                         }}
                         type="number"
-                        placeholder="Khác"
+                        placeholder={t("Other")}
                         sx={{ width: 60 }}
                         className={classes.input}
                         variant="outlined"
                       >
-                        Khác
+                        {t("Other")}
                       </TextField>
                     </Box>
                   </Box>
@@ -177,7 +178,7 @@ const PopupTrade = ({selectedBot}) => {
                         onChange={handleChangeBrokerMode}
                       />
                     }
-                    label="Chế độ chuyên gia"
+                    label={t("Expert Mode")}
                   />
                 </FormGroup>
                 <Divider />

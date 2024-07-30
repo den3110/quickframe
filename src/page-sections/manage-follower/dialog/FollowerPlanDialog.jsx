@@ -269,13 +269,13 @@ const FollowerPlanDialog = (props) => {
               alignItems={"center"}
               gap={1}
             >
-              <Typography>Hiển thị kết quả:</Typography>
+              <Typography>{t("Show result:")}:</Typography>
               <FormControl variant="outlined" sx={{ minWidth: 60 }}>
                 <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
                   <MenuItem value={6}>6</MenuItem>
                   <MenuItem value={12}>12</MenuItem>
                   <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={data.length}>Tất cả</MenuItem>
+                    <MenuItem value={data.length}>{t("All")}</MenuItem>
                 </Select>
               </FormControl>
             </Box>

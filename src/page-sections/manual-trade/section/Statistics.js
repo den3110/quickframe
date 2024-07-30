@@ -226,7 +226,7 @@ const Statistics = () => {
               <StatisticCard
                 title={t("Today W/L")}
                 value={renderWinLoseRate(true)}
-                percentage={`${renderWinLoseRate()}% Tỉ lệ thắng`}
+                percentage={`${renderWinLoseRate()}% ${t("Win rate")}`}
               />
               <StatisticCard
                 title={t("Today Profit")}

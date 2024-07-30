@@ -183,7 +183,7 @@ const SignalStrategyList = () => {
               <TextField
                 variant="outlined"
                 sx={{ width: downLg ? "aaa" : 450 }}
-                placeholder="Tìm chiến lược tín hiệu..."
+                placeholder={t("Search Bot...")}
                 onChange={handleSearch}
                 InputProps={{
                   startAdornment: (

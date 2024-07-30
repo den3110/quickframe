@@ -156,14 +156,14 @@ function FilterComponent({
               aria-haspopup="true"
               onClick={(event) => handleClick(event, "time")}
             >
-              Thời gian: Gần đây
+              {t("time")}: Gần đây
             </Button>
             <Button
               aria-controls="amount-menu"
               aria-haspopup="true"
               onClick={(event) => handleClick(event, "amount")}
             >
-              Số tiền vào lệnh:{" "}
+              {t("Trade amount")}:{" "}
               {selectedAmount === "all" ? "Tất cả" : selectedAmount}
             </Button>
 
@@ -286,7 +286,7 @@ function FilterComponent({
                   gutterBottom
                   sx={{ fontSize: "16px", fontWeight: "bold" }}
                 >
-                  Số tiền vào lệnh
+                  {t("Trade amount")}
                 </Typography>
                 <RadioGroup
                   value={selectedAmount}

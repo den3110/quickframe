@@ -644,6 +644,7 @@ export const resources = {
         "<p>Enter the email address associated with your account and we'll send you a link to reset your password.</p>",
       '<span class="text-success">{{amount}} plans</span> are following you at this time.':
         'Active follower plans: <span class="text-success">{{amount}}</span>',
+        "Active follower plans:": "Active follower plans:",
       '<span class="text-success">{{count}} plans</span> are following you at this time.':
         'Active follower plans: <span class="text-success">{{count}}</span>',
       '<span><b class="text-warning">Important Announcement:</b> We will perform scheduled maintenance on <b>{{time}}</b>, estimated maintenance time will be <b>{{est}}.</b></span>':
@@ -1000,6 +1001,7 @@ export const resources = {
       "Copy plan to LIVE": "Copy plan to LIVE",
       "Copyright © 2022 Quickinvest, All rights reserved.":
         "Copyright © 2022 Quickinvest, All rights reserved.",
+        "I want": "I want",
       Country: "Country",
       "Create Bot": "Create Bot",
       "Create Candle Pattern": "Create Candle Pattern",
@@ -1391,6 +1393,8 @@ export const resources = {
       "Follow Plan Name": "Follow This Plan",
       "Follower List": "Follower plans",
       "Follower Statistic": "Follower Statistics",
+      "Use both waiting and resulting candles": "Use both waiting and resulting candles",
+
       "Force Majeure": "Force Majeure",
       "ForceMajeure 1.1 a text":
         "Any action, event, or occurrence including, but not limited to, strikes, riots, civil strife, terrorist acts, wars, natural disasters, accidents, fires, floods, storms, power outages, interruptions in communication, software, or electronic equipment, incorrect operation of any type of equipment or software, quote-feed instability, interruptions in the operation of or the instability of liquidity providers, etc., which, in the Company’s reasonable opinion, led to the destabilization of the market(s) for one or more assets (instruments).",
@@ -4099,6 +4103,7 @@ export const resources = {
       "#{{subLoseCount}}/#{{subWinCount}}_TOOLTIP":
         "Chiến lược vốn được tính lại từ đầu vì chuỗi thua con đạt {{subLoseCount}}/{{subLoseCount}}.",
       "(Board 5) I want": "(Bảng 5) Tôi muốn",
+      "I want": "Tôi muốn",
       "(You)": "(Bạn)",
       "(push notifications, reminders, service messages, etc.)":
         "(thông báo nhanh, nhắc nhở, tin nhắn dịch vụ, v.v.)",
@@ -5107,6 +5112,7 @@ export const resources = {
         "Giao dịch là dự đoán biến động của một loại tài sản để tạo ra lợi nhuận. Mọi nhà giao dịch đều có các chiến lược và công cụ để cải thiện dự báo của họ. Bắt đầu giao dịch hiệu quả với các mẹo sau:",
       "How can I be more efficient in my trading?":
         "Làm sao để tôi có thể giao dịch hiệu quả hơn?",
+        "Active follower plans:": "Gói theo dõi đang chạy:",
       "How to Register on Quickinvest?": "Làm sao để đăng ký trên Quickinvest?",
       "How to use": "Cách sử dụng",
       "How to use manual trade?": "Cách thức để giao dịch thủ công",
@@ -5539,6 +5545,7 @@ export const resources = {
       "Press  to add newenter tag": "Nhấn  để thêm chuỗi",
       "Press  to add tag11": "Nhấn  để thêm chuỗi",
       "Press enter to add new tag": "Nhấn enter để thêm chuỗi",
+      "Use both waiting and resulting candles": "Sử dụng cả nến chờ và kết quả",
       "Press enter to add new tag11": "Nhấn enter để thêm chuỗi",
       "Press enter to add...": "Nhấn enter để thêm...",
       "Preventing and prosecuting potentially prohibited or illegal activities.":

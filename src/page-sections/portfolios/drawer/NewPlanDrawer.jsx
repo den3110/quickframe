@@ -526,7 +526,7 @@ const NewPlanDrawer = ({
           setData((prev) => [response?.data?.d, ...prev]);
         }
         showToast(
-          isEdit ? "Cập nhật bot thành công" : t("Create the bot successfully!"),
+          isEdit ? t("update_successful") : t("Create the bot successfully!"),
           "success"
         );
         setIsEdit(false);
@@ -1200,7 +1200,7 @@ const NewPlanDrawer = ({
                       selectedTab === "Telegram Signal") && (
                       <Box sx={{ width: "100%" }} mt={2}>
                         <Typography variant="subtitle1">
-                          Tính năng sử dụng
+                          {t("usability")}
                         </Typography>
                         <FormControl
                           variant="outlined"

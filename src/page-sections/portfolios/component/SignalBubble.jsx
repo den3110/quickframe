@@ -12,6 +12,7 @@ import { isDark } from "util/constants";
 import { PortfolioDetailContext } from "../page-view/detail";
 import { ref } from "yup";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 const colors = [
   (theme) => (isDark(theme) ? "#565d67" : "#d9d9d9"),
@@ -102,6 +103,7 @@ const GridBallButton = ({
 };
 
 const SignalBubble = () => {
+  const {t }= useTranslation()
   const sliderRef = useRef(null);
   const { dataSignal: dataSignalProps, setDataSignal } = useContext(
     PortfolioDetailContext
@@ -170,7 +172,7 @@ const SignalBubble = () => {
           <SwiperSlide key={tableIndex}>
             <Box sx={{ mb: 2 }}>
               <Typography variant="body2" mb={1} sx={{ fontSize: "0.7em" }}>
-                Bảng {table}
+                {t("board")} {table}
               </Typography>
               <Box
                 sx={{

@@ -139,7 +139,7 @@ const TelegramChannelSignalStrategy = () => {
           <Box width={"100%"} sx={{ paddingTop: "22px" }}>
             <Box sx={{ padding: downLg ? 1 : "24px" }}>
               <Typography variant="h6" gutterBottom>
-                Kênh Telegram
+                {t("Telegram Channel")}
               </Typography>
               <Box
                 sx={{
@@ -157,7 +157,7 @@ const TelegramChannelSignalStrategy = () => {
                         <TextField
                           fullWidth
                           variant="outlined"
-                          placeholder="Tìm kiếm kênh..."
+                          placeholder={t("Search Channel...")}
                           value={searchTerm}
                           onChange={handleSearchChange}
                           sx={{
@@ -210,7 +210,7 @@ const TelegramChannelSignalStrategy = () => {
                                     >
                                       <Box display="flex" alignItems={"center"}>
                                         <Typography fontSize={12}>
-                                          Tỉ lệ thắng:&nbsp;
+                                          {t("Win rate:")}&nbsp;
                                         </Typography>
                                         <Typography
                                           fontSize={12}
@@ -240,7 +240,7 @@ const TelegramChannelSignalStrategy = () => {
                                       </Typography>
                                       <Box display="flex" alignItems={"center"}>
                                         <Typography fontSize={12}>
-                                          Chuỗi thắng / thua:&nbsp;
+                                          {t("Win/Lose Streak:")}&nbsp;
                                         </Typography>
                                         <Typography
                                           fontWeight={600}
@@ -265,7 +265,7 @@ const TelegramChannelSignalStrategy = () => {
                                       </Typography>
                                       <Box display="flex" alignItems={"center"}>
                                         <Typography fontSize={12}>
-                                          VOL:&nbsp;
+                                          {t("Volume")}:&nbsp;
                                         </Typography>
                                         <Typography
                                           fontWeight={600}
@@ -309,10 +309,10 @@ const TelegramChannelSignalStrategy = () => {
                           }}
                         >
                           <Typography variant="body1">
-                            🎉 Tổng hợp{" "}
+                            🎉 {t("summary")}{" "}
                             {transactions?.messages?.[1]?.message?.histories
                               ?.length || 0}{" "}
-                            phiên giao dịch gần nhất (UTC+7):
+                            {t("last_trading_session")} (UTC+7):
                           </Typography>
                           <List>
                             {sortData(
@@ -354,7 +354,7 @@ const TelegramChannelSignalStrategy = () => {
                               ))}
                           </List>
                           <Typography variant="body1" sx={{ display: "flex" }}>
-                            Hãy đặt lệnh :{" "}
+                            {t("please_trade")} :{" "}
                             <Typography
                               mb={1}
                               fontWeight={600}
@@ -371,8 +371,8 @@ const TelegramChannelSignalStrategy = () => {
                               )}{" "}
                               {transactions?.messages?.[0]?.message?.betType ===
                               "UP"
-                                ? "Tăng"
-                                : "Giảm"}
+                                ? t("up")
+                                : t("down")}
                             </Typography>
                           </Typography>
                         </Box>
@@ -386,7 +386,7 @@ const TelegramChannelSignalStrategy = () => {
                       <TextField
                         fullWidth
                         variant="outlined"
-                        placeholder="Tìm kiếm kênh..."
+                        placeholder={t("Search Channel...")}
                         value={searchTerm}
                         onChange={handleSearchChange}
                       />
@@ -427,7 +427,7 @@ const TelegramChannelSignalStrategy = () => {
                                 >
                                   <Box display="flex" alignItems={"center"}>
                                     <Typography fontSize={12}>
-                                      Tỉ lệ thắng:&nbsp;
+                                      {t("Win rate:")}:&nbsp;
                                     </Typography>
                                     <Typography
                                       fontSize={12}
@@ -455,7 +455,7 @@ const TelegramChannelSignalStrategy = () => {
                                   <Typography fontSize={8}>|</Typography>
                                   <Box display="flex" alignItems={"center"}>
                                     <Typography fontSize={12}>
-                                      Chuỗi thắng / thua:&nbsp;
+                                      {t("Win/Lose Streak:")}&nbsp;
                                     </Typography>
                                     <Typography
                                       fontWeight={600}
@@ -568,8 +568,8 @@ const TelegramChannelSignalStrategy = () => {
                                     )}{" "}
                                     {transactions?.messages?.[0]?.message
                                       ?.betType === "UP"
-                                      ? "Tăng"
-                                      : "Giảm"}
+                                      ? t("up")
+                                      : t("down")}
                                   </Typography>
                                 </Typography>
                               </Box>

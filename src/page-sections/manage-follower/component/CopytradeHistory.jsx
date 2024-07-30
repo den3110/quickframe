@@ -23,6 +23,7 @@ import TrendingDown from "icons/duotone/TrendingDown";
 import TrendingUp from "icons/duotone/TrendingUp";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import sortData from "util/sortData";
 
 const HistoryTable = styled(Box)(({ theme }) => ({}));
@@ -43,6 +44,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const CopytradeHistory = () => {
+  const { t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { isConnected, socket } = useContext(SocketContext);
   const [rowsPerPage, setRowsPerPage] = useState(6);
@@ -106,13 +108,13 @@ const CopytradeHistory = () => {
               {!downLg && (
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell>Thời gian</StyledTableCell>
-                    <StyledTableCell>Số người theo</StyledTableCell>
-                    <StyledTableCell>Số lệnh theo (LIVE/DEMO)</StyledTableCell>
+                    <StyledTableCell>{t("time")}</StyledTableCell>
+                    <StyledTableCell>{t("SessionHistory_List_Header_TotalFollower")}</StyledTableCell>
+                    <StyledTableCell>{t("SessionHistory_List_Header_FollowerOrders")} (LIVE/DEMO)</StyledTableCell>
                     <StyledTableCell>
-                      KLGD người theo (LIVE/DEMO)
+                      {t("SessionHistory_List_Header_FollowerVolume")} (LIVE/DEMO)
                     </StyledTableCell>
-                    <StyledTableCell>Loại lệnh</StyledTableCell>
+                    <StyledTableCell>{t("type")}</StyledTableCell>
                   </TableRow>
                 </TableHead>
               )}
@@ -141,7 +143,7 @@ const CopytradeHistory = () => {
                       >
                         {downLg && (
                           <Typography variant="body2" color="textSecondary">
-                            Created at
+                            {t("Created Time")}
                           </Typography>
                         )}
                         <Typography variant="body2">
@@ -160,7 +162,7 @@ const CopytradeHistory = () => {
                       >
                         {downLg && (
                           <Typography variant="body2" color="textSecondary">
-                            Số người theo
+                            {t("SessionHistory_List_Header_TotalFollower")}
                           </Typography>
                         )}
                         <Typography variant="body2">
@@ -177,7 +179,7 @@ const CopytradeHistory = () => {
                       > 
                         {downLg && (
                           <Typography variant="body2" color="textSecondary">
-                            Số lệnh theo (LIVE / DEMO)
+                            {t("SessionHistory_List_Header_FollowerOrders")} (LIVE / DEMO)
                           </Typography>
                         )}
                         <Typography variant="body2">
@@ -194,7 +196,7 @@ const CopytradeHistory = () => {
                       >
                         {downLg && (
                           <Typography variant="body2" color="textSecondary">
-                            KLGD người theo (LIVE / DEMO)
+                            {t("SessionHistory_List_Header_FollowerVolume")} (LIVE / DEMO)
                           </Typography>
                         )}
                         <Typography variant="body2">
@@ -211,7 +213,7 @@ const CopytradeHistory = () => {
                       >
                         {downLg && (
                           <Typography variant="body2" color="textSecondary">
-                            Loại lệnh
+                            {t("type")}
                           </Typography>
                         )}
                         <Typography variant="body2">
@@ -236,13 +238,13 @@ const CopytradeHistory = () => {
           alignItems={"center"}
           gap={1}
         >
-          <Typography>Hiển thị kết quả:</Typography>
+          <Typography>{t("Show result:")}:</Typography>
           <FormControl variant="outlined" sx={{ minWidth: 60 }}>
             <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
               <MenuItem value={6}>6</MenuItem>
               <MenuItem value={12}>12</MenuItem>
               <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={data.length}>Tất cả</MenuItem>
+                    <MenuItem value={data.length}>{t("All")}</MenuItem>
             </Select>
           </FormControl>
         </Box>

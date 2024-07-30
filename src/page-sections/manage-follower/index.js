@@ -22,6 +22,7 @@ import ListUserBlock from "./component/ListUserBlock";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import _ from "lodash";
 import CopytradeHistory from "./component/CopytradeHistory";
+import { useTranslation } from "react-i18next";
 
 const Content = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
@@ -73,6 +74,7 @@ const InfoCard = ({ title, value, tooltip }) => {
 };
 
 function ManageFollowerPage() {
+  const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { data, setData, loading, setChange } = useContext(
     ManageFollowerContext
@@ -158,9 +160,9 @@ function ManageFollowerPage() {
                   color="white"
                   fontWeight={600}
                 >
-                  Thống kê người theo
+                  {t("manage_followers")}
                   <br />
-                  Cùng nhau phát triển
+                  {t("Earn Money Together")}
                 </Typography>
               </Box>
               <Box mb={2} sx={{ width: downLg ? "100%" : 442 }}>
@@ -192,29 +194,29 @@ function ManageFollowerPage() {
                         fontSize={18}
                         fontWeight={600}
                       >
-                        Số liệu thống kê
+                        {t("Follower Statistic")}
                       </Typography>
                     </Box>
                     <Box className="aksmwaaw" sx={{ width: "100" }} mt={2}>
                       <Grid container spacing={1}>
                         <Grid item xs={6}>
                           <InfoCard
-                            title="Tổng người theo dõi"
+                            title={t("Total Follower")}
                             value={
                               _.uniqBy(data?.followList, "nickName")?.length ||
                               0
                             }
                             tooltip={
-                              "Số lượng người dùng đã theo dõi gói đầu tư của bạn"
+                              t("Total follower tooltip")
                             }
                           />
                         </Grid>
                         <Grid item xs={6}>
                           <InfoCard
-                            title="Tổng số gói đang chạy"
+                            title={t("Total Active Plans")}
                             value={data?.total_plans_running || 0}
                             tooltip={
-                              "Tổng số gói đang chạy trên tài khoản của bạn (Bao gồm cả Live và Demo)"
+                              t("Total Active Plans tooltip")
                             }
                           />
                         </Grid>
@@ -243,8 +245,8 @@ function ManageFollowerPage() {
                 textColor="primary"
                 centered
               >
-                <Tab label="Gói theo dõi" />
-                <Tab label="Danh sách chặn" />
+                <Tab label={t("Follower List")} />
+                <Tab label={t("Blocked List")} />
               </Tabs>
               <Box
                 mt={downLg ? 1 : 0}
@@ -255,7 +257,7 @@ function ManageFollowerPage() {
               >
                 <TextField
                   variant="outlined"
-                  placeholder="Tìm biệt danh"
+                  placeholder={t("Search Nickname")}
                   sx={{ width: downLg ? "100%" : 450 }}
                   onChange={handleSearch}
                   InputProps={{
@@ -282,7 +284,7 @@ function ManageFollowerPage() {
                     {loading === true && <CircularProgress />}
                     {loading === false && dataState?.followList?.length <= 0 && (
                       <EmptyPage
-                        title={"Không có dữ liệu"}
+                        title={t("no_data_to_display")}
                         disableButton={true}
                       />
                     )}
@@ -303,7 +305,7 @@ function ManageFollowerPage() {
                     {loading === true && <CircularProgress />}
                     {loading === false && data?.blockList?.length <= 0 && (
                       <EmptyPage
-                        title={"Không có dữ liệu"}
+                        title={t("no_data_to_display")}
                         disableButton={true}
                       />
                     )}
@@ -322,7 +324,7 @@ function ManageFollowerPage() {
           </Card>
           <History mt={2}>
             <HistoryHeader mb={2}>
-              <Typography variant="h6">Lịch sử</Typography>
+              <Typography variant="h6">{t("history")}</Typography>
               <Card>
                 <Box sx={{ padding: 1.5, cursor: "pointer" }}>
                   <Typography>15/07/2024 12:00 SA - 04:21 CH</Typography>

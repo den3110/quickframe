@@ -42,6 +42,7 @@ import { ManualTradeContext } from "contexts/ManualTradeContext";
 import { constant } from "constant/constant";
 import AuthContext from "contexts/AuthContext";
 import { showToast } from "components/toast/toast";
+import { useTranslation } from "react-i18next";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -52,6 +53,8 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const TableDetailTrade = ({dataState}) => {
+  const {t }= useTranslation()
+
   const theme = useTheme();
   const {userLinkAccountList }= useContext(AuthContext)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -323,7 +326,7 @@ const TableDetailTrade = ({dataState}) => {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        Quá trình đầu tư
+        {t("Plan Timeline")}
       </Typography>
       <Box>
         <Timeline className="askskaa" sx={{ padding: downLg ? 0 : "" }}>
@@ -379,7 +382,7 @@ const TableDetailTrade = ({dataState}) => {
                         </Typography>
                         <Box sx={{ display: "flex", alignItems: "center" }}>
                           <Typography fontSize={12}>
-                            Thời gian (UTC + 7){" "}
+                          {t("time")} (UTC + 7){" "}
                           </Typography>
                           {item?.message === "success" &&
                             item?.bet_second > 0 && (
@@ -462,7 +465,7 @@ const TableDetailTrade = ({dataState}) => {
                               ${item.betAmount?.toFixed(2)}
                             </Typography>
                             <Typography fontSize={12}>
-                              Số tiền vào lệnh
+                              {t("Trade amount")}
                             </Typography>
                           </>
                         )}
@@ -537,7 +540,7 @@ const TableDetailTrade = ({dataState}) => {
                               >
                                 {formatCurrency(item?.winAmount)}
                               </Typography>
-                              <Typography fontSize={12}>Thu nhập</Typography>
+                              <Typography fontSize={12}>{t("Payout")}</Typography>
                             </>
                           )}
                         {!item.result && item.message === "success" && (
@@ -548,9 +551,9 @@ const TableDetailTrade = ({dataState}) => {
                               mb={1}
                               color={"warning.main"}
                             >
-                              Chờ {countDown}s
+                              {t("wait")} {countDown}s
                             </Typography>
-                            <Typography fontSize={12}>Thu nhập</Typography>
+                            <Typography fontSize={12}>{t("Payout")}</Typography>
                           </>
                         )}
                       </Box>
@@ -602,13 +605,13 @@ const TableDetailTrade = ({dataState}) => {
             alignItems={"center"}
             gap={1}
           >
-            <Typography>Hiển thị kết quả:</Typography>
+            <Typography>{t("Show result:")}:</Typography>
             <FormControl variant="outlined" sx={{ minWidth: 60 }}>
               <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
                 <MenuItem value={6}>6</MenuItem>
                 <MenuItem value={12}>12</MenuItem>
                 <MenuItem value={24}>24</MenuItem>
-                <MenuItem value={dataProps.length}>Tất cả</MenuItem>
+                <MenuItem value={dataProps.length}>{t("All")}</MenuItem>
               </Select>
             </FormControl>
           </Box>

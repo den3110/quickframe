@@ -15,6 +15,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { isDark } from "util/constants";
@@ -43,6 +44,7 @@ const GridBallButton = ({
   resultIndex,
 }) => {
   const [ballBubble, setBallBubble] = useState();
+  const {t }= useTranslation()
   useEffect(() => {
     if (dataSignal) {
       dataSignal?.map((item, key) => {
@@ -86,6 +88,7 @@ const GridBallButton = ({
 };
 
 const BubbleHistory = () => {
+  const {t }= useTranslation()
   const theme = useTheme();
   const sliderRef = useRef(null);
   const { dataSignal: dataSignalProps, setDataSignal } =
@@ -105,7 +108,6 @@ const BubbleHistory = () => {
     if (!sliderRef.current) return;
     sliderRef.current?.slideNext();
   }, []);
-  console.log(sliderRef.current?.params?.slidesPerView)
 
   return (
     <Card variant="outlined" sx={{ mb: 1 }}>
@@ -149,7 +151,7 @@ const BubbleHistory = () => {
                     fontWeight={600}
                     sx={{ fontSize: "0.7em" }}
                   >
-                    Bảng {table}
+                    {t("board")} {table}
                   </Typography>
                   <Box
                     sx={{

@@ -18,10 +18,12 @@ import { SocketContext } from "contexts/SocketContext";
 import copytradeApi from "api/copytrade/copytradeApi";
 import { showToast } from "components/toast/toast";
 import AuthContext from "contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const MultiplyIndex = () => {
   const { isConnected, socket } = useContext(SocketContext);
   const theme = useTheme();
+  const {t }= useTranslation()
   const { walletMode } = useContext(SettingsContext);
   const [countDown, setCountDown] = useState(0);
   const [betAmount, setBetAmount] = useState(1);
@@ -100,7 +102,7 @@ const MultiplyIndex = () => {
           <Header />
           <Box mb={1}>
             <TextField
-              label="Số tiền vào lệnh ($)"
+              label={`${t("Trade amount")} ($)`}
               variant="outlined"
               fullWidth
               margin="normal"
@@ -111,7 +113,7 @@ const MultiplyIndex = () => {
               error={isErrorBetAmount ? true : false}
               helperText={
                 isErrorBetAmount
-                  ? "Không thể nhập giá trị lớn hơn 1.000.000 và nhỏ hơn 0"
+                  ? t("Value is invalid")
                   : ""
               }
             />
@@ -177,7 +179,7 @@ const MultiplyIndex = () => {
                   },
                 }}
               >
-                Khác
+                {t("Other")}
               </ToggleButton>
             </ToggleButtonGroup>
             {multiplier === "Khác" && (
@@ -194,7 +196,7 @@ const MultiplyIndex = () => {
           <Box mb={1}>
             <TextField
               label={
-                statusTrade === "WAIT" ? `Thời gian chờ` : "Thời gian giao dịch"
+                statusTrade === "WAIT" ? t("Waiting time") : t("FrmCreate_OrderIndex_label")
               }
               variant="outlined"
               fullWidth
@@ -249,7 +251,7 @@ const MultiplyIndex = () => {
                     onChange={handleChangeBrokerMode}
                   />
                 }
-                label="Chế độ chuyên gia"
+                label={t("Expert Mode")}
               />
             </FormGroup>
           </Box>
