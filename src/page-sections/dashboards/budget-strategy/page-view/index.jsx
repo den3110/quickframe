@@ -446,6 +446,7 @@ const BudgetStrategyPage = () => {
         </Box>
         {/* copy strategy */}
         <CopyBudgetStrategy
+          selectedData={selectedStrategy}
           title={t("Import Budget Strategy")}
           title2={t("Easy way to set up your superb strategy!")}
           title3={t("Enter your shared Budget Strategy Code to start your ideal investment plan")}

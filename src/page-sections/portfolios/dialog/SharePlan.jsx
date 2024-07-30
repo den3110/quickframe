@@ -24,6 +24,7 @@ import { showToast } from "components/toast/toast";
 import { isDark } from "util/constants";
 import { ActionBotType } from "type/ActionBotType";
 import { useTranslation } from "react-i18next";
+import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 // import AuthContext from "contexts/AuthContext";
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -31,7 +32,7 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   alignItems: "center",
 }));
 
-const SharePlan = ({ open, onClose, selectedPlan, setData, title, title2, title3, isFromBudgetStrategy }) => {
+const SharePlan = ({ open, onClose, selectedPlan, setData, title, title2, title3, isFromBudgetStrategy, isFromPortfolios, isFromSignalStrategy }) => {
   const {t }= useTranslation()
   // const {selectedLinkAccount }= useContext(AuthContext)
   const [shareCode, setShareCode]= useState(selectedPlan?.shareCode)
@@ -44,12 +45,21 @@ const SharePlan = ({ open, onClose, selectedPlan, setData, title, title2, title3
 
   const handleGenerateCopycode= async ()=> {
     try {
+      let response
       const payload = {
         action: ActionBotType.GENERATE_SHARE_CODE,
         // linkAccountId: selectedLinkAccount,
       };
       // const { data, error, loading, refetch }= useQuery()
-      const response= await portfolioApi.userBotAction(selectedPlan?._id, payload);
+      if(isFromPortfolios) {
+        response= await portfolioApi.userBotAction(selectedPlan?._id, payload);
+      }
+      if(isFromBudgetStrategy) {
+        // response= await budgetStrategyApi.userBudgetSignalGenerateShareCode(selectedPlan?._id);
+      }
+      if(isFromSignalStrategy) {
+        // response= await budgetStrategyApi.userBudgetSignalGenerateShareCode(selectedPlan?._id);
+      }
       if(response?.data?.ok=== true) {
         setShareCode(response?.data?.err_code)
       }

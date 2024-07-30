@@ -1,18 +1,36 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { Divider } from '@mui/material';
+import React from 'react';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
+  Typography,
+  Box,
+  useTheme
+} from '@mui/material';
+import formatCurrency from 'util/formatCurrency';
+import { useTranslation } from 'react-i18next';
 
 export default function OpenDetailTimeline(props) {
-  const {open, setOpen }= props
+  const { open, setOpen, selectedData } = props;
+  const theme = useTheme();
+  const {t }= useTranslation()
 
-  const handleClose= ()=> {
-    setOpen(false)
-  }
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const {
+    volume,
+    winStreak,
+    loseStreak,
+    profit,
+    signal_name,
+  } = selectedData?.runningData || {};
+  const { bet_second } = selectedData || {};
 
   return (
     <React.Fragment>
@@ -20,19 +38,135 @@ export default function OpenDetailTimeline(props) {
         fullWidth
         open={open}
         onClose={handleClose}
+        PaperProps={{
+          style: { borderRadius: 10, padding: theme.spacing(2) },
+        }}
       >
         <DialogTitle id="alert-dialog-title">
-          {"Chi tiết"}
+          {t("Details")}
         </DialogTitle>
         <Divider />
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            bla bla bla
-          </DialogContentText>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 2,
+                  p: 1,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1,
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  {t("volume")}:
+                </Typography>
+                <Typography fontWeight={600} variant="body1" color={volume > 0 ? "success.main": "error"}>{formatCurrency()}</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 2,
+                  p: 1,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1,
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  {t("Win streak")}:
+                </Typography>
+                <Typography fontWeight={600} variant="body1" color={"success.main"}>{winStreak}</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 2,
+                  p: 1,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1,
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  {t("Lose streak")}:
+                </Typography>
+                <Typography fontWeight={600} variant="body1" color={"error"}>{loseStreak}</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 2,
+                  p: 1,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1,
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  {t("profit")}:
+                </Typography>
+                <Typography fontWeight={600} variant="body1" color={profit > 0 ? "success.main": "error"}>{formatCurrency(profit)}</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 2,
+                  p: 1,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1,
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  {t("Order entry time")}:
+                </Typography>
+                <Typography variant="body1">{bet_second} {t("second")}</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 2,
+                  p: 1,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1,
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  {t("Tên phương pháp")}:
+                </Typography>
+                <Typography variant="body1">{signal_name}</Typography>
+              </Box>
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} autoFocus>
-            Đóng
+            {t("Close")}
           </Button>
         </DialogActions>
       </Dialog>

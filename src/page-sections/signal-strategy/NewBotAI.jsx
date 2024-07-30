@@ -49,9 +49,10 @@ const NewBotAI = ({
   selectedBot,
   setIsEdit,
   initState,
+  isFromCopyPlan,
 }) => {
   const { setData } = useContext(SignalStrategyContext);
-  const {t }= useTranslation()
+  const { t } = useTranslation();
   const [goals, setGoals] = useState([
     { type: "win_streak", count: 1 },
     { type: "lose_streak", count: 1 },
@@ -139,7 +140,9 @@ const NewBotAI = ({
         type: "BUBBLE_METHOD",
       };
       let response;
-      if (initState === true) {
+      if (initState === true && isFromCopyPlan === true) {
+        response = await signalStrategyApi.userBudgetSignalCreate(data);
+      } else if (initState === true) {
         response = await signalStrategyApi.userBudgetSignalUpdate(
           idBotAI,
           data
@@ -149,12 +152,12 @@ const NewBotAI = ({
       }
       if (response?.data?.ok === true) {
         showToast(
-          initState === true
+          initState === true && isFromCopyPlan !== true
             ? "Chỉnh sửa bot thành công"
             : t("Create the bot successfully!"),
           "success"
         );
-        if (initState === true) {
+        if (initState === true && isFromCopyPlan !== true) {
           // setData(response?.data?.d)
         } else {
           setData(response?.data?.d);
@@ -325,7 +328,9 @@ const NewBotAI = ({
                     />
                   }
                   label={`${t("Skip the rest of board 5 when:")} ${
-                    goal.type === "win_streak" ? t("Win Streak") : t("Lose Streak")
+                    goal.type === "win_streak"
+                      ? t("Win Streak")
+                      : t("Lose Streak")
                   }`}
                 />
                 <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>

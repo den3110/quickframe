@@ -1242,6 +1242,7 @@ export const resources = {
         "Your account has already been activated. Please login as normal",
       "EmailVerification.description":
         "Please back to login & start your trading journey with us now",
+        mark_read_all: "Mark read all",
       "EmailVerification.errorDescription":
         "Please retry again or contact us for support. Sincerely sorry for the inconvenience",
       "EmailVerification.errorTitle":
@@ -5860,6 +5861,7 @@ export const resources = {
       "Security your account": "Bảo mật tài khoản của bạn",
       "See less": "Thu gọn",
       "See more": "Xem thêm",
+      mark_read_all: "Đánh dấu tất cả là đã đọc",
       "Select BOT AI...": "Chọn BOT AI...",
       "Select Bot...": "Chọn Bot...",
       "Select Language": "Chọn ngôn ngữ",

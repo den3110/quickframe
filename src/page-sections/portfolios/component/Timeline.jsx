@@ -203,6 +203,23 @@ const CustomTimeline = () => {
     }
   };
 
+  const renderColorZero= (data)=> {
+    if(data?.winAmount < 0) {
+      return "error"
+    }
+    else if(data?.winAmount=== 0) {
+      if(data?.result=== "WIN") {
+        return theme.palette.success.main
+      }
+      else { 
+        return "error"
+      }
+    }
+    else {
+      return theme.palette.success.main
+    }
+  }
+
   const handleMenuOpen = (index, event) => {
     const newAnchorEls = [...anchorEls];
     newAnchorEls[index] = event.currentTarget;
@@ -481,7 +498,7 @@ const CustomTimeline = () => {
                           display: "flex",
                           alignItems: "center",
                           padding: downLg ? 1 : 2.5,
-                          flexWrap: downLg ? "wrap" : "",
+                          flexWrap: downLg ? "wrap" : "", cursor: "pointer"
                         }}
                         
                       >
@@ -657,9 +674,7 @@ const CustomTimeline = () => {
                                   fontWeight={600}
                                   mb={1}
                                   color={
-                                    item?.winAmount >= 0
-                                      ? theme.palette.success.main
-                                      : "error"
+                                    renderColorZero(item)
                                   }
                                 >
                                   {formatCurrency(item?.winAmount)}
@@ -752,7 +767,7 @@ const CustomTimeline = () => {
             shape="rounded"
           />
         </PaginationContainer>
-        <OpenDetailTimeline open={openDetailTimelineDialog} setOpen={setOpenDetailTimelineDialog} />
+        <OpenDetailTimeline open={openDetailTimelineDialog} setOpen={setOpenDetailTimelineDialog} selectedData={selectedItem} />
       </Box>
     </Box>
   );

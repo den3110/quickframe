@@ -48,7 +48,7 @@ const BottomMenuDialog = (props) => {
         <List>
           <ListItem onClick={()=> handleNavigate("/manage-follower")} button>
             <ListItemText
-              primary={t("manage_follower")}
+              primary={t("manage_followers")}
               secondary="Quản lý thống kê người theo dõi đầu tư của bạn"
               primaryTypographyProps={{ style: { fontWeight: 'bold', fontFamily: "Manrope, sans-serif" } }}
             />

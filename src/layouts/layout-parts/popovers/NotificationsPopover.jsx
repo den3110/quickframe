@@ -23,16 +23,17 @@ import { useInView } from "react-intersection-observer";
 
 const NotificationsPopover = (props) => {
   const { hiddenViewButton } = props;
+  const { ref, inView } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
   const anchorRef = useRef(null);
   const [data, setData] = useState([]);
   const [unReadNotification, setUnReadNotification] = useState();
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState("1");
-  const { ref, inView } = useInView({
-    /* Optional options */
-    threshold: 0,
-  });
+  const [visibleCount, setVisibleCount] = useState(6);
 
   const handleReadNotification = async (selectedNotification) => {
     try {
@@ -57,34 +58,26 @@ const NotificationsPopover = (props) => {
             dataTemp[findIndex] = { ...dataTemp[findIndex], is_read: true };
           }
         }
+        setData([...dataTemp]);
       }
     } catch (error) {
       showToast();
-    } finally {
     }
   };
 
   const handleReadAllNotification = async () => {
-    setUnReadNotification(0)
+    setUnReadNotification(0);
     setOpen(false);
     try {
       const response = await notificationApi.userReadAllNotification();
       if (response?.data?.ok === true) {
-        setUnReadNotification(0)
-      }
-      // assumption
-      else {
-        setUnReadNotification(0)
+        const updatedData = data.map((item) => ({ ...item, is_read: true }));
+        setData(updatedData);
       }
     } catch (error) {
-      console.log(error)
-      // assumption 
-      setUnReadNotification(0)
       showToast();
-    } finally {
     }
   };
-  // const handleTabChange = (_, value) => setTabValue(value);
 
   useEffect(() => {
     (async () => {
@@ -101,7 +94,16 @@ const NotificationsPopover = (props) => {
     })();
   }, [t]);
 
-  // UNREAD MESSAGES LENGTH
+  useEffect(()=> {
+    if(!inView) {
+      setVisibleCount(6)
+    }
+  }, [inView])
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + 6);
+  };
+
   return (
     <Fragment>
       <IconButton ref={anchorRef} onClick={() => setOpen(true)}>
@@ -121,11 +123,6 @@ const NotificationsPopover = (props) => {
         popoverClose={() => setOpen(false)}
       >
         <TabContext value={tabValue}>
-          {/* <TabList onChange={handleTabChange}>
-            <StyledTab value="1" label={`Messages (${UNREAD_MSG_LEN})`} />
-            <StyledTab value="2" label="Archived" />
-          </TabList> */}
-
           <Box ref={ref}>
             {data.length === 0 ? (
               <Paragraph fontWeight="500" textAlign="center" p={2}>
@@ -133,20 +130,25 @@ const NotificationsPopover = (props) => {
               </Paragraph>
             ) : (
               <TabPanel value="1">
-                {data.map((msg) => (
+                {data.slice(0, visibleCount).map((msg) => (
                   <ListItem
                     onClick={handleReadNotification}
                     msg={msg}
-                    key={msg.id}
-                    onClose={() => {
-                      setOpen(false);
-                    }}
+                    key={msg._id}
+                    onClose={() => setOpen(false)}
                   />
                 ))}
+                {visibleCount < data.length && (
+                  <Box p={1} pb={0.5}>
+                    <Button onClick={handleShowMore} variant="text" fullWidth disableRipple>
+                      {t("See more")}
+                    </Button>
+                  </Box>
+                )}
                 {!hiddenViewButton ? (
                   <Box p={1} pb={0.5}>
                     <Button onClick={handleReadAllNotification} variant="text" fullWidth disableRipple>
-                      Mark read all
+                      {t("mark_read_all")}
                     </Button>
                   </Box>
                 ) : null}
@@ -159,10 +161,7 @@ const NotificationsPopover = (props) => {
   );
 };
 
-// ListItem component props
-
 function ListItem({ msg, onClose, onClick }) {
-  const isNew = msg.type === "new_message";
   const navigate = useNavigate();
 
   return (
@@ -179,7 +178,7 @@ function ListItem({ msg, onClose, onClick }) {
         borderBottom: 1,
         cursor: "pointer",
         borderColor: "divider",
-        backgroundColor: isNew ? "action.hover" : "transparent",
+        backgroundColor: msg?.is_read ? "grey.700" : "transparent",
         "&:hover": {
           backgroundColor: "action.hover",
         },
@@ -203,4 +202,5 @@ function ListItem({ msg, onClose, onClick }) {
     </FlexBox>
   );
 }
+
 export default memo(NotificationsPopover);

@@ -25,12 +25,11 @@ export function sortDataAlphabet(arr, propertyName) {
     const charA = removeVietnameseTones(a[propertyName])[0];
     const charB = removeVietnameseTones(b[propertyName])[0];
 
-    if (charA < charB) {
+    if (charA <= charB) {
       return -1;
     }
-    if (charA > charB) {
+    else {
       return 1;
     }
-    return 0;
   });
 }

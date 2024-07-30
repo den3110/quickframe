@@ -36,6 +36,7 @@ import SpotBalanceContext from "contexts/SpotBalanceContext";
 import sortData from "util/sortData";
 import TableInvest from "./component/TableInvest";
 import PopupTrade from "./component/PopupTrade";
+import { sortDataAlphabet } from "util/sortDataAlphabet";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -177,7 +178,7 @@ const TelegramChannelSignalStrategy = () => {
                           }}
                         >
                           <List>
-                            {filteredData.map((item, index) => (
+                            {sortDataAlphabet(filteredData, "name").map((item, index) => (
                               <ListItem
                                 onClick={() => {
                                   setSelectedBot(item);
@@ -392,7 +393,7 @@ const TelegramChannelSignalStrategy = () => {
                       />
                     </Box>
 
-                    {filteredData
+                    {sortDataAlphabet(filteredData, "name")
                       ?.slice(
                         rowsPerPage * (page - 1),
                         rowsPerPage * (page - 1) + rowsPerPage
@@ -577,40 +578,41 @@ const TelegramChannelSignalStrategy = () => {
                           </AccordionDetails>
                         </Accordion>
                       ))}
+
+                  {downLg && 
+                    <PaginationContainer>
+                      <Box
+                        display={"flex"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                        
+                        gap={1}
+                      >
+                        <Typography style={{whiteSpace: "nowrap"}}>{t("Show result")}:</Typography>
+                        <FormControl variant="outlined" sx={{ minWidth: 60 }}>
+                          <Select
+                            value={rowsPerPage}
+                            onChange={handleChangeRowsPerPage}
+                          >
+                            <MenuItem value={6}>6</MenuItem>
+                            <MenuItem value={12}>12</MenuItem>
+                            <MenuItem value={24}>24</MenuItem>
+                            <MenuItem value={filteredData.length}>
+                              {t("all")}
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                      <Pagination
+                        count={Math.ceil(filteredData.length / rowsPerPage)}
+                        page={page}
+                        onChange={handleChangePage}
+                        shape="rounded"
+                      />
+                    </PaginationContainer>
+                  }
                   </Box>
                 )}
-                {downLg && 
-                  <PaginationContainer>
-                    <Box
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                      
-                      gap={1}
-                    >
-                      <Typography style={{whiteSpace: "nowrap"}}>{t("Show result")}:</Typography>
-                      <FormControl variant="outlined" sx={{ minWidth: 60 }}>
-                        <Select
-                          value={rowsPerPage}
-                          onChange={handleChangeRowsPerPage}
-                        >
-                          <MenuItem value={6}>6</MenuItem>
-                          <MenuItem value={12}>12</MenuItem>
-                          <MenuItem value={24}>24</MenuItem>
-                          <MenuItem value={filteredData.length}>
-                            {t("all")}
-                          </MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                    <Pagination
-                      count={Math.ceil(filteredData.length / rowsPerPage)}
-                      page={page}
-                      onChange={handleChangePage}
-                      shape="rounded"
-                    />
-                  </PaginationContainer>
-                }
                 <PopupTrade selectedBot={selectedBot} />
               </Box>
             </Box>

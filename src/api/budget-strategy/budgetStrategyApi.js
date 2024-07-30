@@ -16,6 +16,10 @@ const budgetStrategyApi = {
   userBudgetStrategyDelete(id, data) {
     const url= `/users/budget-strategy/delete/${id}`
     return axiosClient.delete(url, data)
+  },
+  userBudgetSignalGenerateShareCode(id, data) {
+    const url= `/users/budget-signal/generate-share-code/` + id
+    return axiosClient.put(url, data)
   }
 };
 

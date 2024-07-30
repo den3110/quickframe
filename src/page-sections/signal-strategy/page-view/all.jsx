@@ -494,6 +494,7 @@ const SignalStrategyList = () => {
           setChange={setChange}
         />
         <CopyBudgetStrategy
+          selectedData={selectedBot}
           title={t("Import Bot AI")}
           title2={t("Easy way to set up your superb Bot AI!")}
           title3={t(
@@ -511,7 +512,7 @@ const SignalStrategyList = () => {
           onClose={handleSharePlanClose}
           selectedPlan={selectedBot}
           setData={setData}
-          isFromBudgetStrategy={true}
+          isFromSignalStrategy={true}
         />
         <DeleteSignalStrategy
           open={isDeleteBot}
