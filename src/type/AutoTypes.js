@@ -19,3 +19,10 @@ export const AutoTypesTitleValue = {
   3: "Telegram Signal"
 };
 
+export const AutoTypesTitleValueFilter = {
+  0: "Bot AI",
+  1: "Follow Leader",
+  2: "Telebot",
+  3: "Telegram Signal"
+};
+
