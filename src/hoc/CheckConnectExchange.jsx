@@ -67,7 +67,7 @@ const CheckConnectExchange = ({ children }) => {
     } else {
       setLoading(false);
     }
-  }, [user, selectedLinkAccount, navigate, setAccessToken, setDataSelectedLinkAccount, setSelectedLinkAccount, accessToken]);
+  }, [user, selectedLinkAccount, accessToken]);
   
   // if (!selectedLinkAccount) {
   //   return <Navigate to="/login" />;

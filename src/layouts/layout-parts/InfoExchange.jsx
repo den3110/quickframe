@@ -8,10 +8,12 @@ import AuthContext from "contexts/AuthContext";
 import { ConnectExchangeContext } from "hoc/CheckConnectExchange";
 import { constant } from "constant/constant";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 const InfoExchange = () => {
-  const {user }= useContext(AuthContext)
-  const { linked }= useContext(ConnectExchangeContext)
+  const {dataSelectedLinkAccount }= useContext(AuthContext)
+  // const { linked }= useContext(ConnectExchangeContext)
   const navigate= useNavigate()
+  const {t }= useTranslation()
 
   return <FlexRowAlign flexDirection="column" py={5}>
       
@@ -19,8 +21,8 @@ const InfoExchange = () => {
         navigate("/dashboard/profile?tab=2")
       }} style={{backgroundColor: "rgb(50, 59, 73)"}} fullWidth>
         <Box sx={{width: "100%"}}>
-          <Typography align="left" color={"rgb(238, 239, 242)"} fontSize={12} fontWeight={600} mb={1}>Linked Exchange</Typography>
-          <img src={constant.API_URL + "/assets/exchange/" + linked?.exchange?.clientId + ".svg"} alt="Can't open" />
+          <Typography align="left" color={"rgb(238, 239, 242)"} fontSize={12} fontWeight={600} mb={1}>{t("Exchange Linked")}</Typography>
+          <img src={constant.API_URL + "/assets/exchange/" + dataSelectedLinkAccount?.clientId + ".svg"} alt="Can't open" />
         </Box>
       </Button>
     </FlexRowAlign>;

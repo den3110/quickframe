@@ -2941,6 +2941,7 @@ export const resources = {
         "The system supports parsing channel content **according to a number of available templates**, \n          and apply this signal to you.",
       "The system supports parsing channel content **according to a number of available templates**, and apply this signal to you":
         "The system supports parsing channel content **according to a number of available templates**, and apply this signal to you",
+        apply: "Apply",
       "The total trading volumes from your account over a period of time":
         "The total trading volumes from your account over a period of time",
       "The value 'undefined' is not valid.":
@@ -6735,6 +6736,7 @@ export const resources = {
       "“{{botName}}” use method: {{methodName}}":
         "“{{botName}}” sử dụng phương pháp: {{methodName}}",
       "🌟 Go to New Version": "🌟 Chuyển sang phiên bản mới",
+      apply: "Áp dụng",
       "Click the button below to initiate the password change process. You will need to verify your email and set a new password.": "Nhấp vào nút bên dưới để bắt đầu quá trình thay đổi mật khẩu. Bạn sẽ cần phải xác minh email của mình và đặt mật khẩu mới."
     },
   },

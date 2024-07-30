@@ -740,7 +740,7 @@ const NewBudgetStrategy = ({
                   </Box>
                 </>
               )}
-              {console.log("method 1", method1)}
+              {/* {console.log("method 1", method1)} */}
               {type === BudgetStrategyType.MARTINGALE && (
                 <>
                   <Box display={"flex"}>

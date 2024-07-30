@@ -69,6 +69,7 @@ import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
 import { useTranslation } from "react-i18next";
 import OpenCopyPlanDialog from "../dialog/OpenCopyPlanDialog";
 import portfolioApi from "api/portfolios/portfolioApi";
+import FilterPortfolios from "./component/FilterPortfolios";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -97,7 +98,12 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const PortfoliosList = () => {
-  const { data, setData, loading, setChangeNoLoading: setChangeData } = useContext(PortfoliosContext);
+  const {
+    data,
+    setData,
+    loading,
+    setChangeNoLoading: setChangeData,
+  } = useContext(PortfoliosContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { walletMode } = useContext(SettingsContext);
@@ -120,6 +126,7 @@ const PortfoliosList = () => {
   const [page, setPage] = useState(1);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [openNewBotAI, setOpenNewBotAI] = useState(false);
+  const [openFilterDialog, setOpenFilterDialog] = useState(false);
   const [openNewBotAIStringMethod, setOpenNewBotAIStringMethod] =
     useState(false);
   const [anchorElMenu, setAnchorElMenu] = useState(null);
@@ -269,14 +276,14 @@ const PortfoliosList = () => {
     // setLoading(true);
 
     try {
-      const payload= {
-        ids: selectedPlans?.map(item=> item?._id),
+      const payload = {
+        ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.PAUSE,
-      }
-      const responses= await portfolioApi.userBotActionList(payload)
-      if(responses?.data?.ok=== true ) {
+      };
+      const responses = await portfolioApi.userBotActionList(payload);
+      if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.PAUSE], "success");
-        setChangeData(prev=> !prev)
+        setChangeData((prev) => !prev);
       }
       // const requests = selectedPlans.map((plan, index) =>
       //   axiosClient.post(`/users/bot/action/${plan?._id}`, {
@@ -342,14 +349,14 @@ const PortfoliosList = () => {
       //     }
       //   })
       // );
-      const payload= {
-        ids: selectedPlans?.map(item=> item?._id),
+      const payload = {
+        ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.STOP,
-      }
-      const responses= await portfolioApi.userBotActionList(payload)
-      if(responses?.data?.ok=== true ) {
+      };
+      const responses = await portfolioApi.userBotActionList(payload);
+      if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.STOP], "success");
-        setChangeData(prev=> !prev)
+        setChangeData((prev) => !prev);
       }
     } catch (error) {
       console.error("Error sending requests:", error);
@@ -370,14 +377,14 @@ const PortfoliosList = () => {
       //     action: ActionBotType.RESUME,
       //   })
       // );
-      const payload= {
-        ids: selectedPlans?.map(item=> item?._id),
+      const payload = {
+        ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.RESUME,
-      }
-      const responses= await portfolioApi.userBotActionList(payload)
-      if(responses?.data?.ok=== true ) {
+      };
+      const responses = await portfolioApi.userBotActionList(payload);
+      if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.RESUME], "success");
-        setChangeData(prev=> !prev)
+        setChangeData((prev) => !prev);
       }
       // const responses = await Promise.all(requests);
       // const listResult = responses?.map((item) => item.data.ok);
@@ -408,14 +415,14 @@ const PortfoliosList = () => {
     // setLoading(true);
 
     try {
-      const payload= {
-        ids: selectedPlans?.map(item=> item?._id),
+      const payload = {
+        ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.RESTART,
-      }
-      const responses= await portfolioApi.userBotActionList(payload)
-      if(responses?.data?.ok=== true ) {
+      };
+      const responses = await portfolioApi.userBotActionList(payload);
+      if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.RESTART], "success");
-        setChangeData(prev=> !prev)
+        setChangeData((prev) => !prev);
       }
       // const requests = selectedPlans.map((plan, index) =>
       //   axiosClient.post(`/users/bot/action/${plan?._id}`, {
@@ -454,14 +461,14 @@ const PortfoliosList = () => {
     // a roi oke cho e ti
 
     try {
-      const payload= {
-        ids: selectedPlans?.map(item=> item?._id),
+      const payload = {
+        ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.RESET,
-      }
-      const responses= await portfolioApi.userBotActionList(payload)
-      if(responses?.data?.ok=== true ) {
+      };
+      const responses = await portfolioApi.userBotActionList(payload);
+      if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.RESET], "success");
-        setChangeData(prev=> !prev)
+        setChangeData((prev) => !prev);
       }
       // const requests = selectedPlans.map((plan, index) =>
       //   axiosClient.post(`/users/bot/action/${plan?._id}`, {
@@ -499,14 +506,14 @@ const PortfoliosList = () => {
     // setLoading(true);
 
     try {
-      const payload= {
-        ids: selectedPlans?.map(item=> item?._id),
+      const payload = {
+        ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.REMOVE,
-      }
-      const responses= await portfolioApi.userBotActionList(payload)
-      if(responses?.data?.ok=== true ) {
+      };
+      const responses = await portfolioApi.userBotActionList(payload);
+      if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.REMOVE], "success");
-        setChangeData(prev=> !prev)
+        setChangeData((prev) => !prev);
       }
       // const requests = selectedPlans.map((plan, index) =>
       //   axiosClient.post(`/users/bot/action/${plan?._id}`, {
@@ -722,8 +729,31 @@ const PortfoliosList = () => {
                       )}
                     </Button>
                   )}
+                  {!downLg && (
+                    <Button
+                      onClick={() => {
+                        setOpenFilterDialog(true);
+                      }}
+                      variant="outlined"
+                      sx={{
+                        mr: 2,
+                        "& .MuiButton-endIcon": {
+                          margin: downLg ? 0 : "",
+                        },
+                      }}
+                      size={downLg ? "large" : "medium"}
+                      fullWidth={downLg ? true : false}
+                      endIcon={<FilterIcon />}
+                      // onClick={handleDialogOpen}
+                    >
+                      {downLg ? "" : "Filter"}
+                    </Button>
+                  )}
                   {downLg && (
                     <Button
+                      onClick={() => {
+                        setOpenFilterDialog(true);
+                      }}
                       variant="outlined"
                       sx={{
                         mr: 2,
@@ -930,7 +960,12 @@ const PortfoliosList = () => {
                                       fontWeight={"600"}
                                       sx={{ cursor: "pointer" }}
                                     >
-                                      <Link style={{color: "unset"}} to={plan._id}>{plan.name}</Link>
+                                      <Link
+                                        style={{ color: "unset" }}
+                                        to={plan._id}
+                                      >
+                                        {plan.name}
+                                      </Link>
                                     </Typography>
                                     <Typography
                                       variant="body2"
@@ -1060,6 +1095,7 @@ const PortfoliosList = () => {
                                   anchorEl={anchorEls[index]}
                                   open={Boolean(anchorEls[index])}
                                   onClose={() => handleClose(index)}
+                                  disableScrollLock={true}
                                 >
                                   <MenuItem
                                     onClick={() => {
@@ -1373,6 +1409,15 @@ const PortfoliosList = () => {
           }}
           changeState={changeState}
           setChangeState={setChangeState}
+        />
+        <FilterPortfolios
+          open={openFilterDialog}
+          onClose={() => {
+            setOpenFilterDialog(false);
+          }}
+          setData={setDataState}
+          data={data}
+          setPage={setPage}
         />
       </Box>
     </Layout>

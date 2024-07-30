@@ -1414,7 +1414,7 @@ const NewPlanDrawer = ({
                             onChange={(e) => setBudgetStrategy(e.target.value)}
                             renderValue={(value) => (
                               <> 
-                              {console.log(dataBudgetStrategy)}
+                              {/* {console.log(dataBudgetStrategy)} */}
                                 {loading === true && <>Loading...</>}
                                 {loading === false &&
                                   dataBudgetStrategy?.find(

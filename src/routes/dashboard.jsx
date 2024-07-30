@@ -52,10 +52,6 @@ export const DashboardRoutes = [
         index: true,
         element: <Dashboard />,
       },
-      {
-        path: "",
-        element: <Dashboard />,
-      },
       // {
       //   path: "portfolios",
       //   element: <Portfolios />,

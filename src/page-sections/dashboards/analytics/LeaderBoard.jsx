@@ -58,12 +58,12 @@ const LeaderBoard = () => {
   const [dataUser, setDataUser] = useState([]);
   const [dataBot, setDataBot] = useState([]);
   const [loading, setLoading] = useState();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState();
   const [openCopyPlan, setOpenCopyPlan]= useState(false)
-  const { logoutFromSystem, logoutToConnect } = useContext(AuthContext);
+  // const { logoutFromSystem, logoutToConnect } = useContext(AuthContext);
   const fetchDataUser = useCallback(async () => {
     try {
       setLoading(true);
