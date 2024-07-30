@@ -172,6 +172,7 @@ export const resources = {
         "Withdraw amount must be greater than 1 ALI",
       err_invalid_balance: "Your balance is not enough",
       err_balance_not_enough: "Your balance is not enough",
+      Paused: "Paused",
       note_withdraw_bep20:
         "Note: To ensure the safety of your assets, please confirm again the blockchain you need to use is BSC.",
       internal: "Internal",
@@ -1468,6 +1469,8 @@ export const resources = {
         '<span>from <span class="demo">Demo account</span></span>',
       FormCreatePlan_baseInfo_from_live_account:
         '<span>from <span class="live">Live account</span></span>',
+      auto_type: "Auto type",
+
       FormCreatePlan_baseInfo_name_label: "My investment goal is",
       FormCreatePlan_baseInfo_name_placeholder: "your goal",
       FormCreatePlan_baseInfo_subTitle:
@@ -5295,6 +5298,7 @@ export const resources = {
       "Match Take Profit": "Đạt Mục Tiêu Lợi Nhuận",
       "Match Win Streak": "Đạt Chuỗi Thắng Liên Tiếp",
       "Match win streaks": "Đạt Chuỗi Thắng Liên Tiếp",
+      Running: "Đang chạy",
       Max: "Tối đa",
       "Max Lose Streak": "Chuỗi thua tối đa",
       "Max Profit": "Lợi nhuận tối đa",
@@ -5402,6 +5406,7 @@ export const resources = {
         "Các tuyên bố xúc phạm về Công ty, và/hoặc",
       "Old password": "Mật khẩu cũ",
       "On Going": "Đang chạy",
+      auto_type: "Loại gói",
       "On Going Plan": "Gói đang chạy",
       "On going": "Đang chạy",
       Open: "Đang mở",
@@ -6248,6 +6253,7 @@ export const resources = {
         "Chiến lược này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành động này.",
       "This week": "Tuần này",
       week: "Tuần",
+      Paused: "Tạm ngưng",
       "Thriving to provide the best possible trading experience to all traders, Quickinvest is owing unique features, and effective money-making strategies.":
         "Hướng đến cung cấp trải nghiệm giao dịch tốt nhất cho tất cả các nhà giao dịch, Quickinvest sở hữu tính năng độc đáo và chiến lược kiếm tiền hiệu quả.",
       Thursday: "Thứ năm",

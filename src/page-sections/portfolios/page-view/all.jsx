@@ -209,15 +209,15 @@ const PortfoliosList = () => {
     setIsOpenPlanDrawer(false);
   };
 
-  const handleOpenDeleteBot = () => {
-    setIsDeleteBot(true);
-  };
+  // const handleOpenDeleteBot = () => {
+  //   setIsDeleteBot(true);
+  // };
   const handleCloseDeleteBot = () => {
     setIsDeleteBot(false);
   };
-  const handleCloseNewBotAI = () => {
-    setOpenNewBotAI(false);
-  };
+  // const handleCloseNewBotAI = () => {
+  //   setOpenNewBotAI(false);
+  // };
 
   const handleOpenNewBotAI = () => {
     setOpenNewBotAI(true);
@@ -233,13 +233,13 @@ const PortfoliosList = () => {
   const handleOpenNewBotAIStringMethod = () => {
     setOpenNewBotAIStringMethod(true);
   };
-  const handleCloseNewBotAIStringMethod = () => {
-    setOpenNewBotAIStringMethod(false);
-  };
+  // const handleCloseNewBotAIStringMethod = () => {
+  //   setOpenNewBotAIStringMethod(false);
+  // };
 
-  const handleClick = (event, index) => {
-    setAnchorEls((prev) => ({ ...prev, [index]: event.currentTarget }));
-  };
+  // const handleClick = (event, index) => {
+  //   setAnchorEls((prev) => ({ ...prev, [index]: event.currentTarget }));
+  // };
 
   const handleClose = (index) => {
     setAnchorEls((prev) => ({ ...prev, [index]: null }));
@@ -454,7 +454,10 @@ const PortfoliosList = () => {
   };
 
   const handleResetPlan = async () => {
-    const selectedPlans = dataState.filter(
+    const selectedPlans = dataState.slice(
+      rowsPerPage * (page - 1),
+      rowsPerPage * (page - 1) + rowsPerPage
+    ).filter(
       (_, index) => checkedRows[index] === true
     );
     // setLoading(true);
@@ -500,7 +503,10 @@ const PortfoliosList = () => {
   };
 
   const handleRemovePlan = async () => {
-    const selectedPlans = dataState.filter(
+    const selectedPlans = dataState.slice(
+      rowsPerPage * (page - 1),
+      rowsPerPage * (page - 1) + rowsPerPage
+    ).filter(
       (_, index) => checkedRows[index] === true
     );
     // setLoading(true);
@@ -1371,7 +1377,7 @@ const PortfoliosList = () => {
           handleClose={handleClosePlanDrawer}
           isEdit={isEdit}
           selectedPlan={selectedPlan}
-          setData={setData}
+          setData={setDataState}
           dataProps={data}
           setIsEdit={setIsEdit}
           setChangeState={setChangeState}

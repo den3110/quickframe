@@ -150,7 +150,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
       case "isRunning":
         return (
           <Box>
-            <Typography>Gói đang chạy</Typography>
+            <Typography>{t("On Going Plan")}</Typography>
             <FormControl component="fieldset" key="isRunning">
               <FormControlLabel
                 control={
@@ -188,7 +188,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
       case "autoType":
         return (
           <Box>
-            <Typography>Loại gói</Typography>
+            <Typography>{t("auto_type")}</Typography>
             <FormControl component="fieldset" key="autoType">
               <FormControlLabel
                 control={
@@ -239,7 +239,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
       case "accountType":
         return (
           <Box>
-            <Typography>Dạng tài khoản</Typography>
+            <Typography>{t("Account Type")}</Typography>
             <FormControl component="fieldset" key="accountType">
               <FormControlLabel
                 control={
@@ -362,7 +362,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t("Cancel")}</Button>
-        <Button onClick={applyFilters}>{t("Apply")}</Button>
+        <Button onClick={applyFilters}>{t("apply")}</Button>
       </DialogActions>
     </Dialog>
   );
