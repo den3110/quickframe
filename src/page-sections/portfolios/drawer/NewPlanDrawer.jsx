@@ -490,7 +490,6 @@ const NewPlanDrawer = ({
           get_signal_to_stop_from_signal_plan: getSignalToStopFromSignalPlan,
         }
       };
-      console.log(data)
       if (isEdit === true) {
         if (isFromLeaderboard) {
           response = await portfolioApi.usersBotCreate(data);
@@ -695,6 +694,12 @@ const NewPlanDrawer = ({
         selectedPlan?.method_data?.feature_data
           ?.lose_change_method_after_win_streak
       );
+      setWinningTotalReach(selectedPlan?.method_data?.feature_data?.win_total_target)
+      setLoseTotalReach(selectedPlan?.method_data?.feature_data?.lose_total_target)
+      setWinningContinue(selectedPlan?.method_data?.feature_data?.win_streak_target)
+      setLoseContinue(selectedPlan?.method_data?.feature_data?.lose_streak_target)
+      setWhenProfit(selectedPlan?.method_data?.feature_data?.take_profit_target)
+      setWhenLosing(selectedPlan?.method_data?.feature_data?.stop_loss_target)
       setTelegramToken(selectedPlan?.telegram_token);
       setTelegramChatId(selectedPlan?.telegram_chatId);
       setTelegramUrl(selectedPlan?.telegram_url);
@@ -811,6 +816,12 @@ const NewPlanDrawer = ({
       setStopWhenLoseStreak(0);
       setStopWhenProfit(0);
       setStopWhenLoss(0);
+      setWinningTotalReach(0)
+      setLoseTotalReach(0)
+      setWinningContinue(0)
+      setLoseContinue(0)
+      setWhenProfit(0)
+      setWhenLosing(0)
       setRunWhenExactlyWinLose(false);
       setGetSignalToStopFromSignalPlan(false);
       setWaitSignalOtherPlanEnabled(false)
