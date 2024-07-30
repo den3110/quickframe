@@ -22,6 +22,8 @@ import {
   MenuItem,
   Pagination,
   styled,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import Layout from "../Layout";
 import { SocketContext } from "contexts/SocketContext";
@@ -37,6 +39,8 @@ import sortData from "util/sortData";
 import TableInvest from "./component/TableInvest";
 import PopupTrade from "./component/PopupTrade";
 import { sortDataAlphabet } from "util/sortDataAlphabet";
+import CopyAllIcon from "@mui/icons-material/CopyAll";
+import { showToast } from "components/toast/toast";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -44,7 +48,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   alignItems: "center",
   marginTop: theme.spacing(2),
   paddingBottom: theme.spacing(2),
-  gap: 2
+  gap: 2,
 }));
 
 const TelegramChannelSignalStrategy = () => {
@@ -68,7 +72,7 @@ const TelegramChannelSignalStrategy = () => {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    setPage(1)
+    setPage(1);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -137,7 +141,37 @@ const TelegramChannelSignalStrategy = () => {
             display: "flex",
           }}
         >
-          <Box width={"100%"} sx={{ paddingTop: "22px" }}>
+          <Box width={"100%"} sx={{ paddingTop: "22px", position: "relative" }}>
+            <Box sx={{ position: "absolute", right: 0, top: 0 }}>
+              <Box p={2}>
+                <Tooltip title="Copy all">
+                  <IconButton
+                    onClick={() => {
+                        try {
+                        const formattedData = filteredData
+                          .map((item) => `${item.name} | ${item.url}`)
+                          .join("\n");
+
+                        const textarea = document.createElement("textarea");
+                        textarea.value = formattedData;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand("copy");
+
+                        document.body.removeChild(textarea)
+                        showToast("Copy tất cả kênh telegram thành công", "success")
+                      }
+                      catch(e) {
+                        showToast("Lỗi khi copy", "error")
+
+                      }
+                    }}
+                  >
+                    <CopyAllIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </Box>
             <Box sx={{ padding: downLg ? 1 : "24px" }}>
               <Typography variant="h6" gutterBottom>
                 {t("Telegram Channel")}
@@ -178,104 +212,118 @@ const TelegramChannelSignalStrategy = () => {
                           }}
                         >
                           <List>
-                            {sortDataAlphabet(filteredData, "name").map((item, index) => (
-                              <ListItem
-                                onClick={() => {
-                                  setSelectedBot(item);
-                                }}
-                                button
-                                key={index}
-                                sx={{
-                                  backgroundColor:
-                                    selectedBot._id === item._id
-                                      ? "success.bg"
-                                      : "transparent",
-                                }}
-                              >
-                                <ListItemText
-                                  primary={
-                                    <Box
-                                      display={"flex"}
-                                      justifyContent={"space-between"}
-                                      alignItems={"center"}
-                                    >
-                                      <Typography>{item.name}</Typography>
-                                    </Box>
-                                  }
-                                  secondary={
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                      }}
-                                    >
-                                      <Box display="flex" alignItems={"center"}>
-                                        <Typography fontSize={12}>
-                                          {t("Win rate:")}&nbsp;
-                                        </Typography>
-                                        <Typography
-                                          fontSize={12}
-                                          fontWeight={600}
-                                          sx={{
-                                            cursor: "pointer",
-                                          }}
-                                          color={
-                                            (item.win_day /
-                                              (item.win_day + item.lose_day)) *
-                                              100 >=
-                                            50
-                                              ? "success.main"
-                                              : "error.main"
-                                          }
-                                        >
-                                          {round2number(
-                                            (item.win_day /
-                                              (item.win_day + item.lose_day)) *
-                                              100
-                                          )}
-                                          %
-                                        </Typography>
+                            {sortDataAlphabet(filteredData, "name").map(
+                              (item, index) => (
+                                <ListItem
+                                  onClick={() => {
+                                    setSelectedBot(item);
+                                  }}
+                                  button
+                                  key={index}
+                                  sx={{
+                                    backgroundColor:
+                                      selectedBot._id === item._id
+                                        ? "success.bg"
+                                        : "transparent",
+                                  }}
+                                >
+                                  <ListItemText
+                                    primary={
+                                      <Box
+                                        display={"flex"}
+                                        justifyContent={"space-between"}
+                                        alignItems={"center"}
+                                      >
+                                        <Typography>{item.name}</Typography>
                                       </Box>
-                                      <Typography fontSize={8}>
-                                        | &nbsp;
-                                      </Typography>
-                                      <Box display="flex" alignItems={"center"}>
-                                        <Typography fontSize={12}>
-                                          {t("Win/Lose Streak:")}&nbsp;
-                                        </Typography>
-                                        <Typography
-                                          fontWeight={600}
-                                          fontSize={12}
-                                          color={"success.main"}
+                                    }
+                                    secondary={
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <Box
+                                          display="flex"
+                                          alignItems={"center"}
                                         >
-                                          {item?.longest_win_streak}
+                                          <Typography fontSize={12}>
+                                            {t("Win rate:")}&nbsp;
+                                          </Typography>
+                                          <Typography
+                                            fontSize={12}
+                                            fontWeight={600}
+                                            sx={{
+                                              cursor: "pointer",
+                                            }}
+                                            color={
+                                              (item.win_day /
+                                                (item.win_day +
+                                                  item.lose_day)) *
+                                                100 >=
+                                              50
+                                                ? "success.main"
+                                                : "error.main"
+                                            }
+                                          >
+                                            {round2number(
+                                              (item.win_day /
+                                                (item.win_day +
+                                                  item.lose_day)) *
+                                                100
+                                            )}
+                                            %
+                                          </Typography>
+                                        </Box>
+                                        <Typography fontSize={8}>
+                                          | &nbsp;
                                         </Typography>
-                                        <Typography fontSize={12}>/</Typography>
-                                        <Typography
-                                          fontWeight={600}
-                                          fontSize={12}
-                                          color={"error.main"}
+                                        <Box
+                                          display="flex"
+                                          alignItems={"center"}
                                         >
-                                          {item?.longest_lose_streak}
-                                        </Typography>
-                                      </Box>
+                                          <Typography fontSize={12}>
+                                            {t("Win/Lose Streak:")}&nbsp;
+                                          </Typography>
+                                          <Typography
+                                            fontWeight={600}
+                                            fontSize={12}
+                                            color={"success.main"}
+                                          >
+                                            {item?.longest_win_streak}
+                                          </Typography>
+                                          <Typography fontSize={12}>
+                                            /
+                                          </Typography>
+                                          <Typography
+                                            fontWeight={600}
+                                            fontSize={12}
+                                            color={"error.main"}
+                                          >
+                                            {item?.longest_lose_streak}
+                                          </Typography>
+                                        </Box>
 
-                                      <Typography fontSize={8}>
-                                        {" "}
-                                        &nbsp;|&nbsp;{" "}
-                                      </Typography>
-                                      <Box display="flex" alignItems={"center"}>
-                                        <Typography fontSize={12}>
-                                          {t("Volume")}:&nbsp;
+                                        <Typography fontSize={8}>
+                                          {" "}
+                                          &nbsp;|&nbsp;{" "}
                                         </Typography>
-                                        <Typography
-                                          fontWeight={600}
-                                          fontSize={12}
-                                          color={"warning.main"}
+                                        <Box
+                                          display="flex"
+                                          alignItems={"center"}
                                         >
-                                          ${round2number(item?.volume)}
-                                        </Typography>
-                                        {/* <Typography fontSize={12}>/</Typography>
+                                          <Typography fontSize={12}>
+                                            {t("Volume")}:&nbsp;
+                                          </Typography>
+                                          <Typography
+                                            fontWeight={600}
+                                            fontSize={12}
+                                            color={"warning.main"}
+                                          >
+                                            ${round2number(item?.volume)}
+                                          </Typography>
+                                          {/* <Typography fontSize={12}>/</Typography>
                                       <Typography
                                         fontWeight={600}
                                         fontSize={12}
@@ -283,12 +331,13 @@ const TelegramChannelSignalStrategy = () => {
                                       >
                                         {item?.longest_lose_streak}
                                       </Typography> */}
+                                        </Box>
                                       </Box>
-                                    </Box>
-                                  }
-                                />
-                              </ListItem>
-                            ))}
+                                    }
+                                  />
+                                </ListItem>
+                              )
+                            )}
                           </List>
                         </Box>
                       </Paper>
@@ -579,38 +628,39 @@ const TelegramChannelSignalStrategy = () => {
                         </Accordion>
                       ))}
 
-                  {downLg && 
-                    <PaginationContainer>
-                      <Box
-                        display={"flex"}
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                        
-                        gap={1}
-                      >
-                        <Typography style={{whiteSpace: "nowrap"}}>{t("Show result")}:</Typography>
-                        <FormControl variant="outlined" sx={{ minWidth: 60 }}>
-                          <Select
-                            value={rowsPerPage}
-                            onChange={handleChangeRowsPerPage}
-                          >
-                            <MenuItem value={6}>6</MenuItem>
-                            <MenuItem value={12}>12</MenuItem>
-                            <MenuItem value={24}>24</MenuItem>
-                            <MenuItem value={filteredData.length}>
-                              {t("all")}
-                            </MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                      <Pagination
-                        count={Math.ceil(filteredData.length / rowsPerPage)}
-                        page={page}
-                        onChange={handleChangePage}
-                        shape="rounded"
-                      />
-                    </PaginationContainer>
-                  }
+                    {downLg && (
+                      <PaginationContainer>
+                        <Box
+                          display={"flex"}
+                          justifyContent={"center"}
+                          alignItems={"center"}
+                          gap={1}
+                        >
+                          <Typography style={{ whiteSpace: "nowrap" }}>
+                            {t("Show result")}:
+                          </Typography>
+                          <FormControl variant="outlined" sx={{ minWidth: 60 }}>
+                            <Select
+                              value={rowsPerPage}
+                              onChange={handleChangeRowsPerPage}
+                            >
+                              <MenuItem value={6}>6</MenuItem>
+                              <MenuItem value={12}>12</MenuItem>
+                              <MenuItem value={24}>24</MenuItem>
+                              <MenuItem value={filteredData.length}>
+                                {t("all")}
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                        <Pagination
+                          count={Math.ceil(filteredData.length / rowsPerPage)}
+                          page={page}
+                          onChange={handleChangePage}
+                          shape="rounded"
+                        />
+                      </PaginationContainer>
+                    )}
                   </Box>
                 )}
                 <PopupTrade selectedBot={selectedBot} />
