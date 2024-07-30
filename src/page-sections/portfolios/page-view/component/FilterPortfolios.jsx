@@ -54,6 +54,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
   }, [selectedLinkAccount]);
 
   const handleFilterTypeChange = (event) => {
+    console.log('click ' + event.target.value);
     setSelectedFilterTypes(event.target.value);
   };
 
@@ -303,7 +304,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
 
         return (
           <Box>
-            <Typography>{t("Show all account")}</Typography>
+            <Typography>{t("By User Name")}</Typography>
             <FormControl component="fieldset" key="accountLinked">
               {/* <FormControlLabel
                 control={
