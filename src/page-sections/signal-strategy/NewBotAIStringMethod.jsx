@@ -20,6 +20,7 @@ import { MuiChipsInput } from "mui-chips-input";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
 import { JwtContext } from "contexts/jwtContext";
+import { useTranslation } from "react-i18next";
 
 const NewBotAIStringMethod = ({
   open,
@@ -39,6 +40,7 @@ const NewBotAIStringMethod = ({
   const [allResults, setAllResults] = useState(false);
   const [isDefault, setIsDefault] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
+  const {t }= useTranslation()
 
   const isDisableButton = name?.length <= 0 || chainSignal?.length <= 0;
   const handleChangeChainSignal = (value) => {
@@ -160,10 +162,10 @@ const NewBotAIStringMethod = ({
             </IconButton>
           </Box>
 
-          <Typography variant="subtitle1">1. Tên bot*</Typography>
+          <Typography variant="subtitle1">1. {t("Bot Name")}*</Typography>
           <TextField
             inputProps={{ readOnly: readOnly }}
-            placeholder="Nhập tên bot"
+            placeholder={t("Enter Bot Name")}
             fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -232,7 +234,7 @@ const NewBotAIStringMethod = ({
                     />
                   }
                   label=<Typography fontSize={14} variant="subtitle1">
-                    Chiến lược mặc định
+                    {t("Default Strategy")}
                   </Typography>
                 />
               </FormGroup>
@@ -269,7 +271,7 @@ const NewBotAIStringMethod = ({
             }
             onClick={handleSubmit}
           >
-            {is_edit === true ? "Lưu bot" : "Tạo bot"}
+            {is_edit === true ? "Lưu bot" : t("Create Bot")}
           </Button>
         </Box>
       </Box>

@@ -18,6 +18,7 @@ import { useInView } from "react-intersection-observer";
 import { isDark } from "util/constants";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
+import { useTranslation } from "react-i18next";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   "&:disabled": {
@@ -186,6 +187,7 @@ const CandleShadow = ({
     /* Optional options */
     threshold: 0,
   });
+  const {t}= useTranslation()
   const [selectedBall, setSelectedBall] = useState(1);
   const [selectedGridBall, setSelectedGridBall] = useState([]);
   const [ballStates, setBallStates] = useState([1, ...Array(19).fill(0)]);
@@ -395,7 +397,7 @@ const CandleShadow = ({
             </Box>
           </Box> */}
           <Typography variant="body1" sx={{ mt: 4 }}>
-            Nếu các điều kiện sau được thỏa mãn:
+            {t("If the following conditions are satisfied:")}
           </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", mt: 2, gap: 6 }}>
             {downLg && (

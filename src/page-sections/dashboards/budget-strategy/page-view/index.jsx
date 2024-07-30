@@ -309,8 +309,8 @@ const BudgetStrategyPage = () => {
                               sx={{ whiteSpace: "nowrap" }}
                             >
                               {row?.is_default === true
-                                ? "Chiến lược mặc định"
-                                : "Chiến lược tuỳ chỉnh"}
+                                ? t("Default Strategy")
+                                : t("Custom Strategy")}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell

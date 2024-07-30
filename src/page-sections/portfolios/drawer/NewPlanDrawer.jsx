@@ -54,6 +54,8 @@ import { constant } from "constant/constant";
 import Backdrop from "components/backdrop/Backdrop";
 import { useTranslation } from "react-i18next";
 import PortfoliosContext from "contexts/PortfoliosContext";
+import sortData from "util/sortData";
+import { sortDataAlphabet } from "util/sortDataAlphabet";
 
 const NewPlanDrawer = ({
   open,
@@ -501,7 +503,7 @@ const NewPlanDrawer = ({
       }
       if (response?.data?.ok === true) {
         if (allowSelectedTab || isFromLeaderboard) {
-          showToast("Tạo bot thành công", "success");
+          showToast(t("Create the bot successfully!"), "success");
           setIsEdit(false);
           onClose();
           return;
@@ -524,7 +526,7 @@ const NewPlanDrawer = ({
           setData((prev) => [response?.data?.d, ...prev]);
         }
         showToast(
-          isEdit ? "Cập nhật bot thành công" : "Tạo bot thành công",
+          isEdit ? "Cập nhật bot thành công" : t("Create the bot successfully!"),
           "success"
         );
         setIsEdit(false);
@@ -1411,7 +1413,7 @@ const NewPlanDrawer = ({
                             )}
                             size="medium"
                           >
-                            {loading === false && dataBudgetStrategy?.map((item, key) => (
+                            {loading === false && sortDataAlphabet(dataBudgetStrategy, "name")?.map((item, key) => (
                               <MenuItem key={key} value={item?._id}>
                                 {item?.name}
                               </MenuItem>
@@ -1448,7 +1450,7 @@ const NewPlanDrawer = ({
                                     }
                                     size="medium"
                                   >
-                                    {dataSignalStrategy?.map((item, key) => (
+                                    {sortDataAlphabet(dataSignalStrategy, "name")?.map((item, key) => (
                                       <MenuItem key={key} value={item?._id}>
                                         {item?.name}
                                       </MenuItem>
@@ -1485,7 +1487,7 @@ const NewPlanDrawer = ({
                                       </Box>
                                     )}
                                   >
-                                    {dataSignalStrategy?.map((item, key) => (
+                                    {sortData(dataSignalStrategy, "name", "asc")?.map((item, key) => (
                                       <MenuItem key={key} value={item?._id}>
                                         <Checkbox
                                           checked={
@@ -1531,7 +1533,7 @@ const NewPlanDrawer = ({
                                   }
                                   size="medium"
                                 >
-                                  {dataSignalStrategyTelegramSignal?.map(
+                                  {sortDataAlphabet(dataSignalStrategyTelegramSignal, "name")?.map(
                                     (item, key) => (
                                       <MenuItem key={key} value={item?._id}>
                                         {item?.name}
@@ -1572,7 +1574,7 @@ const NewPlanDrawer = ({
                                             label={
                                               <Box>
                                                 <Box>
-                                                  {dataSignalStrategyTelegramSignal.find(
+                                                  {sortData(dataSignalStrategyTelegramSignal, "name", "asc").find(
                                                     (item) => item._id === value
                                                   )?.name || ""}
                                                 </Box>
@@ -1592,7 +1594,7 @@ const NewPlanDrawer = ({
                                     </Box>
                                   )}
                                 >
-                                  {dataSignalStrategyTelegramSignal?.map(
+                                  {sortData(dataSignalStrategyTelegramSignal, "name", "asc")?.map(
                                     (item, key) => (
                                       <MenuItem key={key} value={item?._id}>
                                         <Checkbox
@@ -1798,7 +1800,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label={t("reverse_signal")}
+                                      label={t("reverse_order")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1912,7 +1914,7 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label={t("reverse_signal")}
+                                      label={t("reverse_order")}
                                     />
                                     <FormControlLabel
                                       control={
@@ -2290,14 +2292,15 @@ const NewPlanDrawer = ({
                             }}
                           >
                             {isEdit
-                              ? botList
+                              ? sortDataAlphabet(botList, "name")
                                   ?.filter((a) => a?._id !== selectedPlan?._id)
                                   ?.map((option) => (
                                     <MenuItem key={option?._id} value={option?._id}>
                                       {t(option?.name)}
                                     </MenuItem>
                                   ))
-                              : botList?.map((option) => (
+                              : sortDataAlphabet(botList, "name")
+                              ?.map((option) => (
                                   <MenuItem key={option?._id} value={option?._id}>
                                     {t(option?.name)}
                                   </MenuItem>

@@ -151,7 +151,7 @@ const NewBotAI = ({
         showToast(
           initState === true
             ? "Chỉnh sửa bot thành công"
-            : "Tạo bot thành công",
+            : t("Create the bot successfully!"),
           "success"
         );
         if (initState === true) {
@@ -289,7 +289,7 @@ const NewBotAI = ({
           <TextField
             inputProps={{ readOnly: readOnly }}
             fullWidth
-            label="Tên bot"
+            label={t("Bot Name")}
             variant="outlined"
             margin="normal"
             value={name}
@@ -324,8 +324,8 @@ const NewBotAI = ({
                       checked={goal.count <= 0 ? false : true}
                     />
                   }
-                  label={`Đạt mục tiêu bằng 5 sau khi ${
-                    goal.type === "win_streak" ? "Chuỗi thắng" : "Chuỗi thua"
+                  label={`${t("Skip the rest of board 5 when:")} ${
+                    goal.type === "win_streak" ? t("Win Streak") : t("Lose Streak")
                   }`}
                 />
                 <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
@@ -378,7 +378,7 @@ const NewBotAI = ({
           {decodedData?.data?.levelStaff >= 3 && (
             <Box sx={{}}>
               <Typography fontSize={14} variant="subtitle1">
-                Chiến lược sử dụng
+                {t("Usage Strategy")}
               </Typography>
               <FormGroup>
                 <FormControlLabel
@@ -391,7 +391,7 @@ const NewBotAI = ({
                     />
                   }
                   label=<Typography fontSize={14} variant="subtitle1">
-                    Chiến lược mặc định
+                    {t("Default Strategy")}
                   </Typography>
                 />
               </FormGroup>
@@ -778,7 +778,7 @@ const NewBotAI = ({
             <CardHeader
               sx={{ padding: 0 }}
               titleTypographyProps={{ variant: "body1" }}
-              title={"Điều kiện đã thêm"}
+              title={t("conditions_added")}
               action={
                 <Stack spacing={1} direction="row">
                   <Button
@@ -901,7 +901,7 @@ const NewBotAI = ({
           }}
         >
           <Button variant="outlined" onClick={onClose} sx={{ padding: "10px" }}>
-            Đóng
+            {t("Close")}
           </Button>
           <Button
             onClick={handleCreateBot}
@@ -913,7 +913,7 @@ const NewBotAI = ({
             color="primary"
             sx={{ padding: "10px" }}
           >
-            {initState === true ? "Lưu Bot" : "Tạo bot"}
+            {initState === true ? "Lưu Bot" : t("Create Bot")}
           </Button>
         </Box>
       </Box>

@@ -13,55 +13,41 @@ import {
   useTheme,
   useMediaQuery,
   Card,
-  Divider,
   Stack,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  IconButton,
-  FormGroup,
-  FormControlLabel,
-  Switch,
+  FormControl,
+  Select,
+  MenuItem,
+  Pagination,
+  styled,
 } from "@mui/material";
-import { green, red } from "@mui/material/colors";
-import TimerIcon from "@mui/icons-material/Timer";
-import WhatshotIcon from "@mui/icons-material/Whatshot";
 import Layout from "../Layout";
-import { useNavigate } from "react-router-dom";
 import { SocketContext } from "contexts/SocketContext";
-import { SettingsContext } from "contexts/settingsContext";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import round2number from "util/round2number";
-import { makeStyles } from "@mui/styles";
-import copytradeApi from "api/copytrade/copytradeApi";
-import { showToast } from "components/toast/toast";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import formatCurrency from "util/formatCurrency";
-import Toggle from "icons/duotone/Toggle";
-import CloseIcon from "icons/duotone/CloseIcon";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AuthContext from "contexts/AuthContext";
 import SpotBalanceContext from "contexts/SpotBalanceContext";
 import sortData from "util/sortData";
-import TelegramIcon from "@mui/icons-material/Telegram";
 import TableInvest from "./component/TableInvest";
+import PopupTrade from "./component/PopupTrade";
 
-const useStyles = makeStyles((theme) => ({
-  input: {
-    height: "56px",
-    boxSizing: "border-box",
-  },
-  button: {
-    height: "44px",
-    minWidth: "auto", // To ensure button does not expand unnecessarily
-  },
+const PaginationContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: theme.spacing(2),
+  paddingBottom: theme.spacing(2),
+  gap: 2
 }));
 
 const TelegramChannelSignalStrategy = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const [openTrade, setOpenTrade] = useState(false);
-  const classes = useStyles();
   const theme = useTheme();
   // const navigate = useNavigate();
   const [dataBot, setDataBot] = useState([]);
@@ -69,33 +55,28 @@ const TelegramChannelSignalStrategy = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { isConnected, socket } = useContext(SocketContext);
   const { selectedLinkAccount } = useContext(AuthContext);
-  const { walletMode } = useContext(SettingsContext);
-  const [countDown, setCountDown] = useState(0);
-  const [betAmount, setBetAmount] = useState(1);
-  const [statusTrade, setStatusTrade] = useState();
-  const [multiplier, setMultiplier] = useState(1);
+
   const [selectedBot, setSelectedBot] = useState();
   const [transactions, setTransactions] = useState();
   const [expanded, setExpanded] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [page, setPage] = useState(1);
   // const [accordionData, setAccordionData] = useState([]);
-  const [isBrokerMode, setIsBrokerMode] = useState(
-    typeof JSON.parse(localStorage.getItem("brokerModeTele")) === "boolean"
-      ? JSON.parse(localStorage.getItem("brokerModeTele"))
-      : false
-  );
   const { setChange } = useContext(SpotBalanceContext);
   const { t } = useTranslation();
-  const isDisableButtonTrade = statusTrade === "WAIT" || !statusTrade;
-  const isErrorBetAmount =
-    betAmount.toString().length <= 0 || betAmount > 1000000 || betAmount <= 0;
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    setPage(1)
   };
 
-  const handleChangeBrokerMode = (e) => {
-    localStorage.setItem("brokerModeTele", e.target.checked);
-    setIsBrokerMode(e.target.checked);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(event.target.value);
+    setPage(1);
+  };
+
+  const handleChangePage = (event, value) => {
+    setPage(value);
   };
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -106,27 +87,6 @@ const TelegramChannelSignalStrategy = () => {
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSubmit = async (betType) => {
-    try {
-      const data = {
-        betType,
-        amount: parseFloat(betAmount) * parseInt(multiplier),
-        isBrokerMode: isBrokerMode,
-        accountType: walletMode ? "LIVE" : "DEMO",
-        linkAccountId: selectedLinkAccount,
-      };
-      const response = await copytradeApi.postUserCopytrade(data);
-      if (response?.data?.ok === true) {
-        showToast("Đặt lệnh thành công", "success");
-      } else if (response?.data?.ok === false) {
-        showToast(response?.data?.d?.err_code || "Unknow error", "error");
-      }
-    } catch (error) {
-      console.log(error);
-      showToast(error?.response?.data?.err_code || "Unknow error", "error");
-    }
-  };
-
   useEffect(() => {
     (async () => {
       const response = await signalStrategyApi.userBudgetTelegramSignal();
@@ -136,16 +96,6 @@ const TelegramChannelSignalStrategy = () => {
       }
     })();
   }, []);
-
-  useEffect(() => {
-    if (isConnected) {
-      socket.emit("CURRENT_SESSION_SUBCRIBE");
-      socket.on("CURRENT_SESSION", (data) => {
-        setCountDown(data?.r_second);
-        setStatusTrade(data?.ss_t);
-      });
-    }
-  }, [isConnected, socket]);
 
   useEffect(() => {
     if (isConnected && selectedBot) {
@@ -162,7 +112,7 @@ const TelegramChannelSignalStrategy = () => {
   }, [isConnected, socket, selectedBot]);
 
   useEffect(() => {
-    if (isConnected && socket) {
+    if (isConnected && socket && selectedLinkAccount) {
       socket.emit("LINK_ACCOUNT_SUBCRIBE", selectedLinkAccount);
       return () => {
         socket.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount);
@@ -441,424 +391,227 @@ const TelegramChannelSignalStrategy = () => {
                         onChange={handleSearchChange}
                       />
                     </Box>
-                    {filteredData?.map((item, index) => (
-                      <Accordion
-                        onClick={() => {
-                          setSelectedBot(item);
-                        }}
-                        key={item.id}
-                        expanded={expanded === `panel${index}`}
-                        onChange={handleChange(`panel${index}`)}
-                      >
-                        <AccordionSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls={`panel${index}a-content`}
-                          id={`panel${index}a-header`}
+
+                    {filteredData
+                      ?.slice(
+                        rowsPerPage * (page - 1),
+                        rowsPerPage * (page - 1) + rowsPerPage
+                      )
+                      ?.map((item, index) => (
+                        <Accordion
+                          onClick={() => {
+                            setSelectedBot(item);
+                          }}
+                          key={index}
+                          expanded={expanded === `panel${index}`}
+                          onChange={handleChange(`panel${index}`)}
                         >
-                          <ListItemText
-                            primary={
-                              <Box
-                                display={"flex"}
-                                justifyContent={"space-between"}
-                                alignItems={"center"}
-                              >
-                                <Typography>{item.name}</Typography>
-                              </Box>
-                            }
-                            secondary={
-                              <Box
-                                sx={{ display: "flex", alignItems: "center" }}
-                              >
-                                <Box display="flex" alignItems={"center"}>
-                                  <Typography fontSize={12}>
-                                    Tỉ lệ thắng:&nbsp;
-                                  </Typography>
-                                  <Typography
-                                    fontSize={12}
-                                    fontWeight={600}
-                                    sx={{
-                                      cursor: "pointer",
-                                    }}
-                                    color={
-                                      (item.win_day /
-                                        (item.win_day + item.lose_day)) *
-                                        100 >=
-                                      50
-                                        ? "success.main"
-                                        : "error.main"
-                                    }
-                                  >
-                                    {round2number(
-                                      (item.win_day /
-                                        (item.win_day + item.lose_day)) *
-                                        100
-                                    )}
-                                    %
-                                  </Typography>
+                          <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls={`panel${index}a-content`}
+                            id={`panel${index}a-header`}
+                          >
+                            <ListItemText
+                              primary={
+                                <Box
+                                  display={"flex"}
+                                  justifyContent={"space-between"}
+                                  alignItems={"center"}
+                                >
+                                  <Typography>{item.name}</Typography>
                                 </Box>
-                                <Typography fontSize={8}>|</Typography>
-                                <Box display="flex" alignItems={"center"}>
-                                  <Typography fontSize={12}>
-                                    Chuỗi thắng / thua:&nbsp;
-                                  </Typography>
-                                  <Typography
-                                    fontWeight={600}
-                                    fontSize={12}
-                                    color={
-                                      parseFloat(item?.win_streak) >= 0
-                                        ? "success.main"
-                                        : "error.main"
-                                    }
-                                  >
-                                    {item?.win_streak}
-                                  </Typography>
-                                  <Typography fontSize={12}>/</Typography>
-                                  <Typography
-                                    fontWeight={600}
-                                    fontSize={12}
-                                    color={"error.main"}
-                                  >
-                                    {item?.lose_streak}
-                                  </Typography>
+                              }
+                              secondary={
+                                <Box
+                                  sx={{ display: "flex", alignItems: "center" }}
+                                >
+                                  <Box display="flex" alignItems={"center"}>
+                                    <Typography fontSize={12}>
+                                      Tỉ lệ thắng:&nbsp;
+                                    </Typography>
+                                    <Typography
+                                      fontSize={12}
+                                      fontWeight={600}
+                                      sx={{
+                                        cursor: "pointer",
+                                      }}
+                                      color={
+                                        (item.win_day /
+                                          (item.win_day + item.lose_day)) *
+                                          100 >=
+                                        50
+                                          ? "success.main"
+                                          : "error.main"
+                                      }
+                                    >
+                                      {round2number(
+                                        (item.win_day /
+                                          (item.win_day + item.lose_day)) *
+                                          100
+                                      )}
+                                      %
+                                    </Typography>
+                                  </Box>
+                                  <Typography fontSize={8}>|</Typography>
+                                  <Box display="flex" alignItems={"center"}>
+                                    <Typography fontSize={12}>
+                                      Chuỗi thắng / thua:&nbsp;
+                                    </Typography>
+                                    <Typography
+                                      fontWeight={600}
+                                      fontSize={12}
+                                      color={
+                                        parseFloat(item?.win_streak) >= 0
+                                          ? "success.main"
+                                          : "error.main"
+                                      }
+                                    >
+                                      {item?.win_streak}
+                                    </Typography>
+                                    <Typography fontSize={12}>/</Typography>
+                                    <Typography
+                                      fontWeight={600}
+                                      fontSize={12}
+                                      color={"error.main"}
+                                    >
+                                      {item?.lose_streak}
+                                    </Typography>
+                                  </Box>
                                 </Box>
-                              </Box>
-                            }
-                          />
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <Typography>
-                            <Box
-                              sx={{
-                                overflow: "auto",
-                                maxHeight: "200px",
-                              }}
-                            >
-                              {/* <Typography variant="body1" sx={{ display: "flex" }}>
+                              }
+                            />
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <Typography>
+                              <Box
+                                sx={{
+                                  overflow: "auto",
+                                  maxHeight: "200px",
+                                }}
+                              >
+                                {/* <Typography variant="body1" sx={{ display: "flex" }}>
                               Kết quả :{" "}
                               <Typography sx={{ color: "success.main" }}>
                                 THẮNG : +0.95$
                               </Typography>
                             </Typography> */}
 
-                              <Typography variant="body1">
-                                🎉 Tổng hợp{" "}
-                                {transactions?.messages?.[1]?.message?.histories
-                                  ?.length || 0}{" "}
-                                phiên giao dịch gần nhất (UTC+7):
-                              </Typography>
-                              <List>
-                                {sortData(
-                                  transactions?.messages?.[1]?.message
-                                    ?.histories,
-                                  "time",
-                                  "desc"
-                                )
-                                  ?.reverse()
-                                  ?.map((transaction, index) => (
-                                    <Stack
-                                      key={index}
-                                      direction="row"
-                                      spacing={1}
-                                    >
-                                      {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}
-                                      <Typography>
-                                        {" "}
-                                        {`${format(
-                                          new Date(transaction.time),
-                                          "HH:mm"
-                                        )}`}
-                                      </Typography>
-                                      <Typography>{t("Session")} </Typography>
-                                      <Typography sx={{ fontWeight: "bold" }}>
-                                        {transaction.session}{" "}
-                                      </Typography>
-                                      <Typography>
-                                        {transaction?.result === "WIN"
-                                          ? "💚"
-                                          : "🔥"}
-                                      </Typography>
-                                      {/* <Iconify icon={transaction.result === 1 ? 'noto:green-circle' : 'fluent-emoji:red-circle'} /> */}
-                                      <Typography
-                                        color={
-                                          transaction.profit > 0
-                                            ? "success.main"
-                                            : "error.main"
-                                        }
-                                      >
-                                        {formatCurrency(transaction.profit)}{" "}
-                                      </Typography>
-                                    </Stack>
-                                  ))}
-                              </List>
-                              <Typography
-                                variant="body1"
-                                sx={{ display: "flex" }}
-                              >
-                                Hãy đặt lệnh :{" "}
-                                <Typography
-                                  mb={1}
-                                  fontWeight={600}
-                                  sx={{
-                                    color:
-                                      transactions?.messages?.[0]?.message
-                                        ?.betType === "UP"
-                                        ? "success.main"
-                                        : "error.main",
-                                  }}
-                                >
-                                  {formatCurrency(
-                                    transactions?.messages?.[0]?.message
-                                      ?.betAmount
-                                  )}{" "}
-                                  {transactions?.messages?.[0]?.message
-                                    ?.betType === "UP"
-                                    ? "Tăng"
-                                    : "Giảm"}
+                                <Typography variant="body1">
+                                  🎉 Tổng hợp{" "}
+                                  {transactions?.messages?.[1]?.message
+                                    ?.histories?.length || 0}{" "}
+                                  phiên giao dịch gần nhất (UTC+7):
                                 </Typography>
-                              </Typography>
-                            </Box>
-                          </Typography>
-                        </AccordionDetails>
-                      </Accordion>
-                    ))}
+                                <List>
+                                  {sortData(
+                                    transactions?.messages?.[1]?.message
+                                      ?.histories,
+                                    "time",
+                                    "desc"
+                                  )
+                                    ?.reverse()
+                                    ?.map((transaction, index) => (
+                                      <Stack
+                                        key={index}
+                                        direction="row"
+                                        spacing={1}
+                                      >
+                                        {/* <Iconify icon={'emojione-v1:alarm-clock'} /> */}
+                                        <Typography>
+                                          {" "}
+                                          {`${format(
+                                            new Date(transaction.time),
+                                            "HH:mm"
+                                          )}`}
+                                        </Typography>
+                                        <Typography>{t("Session")} </Typography>
+                                        <Typography sx={{ fontWeight: "bold" }}>
+                                          {transaction.session}{" "}
+                                        </Typography>
+                                        <Typography>
+                                          {transaction?.result === "WIN"
+                                            ? "💚"
+                                            : "🔥"}
+                                        </Typography>
+                                        {/* <Iconify icon={transaction.result === 1 ? 'noto:green-circle' : 'fluent-emoji:red-circle'} /> */}
+                                        <Typography
+                                          color={
+                                            transaction.profit > 0
+                                              ? "success.main"
+                                              : "error.main"
+                                          }
+                                        >
+                                          {formatCurrency(transaction.profit)}{" "}
+                                        </Typography>
+                                      </Stack>
+                                    ))}
+                                </List>
+                                <Typography
+                                  variant="body1"
+                                  sx={{ display: "flex" }}
+                                >
+                                  Hãy đặt lệnh :{" "}
+                                  <Typography
+                                    mb={1}
+                                    fontWeight={600}
+                                    sx={{
+                                      color:
+                                        transactions?.messages?.[0]?.message
+                                          ?.betType === "UP"
+                                          ? "success.main"
+                                          : "error.main",
+                                    }}
+                                  >
+                                    {formatCurrency(
+                                      transactions?.messages?.[0]?.message
+                                        ?.betAmount
+                                    )}{" "}
+                                    {transactions?.messages?.[0]?.message
+                                      ?.betType === "UP"
+                                      ? "Tăng"
+                                      : "Giảm"}
+                                  </Typography>
+                                </Typography>
+                              </Box>
+                            </Typography>
+                          </AccordionDetails>
+                        </Accordion>
+                      ))}
                   </Box>
                 )}
-                <Box
-                  position={downLg ? "fixed" : "absolute"}
-                  bottom={downLg ? 70 : 16}
-                  right={downLg ? 8 : 16}
-                  sx={{zIndex: 10}}
-                >
-                  {openTrade === true && (
+                {downLg && 
+                  <PaginationContainer>
                     <Box
-                      borderRadius={"10px"}
-                      boxShadow={3}
-                      border={`1px solid ${theme.palette.border}`}
-                      overflow={"hidden"}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      
+                      gap={1}
                     >
-                      <Box position={"relative"} overflow={"hidden"}>
-                        <Card>
-                          <Box
-                            width={downLg ? "calc(100vw - 16px)" : "aaa"}
-                            p={2}
-                          >
-                            <Box display={"flex"} gap={1} mb={1}>
-                              <Box>
-                                <Typography
-                                  variant="body2"
-                                  fontSize={12}
-                                  fontWeight={600}
-                                >
-                                  Số tiền vào lệnh
-                                </Typography>
-                                <TextField
-                                  sx={{ width: 120 }}
-                                  className={classes.input}
-                                  variant="outlined"
-                                  fullWidth
-                                  prefix="$"
-                                  size="small"
-                                  defaultValue={1}
-                                  onChange={(e) => setBetAmount(e.target.value)}
-                                  type="number"
-                                  error={isErrorBetAmount ? true : false}
-                                  helperText={
-                                    isErrorBetAmount ? (
-                                      <Typography fontSize={8}>
-                                        Không thể nhập giá trị lớn hơn 1.000.000
-                                        và nhỏ hơn 0
-                                      </Typography>
-                                    ) : (
-                                      ""
-                                    )
-                                  }
-                                />
-                              </Box>
-                              <Box>
-                                <Typography
-                                  variant="body2"
-                                  fontSize={12}
-                                  fontWeight={600}
-                                >
-                                  Hệ số nhân
-                                </Typography>
-                                <Box
-                                  display="flex"
-                                  justifyContent="space-between"
-                                  alignItems="start"
-                                  gap={1}
-                                >
-                                  <Button
-                                    onClick={() => {
-                                      setMultiplier(1);
-                                    }}
-                                    className={classes.button}
-                                    variant={
-                                      multiplier === 1
-                                        ? "contained"
-                                        : "outlined"
-                                    }
-                                  >
-                                    1x
-                                  </Button>
-                                  <Button
-                                    onClick={() => {
-                                      setMultiplier(2);
-                                    }}
-                                    className={classes.button}
-                                    variant={
-                                      multiplier === 2
-                                        ? "contained"
-                                        : "outlined"
-                                    }
-                                  >
-                                    2x
-                                  </Button>
-                                  <TextField
-                                    onChange={(e) => {
-                                      setMultiplier(parseFloat(e.target.value));
-                                    }}
-                                    type="number"
-                                    placeholder="Khác"
-                                    sx={{ width: 60 }}
-                                    className={classes.input}
-                                    variant="outlined"
-                                  >
-                                    Khác
-                                  </TextField>
-                                </Box>
-                              </Box>
-                              <Box mt={1}></Box>
-                            </Box>
-                            <FormGroup>
-                              <FormControlLabel
-                                control={
-                                  <Switch
-                                    checked={isBrokerMode}
-                                    onChange={handleChangeBrokerMode}
-                                  />
-                                }
-                                label="Chế độ chuyên gia"
-                              />
-                            </FormGroup>
-                            <Divider />
-                            <Box
-                              mt={2}
-                              display="flex"
-                              justifyContent="space-between"
-                              gap={1}
-                            >
-                              <Button
-                                disabled={isDisableButtonTrade}
-                                fullWidth
-                                variant="contained"
-                                color="error"
-                                onClick={() => {
-                                  handleSubmit("DOWN");
-                                }}
-                              >
-                                Down
-                              </Button>
-                              <Button
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                              >
-                                {countDown}s
-                              </Button>
-                              <Button
-                                disabled={isDisableButtonTrade}
-                                onClick={() => {
-                                  handleSubmit("UP");
-                                }}
-                                fullWidth
-                                variant="contained"
-                                color="success"
-                              >
-                                Up
-                              </Button>
-                            </Box>
-                          </Box>
-                        </Card>
-                        <Box
-                          position={"absolute"}
-                          sx={{
-                            background:
-                              "linear-gradient(154.83deg,#03c768 15.98%,#0062ff 85.83%)",
-                            fontSize: 9,
-                            height: 20,
-                            lineHeight: 2,
-                            right: -30,
-                            textAlign: "center",
-                            textTransform: "uppercase",
-                            top: 10,
-                            transform: "rotate(45deg)",
-                            width: 90,
-                            borderRadius: "12px",
-                            fontWeight: 600,
-                            minWidth: 70,
-                            overflow: "hidden",
-                            padding: "0 6px",
-                            whiteSpace: "nowrap",
-                            textOverflow: "ellipsis",
-                            color: "white",
-                          }}
+                      <Typography style={{whiteSpace: "nowrap"}}>{t("Show result")}:</Typography>
+                      <FormControl variant="outlined" sx={{ minWidth: 60 }}>
+                        <Select
+                          value={rowsPerPage}
+                          onChange={handleChangeRowsPerPage}
                         >
-                          {walletMode ? "LIVE" : "DEMO"}
-                        </Box>
-                      </Box>
+                          <MenuItem value={6}>6</MenuItem>
+                          <MenuItem value={12}>12</MenuItem>
+                          <MenuItem value={24}>24</MenuItem>
+                          <MenuItem value={filteredData.length}>
+                            {t("all")}
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
                     </Box>
-                  )}
-                  <Box
-                    mt={2}
-                    display={"flex"}
-                    alignItems={"center"}
-                    gap={2}
-                    flexDirection={"row-reverse"}
-                  >
-                    <Box
-                      sx={{
-                        direction: "rtl",
-                        display: "flex",
-                        flexDirection: "row-reverse",
-                      }}
-                    >
-                      <Box sx={{ cursor: "pointer" }}>
-                        {openTrade === false && (
-                          <Toggle
-                            width={"2.5rem"}
-                            height={"2.5rem"}
-                            style={{ width: 48, height: 48 }}
-                            onClick={() => setOpenTrade((prev) => !prev)}
-                          />
-                        )}
-                        {openTrade === true && (
-                          <CloseIcon
-                            width={"2.5rem"}
-                            height={"2.5rem"}
-                            style={{ width: 48, height: 48 }}
-                            onClick={() => setOpenTrade((prev) => !prev)}
-                          />
-                        )}
-                      </Box>
-                    </Box>
-                    {selectedBot && (
-                      <Box>
-                        <IconButton
-                          onClick={() => {
-                            window.open(selectedBot?.url);
-                          }}
-                        >
-                          <img
-                            alt="Can't display"
-                            style={{ width: 48, height: 48 }}
-                            src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-icon-6896828_960_720.png"
-                          />
-                        </IconButton>
-                      </Box>
-                    )}
-                  </Box>
-                </Box>
+                    <Pagination
+                      count={Math.ceil(filteredData.length / rowsPerPage)}
+                      page={page}
+                      onChange={handleChangePage}
+                      shape="rounded"
+                    />
+                  </PaginationContainer>
+                }
+                <PopupTrade selectedBot={selectedBot} />
               </Box>
             </Box>
           </Box>
@@ -873,7 +626,7 @@ const TelegramChannelSignalStrategy = () => {
           mb={2}
         >
           <Box width={"100%"} sx={{ padding: downLg ? 1 : "24px" }}>
-            <TableInvest selectedBot={{...selectedBot}} />
+            <TableInvest selectedBot={{ ...selectedBot }} />
           </Box>
         </Card>
       </Box>

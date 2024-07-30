@@ -1,5 +1,5 @@
 import HistoryTable from 'page-sections/manual-trade/section/HistoryTable'
-import React from 'react'
+import React, { memo } from 'react'
 
 const TableInvest = () => {
   return (
@@ -7,4 +7,4 @@ const TableInvest = () => {
   )
 }
 
-export default TableInvest
+export default memo(TableInvest)

@@ -38,7 +38,7 @@ const PopoverLayout = props => {
 
       {!hiddenViewButton ? <Box p={1} pb={0.5}>
           <Button variant="text" fullWidth disableRipple>
-            View all Notifications
+            Mark read all
           </Button>
         </Box> : null}
     </Popover>;

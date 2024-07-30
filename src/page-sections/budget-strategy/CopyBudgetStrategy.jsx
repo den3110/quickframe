@@ -81,7 +81,7 @@ const CopyBudgetStrategy = ({
               size={"medium"}
               autoFocus
               margin="dense"
-              label="Copy strategy code"
+              label={t("Import strategy code")}
               type="text"
               fullWidth
               value={shareCode}
@@ -96,7 +96,7 @@ const CopyBudgetStrategy = ({
                         .then((text) => setShareCode(text))
                     }
                   >
-                    PASTE
+                    {t("PASTE")}
                   </Button>
                 ),
               }}
@@ -108,8 +108,7 @@ const CopyBudgetStrategy = ({
               mt={1}
               mb={2}
             >
-              Note: You will be able to review strategy to confirm after copying
-              code.
+              {t("Note")}: {t("You will be able to review strategy to confirm after importing code.")}
             </Typography>
           </Box>
         </DialogContent>

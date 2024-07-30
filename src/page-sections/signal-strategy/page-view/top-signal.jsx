@@ -257,7 +257,7 @@ const TopSignalPageView = () => {
                           />
                         </StyledTableCell>
                       )}
-                      <StyledTableCell>Tên bot</StyledTableCell>
+                      <StyledTableCell>{t("Bot Name")}</StyledTableCell>
                       {/* <StyledTableCell>Loại tài khoản</StyledTableCell> */}
                       <StyledTableCell>Thắng/Thua</StyledTableCell>
                       <StyledTableCell>Chuỗi thắng</StyledTableCell>
@@ -335,7 +335,7 @@ const TopSignalPageView = () => {
                                   onChange={() => handleToggleRow(key)}
                                 />
                               )}
-                              {downLg && <Typography>Tên bot</Typography>}
+                              {downLg && <Typography>{t("Bot Name")}</Typography>}
                               {/* {downLg && (
                           <Typography
                             fontSize={14}

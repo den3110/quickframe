@@ -74,8 +74,8 @@ const SignalStrategyList = () => {
   const { data, setData, loading, setChange } = useContext(
     SignalStrategyContext
   );
-  const {t }= useTranslation()
-  const [dataState, setDataState]= useState([])
+  const { t } = useTranslation();
+  const [dataState, setDataState] = useState([]);
   const [initState, setInitState] = useState(false);
   const [selectedBot, setSelectedBot] = useState();
   const [isEdit, setIsEdit] = useState(false);
@@ -156,9 +156,8 @@ const SignalStrategyList = () => {
     setDialogOpen(false);
   };
 
-
   const handleSearch = (e) => {
-    const filtered = data.filter(item =>
+    const filtered = data.filter((item) =>
       item.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setDataState(filtered);
@@ -201,7 +200,7 @@ const SignalStrategyList = () => {
                   endIcon={<ContentCopyIcon />}
                   onClick={handleDialogOpen}
                 >
-                  Copy
+                  {t("Copy")}
                 </Button>
                 <Button
                   variant="contained"
@@ -211,7 +210,7 @@ const SignalStrategyList = () => {
                   // onClick={handleOpenNewBudgetStrategy}
                   onClick={handleMenuClick}
                 >
-                  Thiết kế Bot AI
+                  {t("Bot AI Builder")}
                 </Button>
                 <Menu
                   disableScrollLock={false}
@@ -251,10 +250,10 @@ const SignalStrategyList = () => {
                 {!downLg && (
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>Strategy name</StyledTableCell>
-                      <StyledTableCell>Method Using</StyledTableCell>
-                      <StyledTableCell>Loại chiến lược</StyledTableCell>
-                      <StyledTableCell>Actions</StyledTableCell>
+                      <StyledTableCell>{t("strategy_name")}</StyledTableCell>
+                      <StyledTableCell>{t("Method Using")}</StyledTableCell>
+                      <StyledTableCell>{t("Loại chiến lược")}</StyledTableCell>
+                      <StyledTableCell>{t("actions")}</StyledTableCell>
                     </TableRow>
                   </TableHead>
                 )}
@@ -296,7 +295,7 @@ const SignalStrategyList = () => {
                                 {row.name}
                               </Typography>
                               <Typography variant="body2" color="textSecondary">
-                                Created:{" "}
+                                {t("Created")}:{" "}
                                 {moment(row.createdAt).format(
                                   "DD-MM-YYYY, HH:mm:ss"
                                 )}
@@ -317,10 +316,13 @@ const SignalStrategyList = () => {
                                 borderBottom: downLg ? "none" : "",
                               }}
                             >
-                              <Typography fontSize={14} sx={{whiteSpace: "nowrap"}}>
+                              <Typography
+                                fontSize={14}
+                                sx={{ whiteSpace: "nowrap" }}
+                              >
                                 {row?.is_default === true
-                                  ? "Chiến lược mặc định"
-                                  : "Chiến lược tuỳ chỉnh"}
+                                  ? t("Default Strategy")
+                                  : t("Custom Strategy")}
                               </Typography>
                             </StyledTableCell>
                             <StyledTableCell
@@ -370,14 +372,16 @@ const SignalStrategyList = () => {
                                         }
                                       }}
                                     >
-                                      Edit Strategy
+                                      {t("Edit Strategy")}
                                     </StyledMenuItem>
-                                    <StyledMenuItem onClick={()=> {
-                                      setSelectedBot(row);
-                                      handleSharePlanOpen()
-                                      handleClose(index);
-                                    }}>
-                                      Share Strategy
+                                    <StyledMenuItem
+                                      onClick={() => {
+                                        setSelectedBot(row);
+                                        handleSharePlanOpen();
+                                        handleClose(index);
+                                      }}
+                                    >
+                                      {t("Send Strategy")}
                                     </StyledMenuItem>
                                     <StyledMenuItem
                                       onClick={() => {
@@ -386,7 +390,7 @@ const SignalStrategyList = () => {
                                         handleOpenDeleteBot();
                                       }}
                                     >
-                                      Delete Strategy
+                                      {t("Delete Strategy")}
                                     </StyledMenuItem>
                                   </>
                                 )}
@@ -411,7 +415,7 @@ const SignalStrategyList = () => {
                                           }
                                         }}
                                       >
-                                        View Strategy
+                                        {t("View Strategy")}
                                       </StyledMenuItem>
                                     </>
                                   )}
@@ -434,10 +438,10 @@ const SignalStrategyList = () => {
               >
                 <EmptyPage
                   title={"Danh mục tín hiệu đang trống"}
-                  subTitle={
-                    "Bắt đầu khám phá các cơ hội đầu tư và kiếm lợi nhuận ngay hôm nay."
-                  }
-                  titleButton={"Tạo chiến lược mới"}
+                  subTitle={t(
+                    "Start exploring investment opportunities and earn profits by start an investment plan today"
+                  )}
+                  titleButton={t("Create Your Strategy")}
                   actionClick={handleMenuClick}
                   disableButton={true}
                 />
@@ -450,7 +454,7 @@ const SignalStrategyList = () => {
                 alignItems={"center"}
                 gap={1}
               >
-                <Typography>Hiển thị kết quả:</Typography>
+                <Typography>{t("Show result:")}</Typography>
                 <FormControl variant="outlined" sx={{ minWidth: 60 }}>
                   <Select
                     value={rowsPerPage}
@@ -459,7 +463,7 @@ const SignalStrategyList = () => {
                     <MenuItem value={6}>6</MenuItem>
                     <MenuItem value={12}>12</MenuItem>
                     <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={dataState.length}>Tất cả</MenuItem>
+                    <MenuItem value={dataState.length}>{t("All")}</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -489,15 +493,24 @@ const SignalStrategyList = () => {
           selectedBot={selectedBot}
           setChange={setChange}
         />
-        <CopyBudgetStrategy title={"Sao chép Bot AI"} title2={"Thiết kế ngay Bot AI tối ưu hóa giao dịch!"} title3={"Nhập mã để bắt đầu giao dịch chuyên nghiệp"} open={dialogOpen} onClose={handleDialogClose} isFromSignalStrategy={true} />
+        <CopyBudgetStrategy
+          title={t("Import Bot AI")}
+          title2={t("Easy way to set up your superb Bot AI!")}
+          title3={t(
+            "Enter your shared Bot AI Code to start your ideal investment plan"
+          )}
+          open={dialogOpen}
+          onClose={handleDialogClose}
+          isFromSignalStrategy={true}
+        />
         <SharePlan
-          title="Chia sẻ Bot AI"
-          title2={"Dễ dàng chia sẻ Bot AI của bạn!"}
-          title3="Chia sẻ mã Bot AI cho bạn bè để cùng nhau giao dịch."
+          title={t("Share Bot AI")}
+          title2={t("Easy way to share your superb Bot AI!")}
+          title3={t("Share your Bot AI Code to your peers and trade together.")}
           open={sharePlanOpen}
           onClose={handleSharePlanClose}
           selectedPlan={selectedBot}
-          setData={setData}    
+          setData={setData}
           isFromBudgetStrategy={true}
         />
         <DeleteSignalStrategy
