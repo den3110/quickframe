@@ -430,8 +430,8 @@ const TopSignalPageView = () => {
                                   : "error.main"
                               }
                             >
-                              {/* {item?.win_streak}/{item?.longest_win_streak} */}
-                              {item?.longest_win_streak}
+                              {item?.win_streak}/{item?.longest_win_streak}
+                              {/* {item?.longest_win_streak} */}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell
@@ -452,8 +452,8 @@ const TopSignalPageView = () => {
                                   : "error.main"
                               }
                             >
-                              {/* {item?.lose_streak}/{item?.longest_lose_streak} */}
-                              {item?.longest_lose_streak}
+                              {item?.lose_streak}/{item?.longest_lose_streak}
+                              {/* {item?.longest_lose_streak} */}
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell
