@@ -55,7 +55,7 @@ import { SettingsContext } from "contexts/settingsContext";
 import { ActionBotType, ActionBotTypeMessageSucces } from "type/ActionBotType";
 import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 import sortData from "util/sortData";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import formatCurrency from "util/formatCurrency";
 import DuplicatePlan from "../dialog/DuplicatePlan";
 import SharePlan from "../dialog/SharePlan";
@@ -924,13 +924,13 @@ const PortfoliosList = () => {
                                   <Box>
                                     <Typography
                                       onClick={() => {
-                                        navigate(plan._id);
+                                        // navigate(plan._id);
                                       }}
                                       variant="body1"
                                       fontWeight={"600"}
                                       sx={{ cursor: "pointer" }}
                                     >
-                                      {plan.name}
+                                      <Link style={{color: "unset"}} to={plan._id}>{plan.name}</Link>
                                     </Typography>
                                     <Typography
                                       variant="body2"
