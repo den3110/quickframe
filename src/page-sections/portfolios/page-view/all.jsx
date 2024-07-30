@@ -378,7 +378,7 @@ const PortfoliosList = () => {
   };
 
   const handleRestartPlan = async () => {
-    const selectedPlans = data.filter(
+    const selectedPlans = dataState.filter(
       (_, index) => checkedRows[index] === true
     );
     // setLoading(true);
@@ -414,10 +414,11 @@ const PortfoliosList = () => {
   };
 
   const handleResetPlan = async () => {
-    const selectedPlans = data.filter(
+    const selectedPlans = dataState.filter(
       (_, index) => checkedRows[index] === true
     );
     // setLoading(true);
+    // a roi oke cho e ti
 
     try {
       const requests = selectedPlans.map((plan, index) =>
