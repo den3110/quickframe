@@ -68,6 +68,7 @@ import { AutoTypesTitle } from "type/AutoTypes";
 import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
 import { useTranslation } from "react-i18next";
 import OpenCopyPlanDialog from "../dialog/OpenCopyPlanDialog";
+import portfolioApi from "api/portfolios/portfolioApi";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -96,7 +97,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const PortfoliosList = () => {
-  const { data, setData, loading } = useContext(PortfoliosContext);
+  const { data, setData, loading, setChangeNoLoading: setChangeData } = useContext(PortfoliosContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { walletMode } = useContext(SettingsContext);
@@ -308,39 +309,47 @@ const PortfoliosList = () => {
     // setLoading(true);
 
     try {
-      const requests = selectedPlans.map((plan, index) =>
-        axiosClient.post(`/users/bot/action/${plan?._id}`, {
-          action: ActionBotType.STOP,
-        })
-      );
+      // const requests = selectedPlans.map((plan, index) =>
+      //   axiosClient.post(`/users/bot/action/${plan?._id}`, {
+      //     action: ActionBotType.STOP,
+      //   })
+      // );
 
-      const responses = await Promise.all(requests);
-      const listResult = responses?.map((item) => item.data.ok);
+      // const responses = await Promise.all(requests);
+      // const listResult = responses?.map((item) => item.data.ok);
       // setData();
-      setData(
-        data?.map((item, key) => {
-          if (
-            selectedPlans.some((obj) => obj._id === item._id) &&
-            listResult[key] === true
-          ) {
-            return { ...item, isRunning: false };
-          }
-          // if(selectedPlans.some(obj=> obj._id=== item._id) && listResult[key]=== false) {
-          //   return ({...item, isRunning: false})
-          // }
-          else {
-            return { ...item };
-          }
-        })
-      );
-      showToast(ActionBotTypeMessageSucces[ActionBotType.STOP], "success");
+      // setData(
+      //   data?.map((item, key) => {
+      //     if (
+      //       selectedPlans.some((obj) => obj._id === item._id) &&
+      //       listResult[key] === true
+      //     ) {
+      //       return { ...item, isRunning: false };
+      //     }
+      //     // if(selectedPlans.some(obj=> obj._id=== item._id) && listResult[key]=== false) {
+      //     //   return ({...item, isRunning: false})
+      //     // }
+      //     else {
+      //       return { ...item };
+      //     }
+      //   })
+      // );
+      const payload= {
+        ids: selectedPlans?.map(item=> item?._id),
+        action: ActionBotType.STOP,
+      }
+      const responses= await portfolioApi.userBotActionList(payload)
+      if(responses?.data?.ok=== true ) {
+        showToast(ActionBotTypeMessageSucces[ActionBotType.STOP], "success");
+        setChangeData(prev=> !prev)
+      }
     } catch (error) {
       console.error("Error sending requests:", error);
     } finally {
       // setLoading(false);
     }
   };
-
+  // ok
   const handleResumePlan = async () => {
     const selectedPlans = dataState.filter(
       (_, index) => checkedRows[index] === true
@@ -348,28 +357,35 @@ const PortfoliosList = () => {
     // setLoading(true);
 
     try {
-      const requests = selectedPlans.map((plan, index) =>
-        axiosClient.post(`/users/bot/action/${plan?._id}`, {
-          action: ActionBotType.RESUME,
-        })
-      );
-
-      const responses = await Promise.all(requests);
-      const listResult = responses?.map((item) => item.data.ok);
+      // const requests = selectedPlans.map((plan, index) =>
+      //   axiosClient.post(`/users/bot/action/${plan?._id}`, {
+      //     action: ActionBotType.RESUME,
+      //   })
+      // );
+      const payload= {
+        ids: selectedPlans?.map(item=> item?._id),
+        action: ActionBotType.RESUME,
+      }
+      const responses= await portfolioApi.userBotActionList(payload)
+      if(responses?.data?.ok=== true ) {
+        showToast("Tiếp tục các gói đã chọn thành công", "success");
+        setChangeData(prev=> !prev)
+      }
+      // const responses = await Promise.all(requests);
+      // const listResult = responses?.map((item) => item.data.ok);
       // setData();
-      showToast("Tiếp tục các gói đã chọn thành công", "success");
-      setData(
-        dataState?.map((item, key) => {
-          if (
-            selectedPlans.some((obj) => obj._id === item._id) &&
-            listResult[key] === true
-          ) {
-            return { ...item, isRunning: true };
-          } else {
-            return { ...item };
-          }
-        })
-      );
+      // setData(
+      //   dataState?.map((item, key) => {
+      //     if (
+      //       selectedPlans.some((obj) => obj._id === item._id) &&
+      //       listResult[key] === true
+      //     ) {
+      //       return { ...item, isRunning: true };
+      //     } else {
+      //       return { ...item };
+      //     }
+      //   })
+      // );
     } catch (error) {
       console.error("Error sending requests:", error);
     } finally {

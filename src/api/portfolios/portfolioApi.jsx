@@ -13,6 +13,10 @@ const portfolioApi = {
     const url= `/users/bot/action/${id}`
     return axiosClient.post(url, data)
   },
+  userBotActionList(data) {
+    const url= `/users/bot/actions`
+    return axiosClient.post(url, data)
+  },
   userBotUpdate(id, data) {
     const url= `/users/bot/update/${id}`
     return axiosClient.post(url, data)

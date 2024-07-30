@@ -5844,7 +5844,7 @@ export const resources = {
       "Scan to copy plan": "Quét để sao chép gói",
       "Scan to copy referal code": "Quét để sao chép mã giới thiệu",
       "Default Strategy": "Chiến lược mặc định",
-      "Custom Strategy": "Chiến lược mặc định",
+      "Custom Strategy": "Chiến lược tuỳ chỉnh",
       Search: "Tìm kiếm",
       "Search Bot...": "Tìm kiếm ...",
       "Search Channel": "Tìm kiếm kênh",
