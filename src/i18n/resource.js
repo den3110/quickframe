@@ -42,6 +42,7 @@ export const resources = {
       logout: "Logout",
       switch_account: "Switch account",
       transaction_wallet: "Transaction Wallet",
+      vol_day: "VOL day",
       switch_mode: "Switch mode",
       email_account: "Email account",
       wallet: "Wallet",
@@ -52,6 +53,7 @@ export const resources = {
       withdraw: "Withdraw",
       deposit: "Deposit",
       transfer: "Transfer",
+      "Current linked account": "Current linked account",
       balance: "Balance",
       disconnect_link_account: "Disconnect now!",
       email: "Email",
@@ -3603,6 +3605,7 @@ export const resources = {
       manual_trade: "Giao dịch thủ công",
       vip_member: "Thành viên vip",
       linked_account: "Tài khoản liên kết",
+      "Current linked account": "Tài khoản hiện tại liên kết",
       add_linked_account: "Thêm tài khoản liên kết",
       close: "Đóng",
       logout: "Đăng xuất",
@@ -6260,6 +6263,8 @@ export const resources = {
       "Ticket Center": "Trung tâm hỗ trợ",
       "Ticket ID": "ID yêu cầu",
       "Ticket has been resolved": "Yêu cầu đã được giải quyết",
+      vol_day: "VOL ngày",
+
       "Ticket successfully created": "Tạo yêu cầu thành công",
       "Ticket successfully created <br> Details and your ticket ID":
         "Tạo yêu cầu thành công <br> Chi tiết và ID yêu cầu của bạn",

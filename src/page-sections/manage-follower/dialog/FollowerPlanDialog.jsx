@@ -138,7 +138,7 @@ const FollowerPlanDialog = (props) => {
               <TableRow>
                 <StyledTableCell sx={{ width: "40%" }}>Tên gói</StyledTableCell>
                 <StyledTableCell>Thắng/Thua</StyledTableCell>
-                <StyledTableCell>Lợi nhuận</StyledTableCell>
+                <StyledTableCell>{t("Profits")}</StyledTableCell>
                 <StyledTableCell>Trạng thái</StyledTableCell>
               </TableRow>
             )}
@@ -218,7 +218,7 @@ const FollowerPlanDialog = (props) => {
                       {downLg && (
                         <Box display={"flex"} alignItems={"center"}>
                           <Typography fontSize={14} fontWeight={600}>
-                            Lợi nhuận
+                            {t("Profits")}
                           </Typography>
                         </Box>
                       )}

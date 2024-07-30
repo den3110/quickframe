@@ -6,6 +6,7 @@ import Layout from "../Layout";
 import Overview from "../overview";
 import Projects from "../exchange-account";
 import { useSearchParams } from "react-router-dom";
+import ExchangeAccount from "../exchange-account";
 // import Activity from "../activity";
 // import Campaigns from "../campaigns";
 // import Documents from "../documents";
@@ -31,7 +32,7 @@ const ProfilePageView = () => {
             <Overview />
           </TabPanel>
           <TabPanel value="2">
-            <Projects />
+            <ExchangeAccount />
           </TabPanel>
           {/* <TabPanel value="3">
             <Campaigns />

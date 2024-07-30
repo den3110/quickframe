@@ -19,28 +19,34 @@ import RestorePageIcon from "@mui/icons-material/RestorePage";
 import { useTranslation } from "react-i18next";
 import { AutoTypesTitleValueFilter } from "type/AutoTypes";
 import { JwtContext } from "contexts/jwtContext";
+import AuthContext from "contexts/AuthContext";
 
 const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
   const { decodedData } = useContext(JwtContext);
   const { t } = useTranslation();
   const theme = useTheme();
-
+  const { selectedLinkAccount, userLinkAccountList } = useContext(AuthContext);
   const [selectedFilterTypes, setSelectedFilterTypes] = useState([]);
 
   const [runningFilters, setRunningFilters] = useState({
-    running: false,
-    paused: false,
-    all: false,
+    running: true,
+    paused: true,
+    all: true,
   });
   const [autoTypeFilters, setAutoTypeFilters] = useState({
-    botAI: false,
-    copyTrade: false,
-    telegramSignal: false,
-    telebot: false,
+    botAI: true,
+    copyTrade: true,
+    telegramSignal: true,
+    telebot: true,
   });
   const [accountTypeFilters, setAccountTypeFilters] = useState({
-    demo: false,
-    live: false,
+    demo: true,
+    live: true,
+  });
+
+  const [accountLinkedFilter, setAccountLinkedFilter] = useState({
+    showAll: false,
+    linkedAccount: true,
   });
 
   const handleFilterTypeChange = (event) => {
@@ -64,6 +70,13 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
   const handleAccountTypeChange = (event) => {
     setAccountTypeFilters({
       ...accountTypeFilters,
+      [event.target.name]: event.target.checked,
+    });
+  };
+  
+  const handleAccountLinkedChange = (event) => {
+    setAccountLinkedFilter({
+      ...accountLinkedFilter,
       [event.target.name]: event.target.checked,
     });
   };
@@ -112,6 +125,14 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
               (live && item.accountType === "LIVE")
           );
           break;
+        case "accountLinked":
+          const { showAll, linkedAccount } = accountLinkedFilter;
+          filteredData = filteredData.filter(
+            (item) =>
+              showAll ||
+              (linkedAccount && item.linkAccountId === selectedLinkAccount)
+          );
+          break;
         default:
           break;
       }
@@ -139,6 +160,10 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
     setAccountTypeFilters({
       demo: false,
       live: false,
+    });
+    setAccountLinkedFilter({
+      showAll: false,
+      linkedAccount: true,
     });
     setData(data);
     setPage(1);
@@ -264,11 +289,39 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
             </FormControl>
           </Box>
         );
+      case "accountLinked":
+        return (
+          <Box>
+            <Typography>{t("Show all account")}</Typography>
+            <FormControl component="fieldset" key="accountLinked">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={accountLinkedFilter.showAll}
+                    onChange={handleAccountLinkedChange}
+                    name="showAll"
+                  />
+                }
+                label={t("All")}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={accountLinkedFilter.linkedAccount}
+                    onChange={handleAccountLinkedChange}
+                    name="linkedAccount"
+                  />
+                }
+                label={t("Current linked account")}
+              />
+            </FormControl>
+          </Box>
+        );
       default:
         return null;
     }
   };
-  const allFilters = ["isRunning", "autoType", "accountType"];
+  const allFilters = ["isRunning", "autoType", "accountType", "accountLinked"];
 
   return (
     <Dialog fullWidth open={open} onClose={onClose}>
@@ -323,12 +376,14 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
                       />
                       <Box ml={1}>
                         {t(
-                          value === "isRunning"
-                            ? "On Going Plan"
-                            : value === "autoType"
-                            ? "Loại gói"
-                            : "Account Type"
-                        )}
+                    value === "isRunning"
+                      ? "On Going Plan"
+                      : value === "autoType"
+                      ? "Loại gói"
+                      : value === "accountType"
+                      ? "Account Type"
+                      : "linked_account"
+                  )}
                       </Box>
                     </Box>
                   ))}
@@ -347,7 +402,9 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
                       ? "On Going Plan"
                       : option === "autoType"
                       ? "Loại gói"
-                      : "Account Type"
+                      : option === "accountType"
+                      ? "Account Type"
+                      : "linked_account"
                   )}
                 </MenuItem>
               ))}

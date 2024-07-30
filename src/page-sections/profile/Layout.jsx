@@ -19,6 +19,7 @@ import AuthContext from "contexts/AuthContext";
 import userApi from "api/user/userApi";
 import { showToast } from "components/toast/toast";
 import { constant } from "constant/constant";
+import { useTranslation } from "react-i18next";
 
 // STYLED COMPONENTS
 const ContentWrapper = styled(Box)({
@@ -51,6 +52,7 @@ const StyledTabList = styled(TabList)(({ theme }) => ({
 }));
 
 const Layout = ({ children, handleTabList }) => {
+  const {t }= useTranslation()
   const { user, setUser } = useContext(AuthContext);
   const [avatarUrl, setAvatarUrl] = useState(user?.avatar);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -162,8 +164,8 @@ const Layout = ({ children, handleTabList }) => {
         </ContentWrapper>
 
         <StyledTabList variant="scrollable" onChange={handleTabList}>
-          <Tab disableRipple label="Overview" value="1" />
-          <Tab disableRipple label="Exchange connect" value="2" />
+          <Tab disableRipple label={t("Overview")} value="1" />
+          <Tab disableRipple label={t("Exchange Connect")} value="2" />
           {/* <Tab disableRipple label="Campaigns" value="3" />
           <Tab disableRipple label="Documents" value="4" />
           <Tab disableRipple label="Connections" value="5" />

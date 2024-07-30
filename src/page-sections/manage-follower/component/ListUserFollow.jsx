@@ -67,11 +67,11 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
           {!downLg && (
             <TableHead>
               <TableRow>
-                <StyledTableCell>Biệt danh</StyledTableCell>
+                <StyledTableCell>{t("nickname")}</StyledTableCell>
                 {/* <StyledTableCell>Loại tài khoản</StyledTableCell> */}
-                <StyledTableCell>Lợi nhuận ngày </StyledTableCell>
-                <StyledTableCell>VOL ngày</StyledTableCell>
-                <StyledTableCell>Action</StyledTableCell>
+                <StyledTableCell>{t("profit_day")}</StyledTableCell>
+                <StyledTableCell>{t("vol_day")}</StyledTableCell>
+                <StyledTableCell>{t("actions")}</StyledTableCell>
               </TableRow>
             </TableHead>
           )}
@@ -100,7 +100,7 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
                         fontSize={14}
                         sx={{ textDecoration: "underline", cursor: "pointer" }}
                       >
-                        Gói: {item?.count || 0}
+                        {t("Plan")}: {item?.count || 0}
                       </Typography>
                     )}
                   </Box>
@@ -130,7 +130,7 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
                         fontSize={14}
                         sx={{ textDecoration: "underline", cursor: "pointer" }}
                       >
-                        Gói: {item?.count || 0}
+                        {t("Plan")}: {item?.count || 0}
                       </Typography>
                     )}
                   </Box>
@@ -196,7 +196,7 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
                     variant="contained"
                     color="primary"
                   >
-                    Chặn
+                    {t("block")}
                   </Button>
                 </StyledTableCell>
               </TableRow>
@@ -217,7 +217,7 @@ const ListUserFollow = ({ data, setData, dataProps, setChange }) => {
               <MenuItem value={6}>6</MenuItem>
               <MenuItem value={12}>12</MenuItem>
               <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={data.length}>{t("All")}</MenuItem>
+              <MenuItem value={data.length}>{t("All")}</MenuItem>
             </Select>
           </FormControl>
         </Box>

@@ -681,7 +681,7 @@ const PortfoliosList = () => {
               </Box>
               {loading === false && (
                 <Box mt={downLg ? 2 : 0} display={downLg ? "flex" : "flex"}>
-                  {!downLg && (
+                  {/* {!downLg && (
                     <Box>
                       <FormControlLabel
                         label={t("Show all account")}
@@ -693,7 +693,7 @@ const PortfoliosList = () => {
                         }
                       />
                     </Box>
-                  )}
+                  )} */}
                   {!downLg && (
                     <Button
                       variant="outlined"
@@ -844,7 +844,7 @@ const PortfoliosList = () => {
               )}
               {downLg && (
                 <>
-                  <Box>
+                  {/* <Box>
                     <FormControlLabel
                       label={t("Show all account")}
                       control={
@@ -854,7 +854,7 @@ const PortfoliosList = () => {
                         />
                       }
                     />
-                  </Box>
+                  </Box> */}
                   <Box>
                     <FormControlLabel
                       label={t("Select all")}

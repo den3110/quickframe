@@ -103,7 +103,7 @@ const InvestmentOverview = (props) => {
                 sx={{ color: "rgba(255, 255, 255, 0.46)" }}
                 fontSize={12}
               >
-                Lợi nhuận (
+                {t("Profits")} (
                 {formatCurrency(dataStat?.lastData?.profit)?.replaceAll(
                   "$",
                   ""
