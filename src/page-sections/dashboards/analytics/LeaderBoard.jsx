@@ -18,6 +18,7 @@ import {
   useMediaQuery,
   useTheme,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import exchangeApi from "api/exchange/exchangeApi";
@@ -140,7 +141,9 @@ const LeaderBoard = () => {
           </Typography>
           <Fragment>
             <Tooltip title={t("Swipe left to see more plans")}>
-              <FlickAnimate />
+              <IconButton>
+                <FlickAnimate />
+              </IconButton>
             </Tooltip>
           </Fragment>
         </Box>

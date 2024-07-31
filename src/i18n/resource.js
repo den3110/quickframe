@@ -2827,6 +2827,7 @@ export const resources = {
       Suggestions: "Suggestions",
       Sunday: "Sunday",
       "Swipe left to see more plans": "Swipe left to see more plans",
+      "Swipe left to see more": "Swipe left to see more",
       "Switch Conditions": "Switch condition",
       "Switch condition": "Switch condition",
       "Switch on this button to enable the new user interface.":
@@ -6092,6 +6093,7 @@ export const resources = {
       Suggestions: "Đề xuất",
       Sunday: "Chủ nhật",
       "Swipe left to see more plans": "Vuốt sang trái để xem thêm gói",
+      "Swipe left to see more": "Vuốt sang trái để xem thêm",
       "Switch Conditions": "Đổi điều kiện",
       "Please enter the 6-digit OTP from your email":
         "Vui lòng nhập OTP gồm 6 chữ số từ email của bạn",

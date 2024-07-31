@@ -9,6 +9,8 @@ import {
   Box,
   useTheme,
   useMediaQuery,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import { PortfolioDetailContext } from "../page-view/detail";
 import {
@@ -20,6 +22,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import { Navigation } from "swiper";
 import isNumber from "util/isNumber";
 import round2number from "util/round2number";
+import { useTranslation } from "react-i18next";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -29,6 +32,7 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
 }));
 
 const CustomAutowinTable = () => {
+  const {t }= useTranslation()
   const { dataStat } = useContext(PortfolioDetailContext);
   const theme = useTheme();
   const [itemColumnTable, setItemColumnTable] = useState(
@@ -94,7 +98,11 @@ const CustomAutowinTable = () => {
             ]
           }
         </Typography>
-        <FlickAnimate sx={{ marginRight: "8px" }} />
+        <Tooltip title={t("Swipe left to see more")}>
+          <IconButton>
+            <FlickAnimate sx={{ marginRight: "8px" }} />
+          </IconButton>
+        </Tooltip>
       </Box>
       <Box>
         <Box>
