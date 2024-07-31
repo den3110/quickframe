@@ -27,13 +27,13 @@ import {
 import WalletPopover from "layouts/layout-parts/popovers/WalletPopover";
 import { Link } from "react-router-dom";
 import UserlinkAccountPopover from "layouts/layout-parts/popovers/UserlinkAccountPopover";
+import JackpotPopover from "layouts/layout-parts/popovers/JackpotPopover";
 
 const DashboardHeader = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { handleOpenMobileSidebar } = useLayout();
   // const [openSearchBar, setSearchBar] = useState(false);
   const { settings, saveSettings } = useContext(SettingsContext);
-  
 
   // const upSm = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   const downMd = useMediaQuery((theme) => theme.breakpoints.down(974));
@@ -86,9 +86,8 @@ const DashboardHeader = () => {
         </ClickAwayListener> */}
 
         <Box flexGrow={1} ml={1} />
-        {!downLg && 
-          <UserlinkAccountPopover />
-        }
+        {!downLg && <UserlinkAccountPopover />}
+        {downLg && <JackpotPopover />}
         <WalletPopover />
         {!downLg && (
           <>
@@ -119,6 +118,7 @@ const DashboardHeader = () => {
               {settings.theme === "light" ? <DarkModeIcon /> : <ThemeIcon />}
             </IconButton>
             <LanguagePopover />
+            <JackpotPopover />
           </>
         )}
         <NotificationsPopover />

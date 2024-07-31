@@ -594,7 +594,7 @@ const TableDetailTrade = ({dataState}) => {
                       </MenuItem>
                       <MenuItem onClick={() => handleMenuClose(index)}>
                         
-                        <Button color="success">Xem chi tiết</Button>
+                        <Button color="success">{t("View Details")}</Button>
                       </MenuItem>
                      
                     </Menu>

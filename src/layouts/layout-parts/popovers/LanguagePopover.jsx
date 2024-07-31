@@ -1,5 +1,5 @@
 import { Fragment, useRef, useState, useEffect } from "react";
-import { Box, IconButton, MenuItem, Popover, styled, Typography, useMediaQuery } from "@mui/material";
+import { Box, IconButton, MenuItem, Popover, styled, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 // STYLED COMPONENTS
@@ -55,13 +55,15 @@ const LanguagePopover = ({isFromLogin}) => {
   const selectedLanguage = languageOptions[i18n.language];
 
   return (
-    <Fragment>
-      <IconButton onClick={handleOpen} ref={anchorRef}>
-        <IconWrapper>
-          <img alt={selectedLanguage.label} src={selectedLanguage.icon} />
-          {downLg && isFromLogin !== true && <Typography fontSize={13} ml={1} whiteSpace={"nowrap"}>{selectedLanguage.label}</Typography>}
-        </IconWrapper>
-      </IconButton>
+    <Fragment> 
+      <Tooltip title={t("Language")}>
+        <IconButton onClick={handleOpen} ref={anchorRef}>
+          <IconWrapper>
+            <img alt={selectedLanguage.label} src={selectedLanguage.icon} />
+            {downLg && isFromLogin !== true && <Typography fontSize={13} ml={1} whiteSpace={"nowrap"}>{selectedLanguage.label}</Typography>}
+          </IconWrapper>
+        </IconButton>
+      </Tooltip>
 
       <Popover
         keepMounted

@@ -7,6 +7,7 @@ import {
   IconButton,
   styled,
   Tab,
+  Tooltip,
 } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 // CUSTOM COMPONENTS
@@ -94,11 +95,11 @@ const NotificationsPopover = (props) => {
     })();
   }, [t]);
 
-  useEffect(()=> {
-    if(!inView) {
-      setVisibleCount(6)
+  useEffect(() => {
+    if (!inView) {
+      setVisibleCount(6);
     }
-  }, [inView])
+  }, [inView]);
 
   const handleShowMore = () => {
     setVisibleCount((prev) => prev + 6);
@@ -106,18 +107,20 @@ const NotificationsPopover = (props) => {
 
   return (
     <Fragment>
-      <IconButton ref={anchorRef} onClick={() => setOpen(true)}>
-        <Badge color="error" badgeContent={unReadNotification}>
-          <NotificationsIcon
-            sx={{
-              color: "grey.400",
-            }}
-          />
-        </Badge>
-      </IconButton>
+      <Tooltip title={t("Notifications")}>
+        <IconButton ref={anchorRef} onClick={() => setOpen(true)}>
+          <Badge color="error" badgeContent={unReadNotification}>
+            <NotificationsIcon
+              sx={{
+                color: "grey.400",
+              }}
+            />
+          </Badge>
+        </IconButton>
+      </Tooltip>
 
       <PopoverLayout
-        title="Notifications"
+        title={t("Notifications")}
         popoverOpen={open}
         anchorRef={anchorRef}
         popoverClose={() => setOpen(false)}
@@ -140,14 +143,24 @@ const NotificationsPopover = (props) => {
                 ))}
                 {visibleCount < data.length && (
                   <Box p={1} pb={0.5}>
-                    <Button onClick={handleShowMore} variant="text" fullWidth disableRipple>
+                    <Button
+                      onClick={handleShowMore}
+                      variant="text"
+                      fullWidth
+                      disableRipple
+                    >
                       {t("See more")}
                     </Button>
                   </Box>
                 )}
                 {!hiddenViewButton ? (
                   <Box p={1} pb={0.5}>
-                    <Button onClick={handleReadAllNotification} variant="text" fullWidth disableRipple>
+                    <Button
+                      onClick={handleReadAllNotification}
+                      variant="text"
+                      fullWidth
+                      disableRipple
+                    >
                       {t("mark_read_all")}
                     </Button>
                   </Box>
@@ -178,7 +191,7 @@ function ListItem({ msg, onClose, onClick }) {
         borderBottom: 1,
         cursor: "pointer",
         borderColor: "divider",
-        backgroundColor: msg?.is_read=== false ? "grey.700" : "transparent",
+        backgroundColor: msg?.is_read === false ? "grey.700" : "transparent",
         "&:hover": {
           backgroundColor: "action.hover",
         },

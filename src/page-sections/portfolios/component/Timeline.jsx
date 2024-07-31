@@ -733,7 +733,7 @@ const CustomTimeline = () => {
                         setSelectedItem(item)
                         setOpenDetailTimelineDialog(true)
                       }}>             
-                        <Button color="success">Xem chi tiết</Button>
+                        <Button color="success">{t("View Details")}</Button>
                       </MenuItem>
                      
                     </Menu>

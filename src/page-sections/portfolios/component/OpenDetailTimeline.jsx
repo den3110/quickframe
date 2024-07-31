@@ -64,7 +64,7 @@ export default function OpenDetailTimeline(props) {
                 <Typography variant="body1" fontWeight="bold">
                   {t("volume")}:
                 </Typography>
-                <Typography fontWeight={600} variant="body1" color={volume > 0 ? "success.main": "error"}>{formatCurrency()}</Typography>
+                <Typography fontWeight={600} variant="body1" color={volume > 0 ? "success.main": "error"}>{formatCurrency(volume)}</Typography>
               </Box>
             </Grid>
             <Grid item xs={12}>
