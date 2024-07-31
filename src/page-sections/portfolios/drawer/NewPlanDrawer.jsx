@@ -342,10 +342,10 @@ const NewPlanDrawer = ({
               method_data: {
                 method_list: arraySignalStrategy,
                 feature_data: {
-                  win_streak_target: winningTotalReach,
-                  lose_streak_target: loseTotalReach,
-                  win_total_target: winningContinue,
-                  lose_total_target: loseContinue,
+                  win_total_target: winningTotalReach,
+                  lose_total_target: loseTotalReach,
+                  win_streak_target: winningContinue,
+                  lose_streak_target: loseContinue,
                   take_profit_target: whenProfit,
                   stop_loss_target: whenLosing,
                 },
