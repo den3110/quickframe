@@ -42,6 +42,7 @@ const LoginPageView = () => {
     localStorage.getItem("lang") || "vi"
   );
   const navigate = useNavigate();
+  const {t }= useTranslation()
 
   useEffect(() => {
     const loadConfig = async () => {
@@ -163,12 +164,12 @@ const LoginPageView = () => {
         <LanguagePopover isFromLogin={true} />
       </div>
       <Box maxWidth={550} p={4}>
-        <H5 fontSize={{ sm: 30, xs: 25 }}>Sign In</H5>
+        <H5 fontSize={{ sm: 30, xs: 25 }}>{t("Sign In")}</H5>
 
         <Paragraph mt={1} mb={6} color="text.secondary">
-          New user?{" "}
+          {t("New user")}?{" "}
           <Box fontWeight={500} component={Link} href="/register">
-            Create an Account
+            {t("Create an Account")}
           </Box>
         </Paragraph>
 
@@ -176,7 +177,7 @@ const LoginPageView = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <H6 fontSize={16} mb={1.5}>
-                Login with your email or username
+                {t("Login with your email or username")}
               </H6>
 
               <TextField
@@ -229,7 +230,7 @@ const LoginPageView = () => {
                     onChange={handleChange}
                     checked={values.remember}
                   />
-                  <Paragraph fontWeight={500}>Remember me</Paragraph>
+                  <Paragraph fontWeight={500}>{t("Remember me")}</Paragraph>
                 </FlexBox>
 
                 <Box
@@ -238,7 +239,7 @@ const LoginPageView = () => {
                   component={Link}
                   sx={{ color: "error.500", fontWeight: 500 }}
                 >
-                  Forget Password?
+                  {t("Forget Password")}?
                 </Box>
               </FlexBetween>
             </Grid>
@@ -256,7 +257,7 @@ const LoginPageView = () => {
                 variant="contained"
                 fullWidth
               >
-                Sign In
+                {t("Sign In")}
               </LoadingButton>
             </Grid>
           </Grid>

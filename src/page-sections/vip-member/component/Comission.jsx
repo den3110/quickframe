@@ -13,8 +13,10 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import SearchIcon from "@mui/icons-material/Search";
 import dayjs from "dayjs";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
+import { useTranslation } from "react-i18next";
 
 function Commissions() {
+  const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [dateRange, setDateRange] = React.useState([
     dayjs("2024-07-01"),
@@ -32,7 +34,7 @@ function Commissions() {
             flexDirection={downLg ? "column" : "row"}
           >
             <Box item width={downLg ? "100%" : "aaa"} mb={downLg ? 1.5 : 0}>
-              <Typography variant="body1">Trading Commission</Typography>
+              <Typography variant="body1">{t("Trading commission")}</Typography>
             </Box>
             <Box
               display={"flex"}
@@ -62,19 +64,18 @@ function Commissions() {
                   variant="contained"
                   color="primary"
                 >
-                  Search
+                  {t("Search")}
                 </Button>
               </Box>
             </Box>
           </Box>
           <Box mt={4}>
             <Typography variant="body2" color="textSecondary">
-              Note: You will receive commissions from the trading volume as soon
-              as your peers make trades.
+              {t("Each new day, you will receive commissions from all the trading volume of your peers yesterday.")}
             </Typography>
             <Box mt={2} textAlign="center">
               <EmptyPage
-                title={"Không có dữ liệu ở đây!"}
+                title={t("There is no data here!")}
                 disableButton={true}
               />
             </Box>
@@ -89,7 +90,7 @@ function Commissions() {
             flexDirection={downLg ? "column" : "row"}
           >
             <Box item width={downLg ? "100%" : "aaa"} mb={downLg ? 1.5 : 0}>
-              <Typography variant="body1">Trading Commission</Typography>
+              <Typography variant="body1">{t("Trading commission")}</Typography>
             </Box>
             <Box
               display={"flex"}
@@ -126,12 +127,11 @@ function Commissions() {
           </Box>
           <Box mt={4}>
             <Typography variant="body2" color="textSecondary">
-              Note: You will receive commissions from the trading volume as soon
-              as your peers make trades.
+              {t("Each new day, you will receive commissions from all the trading volume of your peers yesterday.")}
             </Typography>
             <Box mt={2} textAlign="center">
               <EmptyPage
-                title={"Không có dữ liệu ở đây!"}
+                title={t("There is no data here!")}
                 disableButton={true}
               />
             </Box>

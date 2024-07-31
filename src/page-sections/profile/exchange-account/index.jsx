@@ -316,7 +316,7 @@ const ExchangeAccount = () => {
                                     fullWidth
                                     onClick={handleDisconnect}
                                   >
-                                    Đăng xuất
+                                    {t("logout")}
                                   </Button>
                                 )}
                                 {item?._id !== selectedLinkAccount && (

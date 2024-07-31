@@ -2,8 +2,10 @@ import React from "react";
 import { Box, Tabs, Tab, Typography, useMediaQuery } from "@mui/material";
 import GeneralTab from "../sections/GeneralTab";
 import MemberListAccount from "../sections/MemberListAccount";
+import { useTranslation } from "react-i18next";
 
 function TabsComponent() {
+  const {t }= useTranslation()
   const [value, setValue] = React.useState(0);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
 
@@ -14,8 +16,8 @@ function TabsComponent() {
   return (
     <Box sx={{ width: "100%", mt: 4, mb: 4, p: downLg  ? 1 : 2 }}>
       <Tabs value={value} onChange={handleChange}>
-        <Tab label="General" />
-        <Tab label="Member List" />
+        <Tab label={t("General")} />
+        <Tab label={t("Member List")} />
       </Tabs>
       <TabPanel value={value} index={0}>
         <GeneralTab />

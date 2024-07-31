@@ -21,6 +21,7 @@ import AppBarSection from "./AppBar";
 import { constant } from "constant/constant";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AuthContext from "contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const RootContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -41,6 +42,7 @@ const ContentContainer = styled(Container)(({ theme }) => ({
 
 const ConnectAccountPage = () => {
   const navigate = useNavigate();
+  const {t }= useTranslation()
   const {selectedLinkAccount, setSelectedLinkAccount }= useContext(AuthContext)
   const [open2Fa, setOpen2Fa] = useState(false);
   const [token, setToken] = useState();
@@ -96,7 +98,7 @@ const ConnectAccountPage = () => {
         window.history.replaceState({}, '')
         navigate("/")
       } else {
-        showToast(result?.data?.m, "error");
+        showToast(t(result?.data?.m), "error");
       }
     } catch (error) {
       console.log(error)
@@ -122,7 +124,7 @@ const ConnectAccountPage = () => {
                   component="div"
                   sx={{ marginBottom: 2, color: "#28a745", fontWeight: 600 }}
                 >
-                  Connect your account
+                  {t("Connect your account")}
                 </Typography>
                 <Box display={"flex"} justifyContent={"center"}>
                   {dataExchangeUrl && (
@@ -156,7 +158,7 @@ const ConnectAccountPage = () => {
                   sx={{ marginBottom: 4, color: "text.secondary" }}
                   mt={3}
                 >
-                  Step 1: Enter your Exchange {dataExchangeUrl?.name}
+                  {t("Step 1: Enter your Exchange URL")} {dataExchangeUrl?.name}
                 </Typography>
                 {loading ? (
                   <CircularProgress />
@@ -174,7 +176,7 @@ const ConnectAccountPage = () => {
                     }}
                   >
                     <MenuItem value="" disabled>
-                      Select your Exchange URL
+                      {t("Select your Exchange URL")}
                     </MenuItem>
                     {exchangeUrls.map((item, key) => (
                       <MenuItem
@@ -214,7 +216,7 @@ const ConnectAccountPage = () => {
                   }}
                   disabled={!exchangeUrl}
                 >
-                  Continue
+                  {t("continue")}
                 </Button>
               </Box>
             </Card>
@@ -231,7 +233,7 @@ const ConnectAccountPage = () => {
                   component="div"
                   sx={{ marginBottom: 2, color: "#28a745", fontWeight: 600 }}
                 >
-                  Connect your account
+                  {t("Connect your account")}
                 </Typography>
                 <Box display={"flex"} justifyContent={"center"}>
                   <Box
@@ -270,7 +272,7 @@ const ConnectAccountPage = () => {
                   variant="body1"
                   sx={{ marginBottom: 4, color: "text.secondary" }}
                 >
-                  Step 2: Input Your Information
+                  {t("Step 2: Input Your Informations")}
                 </Typography>
                 <Typography
                   variant="body1"
@@ -280,8 +282,7 @@ const ConnectAccountPage = () => {
                     textAlign: "left",
                   }}
                 >
-                  Enter your exchange account credentials to continue the
-                  connection.
+                  {t("Enter your exchange account credentials to continue the connection.")}
                 </Typography>
                 {loading ? (
                   <CircularProgress />
@@ -294,12 +295,12 @@ const ConnectAccountPage = () => {
                         marginBottom: 6,
                       }}
                     >
-                      Exchange Email
+                      {t("Exchange Email")}
                     </InputLabel>
                     <TextField
                       fullWidth
                       variant="outlined"
-                      placeholder="Exchange Email"
+                      placeholder={t("Exchange Email")}
                       value={exchangeEmail}
                       onChange={(e) => setExchangeEmail(e.target.value)}
                       sx={{ marginBottom: 2 }}
@@ -311,13 +312,13 @@ const ConnectAccountPage = () => {
                         marginBottom: 6,
                       }}
                     >
-                      Exchange Password
+                      {t("Exchange Password")}
                     </InputLabel>
                     <TextField
                       type="password"
                       fullWidth
                       variant="outlined"
-                      placeholder="Exchange Password"
+                      placeholder={t("Exchange Password")}
                       value={exchangePassword}
                       onChange={(e) => setExchangePassword(e.target.value)}
                       sx={{ marginBottom: 2 }}
@@ -336,7 +337,7 @@ const ConnectAccountPage = () => {
                   disabled={!exchangeEmail || !exchangePassword || isSubmitting} // Disable if submitting
                   onClick={connectExchangeLinkAccount}
                 >
-                  {isSubmitting ? "Connecting..." : "Connect"}
+                  {isSubmitting ? t("Connecting...") : t("Connect Now")}
                 </Button>
                 <Button
                   variant="contained"
@@ -349,7 +350,7 @@ const ConnectAccountPage = () => {
                   }}
                   onClick={() => setStep(1)}
                 >
-                  Back
+                  {t("back")}
                 </Button>
               </Box>
             </Card>

@@ -149,14 +149,14 @@ function FilterComponent({
               aria-haspopup="true"
               onClick={(event) => handleClick(event, "type")}
             >
-              Loại: {t(selectedFilter) || t("All")}
+              {t("type")}: {t(selectedFilter) || t("All")}
             </Button>
             <Button
               aria-controls="time-menu"
               aria-haspopup="true"
               onClick={(event) => handleClick(event, "time")}
             >
-              {t("time")}: Gần đây
+              {t("time")}: {t("Recently")}
             </Button>
             <Button
               aria-controls="amount-menu"
@@ -164,7 +164,7 @@ function FilterComponent({
               onClick={(event) => handleClick(event, "amount")}
             >
               {t("Trade amount")}:{" "}
-              {selectedAmount === "all" ? "Tất cả" : selectedAmount}
+              {selectedAmount === "all" ? "Tất cả" : t(selectedAmount)}
             </Button>
 
             <Menu // Menu 1
@@ -181,7 +181,7 @@ function FilterComponent({
                   setData(data);
                 }}
               >
-                Tất cả
+                {t("All")}
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -190,7 +190,7 @@ function FilterComponent({
                   handleClose();
                 }}
               >
-                Lệnh
+                {t("Order")}
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -199,7 +199,7 @@ function FilterComponent({
                   handleClose();
                 }}
               >
-                Hoạt động
+                {t("Plan Status")}
               </MenuItem>
             </Menu>
 
@@ -209,9 +209,10 @@ function FilterComponent({
               keepMounted
               open={Boolean(anchorEl) && selectedMenu === "time"}
               onClose={handleClose}
+              disableScrollLock={true}
             >
-              <MenuItem onClick={handleClose}>Gần đây</MenuItem>
-              <MenuItem onClick={handleOpenDateDialog}>Tùy chỉnh</MenuItem>
+              <MenuItem onClick={handleClose}>{t("Recently")}</MenuItem>
+              <MenuItem onClick={handleOpenDateDialog}>{t("Custom")}</MenuItem>
             </Menu>
 
             <Dialog
@@ -220,7 +221,7 @@ function FilterComponent({
               open={openDateDialog}
               onClose={handleCloseDateDialog}
             >
-              <DialogTitle>Tùy chỉnh</DialogTitle>
+              <DialogTitle>{t("Custom")}</DialogTitle>
               <DialogContent>
                 <Box sx={{ overflow: "hidden" }}>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -243,7 +244,7 @@ function FilterComponent({
                           flexDirection="column"
                           alignItems="center"
                         >
-                          <Box mb={1}>Start Time</Box>
+                          <Box mb={1}>{t("Start time")}</Box>
                           <TimeClock
                             ampm={false}
                             value={startTime}
@@ -268,8 +269,8 @@ function FilterComponent({
                 </Box>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCloseDateDialog}>Cancel</Button>
-                <Button onClick={handleFilterByDate}>OK</Button>
+                <Button onClick={handleCloseDateDialog}>{t("Cancel")}</Button>
+                <Button onClick={handleFilterByDate}>{t("apply")}</Button>
               </DialogActions>
             </Dialog>
 
@@ -299,7 +300,7 @@ function FilterComponent({
                       <Typography
                         sx={{ fontSize: "14px", fontWeight: "normal" }}
                       >
-                        Tất cả
+                        {t("All")}
                       </Typography>
                     }
                   />
@@ -310,7 +311,7 @@ function FilterComponent({
                       <Typography
                         sx={{ fontSize: "14px", fontWeight: "normal" }}
                       >
-                        Nhỏ hơn $10
+                        {t("lessThan10")}
                       </Typography>
                     }
                   />
@@ -321,7 +322,7 @@ function FilterComponent({
                       <Typography
                         sx={{ fontSize: "14px", fontWeight: "normal" }}
                       >
-                        Từ $1 đến $2
+                        {t("1to2")}
                       </Typography>
                     }
                   />
@@ -332,7 +333,7 @@ function FilterComponent({
                       <Typography
                         sx={{ fontSize: "14px", fontWeight: "normal" }}
                       >
-                        Từ $1 đến $5
+                        {t("1to5")}
                       </Typography>
                     }
                   />
@@ -343,7 +344,7 @@ function FilterComponent({
                       <Typography
                         sx={{ fontSize: "14px", fontWeight: "normal" }}
                       >
-                        Từ $5 đến $10
+                        {t("5to10")}
                       </Typography>
                     }
                   />
@@ -354,7 +355,7 @@ function FilterComponent({
                       <Typography
                         sx={{ fontSize: "14px", fontWeight: "normal" }}
                       >
-                        Lớn hơn $10
+                        {t("moreThan10")}
                       </Typography>
                     }
                   />

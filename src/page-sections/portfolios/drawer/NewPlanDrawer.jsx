@@ -1444,10 +1444,10 @@ const NewPlanDrawer = ({
                     {featureType !== SignalFeatureTypes.RANDOM_METHOD && (
                       <Box sx={{ width: "100%" }}>
                         <Typography variant="subtitle1">
-                          {selectedTab === "Bot AI" && "Tín hiệu*"}
+                          {selectedTab === "Bot AI" && t("Signal")}
                           {selectedTab === "Follow Leader" &&
                             "Leader username*"}
-                          {selectedTab === "Telegram Signal" && "Tín hiệu*"}
+                          {selectedTab === "Telegram Signal" && t("Signal")}
                         </Typography>
                         <>
                             {loading=== false && <>

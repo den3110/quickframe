@@ -153,7 +153,9 @@ export default function DepositDrawer(props) {
             </Typography>
 
             <Box className={classes.qrCode}>
-              <QRCode alt="QR Code" size={200} value={address?.a} />
+              {address?.a && (
+                <QRCode alt="QR Code" size={200} value={address?.a} />
+              )}
             </Box>
 
             <Box

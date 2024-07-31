@@ -168,7 +168,7 @@ const HistoryTable = () => {
                 aria-haspopup="true"
                 onClick={(event) => handleClick(event, "time")}
               >
-                {t("time")}: Gần đây
+                {t("time")}: {t("Recently")}
               </Button>
               <Button
                 aria-controls="amount-menu"
@@ -176,7 +176,7 @@ const HistoryTable = () => {
                 onClick={(event) => handleClick(event, "amount")}
               >
                 {t("Trade amount")}:{" "}
-                {selectedAmount === "all" ? "Tất cả" : selectedAmount}
+                {selectedAmount === "all" ? "Tất cả" : t(selectedAmount)}
               </Button>
 
               <Menu // Menu 2
@@ -186,8 +186,8 @@ const HistoryTable = () => {
                 open={Boolean(anchorEl) && selectedMenu === "time"}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Gần đây</MenuItem>
-                <MenuItem onClick={handleOpenDateDialog}>Tùy chỉnh</MenuItem>
+                <MenuItem onClick={handleClose}>{t("Recently")}</MenuItem>
+                <MenuItem onClick={handleOpenDateDialog}>{t("Custom")}</MenuItem>
               </Menu>
 
               <Dialog
@@ -196,7 +196,7 @@ const HistoryTable = () => {
                 open={openDateDialog}
                 onClose={handleCloseDateDialog}
               >
-                <DialogTitle>Tùy chỉnh</DialogTitle>
+                <DialogTitle>{t("Custom")}</DialogTitle>
                 <DialogContent>
                   <Box sx={{ overflow: "hidden" }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -219,7 +219,7 @@ const HistoryTable = () => {
                             flexDirection="column"
                             alignItems="center"
                           >
-                            <Box mb={1}>Start Time</Box>
+                            <Box mb={1}>{t("Start time")}</Box>
                             <TimeClock
                               ampm={false}
                               value={startTime}
@@ -267,6 +267,7 @@ const HistoryTable = () => {
                   <RadioGroup
                     value={selectedAmount}
                     onChange={handleAmountChange}
+                    
                   >
                     <FormControlLabel
                       value="all"
@@ -275,7 +276,7 @@ const HistoryTable = () => {
                         <Typography
                           sx={{ fontSize: "14px" }}
                         >
-                          Tất cả
+                          {t("All")}
                         </Typography>
                       }
                     />
@@ -286,18 +287,19 @@ const HistoryTable = () => {
                         <Typography
                           sx={{ fontSize: "14px" }}
                         >
-                          {"Nhỏ hơn $10"}
+                          {t("lessThan10")}
                         </Typography>
                       }
                     />
                     <FormControlLabel
                       value="1to2"
                       control={<Radio />}
+                      
                       label={
                         <Typography
                           sx={{ fontSize: "14px" }}
                         >
-                          {"Từ $1 đến $2"}
+                          {t("1to2")}
                         </Typography>
                       }
                     />
@@ -308,7 +310,7 @@ const HistoryTable = () => {
                         <Typography
                           sx={{ fontSize: "14px" }}
                         >
-                          {"Từ $1 đến $5"}
+                          {t("1to5")}
                         </Typography>
                       }
                     />
@@ -319,7 +321,7 @@ const HistoryTable = () => {
                         <Typography
                           sx={{ fontSize: "14px" }}
                         >
-                          {"Từ $5 đến $10"}
+                          {t("5to10")}
                         </Typography>
                       }
                     />
@@ -330,7 +332,7 @@ const HistoryTable = () => {
                         <Typography
                           sx={{ fontSize: "14px" }}
                         >
-                          {"Lớn hơn $10"}
+                          {t("moreThan10")}
                         </Typography>
                       }
                     />

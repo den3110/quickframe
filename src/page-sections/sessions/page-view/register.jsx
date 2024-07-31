@@ -8,8 +8,10 @@ import { Link } from "components/link";
 import { H5, H6, Paragraph } from "components/typography";
 import { authApi } from "api";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const RegisterPageView = () => {
+  const {t }= useTranslation()
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -65,7 +67,7 @@ const RegisterPageView = () => {
           if (response?.data?.ok === true) {
             navigate("/login");
           } else {
-            setErrorMessage(response?.data?.m);
+            setErrorMessage(t(response?.data?.m));
           }
         } catch (error) {
           setErrorMessage(
@@ -81,22 +83,22 @@ const RegisterPageView = () => {
   return (
     <Layout>
       <Box maxWidth={550} p={4}>
-        <H5 fontSize={{ sm: 30, xs: 25 }}>Sign up free</H5>
+        <H5 fontSize={{ sm: 30, xs: 25 }}>{t("Sign up")}</H5>
 
         <Paragraph mt={1} mb={6} color="text.secondary">
-          No risk, no obligations, no credit-card required.
+          {t("No risk, no obligations, no credit-card required.")}
         </Paragraph>
 
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <H6 fontSize={16} mb={1}>
-                Register with your email id
+                {t("Register with your email id")}
               </H6>
 
               <TextField
                 fullWidth
-                placeholder="Enter your work email"
+                placeholder={t("Enter your work email")}
                 name="email"
                 onBlur={handleBlur}
                 value={values.email}
@@ -109,7 +111,7 @@ const RegisterPageView = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                placeholder="Enter your password"
+                placeholder={t("Enter your password")}
                 name="password"
                 type="password"
                 onBlur={handleBlur}
@@ -123,7 +125,7 @@ const RegisterPageView = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                placeholder="Enter your nickname"
+                placeholder={t("Enter your nickname")}
                 name="nickName"
                 onBlur={handleBlur}
                 value={values.nickName}
@@ -141,16 +143,14 @@ const RegisterPageView = () => {
                 variant="contained"
                 fullWidth
               >
-                Sign up via Email
+                {t("Sign up")}
               </LoadingButton>
 
               <Paragraph mt={1} color="text.secondary">
-                By signing up, you agree{" "}
+                {t("By signing up, you agree")}{" "}
                 <Box fontWeight={500} component={Link} href="#">
-                  Terms of Service
+                  {t("Terms of Service")}
                 </Box>{" "}
-                & your consent to receiving email communications from Sales
-                handy.
               </Paragraph>
             </Grid>
           </Grid>
@@ -164,7 +164,7 @@ const RegisterPageView = () => {
           }}
         >
           <Paragraph color="text.secondary" px={1}>
-            Already have an account?
+            {t("Already have an account?")}
           </Paragraph>
         </Divider>
 
@@ -176,7 +176,7 @@ const RegisterPageView = () => {
             backgroundColor: "primary.50",
           }}
         >
-          Log In
+          {t("login")}
         </Button>
       </Box>
     </Layout>

@@ -112,7 +112,7 @@ const TimelineTele = () => {
       case "pause_bot":
         return "Tạm ngưng bot";
       case "stop_plan_take_profit_target":
-        return "Đạt mục tiêu lợi nhuận";
+        return t("Match Take Profit");
       case "stop_plan_stop_loss_target":
         return "Đạt mục tiêu cắt lỗ";
       case "stop_plan_win_total_target":
@@ -576,7 +576,7 @@ const TimelineTele = () => {
                               >
                                 {formatCurrency(item.current_profit)}
                               </Typography>
-                              <Typography fontSize={12}>Lợi nhuận</Typography>
+                              <Typography fontSize={12}>{t("Profits")}</Typography>
                             </>
                           )}
                           {item?.message === "stop_plan_take_profit_target" &&

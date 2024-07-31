@@ -640,7 +640,7 @@ const CustomTimeline = () => {
                               >
                                 {formatCurrency(item.current_profit)}
                               </Typography>
-                              <Typography fontSize={12}>Lợi nhuận</Typography>
+                              <Typography fontSize={12}>{t("Profits")}</Typography>
                             </>
                           )}
                           {item?.message === "stop_plan_take_profit_target" &&
@@ -739,7 +739,7 @@ const CustomTimeline = () => {
         )}
         {loading === false && dataState?.length <= 0 && (
           <EmptyPage
-            title="Danh mục quá trình đầu tư trống"
+            title={t("no_data_to_display")}
             disableButton={true}
           />
         )}

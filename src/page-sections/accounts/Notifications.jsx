@@ -6,10 +6,13 @@ import { Scrollbar } from "components/scrollbar";
 import { H6, Paragraph, Small } from "components/typography";
 // COMMON STYLED COMPONENTS
 import { BodyTableCell, BodyTableRow, HeadTableCell } from "./common/styles";
+import { useTranslation } from "react-i18next";
 const Notifications = () => {
+  const {t }= useTranslation()
+
   return <Card>
       <Box padding={3}>
-        <H6 fontSize={14}>Notifications</H6>
+        <H6 fontSize={14}>{t("Notifications")}</H6>
 
         <Small color="text.secondary">
           We need permission from your browser to show notifications.{" "}

@@ -7,7 +7,9 @@ import { Link } from "components/link";
 import { H5, Paragraph } from "components/typography";
 // AUTH0 CONTEXT FILE
 import { AuthContext } from "contexts/auth0Context";
+import { useTranslation } from "react-i18next";
 const LoginView = () => {
+  const {t }= useTranslation()
   const { isAuthenticated, isInitialized, user, loginWithPopup, logout } =
     useContext(AuthContext);
   const handleSingIn = () => {
@@ -40,7 +42,7 @@ const LoginView = () => {
               xs: 25,
             }}
           >
-            Sign In
+            {t("Sign In")}
           </H5>
         )}
 
@@ -50,20 +52,20 @@ const LoginView = () => {
           </Paragraph>
         ) : (
           <Paragraph mt={1} mb={6} color="text.secondary">
-            New user?{" "}
+            {t("New user")}?{" "}
             <Box fontWeight={500} component={Link} href="/register">
-              Create an Account
+            {t("Create an Account")}
             </Box>
           </Paragraph>
         )}
 
         {isAuthenticated ? (
           <Button fullWidth size="large" color="error" onClick={handleSingOut}>
-            Sign Out
+            {t("logout")}
           </Button>
         ) : (
           <Button fullWidth size="large" onClick={handleSingIn}>
-            Sign In
+          {t("login")}
           </Button>
         )}
       </Box>

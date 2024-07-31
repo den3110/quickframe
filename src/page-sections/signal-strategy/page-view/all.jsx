@@ -437,7 +437,7 @@ const SignalStrategyList = () => {
                 }}
               >
                 <EmptyPage
-                  title={"Danh mục tín hiệu đang trống"}
+                  title={t("no_data_to_display")}
                   subTitle={t(
                     "Start exploring investment opportunities and earn profits by start an investment plan today"
                   )}

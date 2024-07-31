@@ -231,7 +231,7 @@ const MemberListAccount = () => {
             alignItems: "center",
           }}
         >
-          <EmptyPage title={"Không có dữ liệu tại đây"} disableButton={true} />
+          <EmptyPage title={t("no_data_to_display")} disableButton={true} />
         </Box>
       )}
       <PaginationContainer>

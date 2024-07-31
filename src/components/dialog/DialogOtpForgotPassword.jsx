@@ -82,17 +82,17 @@ const DialogOtpForgotPassword = (props) => {
       if (/^\d{6}$/.test(text)) {
         setOtp(text);
       } else {
-        showToast("Clipboard content is not a 6-digit code", "error");
+        showToast(t("Clipboard content is not a 6-digit code"), "error");
       }
     } catch (err) {
-      showToast("Failed to read clipboard contents: " + err, "error");
+      showToast(t("Failed to read clipboard contents: ") + err, "error");
     }
   };
 
   const handlePasswordChange = (event) => {
     setNewPassword(event.target.value);
     if (event.target.value !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("passwords_do_not_match"));
     } else {
       setError("");
     }
@@ -101,7 +101,7 @@ const DialogOtpForgotPassword = (props) => {
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
     if (event.target.value !== newPassword) {
-      setError("Passwords do not match");
+      setError(t("passwords_do_not_match"));
     } else {
       setError("");
     }
@@ -125,7 +125,7 @@ const DialogOtpForgotPassword = (props) => {
       </CustomDialogTitle>
       <CustomDialogContent>
         <Typography sx={{ marginBottom: 2 }}>
-          Please enter the 6-digit OTP from your email
+          {t("Please enter the 6-digit OTP from your email")}
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "center", marginBottom: 2 }}>
           <OtpInput

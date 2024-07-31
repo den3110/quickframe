@@ -79,7 +79,7 @@ function VIPInformation() {
             <Box mt={1} mb={1}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography fontSize={18} color="black" fontWeight={600}>
-                  Thông tin VIP
+                  {t("VIP Informations")}
                 </Typography>
               </Box>
             </Box>
@@ -106,7 +106,7 @@ function VIPInformation() {
               <Box sx={{ padding: "0 16px" }}>
                 <Typography variant="h6" sx={{ color: "#fff" }}>
                   {/* {dataStat?.name} */}
-                  Cấp bậc VIP của bạn
+                  {t("Your VIP Level")}
                 </Typography>
               </Box>
               <Box sx={{ padding: "0 16px" }}>
@@ -119,13 +119,13 @@ function VIPInformation() {
             <Box mt={1}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography fontSize={18} color="black" fontWeight={600}>
-                  Điều kiện cấp bậc tiếp theo
+                  {t("Next rank conditions")}
                 </Typography>
               </Box>
             </Box>
             <Grid container spacing={1} mt={1}>
               <Grid item xs={12} md={6}>
-                <InfoCard title="F1 VIP" value={`${dataOverview?.f1_agencies}/${dataOverview?.upnextrank_agencies}`} tooltip={"F1 VIP"} />
+                <InfoCard title={t("F1 VIP")} value={`${dataOverview?.f1_agencies}/${dataOverview?.upnextrank_agencies}`} tooltip={"F1 VIP"} />
               </Grid>
               <Grid item xs={12} md={6}>
                 <InfoCard

@@ -18,9 +18,9 @@ const BottomMenuDialog = (props) => {
     navigate(link)
     onClose()
   }
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = () => {
     setOpen(false);
@@ -49,7 +49,7 @@ const BottomMenuDialog = (props) => {
           <ListItem onClick={()=> handleNavigate("/manage-follower")} button>
             <ListItemText
               primary={t("manage_followers")}
-              secondary="Quản lý thống kê người theo dõi đầu tư của bạn"
+              secondary={t("Monitor your investing follower statistics")}
               primaryTypographyProps={{ style: { fontWeight: 'bold', fontFamily: "Manrope, sans-serif" } }}
             />
             <ListItemSecondaryAction>
@@ -61,8 +61,8 @@ const BottomMenuDialog = (props) => {
           <Divider />
           <ListItem onClick={()=> handleNavigate("/manual-trade")} button>
             <ListItemText
-              primary="Giao dịch thủ công"
-              secondary="Đặt lệnh không cần tín hiệu"
+              primary={t("manual_trade")}
+              secondary={t("Place orders without needing signals.")}
               primaryTypographyProps={{ style: { fontWeight: 'bold', fontFamily: "Manrope, sans-serif" } }}
             />
             <ListItemSecondaryAction>
@@ -75,7 +75,7 @@ const BottomMenuDialog = (props) => {
           <ListItem onClick={()=> handleNavigate("/vip-member")} button>
             <ListItemText
               primary="Vip member"
-              secondary="Quản lý số liệu thống kê người giới thiệu trên sàn giao dịch"
+              secondary={t("Manage your statistic about Exchange referrals")}
               primaryTypographyProps={{ style: { fontWeight: 'bold', fontFamily: "Manrope, sans-serif" } }}
             />
             <ListItemSecondaryAction>

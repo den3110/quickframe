@@ -167,7 +167,7 @@ const ProfilePopover = () => {
               my: 1,
             }}
           />
-          <StyledSmall onClick={logout}>Sign Out</StyledSmall>
+          <StyledSmall onClick={logout}>{t("logout")}</StyledSmall>
         </Box>
       </PopoverLayout>
       <UserLinkAccountListDrawer

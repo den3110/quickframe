@@ -5,6 +5,7 @@ import TradingComission from "icons/duotone/TradingComission";
 import VipComission from "icons/duotone/VipComission";
 import React from "react";
 import Commissions from "../component/Comission";
+import { useTranslation } from "react-i18next";
 
 const Item = ({ icon, title, value }) => {
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -33,6 +34,8 @@ const Item = ({ icon, title, value }) => {
 
 const GeneralTab = () => {
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+    const {t }= useTranslation()
+
   return (
     <Box sx={{ width: "100%" }}>
       <Box
@@ -53,28 +56,28 @@ const GeneralTab = () => {
             <Item
               icon={<TotalReferrals />}
               value={0}
-              title={"Total referrals"}
+              title={t("Total referrals")}
             />
           </Grid>
           <Grid item md={3} xs={12}>
             <Item
               icon={<TotalAgencies />}
               value={0}
-              title={"Total agencies"}
+              title={t("Total agencies")}
             />
           </Grid>
           <Grid item md={3} xs={12}>
             <Item
               icon={<TradingComission />}
               value={0}
-              title={"Trading commission"}
+              title={t("Trading commission")}
             />
           </Grid>
           <Grid item md={3} xs={12}>
             <Item
               icon={<VipComission />}
               value={0}
-              title={"Vip commission"}
+              title={t("Vip commission")}
             />
           </Grid>
         </Grid>

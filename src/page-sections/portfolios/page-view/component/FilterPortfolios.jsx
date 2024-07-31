@@ -366,7 +366,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
   return (
     <Dialog fullWidth open={open} onClose={onClose}>
       <DialogTitle>
-        {t("Filter")}
+        {t("Filters")}
         <Box
           sx={{
             position: "absolute",

@@ -121,7 +121,7 @@ const InvestmentOverview = (props) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="body2">Chốt lời/Cắt lỗ</Typography>
+            <Typography variant="body2">{t("Take Profit/Stop Loss")}</Typography>
             {/* e co ham day a */}
             <Typography variant="body2">
               +${dataStat?.take_profit_target}/-${dataStat?.stop_loss_target}
@@ -146,7 +146,7 @@ const InvestmentOverview = (props) => {
               mt: 1,
             }}
           >
-            <Typography variant="body2">Lợi nhuận</Typography>
+            <Typography variant="body2">{t("Profits")}</Typography>
             <Typography
               variant="body2"
               display={"flex"}
@@ -167,7 +167,7 @@ const InvestmentOverview = (props) => {
                   fontWeight={600}
                   sx={{ cursor: "pointer" }}
                 >
-                  Cài lại
+                  {t("Reset")}
                 </Typography>
               )}
             </Typography>

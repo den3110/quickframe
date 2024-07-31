@@ -1,9 +1,11 @@
 import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import AuthContext from "contexts/AuthContext";
 import React, { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 const AppBarSection = () => {
+  const {t }= useTranslation()
   const navigate= useNavigate()
   const {selectedLinkAccount, setAccessToken,  setSelectedLinkAccount}= useContext(AuthContext)
   const handleLogout = (e) => {
@@ -38,7 +40,7 @@ const AppBarSection = () => {
         <Box display={"flex"} alignItems={"center"}>
           <Box sx={{ marginRight: 2 }}>
             <Link href="/" color="inherit">
-              Dashboard
+              {t("Dashboard")}
             </Link>
           </Box>
           <Box sx={{ marginRight: 2 }}>
@@ -47,7 +49,7 @@ const AppBarSection = () => {
             </Link>
           </Box>
           <Link onClick={handleLogout} href="#" color="inherit">
-            Logout
+            {t("logout")}
           </Link>
         </Box>
       </Toolbar>

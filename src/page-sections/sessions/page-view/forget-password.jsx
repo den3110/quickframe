@@ -8,8 +8,10 @@ import FlexRowAlign from "components/flexbox/FlexRowAlign";
 import { useState } from "react";
 import { authApi } from "api";
 import DialogOtpForgotPassword from "components/dialog/DialogOtpForgotPassword";
+import { useTranslation } from "react-i18next";
 
 const ForgetPasswordPageView = () => {
+  const {t }= useTranslation()
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -43,11 +45,10 @@ const ForgetPasswordPageView = () => {
       <Box textAlign="center" maxWidth={550} width="100%" padding={4}>
         <img src="/static/forget-passwod.svg" alt="Logo" />
 
-        <H5 mt={2}>Forgot your password?</H5>
+        <H5 mt={2}>{t("Forgot your password")}?</H5>
 
         <Paragraph color="text.secondary" mt={1} px={4}>
-          Please enter the email address associated with your account and We
-          will email you a link to reset your password.
+          {t("Please enter the email address associated with your account and We will email you a link to reset your password.")}
         </Paragraph>
 
         <form>
@@ -67,7 +68,7 @@ const ForgetPasswordPageView = () => {
               disabled={email?.length <= 0 || loading}
               fullWidth
             >
-              {loading ? "Sending..." : "Send Link"}
+              {loading ? t("Sending...") : t("Send Link")}
             </Button>
             <Button
               disableRipple
@@ -75,7 +76,7 @@ const ForgetPasswordPageView = () => {
               color="secondary"
               onClick={() => navigate("/login")}
             >
-              <NavigateBefore fontSize="small" /> Back to Sign In
+              <NavigateBefore fontSize="small" /> {t("Back")} 
             </Button>
           </Stack>
         </form>

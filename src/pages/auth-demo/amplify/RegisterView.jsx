@@ -12,6 +12,7 @@ import { H5, H6, Paragraph } from "components/typography";
 import Layout from "page-sections/sessions/Layout";
 // AMPLIFY CONTEXT FILE
 import { AuthContext } from "contexts/amplifyContext";
+import { useTranslation } from "react-i18next";
 const RegisterView = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -19,6 +20,7 @@ const RegisterView = () => {
   const {
     register
   } = useContext(AuthContext);
+  const { t}= useTranslation()
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -122,7 +124,7 @@ const RegisterView = () => {
         borderWidth: 1
       }}>
           <Paragraph color="text.secondary" px={1}>
-            Already have an account?
+            {t("Already have an account?")}
           </Paragraph>
         </Divider>
 

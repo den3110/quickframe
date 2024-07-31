@@ -76,7 +76,7 @@ const DemoWallet = (props) => {
         <Typography variant="h6" align="left" mt={1} mb={1}>
           ${spotBalance?.demoBalance?.toFixed(2)}
         </Typography>
-        <Typography dịch gần đây variant="body1" align="left" fontSize={12} mb={2}>
+        <Typography variant="body1" align="left" fontSize={12} mb={2}>
           {t("wallet")} DEMO
         </Typography>
       </Box>

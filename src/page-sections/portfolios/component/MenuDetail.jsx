@@ -135,7 +135,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Button variant="outlined" size={"large"} onClick={handleBack}>
-          Quay lại
+          {t("Back")}
         </Button>
         <Box>
           {isSignalStrategy === false && (
@@ -154,7 +154,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
                   style={{ marginRight: "8px" }}
                   onClick={() => handleChangeIsRunning("START")}
                 >
-                  {downLg ? "" : "Khởi chạy"}
+                  {downLg ? "" : t("start")}
                 </Button>
               )}
               {isRunning === true && !isPause && (
@@ -188,7 +188,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
                   style={{ marginRight: "8px" }}
                   onClick={() => handleChangeIsRunning("RESUME")}
                 >
-                  {downLg ? "" : "Tiếp tục"}
+                  {downLg ? "" : t("continue")}
                 </Button>
               )}
               <Button
@@ -204,7 +204,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
                 style={{ marginRight: "8px" }}
                 onClick={() => handleChangeIsRunning(ActionBotType.RESTART)}
               >
-                {downLg ? "" : "Khởi động lại"}
+                {downLg ? "" : t("Restart Plan")}
               </Button>
               <IconButton size={"large"} onClick={handleClick}>
                 <MoreVertIcon />

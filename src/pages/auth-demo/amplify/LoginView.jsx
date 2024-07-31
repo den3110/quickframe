@@ -12,6 +12,7 @@ import { H5, H6, Paragraph } from "components/typography";
 import { FlexBetween, FlexBox, FlexRowAlign } from "components/flexbox";
 // AMPLIFY CONTEXT FILE
 import { AuthContext } from "contexts/amplifyContext";
+import { useTranslation } from "react-i18next";
 const LoginView = () => {
   const {
     login,
@@ -19,6 +20,7 @@ const LoginView = () => {
     user,
     isAuthenticated
   } = useContext(AuthContext);
+  const {t }= useTranslation()
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const initialValues = {
@@ -81,12 +83,12 @@ const LoginView = () => {
         <H5 fontSize={{
         sm: 30,
         xs: 25
-      }}>Sign In</H5>
+      }}>{t("Sign In")}</H5>
 
         <Paragraph mt={1} mb={6} color="text.secondary">
           New user?{" "}
           <Box fontWeight={500} component={Link} href="/amplify/register">
-            Create an Account
+          {t("Create an Account")}
           </Box>
         </Paragraph>
 
@@ -109,21 +111,21 @@ const LoginView = () => {
                   p: 0
                 }} name="remember" value={values.remember} onChange={handleChange} checked={values.remember} />
 
-                  <Paragraph fontWeight={500}>Remember me</Paragraph>
+                  <Paragraph fontWeight={500}>{t("Remember me")}</Paragraph>
                 </FlexBox>
 
                 <Box href="#" fontSize={13} component={Link} sx={{
                 color: "error.500",
                 fontWeight: 500
               }}>
-                  Forget Password?
+                  {t("Forget Password")}?
                 </Box>
               </FlexBetween>
             </Grid>
 
             <Grid item xs={12}>
               <LoadingButton loading={isLoading} type="submit" variant="contained" fullWidth>
-                Sign In
+                {t("Sign In")}
               </LoadingButton>
             </Grid>
           </Grid>

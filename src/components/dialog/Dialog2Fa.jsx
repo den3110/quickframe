@@ -18,6 +18,7 @@ import { showToast } from "components/toast/toast";
 import exchangeApi from "api/exchange/exchangeApi";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -31,6 +32,7 @@ const CustomDialogContent = styled(DialogContent)(({ theme }) => ({
 }));
 
 const Dialog2Fa = (props) => {
+  const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const downXss = useMediaQuery((theme) => theme.breakpoints.down("xss"));
   
@@ -62,7 +64,7 @@ const Dialog2Fa = (props) => {
         navigate("/");
       }
       else if(response?.data?.ok=== false) {
-        showToast(response?.data?.m, "error")
+        showToast(t(response?.data?.m), "error")
       }
       // setOpen(false);
     } catch (error) {
@@ -76,36 +78,36 @@ const Dialog2Fa = (props) => {
       if (/^\d{6}$/.test(text)) {
         setOtp(text);
       } else {
-        showToast("Clipboard content is not a 6-digit code", "error");
+        showToast(t("Clipboard content is not a 6-digit code"), "error");
       }
     } catch (err) {
-      showToast("Failed to read clipboard contents: " + err, "error");
+      showToast(t("Failed to read clipboard contents: ") + err, "error");
     }
   };
 
-  const renderWidth= (breakpoint)=> {
-    switch (breakpoint) {
-      case downLg:
-        return 36
-      case downXss: 
-        return 28
-      default:
-        return 56
-    }
-  }
+  // const renderWidth= (breakpoint)=> {
+  //   switch (breakpoint) {
+  //     case downLg:
+  //       return 36
+  //     case downXss: 
+  //       return 28
+  //     default:
+  //       return 56
+  //   }
+  // }
 
   return (
     <>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <CustomDialogTitle>
-          <Typography variant="h6">Exchange 2FA Code</Typography>
+          <Typography variant="h6">{t("Exchange 2FA Code")}</Typography>
           <IconButton onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </CustomDialogTitle>
         <CustomDialogContent>
           <Typography sx={{ marginBottom: 2 }}>
-            Please enter the 6-digit Google Authenticator code
+            {t("Please enter the 6-digit Google Authenticator code")}
           </Typography>
           <Box
             sx={{ display: "flex", justifyContent: "center", marginBottom: 2 }}
@@ -154,7 +156,7 @@ const Dialog2Fa = (props) => {
             }}
             onClick={handlePaste}
           >
-            Paste 2FA code
+            {t("Paste 2FA Code")}
           </Typography>
         </CustomDialogContent>
         <DialogActions>
@@ -169,7 +171,7 @@ const Dialog2Fa = (props) => {
               fontWeight: 600,
             }}
           >
-            Verify
+            {t("Verify")}
           </Button>
         </DialogActions>
       </Dialog>

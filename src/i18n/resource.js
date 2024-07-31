@@ -7,9 +7,12 @@ export const resources = {
       Ecommerce: "Ecommerce",
       Management: "Management",
       "Analytics 1": "Analytics 1",
+      "Sending...": "Sending...",
+      "Enter your nickname": "Enter your nickname",
       "Analytics 2": "Analytics 2",
       "Finance 1": "Finance 1",
       "Finance 2": "Finance 2",
+      "Forgot your password": "Forgot your password",
       Accounts: "Accounts",
       "User & Contact": "User & Contact",
       Invoice: "Invoice",
@@ -144,6 +147,9 @@ export const resources = {
       actions: "Actions",
       insufficient_bet_balance: "Your balance is not enough",
       betsession_is_invalid: "Current session not allow bet",
+      "Paste OTP code": "Paste OTP code",
+      "Clipboard content is not a 6-digit code":
+        "Clipboard content is not a 6-digit code",
       edit: "Edit",
       rank: "Rank",
       volume: "Volume",
@@ -164,6 +170,8 @@ export const resources = {
       memo: "Memo",
       "2fa-disabled": "2FA must be enabled to withdraw",
       "invalid-2fa-code":
+        "Google Authentication code incorrect. Please try again",
+      "Google Authentication code has been used. Please try the new one.":
         "Google Authentication code incorrect. Please try again",
       "used-2fa-code":
         "Google Authentication code has been used. Please try the new one",
@@ -198,6 +206,8 @@ export const resources = {
       bot_management: "Bot Management",
       bot_configuration_name: "Bot configuration name",
       bot_configuration_name_required: "The bot configuration name is required",
+      "Enter your work email": "Enter your email or username",
+      "Enter your password": "Enter your password",
       usability: "Usability",
       basic: "Basic",
       this_is_required_information: "This is required information",
@@ -469,6 +479,8 @@ export const resources = {
       new_password: "New password",
       password_wrong: "Password wrong",
       passwords_do_not_match: "Passwords do not match",
+      "Please enter the 6-digit OTP from your email":
+        "Please enter the 6-digit OTP from your email",
       change_password_successfully: "Change password successfully",
       child_profit: "Child profit",
       child_profit_target: "Child profit target ($)",
@@ -484,7 +496,8 @@ export const resources = {
       donate_bot: "Donate bot configuration",
       the_donated_configuration_can_only_edit:
         "The donated configuration can only edit capital management",
-        "Click the button below to initiate the password change process. You will need to verify your email and set a new password.": "Click the button below to initiate the password change process. You will need to verify your email and set a new password.",
+      "Click the button below to initiate the password change process. You will need to verify your email and set a new password.":
+        "Click the button below to initiate the password change process. You will need to verify your email and set a new password.",
       the_donated_configuration_can_not_edit:
         "The donated configuration can not edit",
       click_edit_configuration_to_finish:
@@ -647,7 +660,7 @@ export const resources = {
         "<p>Enter the email address associated with your account and we'll send you a link to reset your password.</p>",
       '<span class="text-success">{{amount}} plans</span> are following you at this time.':
         'Active follower plans: <span class="text-success">{{amount}}</span>',
-        "Active follower plans:": "Active follower plans:",
+      "Active follower plans:": "Active follower plans:",
       '<span class="text-success">{{count}} plans</span> are following you at this time.':
         'Active follower plans: <span class="text-success">{{count}}</span>',
       '<span><b class="text-warning">Important Announcement:</b> We will perform scheduled maintenance on <b>{{time}}</b>, estimated maintenance time will be <b>{{est}}.</b></span>':
@@ -672,6 +685,7 @@ export const resources = {
       "A. Information you provide to us - text 2":
         "Your Communications with Us: We collect personal information from you such as email address, phone number, or mailing address when you request information about the Services, register for our newsletter, request customer support, or otherwise communicate with us. We also collect the contents of messages or attachments that you may send to us, as well as other information you choose to provide, and that may be associated with your communications.",
       "API Key": "API Key",
+      "Create an Account": "Create an Account",
       "API Key Management": "API Key Management",
       Accept: "Accept",
       "Access our website at: ": "Access our website at: ",
@@ -741,6 +755,8 @@ export const resources = {
         "Announcements on the Company’s website.",
       "Answering requests for customer support.":
         "Answering requests for customer support.",
+      "Register with your email id": "Register with your email or username",
+
       "Are you sure you want to delete these plans?":
         "Are you sure you want to delete these plans?",
       "Are you sure you want to delete this Bot AI?":
@@ -761,11 +777,12 @@ export const resources = {
         "Are you sure you want to edit this plan?",
       "Are you sure you want to edit this strategy?":
         "Are you sure you want to edit this strategy?",
+      "Login with your email or username": "Login with your email or username",
       "Are you sure you want to pause this plan?":
         "Are you sure you want to pause this plan?",
       "Assigning overlapping timer to plan(s): plan 5":
         "Assigning overlapping timer to plan(s): plan 5",
-      "Tuỳ chọn nâng cao" : "Advanced option",
+      "Tuỳ chọn nâng cao": "Advanced option",
 
       "At least one field must have value":
         "At least one field must have value",
@@ -815,6 +832,8 @@ export const resources = {
       "Bot AI Builder": "Bot AI Builder",
       "Bot AI Code": "Bot AI Code",
       "Bot AI code is required": "Bot AI code is required",
+      "No risk, no obligations, no credit-card required.": "No risk, no obligations, no credit-card required.",
+
       "Bot Management": "Bot Management",
       "Bot Name": "Bot Name",
       "Bot Single": "Bot Single",
@@ -919,6 +938,7 @@ export const resources = {
       "Check your email for a verification email to activate your account.":
         "Check your email for a verification email to activate your account.",
       "Checking...": "Checking...",
+      "Please enter the email address associated with your account and We will email you a link to reset your password.": "Please enter the email address associated with your account and We will email you a link to reset your password.",
       "Chiến lược Custom Autowin": "Chiến lược Custom Autowin",
       "Chiến lược Martingale": "Chiến lược Martingale",
       "Choose Bot AI": "Choose Bot AI",
@@ -940,6 +960,8 @@ export const resources = {
       "Click to follow leader": "Click to follow leader",
       "Clone the plan successfully!": "Clone the plan successfully!",
       Close: "Close",
+      "Please enter the 6-digit Google Authenticator code":
+        "Please enter the 6-digit Google Authenticator code",
       Closed: "Closed",
       "Closed Ticket": "Closed Ticket",
       "Closed price": "Closed price",
@@ -980,6 +1002,7 @@ export const resources = {
       "Confirm, it is me": "Confirm, it's me",
       "Connect Another Account": "Connect Another Account",
       "Connect Now": "Connect Now",
+      "Connecting...": "Connecting...",
       "Connect your account": "Connect your account",
       "Connected Account": "Connected Accounts",
       "Consecutive losing": "Order(s)",
@@ -995,6 +1018,8 @@ export const resources = {
       "Copied to clipboard": "Copied to clipboard",
       Copy: "Copy",
       "Copy API Key": "Copy API Key",
+      "Remember me": "Remember me",
+      "Forget Password": "Forget Password",
       "Copy Code": "Copy Code",
       "Copy Code Is Invalid": "Copy Code Is Invalid",
       "Copy Link": "Copy Link",
@@ -1005,7 +1030,7 @@ export const resources = {
       "Copy plan to LIVE": "Copy plan to LIVE",
       "Copyright © 2022 Quickinvest, All rights reserved.":
         "Copyright © 2022 Quickinvest, All rights reserved.",
-        "I want": "I want",
+      "I want": "I want",
       Country: "Country",
       "Create Bot": "Create Bot",
       "Create Candle Pattern": "Create Candle Pattern",
@@ -1213,6 +1238,9 @@ export const resources = {
         "Easy way to set up your superb strategy!",
       "Easy way to share your superb Bot AI!":
         "Easy way to share your superb Bot AI!",
+      "Failed to read clipboard contents: ":
+        "Failed to read clipboard contents: ",
+      // "Please enter the 6-digit Google Authenticator code": "Please enter the 6-digit Google Authenticator code",
       "Easy way to share your superb plan!":
         "Easy way to share your superb plan!",
       "Easy way to share your superb plan! ":
@@ -1246,7 +1274,7 @@ export const resources = {
         "Your account has already been activated. Please login as normal",
       "EmailVerification.description":
         "Please back to login & start your trading journey with us now",
-        mark_read_all: "Mark read all",
+      mark_read_all: "Mark read all",
       "EmailVerification.errorDescription":
         "Please retry again or contact us for support. Sincerely sorry for the inconvenience",
       "EmailVerification.errorTitle":
@@ -1398,7 +1426,8 @@ export const resources = {
       "Follow Plan Name": "Follow This Plan",
       "Follower List": "Follower plans",
       "Follower Statistic": "Follower Statistics",
-      "Use both waiting and resulting candles": "Use both waiting and resulting candles",
+      "Use both waiting and resulting candles":
+        "Use both waiting and resulting candles",
 
       "Force Majeure": "Force Majeure",
       "ForceMajeure 1.1 a text":
@@ -1473,6 +1502,7 @@ export const resources = {
       FormCreatePlan_baseInfo_from_live_account:
         '<span>from <span class="live">Live account</span></span>',
       auto_type: "Auto type",
+      "Send Link": "Send Link",
 
       FormCreatePlan_baseInfo_name_label: "My investment goal is",
       FormCreatePlan_baseInfo_name_placeholder: "your goal",
@@ -1626,6 +1656,8 @@ export const resources = {
         "Great choice! You could win <span>{{amount}}</span> with tactic.",
       "Greater than $10": "Greater than $10",
       "Greater than ${{fromAmount}}": "Greater than ${{fromAmount}}",
+      "By signing up, you agree": "By signing up, you agree",
+      "Terms of Service": "Terms of Service",
       "Guideline Tutorials (10 Videos)": "Guideline Tutorials (10 Videos)",
       "Have a problems with something?": "Have problems with your account?",
       "Have a problems? Click here": "Have a problem? Click here",
@@ -1720,8 +1752,8 @@ export const resources = {
       "Immediately after phoning": "Immediately after phoning",
       "Immediately after posting to the website of the company.":
         "Immediately after posting to the website of the company.",
-        "Default Strategy": "Default Strategy",
-        "Usage Strategy": "Usage Strategy", 
+      "Default Strategy": "Default Strategy",
+      "Usage Strategy": "Usage Strategy",
       "Immediately after text messaging": "Immediately after text messaging",
       Import: "Copy",
       "Import Bot AI": "Copy Bot AI",
@@ -2147,8 +2179,8 @@ export const resources = {
       "Plan switch condition is exists": "Plan switch condition is exists",
       Plans: "Plans",
       "Plans Filter": "Plans Filter",
-      "Please enter the 6-digit Google Authenticator code":
-        "Please enter the 6-digit Google Authenticator code",
+      // "Please enter the 6-digit Google Authenticator code":
+      //   "Please enter the 6-digit Google Authenticator code",
       "Please insert at least 50 characters":
         "Please insert at least 50 characters",
       "Please only send USDT (BEP-20) to this deposit wallet. <br />\n                Do not deposit any USDT nor non USDT assets from non-BEP20 networks.":
@@ -2673,6 +2705,7 @@ export const resources = {
       "Show result:": "Show result:",
       "Sideway 1-1": "Sideway 1-1",
       "Sideway 1_1": "Sideway 1_1",
+      "New user": "New user",
       "Sign In": "Sign In",
       "Sign in from another device": "Sign in from another device",
       "Sign in with email": "Sign in with email",
@@ -2714,6 +2747,11 @@ export const resources = {
       "Start failed": "Scheduled start failed",
       "Start this plan after “Confirm & Save”":
         "Start this plan after “Confirm & Save”",
+      lessThan10: "Less than $10",
+      "1to2": "$1 to $2",
+      "1to5": "$1 to $5",
+      "5to10": "$5 to $10",
+      moreThan10: "More than $10",
       "Start time": "Start Time",
       "Start time and Pause time must be different":
         "Start time and Pause time must be different",
@@ -2727,6 +2765,7 @@ export const resources = {
       "Step 1": "Step 1",
       "Step 1: Condition Profile": "Step 1: Condition Profile",
       "Step 1: Enter your Exchange URL": "Step 1: Enter your Exchange URL",
+      "Select your Exchange URL": "Select your Exchange URL",
       "Step 1: New Condition": "Step 1: New Condition",
       "Step 1: New Strategy": "Step 1: New Strategy",
       "Step 1: Personal information": "Step 1: Personal information",
@@ -2947,7 +2986,7 @@ export const resources = {
         "The system supports parsing channel content **according to a number of available templates**, \n          and apply this signal to you.",
       "The system supports parsing channel content **according to a number of available templates**, and apply this signal to you":
         "The system supports parsing channel content **according to a number of available templates**, and apply this signal to you",
-        apply: "Apply",
+      apply: "Apply",
       "The total trading volumes from your account over a period of time":
         "The total trading volumes from your account over a period of time",
       "The value 'undefined' is not valid.":
@@ -3732,6 +3771,9 @@ export const resources = {
       memo: "Ghi chú",
       "2fa-disabled": "Vui lòng bật 2FA",
       "invalid-2fa-code": "Mã 2FA không chính xác",
+      "Google Authentication code has been used. Please try the new one.":
+        "Mã 2FA không chính xác",
+      "Login with your email or username": "Đăng nhập bằng email hoặc usename",
       "used-2fa-code": "Mã 2FA đã được sử dụng",
       err_invalid_address: "Địa chỉ ví không hợp lệ",
       err_amount_must_greater_than_5_USDT: "Số lượng rút phải từ 5 USDT",
@@ -4074,7 +4116,7 @@ export const resources = {
       are_u_want_to_del_config: "Bạn có chắc chắn muốn xoá cấu hình ?",
       are_u_want_to_del_history_config:
         "Bạn có chắc chắn muốn xoá lịch sử cấu hình ?",
-        // delete: "Xoá",
+      // delete: "Xoá",
       are_u_want_to_del_method: "Bạn có chắc chắn muốn xoá phương pháp ?",
       can_find_log_over_1000: "Không thể tìm lớn hơn 1000 phiên",
       "captcha-email": "Hệ thống captcha đang bận, vui lòng báo với Support",
@@ -4590,7 +4632,8 @@ export const resources = {
         "Xóa gói: {{planName}} thành công!",
       "Delete the strategy successfully!": "Xóa chiến lược thành công!",
       "Delete the timer successfully!": "Xoá hẹn giờ thành công!",
-      "You have 1 plan using this timer This timer will be removed immediately. You cannot undo this action.": "Bạn có 1 gói đang sử dụng bộ hẹn giờ này Bộ hẹn giờ này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành động này.",
+      "You have 1 plan using this timer This timer will be removed immediately. You cannot undo this action.":
+        "Bạn có 1 gói đang sử dụng bộ hẹn giờ này Bộ hẹn giờ này sẽ bị xóa ngay lập tức. Bạn không thể hoàn tác hành động này.",
       "Delete {{amount}} plans using this signal":
         "Xóa {{amount}} gói sử dụng tín hiệu này",
       "Delete {{amount}} plans using this strategy":
@@ -5122,7 +5165,7 @@ export const resources = {
         "Giao dịch là dự đoán biến động của một loại tài sản để tạo ra lợi nhuận. Mọi nhà giao dịch đều có các chiến lược và công cụ để cải thiện dự báo của họ. Bắt đầu giao dịch hiệu quả với các mẹo sau:",
       "How can I be more efficient in my trading?":
         "Làm sao để tôi có thể giao dịch hiệu quả hơn?",
-        "Active follower plans:": "Gói theo dõi đang chạy:",
+      "Active follower plans:": "Gói theo dõi đang chạy:",
       "How to Register on Quickinvest?": "Làm sao để đăng ký trên Quickinvest?",
       "How to use": "Cách sử dụng",
       "How to use manual trade?": "Cách thức để giao dịch thủ công",
@@ -5218,7 +5261,7 @@ export const resources = {
       "Khi thua sẽ tiến ": "Khi thua sẽ tiến",
       "Khi thắng sẽ lùi ": "Khi thắng sẽ lùi",
       "Khi thắng sẽ tiến ": "Khi thắng sẽ tiến ",
-      "Tuỳ chọn nâng cao" : "Tuỳ chọn nâng cao",
+      "Tuỳ chọn nâng cao": "Tuỳ chọn nâng cao",
       L: "Thua",
       LAST_WEEK: "Tuần trước",
       LAST_WEEK_statistic: "Tuần trước",
@@ -5448,6 +5491,8 @@ export const resources = {
         "Nền tảng đầu tư của chúng tôi cung cấp giải pháp liền mạch và hoàn chỉnh để giúp bạn đạt được các mục tiêu tài chính, với một loạt công cụ đầu tư mạnh mẽ, thông tin chuyên sâu về giao dịch của chuyên gia và giao diện thân thiện với người dùng.",
       Overview: "Tổng quan",
       PASTE: "DÁN",
+      "Connecting...": "Đang kết nối...",
+
       "PageSettingsPage.AccountVerification.ctaVerify": "Xác minh ngay",
       "PageSettingsPage.AccountVerification.description":
         "Để bảo vệ tài sản của bạn, chúng tôi cần xác minh danh tính tài khoản. Hãy điền thông tin chính xác, bạn sẽ không thể chỉnh sửa sau khi hoàn thành xác minh.",
@@ -5604,6 +5649,11 @@ export const resources = {
       REFUND: "HOÀN TIỀN",
       REMARK_SUB_SL: "Đặt lại QLV",
       REMARK_SUB_TP: "Đặt lại QLV",
+      lessThan10: "Nhỏ hơn $10",
+      "1to2": "Từ $1 đến $2",
+      "1to5": "Từ $1 đến $5",
+      "5to10": "Từ $5 đến $10",
+      moreThan10: "Lớn hơn $10",
       "Randomly place an order.": "Vào lệnh theo tín hiệu AI",
       "Reach TP/SL": "QLV quay đầu sau mỗi lần TP/SL",
       "Reach target": "Đạt mục tiêu",
@@ -5927,6 +5977,7 @@ export const resources = {
       "Setup your candle pattern": "Thiết lập mô hình nến của bạn",
       "Setup your trade amount": "Thiết lập số tiền vào lệnh",
       Share: "Chia sẻ",
+      "New user": "Người dùng mới",
       "Share Bot AI": "Chia sẻ Bot AI",
       "Share Budget Strategy": "Chia sẻ chiến lược vốn",
       "Share Investment Plan": "Chia sẻ gói đầu tư",
@@ -6041,6 +6092,9 @@ export const resources = {
       Sunday: "Chủ nhật",
       "Swipe left to see more plans": "Vuốt sang trái để xem thêm gói",
       "Switch Conditions": "Đổi điều kiện",
+      "Please enter the 6-digit OTP from your email":
+        "Vui lòng nhập OTP gồm 6 chữ số từ email của bạn",
+      "Paste OTP code": "Dán mã OTP",
       "Switch condition": "Đổi điều kiện ",
       "Switch on this button to enable the new user interface.":
         "Bật nút này để kích hoạt giao diện mới cho tạo gói đầu tư.",
@@ -6056,7 +6110,7 @@ export const resources = {
         "Hệ thống sẽ gửi tín hiệu đến kênh telegram khi\n                             lệnh được tạo",
       "TAKE PROFIT": "CHỐT LỜI",
       THIS_MONTH: "Tháng này",
-      "Usage Strategy": "Chiến lược sử dụng", 
+      "Usage Strategy": "Chiến lược sử dụng",
       THIS_MONTH_statistic: "Tháng này",
       THIS_WEEK: "Tuần này",
       THIS_WEEK_statistic: "Tuần này",
@@ -6165,6 +6219,8 @@ export const resources = {
         "Số tiền rút tối thiểu là {{minUsdt}} USDT.",
       "The number of Bots exceeds the limit.":
         "Số lượng Bot đã vượt quá giới hạn.",
+      "Select your Exchange URL": "Chọn sàn giao dịch của bạn",
+
       "The number of Budget Strategies exceeds the limit.":
         "Số lượng quản lý vốn đã vượt quá giới hạn.",
       "The number of forward/backward steps cannot be greater than the length of string order.":
@@ -6750,7 +6806,27 @@ export const resources = {
         "“{{botName}}” sử dụng phương pháp: {{methodName}}",
       "🌟 Go to New Version": "🌟 Chuyển sang phiên bản mới",
       apply: "Áp dụng",
-      "Click the button below to initiate the password change process. You will need to verify your email and set a new password.": "Nhấp vào nút bên dưới để bắt đầu quá trình thay đổi mật khẩu. Bạn sẽ cần phải xác minh email của mình và đặt mật khẩu mới."
+      "Click the button below to initiate the password change process. You will need to verify your email and set a new password.":
+        "Nhấp vào nút bên dưới để bắt đầu quá trình thay đổi mật khẩu. Bạn sẽ cần phải xác minh email của mình và đặt mật khẩu mới.",
+      "Clipboard content is not a 6-digit code":
+        "Nội dung bảng nhớ tạm không phải là mã gồm 6 chữ số",
+      "Failed to read clipboard contents: ":
+        "Không đọc được nội dung clipboard:",
+      "Create an Account": "Tạo một tài khoản",
+      "Remember me": "Nhớ tôi",
+      "Forget Password": "Quên mật khẩu",
+      "Forgot your password": "Quên mật khẩu của bạn",
+      "Please enter the email address associated with your account and We will email you a link to reset your password.": "Vui lòng nhập địa chỉ email được liên kết với tài khoản của bạn và chúng tôi sẽ gửi cho bạn một liên kết qua email để đặt lại mật khẩu của bạn.",
+      "Send Link": "Gửi liên kết",
+      "Sending...": "Đang gửi...",
+      "No risk, no obligations, no credit-card required.": "Không có rủi ro, không có nghĩa vụ, không cần thẻ tín dụng.",
+      "Register with your email id": "Đăng ký bằng email hoặc username",
+      "Enter your work email": "Nhập email hoặc username của bạn",
+      "Enter your password": "Nhập mật khẩu của bạn",
+      "Enter your nickname": "Nhập biệt danh của bạn",
+      "By signing up, you agree": "Bằng cách đăng ký, bạn đồng ý",
+      "Terms of Service": "Điều khoản dịch vụ",
+
     },
   },
 };

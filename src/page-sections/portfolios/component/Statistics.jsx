@@ -39,7 +39,7 @@ const Statistics = () => {
           {dataStat?.autoType !== 1 && dataStat?.isCopy === false && (
             <Tab value={1} label={t("capital_management")} />
           )}
-          <Tab value={2} label="Tín hiệu" />
+          <Tab value={2} label={t("Signal")} />
         </Tabs>
       </Box>
       <Box
