@@ -2,14 +2,12 @@ import React from "react";
 import { Box, Button, Divider, Popover } from "@mui/material";
 // CUSTOM COMPONENT
 import { H4 } from "components/typography";
-import { useTranslation } from "react-i18next";
 
 // ===================================================================
 
 // ===================================================================
 
 const PopoverLayout = props => {
-  const {t }= useTranslation()
   const {
     children,
     popoverClose,
@@ -32,7 +30,7 @@ const PopoverLayout = props => {
     }
   }}>
       <H4 fontSize={16} fontWeight="500" p={2} pt={1.5}>
-        {t("Notifications")}
+        {title || "Notifications"}
       </H4>
       <Divider />
 
