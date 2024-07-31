@@ -601,7 +601,7 @@ const TopSignalPageView = () => {
           handleClose={() => {
             setOpenDrawer(false);
           }}
-          isEdit={isEdit}
+          isEdit={false}
           allowSelectedTab={true}
           selectedPlan={{
             ...selected,
@@ -618,6 +618,7 @@ const TopSignalPageView = () => {
           dataProps={data}
           setIsEdit={setIsEdit}
           selectedSignal={selectedSignal}
+          isFromSignalStrategy={true}
         />
       </Box>
     </Layout>

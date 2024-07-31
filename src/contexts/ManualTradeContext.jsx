@@ -16,6 +16,7 @@ const ManualTradeProvider = ({children}) => {
   const [loading, setLoading]= useState()
   const { isConnected, socket } = useContext(SocketContext);
   const {selectedLinkAccount }= useContext(AuthContext)
+
   const fetchGlobalLastResult = useCallback(async () => {
     try {
       setLoading(true);
@@ -106,6 +107,12 @@ const ManualTradeProvider = ({children}) => {
             ...dataSocket.runningData,
             lastData: {
               ...dataStatTemp.lastData,
+              longestWinStreak: dataSocket?.runningData?.longestWinStreak,
+              longestLoseStreak: dataSocket?.runningData?.longestLoseStreak,
+              winStreak: dataSocket?.runningData?.winStreak,
+              loseStreak: dataSocket?.runningData?.loseStreak,
+              victorStreak: data?.runningData?.victorStreak,
+              longestVictorStreak: data?.runningData?.longestVictorStreak,
             },
           };
           setDataStat(newObjData);
@@ -138,6 +145,12 @@ const ManualTradeProvider = ({children}) => {
             ...dataSocket.runningData,
             lastData: {
               ...dataStatTemp.lastData,
+              longestWinStreak: dataSocket?.runningData?.longestWinStreak,
+              longestLoseStreak: dataSocket?.runningData?.longestLoseStreak,
+              winStreak: dataSocket?.runningData?.winStreak,
+              loseStreak: dataSocket?.runningData?.loseStreak,
+              victorStreak: data?.runningData?.victorStreak,
+              longestVictorStreak: data?.runningData?.longestVictorStreak,
             },
           };
           setDataStat(newObjData);

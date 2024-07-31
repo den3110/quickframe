@@ -56,6 +56,7 @@ import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 import { showToast } from "components/toast/toast";
 import OpenDetailTimeline from "./OpenDetailTimeline";
 import { useTranslation } from "react-i18next";
+import { JwtContext } from "contexts/jwtContext";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -65,7 +66,8 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-const CustomTimeline = () => {
+const CustomTimeline = ({isSignalStrategy}) => {
+  const { decodedData } = useContext(JwtContext);
   const {t }= useTranslation()
   const { id } = useParams();
   const theme = useTheme();
@@ -277,10 +279,17 @@ const CustomTimeline = () => {
             lastData: {
               ...dataStatTemp.lastData,
               profit: data?.runningData?.profit,
+              longestWinStreak: data?.runningData?.longestWinStreak,
+              longestLoseStreak: data?.runningData?.longestLoseStreak,
+              winStreak: data?.runningData?.winStreak,
+              loseStreak: data?.runningData?.loseStreak,
+              victorStreak: data?.runningData?.victorStreak,
+              longestVictorStreak: data?.runningData?.longestVictorStreak,
               budgetStrategy: {
                 ...dataStatTemp.lastData.budgetStrategy,
                 bs: {
                   ...dataStatTemp.lastData.budgetStrategy?.bs, // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
+                  budgetStrategyType: data?.runningData?.budgetStrategy?.budgetStrategyType,
                   method_data: data?.runningData?.budgetStrategy?.method_data,
                   row: data?.runningData?.budgetStrategy?.row,
                   index: data?.runningData?.budgetStrategy?.index,
@@ -324,12 +333,17 @@ const CustomTimeline = () => {
             week_volume: data?.runningData?.week_volume,
             longestWinStreak: data?.runningData?.longestWinStreak,
             longestLoseStreak: data?.runningData?.longestLoseStreak,
+            winStreak: data?.runningData?.winStreak,
+            loseStreak: data?.runningData?.loseStreak,
             // take_profit_target: data?.runningData?.take_profit_target,
             // stop_loss_target: data?.runningData?.stop_loss_target,
             lastData: {
               ...dataStatTemp.lastData,
               profit: data?.runningData?.profit,
-
+              longestWinStreak: data?.runningData?.longestWinStreak,
+              longestLoseStreak: data?.runningData?.longestLoseStreak,
+              winStreak: data?.runningData?.winStreak,
+              loseStreak: data?.runningData?.loseStreak,
               budgetStrategy: {
                 ...dataStatTemp.lastData.budgetStrategy,
                 bs: {
@@ -497,7 +511,12 @@ const CustomTimeline = () => {
                         </Typography>
                       </Box>
                     </Box>
-                    <Card onClick={(event) => handleMenuOpen(index, event)} variant="outlined" sx={{ mb: 2 }}>
+                    <Card onClick={(event) => {
+                        handleMenuOpen(index, event)
+                        if(isSignalStrategy !== true && decodedData?.data?.levelStaff < 3) {
+                          setOpenDetailTimelineDialog(true)
+                        }
+                      }} variant="outlined" sx={{ mb: 2 }}>
                       <Box
                         sx={{
                           display: "flex",
@@ -706,37 +725,74 @@ const CustomTimeline = () => {
                       )} */}
                       </Box>
                     </Card>
-                    <Menu
-                      disableScrollLock
-                      anchorEl={anchorEls[index]}
-                      open={Boolean(anchorEls[index])}
-                      onClose={() => handleMenuClose(index)}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right",
-                      }}
-                    >
-                      <MenuItem onClick={() => {
-                        handleMenuClose(index)
-                          navigator.clipboard.writeText(JSON.stringify(item))
-                        .then(()=> {
-                          showToast("Copy dữ liệu thành công", "success")
-                        })
-                        .catch((err) => {
-                          alert('Failed to copy text:', err);
-                        })
-                      }}>
-                        <Button>Copy dữ liệu</Button>
-                      </MenuItem>
-                      <MenuItem onClick={() => {
-                        handleMenuClose(index)
-                        setSelectedItem(item)
-                        setOpenDetailTimelineDialog(true)
-                      }}>             
-                        <Button color="success">{t("View Details")}</Button>
-                      </MenuItem>
-                     
-                    </Menu>
+                    {/* signal strategy and is admin */}
+                    {(decodedData?.data?.levelStaff >= 3 && isSignalStrategy=== true) &&
+                      <Menu
+                        disableScrollLock
+                        anchorEl={anchorEls[index]}
+                        open={Boolean(anchorEls[index])}
+                        onClose={() => handleMenuClose(index)}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                      >
+                        <MenuItem onClick={() => {
+                          handleMenuClose(index)
+                            navigator.clipboard.writeText(JSON.stringify(item))
+                          .then(()=> {
+                            showToast("Copy dữ liệu thành công", "success")
+                          })
+                          .catch((err) => {
+                            alert('Failed to copy text:', err);
+                          })
+                        }}>
+                          <Button>Copy dữ liệu</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          handleMenuClose(index)
+                          setSelectedItem(item)
+                          setOpenDetailTimelineDialog(true)
+                        }}>             
+                          <Button color="success">{t("View Details")}</Button>
+                        </MenuItem>
+                      
+                      </Menu>
+                    }
+                    {/* portfolio and is admin */}
+                    {(decodedData?.data?.levelStaff >= 3 && isSignalStrategy!== true) &&
+                      <Menu
+                        disableScrollLock
+                        anchorEl={anchorEls[index]}
+                        open={Boolean(anchorEls[index])}
+                        onClose={() => handleMenuClose(index)}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                      >
+                        <MenuItem onClick={() => {
+                          handleMenuClose(index)
+                            navigator.clipboard.writeText(JSON.stringify(item))
+                          .then(()=> {
+                            showToast("Copy dữ liệu thành công", "success")
+                          })
+                          .catch((err) => {
+                            alert('Failed to copy text:', err);
+                          })
+                        }}>
+                          <Button>Copy dữ liệu</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          handleMenuClose(index)
+                          setSelectedItem(item)
+                          setOpenDetailTimelineDialog(true)
+                        }}>             
+                          <Button color="success">{t("View Details")}</Button>
+                        </MenuItem>
+                      
+                      </Menu>
+                    }
                   </TimelineContent>
                 </TimelineItem>
               ))}

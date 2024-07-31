@@ -224,7 +224,7 @@ const Statistics = () => {
             <Typography variant="h6">{t("statics")}</Typography>
             <Grid container spacing={2}>
               <StatisticCard
-                title={t("Today W/L")}
+                title={t("Today win/lose")}
                 value={renderWinLoseRate(true)}
                 percentage={`${renderWinLoseRate()}% ${t("Win rate")}`}
               />
@@ -245,6 +245,11 @@ const Statistics = () => {
                 value={renderWeekProfit()}
                 color={renderColorWeekProfit()}
               />
+              {/* <StatisticCard
+                title="Chuỗi Victor / tối đa"
+                value={`${dataStat?.victorStreak }/${dataStat?.longestVictorStreak}`}
+                color="error.main"
+              /> */}
             </Grid>
           </Box>
         </CardContent>

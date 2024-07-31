@@ -25,6 +25,7 @@ import {
 //   MenuItem,
 //   Badge,
   Chip,
+  CircularProgress,
 } from "@mui/material";
 import { format } from "date-fns";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -38,6 +39,7 @@ import JackpotIcon from "icons/duotone/JackpotIcon";
 // import { isDark } from "util/constants";
 import { showToast } from "components/toast/toast";
 import Claim2FA from "../dialog/Claim2Fa";
+import EmptyPage from "../blank-list/BlankList";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "16px",
@@ -76,6 +78,7 @@ function JackpotPopover(props) {
     threshold: 0,
   });
   const [open, setOpen] = useState(false);
+  const [loading, setLoading]= useState()
   const theme = useTheme();
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const { selectedLinkAccount, userLinkAccountList } = useContext(AuthContext);
@@ -94,7 +97,7 @@ function JackpotPopover(props) {
   const renderColor= (color)=> {
     switch (color) {
         case "APPROVED":
-            return "primary"
+            return "success"
         case "REJECTED":
             return "error"
     case "PENDING":
@@ -112,6 +115,7 @@ function JackpotPopover(props) {
           page,
         },
       };
+      setLoading(true)
       const response = await jackpotApi.getUserJackpotWinningHistory(
         selectedLinkAccount,
         payload
@@ -128,6 +132,9 @@ function JackpotPopover(props) {
       }
     } catch (e) {
       console.log(e);
+    }
+    finally {
+        setLoading(false)
     }
   }, [selectedLinkAccount, page]);
 
@@ -281,7 +288,7 @@ function JackpotPopover(props) {
                         </TableHead>
                       )}
                       <TableBody>
-                        {data?.map((row, index) => (
+                        {loading=== false && data?.map((row, index) => (
                           <TableRow
                             hover
                             sx={{
@@ -385,6 +392,15 @@ function JackpotPopover(props) {
                         ))}
                       </TableBody>
                     </Table>
+                    {loading=== true && <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                        <CircularProgress />
+                    </Box>}
+                    {loading=== false && data?.length <= 0 && <>
+                    <EmptyPage
+                    title={t("no_data_to_display")}
+                    disableButton={true}
+                    />
+                    </>}
                   </Grid>
                 </Grid>
               </CardContent>

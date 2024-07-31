@@ -29,6 +29,7 @@ export default function OpenDetailTimeline(props) {
     loseStreak,
     profit,
     signal_name,
+    victorStreak
   } = selectedData?.runningData || {};
   const { bet_second } = selectedData || {};
 
@@ -105,7 +106,28 @@ export default function OpenDetailTimeline(props) {
                 <Typography fontWeight={600} variant="body1" color={"error"}>{loseStreak}</Typography>
               </Box>
             </Grid>
+            {/*  */}
             <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 2,
+                  p: 1,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1,
+                  backgroundColor: theme.palette.background.paper,
+                }}
+              >
+                <Typography variant="body1" fontWeight="bold">
+                  {t("Victor streak")}:
+                </Typography>
+                <Typography fontWeight={600} variant="body1" color={"success.main"}>{victorStreak}</Typography>
+              </Box>
+            </Grid>
+            {/*  */}
+            {/* <Grid item xs={12}>
               <Box
                 sx={{
                   display: 'flex',
@@ -123,8 +145,8 @@ export default function OpenDetailTimeline(props) {
                 </Typography>
                 <Typography fontWeight={600} variant="body1" color={profit > 0 ? "success.main": "error"}>{formatCurrency(profit)}</Typography>
               </Box>
-            </Grid>
-            <Grid item xs={12}>
+            </Grid> */}
+            {/* <Grid item xs={12}>
               <Box
                 sx={{
                   display: 'flex',
@@ -142,7 +164,7 @@ export default function OpenDetailTimeline(props) {
                 </Typography>
                 <Typography variant="body1">{bet_second} {t("second")}</Typography>
               </Box>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
               <Box
                 sx={{
@@ -156,7 +178,7 @@ export default function OpenDetailTimeline(props) {
                   backgroundColor: theme.palette.background.paper,
                 }}
               >
-                <Typography variant="body1" fontWeight="bold">
+                <Typography sx={{whiteSpace: "nowrap"}} variant="body1" fontWeight="bold">
                   {t("Tên phương pháp")}:
                 </Typography>
                 <Typography variant="body1">{signal_name}</Typography>

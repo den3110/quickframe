@@ -84,13 +84,18 @@ const Statistics = () => {
                           color={dataStat?.week_profit > 0 ? "success.main" : "error.main"}
                         />
                         <StatisticCard
-                          title="Chuỗi thắng tối đa"
-                          value={dataStat?.lastData?.longestWinStreak || 0}
+                          title="Chuỗi thắng / tối đa"
+                          value={`${dataStat.lastData?.winStreak}/${dataStat.lastData?.longestWinStreak}`}
                           color="success.main"
                         />
                         <StatisticCard
-                          title="Chuỗi thua tối đa"
-                          value={dataStat?.lastData?.longestLoseStreak || 0}
+                          title="Chuỗi thua / tối đa"
+                          value={`${dataStat.lastData?.loseStreak}/${dataStat.lastData?.longestLoseStreak}`}
+                          color="error.main"
+                        />
+                         <StatisticCard
+                          title="Chuỗi Victor / tối đa"
+                          value={`${dataStat.lastData?.victorStreak }/${dataStat.lastData?.longestVictorStreak}`}
                           color="error.main"
                         />
                       </Grid>

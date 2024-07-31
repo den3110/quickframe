@@ -34,7 +34,10 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
 const CustomAutowinTable = () => {
   const {t }= useTranslation()
   const { dataStat } = useContext(PortfolioDetailContext);
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
+  const [initColumnTablePc, setInitColumnTablePc]= useState(7)
+  const [initColumnTableMobile, setInitColumnTableMobile]= useState(4)
   const [itemColumnTable, setItemColumnTable] = useState(
     useMediaQuery(theme.breakpoints.down("lg")) ? 4 : 7
   );
@@ -65,23 +68,79 @@ const CustomAutowinTable = () => {
 
   useEffect(() => {
     try {
-      if (
-        dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+      if(downLg) {
+        console.log((dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
           ?.toString()
           .split("-")?.length /
-          itemColumnTable <
-        1
-      ) {
-        setItemColumnTable(
-          dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+          itemColumnTable))
+          if (
+            (dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+              ?.toString()
+              .split("-")?.length /
+              initColumnTableMobile) <
+            1
+          ) {
+           
+            setItemColumnTable(
+              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                ?.toString()
+                .split("-")?.length
+            );
+          }
+        if (
+          (dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
             ?.toString()
-            .split("-")?.length
-        );
+            .split("-")?.length /
+            itemColumnTable) <
+          1
+        ) {
+         
+          setItemColumnTable(
+            dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+              ?.toString()
+              .split("-")?.length
+          );
+        }
+      }
+      else {
+
+        console.log((dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+          ?.toString()
+          .split("-")?.length /
+          itemColumnTable))
+          if (
+            (dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+              ?.toString()
+              .split("-")?.length /
+              initColumnTablePc) <
+            1
+          ) {
+           
+            setItemColumnTable(
+              dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+                ?.toString()
+                .split("-")?.length
+            );
+          }
+        if (
+          (dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+            ?.toString()
+            .split("-")?.length /
+            itemColumnTable) <
+          1
+        ) {
+         
+          setItemColumnTable(
+            dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+              ?.toString()
+              .split("-")?.length
+          );
+        }
       }
     } catch (e) {
       console.log(e);
     }
-  }, [dataStat?.lastData?.budgetStrategy?.bs?.method_data, itemColumnTable]);
+  }, [dataStat?.lastData?.budgetStrategy?.bs?.method_data, itemColumnTable, dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0], downLg]);
 
   return (
     <TableContainer className="asklaws" component={Paper}>
@@ -114,16 +173,18 @@ const CustomAutowinTable = () => {
             }}
           >
             {/* {console.log(dataStat?.lastData?.budgetStrategy)} */}
+            {console.log(dataStat?.lastData?.budgetStrategy?.bs?.method_data)}
+            
             {Array.from(
               Array(
                 isNumber(
-                  Math.ceil(
+                  Math.floor(
                     dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
                       ?.toString()
                       ?.split("-")?.length / itemColumnTable
                   )
                 )
-                  ? Math.ceil(
+                  ? Math.floor(
                       dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
                         ?.toString()
                         ?.split("-")?.length / itemColumnTable
@@ -163,6 +224,7 @@ const CustomAutowinTable = () => {
                                 Hàng {parseInt(key) + 1}
                               </StyledTypography>
                             </StyledFirstTableCell>
+                            {console.log((keyParent + 1) * itemColumnTable)}
                             {item
                               ?.toString()
                               ?.split("-")

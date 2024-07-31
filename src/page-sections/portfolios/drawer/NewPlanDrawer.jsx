@@ -73,6 +73,7 @@ const NewPlanDrawer = ({
   isFromLeaderboard,
   setChangeState,
   isFromCopyPlan,
+  isFromSignalStrategy
 }) => {
   const { ref, inView } = useInView({
     /* Optional options */
@@ -919,6 +920,13 @@ const NewPlanDrawer = ({
     initBotId,
     // inView
   ]);
+
+  useEffect(()=> {
+    if(allowSelectedTab) {
+      setArraySignalStrategy(selectedSignal);
+      setSignalStrategy(selectedSignal[0]);
+    }
+  }, [allowSelectedTab, selectedSignal])
 
   useEffect(() => {
     if (inView === false) {
