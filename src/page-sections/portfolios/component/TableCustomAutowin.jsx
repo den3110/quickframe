@@ -113,7 +113,7 @@ const CustomAutowinTable = () => {
               },
             }}
           >
-            {console.log(dataStat?.lastData?.budgetStrategy)}
+            {/* {console.log(dataStat?.lastData?.budgetStrategy)} */}
             {Array.from(
               Array(
                 isNumber(

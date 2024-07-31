@@ -91,6 +91,19 @@ function JackpotPopover(props) {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { t } = useTranslation();
 
+  const renderColor= (color)=> {
+    switch (color) {
+        case "APPROVED":
+            return "primary"
+        case "REJECTED":
+            return "error"
+    case "PENDING":
+            return "warning"
+        default:
+            break;
+    }
+  }
+
   const getHistoryWinning = useCallback(async () => {
     try {
       const payload = {
@@ -171,7 +184,7 @@ function JackpotPopover(props) {
       date.setDate(date.getDate());
       updatedRow.createdAt = date.toISOString();
       setDialogData(updatedRow);
-      setOpenDialog(true);
+    //   setOpenDialog(true);
     }
   };
 
@@ -341,7 +354,7 @@ function JackpotPopover(props) {
                                   //   }
                                   sx={{ backgroundColor: "warning" }}
                                 >
-                                  <Chip label={t(row.status)} color="warning" sx={{height: 24}} />
+                                  <Chip label={t(row.status)} color={renderColor(row.status)} sx={{height: 24}} />
                                   {/* <Badge badgeContent={t(row.status)} color="secondary" className="badge-jackpot-custom">{t(row.status)}</Badge> */}
                                 </Box>
                               ) : (
