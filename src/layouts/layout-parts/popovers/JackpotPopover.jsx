@@ -20,10 +20,10 @@ import {
   Tooltip,
   useMediaQuery,
   Pagination,
-  FormControl,
-  Select,
-  MenuItem,
-  Badge,
+//   FormControl,
+//   Select,
+//   MenuItem,
+//   Badge,
   Chip,
 } from "@mui/material";
 import { format } from "date-fns";
@@ -32,10 +32,10 @@ import { makeStyles, styled } from "@mui/styles";
 import { useTranslation } from "react-i18next";
 import jackpotApi from "api/jackpot/jackpotApi";
 import AuthContext from "contexts/AuthContext";
-import { constant } from "constant/constant";
+// import { constant } from "constant/constant";
 import { useInView } from "react-intersection-observer";
 import JackpotIcon from "icons/duotone/JackpotIcon";
-import { isDark } from "util/constants";
+// import { isDark } from "util/constants";
 import { showToast } from "components/toast/toast";
 import Claim2FA from "../dialog/Claim2Fa";
 
@@ -184,7 +184,7 @@ function JackpotPopover(props) {
 
   return (
     <>
-      <Tooltip title="Jackpot">
+      <Tooltip title={t("jackpot")}>
         <IconButton variant="outlined" onClick={handleClickOpen}>
           <JackpotIcon />
         </IconButton>
@@ -203,7 +203,7 @@ function JackpotPopover(props) {
           },
         }}
       >
-        <DialogTitle id="alert-dialog-title">{"Jackpot"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{t("jackpot")}</DialogTitle>
         <DialogContent >
           <Box ref={ref}>
             <Card>
@@ -289,7 +289,7 @@ function JackpotPopover(props) {
                               </Typography>
                               {downLg && 
                               <Typography fontSize={14} mt={2}>
-                                Created
+                                {t("time")}
                               </Typography>
                               }
                             </StyledTableCell>
@@ -341,10 +341,11 @@ function JackpotPopover(props) {
                                   //   }
                                   sx={{ backgroundColor: "warning" }}
                                 >
-                                  <Chip label={t(row.status)} color="warning" />
+                                  <Chip label={t(row.status)} color="warning" sx={{height: 24}} />
                                   {/* <Badge badgeContent={t(row.status)} color="secondary" className="badge-jackpot-custom">{t(row.status)}</Badge> */}
                                 </Box>
                               ) : (
+                                <Box>
                                 <Button
                                   size="small"
                                   variant="contained"
@@ -352,6 +353,7 @@ function JackpotPopover(props) {
                                 >
                                   {t("take")}
                                 </Button>
+                                </Box>
                               )}
                               {downLg && 
                               <Typography fontSize={14} mt={2}>

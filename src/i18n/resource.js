@@ -373,6 +373,7 @@ export const resources = {
       note_add_api_key:
         "Some features will not be available when linking using API Key: Jackpot, Commission Analysis, Deposit & Withdrawal, ...",
       access_type: "Access type",
+      jackpot: "Jackpot",
       exchange_account_info: "Exchange account info",
       short_total_profit: "Total profit",
       short_total_volume: "Total volume",
@@ -6826,6 +6827,9 @@ export const resources = {
       "Enter your nickname": "Nhập biệt danh của bạn",
       "By signing up, you agree": "Bằng cách đăng ký, bạn đồng ý",
       "Terms of Service": "Điều khoản dịch vụ",
+      jackpot: "Jackpot",
+      "Win Streak 9x": "Chuỗi thắng 9x",
+      "Lose Streak 9x": "Lose Streak 9x"
 
     },
   },
