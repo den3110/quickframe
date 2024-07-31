@@ -108,6 +108,10 @@ const TableDetailTrade = ({dataState}) => {
         return "Tài khoản chưa đăng nhập";
       case "insufficient_bet_balance":
         return "Không đủ tiền cược";
+        case "stop_plan_take_profit_target_daily":
+          return t("closing_total_profit");
+        case "stop_plan_stop_loss_target_daily ":
+          return t("total_stop_loss")
       default:
         return type;
     }

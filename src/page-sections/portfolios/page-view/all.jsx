@@ -1278,6 +1278,28 @@ const PortfoliosList = () => {
                                           {t("entry_coefficient")}
                                         </Typography>
                                       </Box>
+                                      {/*  */}
+                                      <Box
+                                        flex={1}
+                                        mb={downLg ? 1 : 0}
+                                        sx={{
+                                          display: downLg ? "flex" : "",
+                                          justifyContent: "space-between",
+                                          alignItems: "center",
+                                          flexDirection: "row-reverse",
+                                        }}
+                                      >
+                                        <Typography
+                                          variant="body1"
+                                          component="div"
+                                          fontSize={14}
+                                        >
+                                          ${plan?.lastData.child_profit?.toFixed(2)}
+                                        </Typography>
+                                        <Typography fontSize={12}>
+                                          {t("child_profit")}
+                                        </Typography>
+                                      </Box>
                                     </Box>
 
                                     {/* Place any additional content here */}
