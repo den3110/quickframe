@@ -95,7 +95,7 @@ export default function WithdrawDrawer(props) {
         amount,
         nickName: toAddress,
         verifyCode: twoFACode,
-        typeWallet: "bsc",
+        typeWallet: "usdt",
         memo: "true"
       }
       const response= await userApi.userExchangeLinkAccountTransfer(data, selectedLinkAccount)

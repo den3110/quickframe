@@ -31,6 +31,7 @@ import {
   CircularProgress,
   Divider,
   Skeleton,
+  Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MuiChipsInput } from "mui-chips-input";
@@ -77,14 +78,16 @@ const NewPlanDrawer = ({
     threshold: 0,
   });
   const { t } = useTranslation();
-  const { selectedLinkAccount, userLinkAccountList, dataSelectedLinkAccount } = useContext(AuthContext);
+  const { selectedLinkAccount, userLinkAccountList, dataSelectedLinkAccount } =
+    useContext(AuthContext);
   const [idPlan, setIdPlan] = useState();
   const { setChange } = useContext(GlobalContext);
   const { decodedData } = useContext(JwtContext);
   const { walletMode } = useContext(SettingsContext);
-  const {data }= useContext(PortfoliosContext)
+  const { data } = useContext(PortfoliosContext);
   const [step, setStep] = useState(1);
-  const [defaultPlan, setDefaultPlan]= useState(false)
+  const [defaultPlan, setDefaultPlan] = useState(false);
+  const [childTargetEnable, setChildTargetEnable]= useState(false)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
   const [planName, setPlanName] = useState("");
@@ -127,6 +130,8 @@ const NewPlanDrawer = ({
   const [winTotalTarget, setWinTotalTarget] = useState(0);
   const [loseTotalTarget, setLoseTotalTarget] = useState(0);
   const [telegramToken, setTelegramToken] = useState("");
+  const [childProfitTarget, setChildProfitTarget]= useState(0)
+  const [childLossTarget, setChildLossTarget]= useState(0)
   const [telegramChatId, setTelegramChatId] = useState("");
   const [telegramUrl, setTelegramUrl] = useState("");
   const [accountType, setAccountType] = useState("DEMO");
@@ -195,13 +200,14 @@ const NewPlanDrawer = ({
   const [stopWhenLoseStreak, setStopWhenLoseStreak] = useState(0);
   const [stopWhenProfit, setStopWhenProfit] = useState(0);
   const [stopWhenLoss, setStopWhenLoss] = useState(0);
-  const [waitSignalOtherPlanEnabled, setWaitSignalOtherPlanEnabled] = useState(false);
+  const [waitSignalOtherPlanEnabled, setWaitSignalOtherPlanEnabled] =
+    useState(false);
   const [runWhenExactlyWinLose, setRunWhenExactlyWinLose] = useState(false);
   const [getSignalToStopFromSignalPlan, setGetSignalToStopFromSignalPlan] =
     useState(false);
-  const [botList, setBotList]= useState([])
-  const [botId, setBotId]= useState()
-  const [initBotId, setInitBotId]= useState()
+  const [botList, setBotList] = useState([]);
+  const [botId, setBotId] = useState();
+  const [initBotId, setInitBotId] = useState();
   const [loading, setLoading] = useState();
 
   const handleTabChange = (event, newValue) => {
@@ -473,6 +479,9 @@ const NewPlanDrawer = ({
         ...data,
         is_waiting: true,
         wait_signal_other_plan_enabled: waitSignalOtherPlanEnabled,
+        child_target_enabled: childTargetEnable,
+        child_profit_target: childProfitTarget,
+        child_loss_target: childLossTarget,
         wait_signal_other_plan_data: {
           botId: botId,
           run_when_win_total: runWhenWinTotal,
@@ -489,10 +498,10 @@ const NewPlanDrawer = ({
           stop_when_loss: stopWhenLoss,
           run_when_exactly_win_lose: runWhenExactlyWinLose,
           get_signal_to_stop_from_signal_plan: getSignalToStopFromSignalPlan,
-        }
+        },
       };
-      if(decodedData?.data?.levelStaff >= 3) {
-        data= {...data, is_default: defaultPlan}
+      if (decodedData?.data?.levelStaff >= 3) {
+        data = { ...data, is_default: defaultPlan };
       }
       if (isEdit === true) {
         if (isFromLeaderboard) {
@@ -546,7 +555,7 @@ const NewPlanDrawer = ({
   };
 
   useEffect(() => {
-    if(inView) {
+    if (inView) {
       (async () => {
         try {
           setLoading(true);
@@ -566,7 +575,7 @@ const NewPlanDrawer = ({
           if (response3?.data?.ok === true) {
             setSignalStrategy(response2?.data?.d?.[0]?._id);
             setDataSignalStrategyTelegramSignal(response3?.data?.d);
-          } 
+          }
         } catch (error) {
         } finally {
           setLoading(false);
@@ -575,34 +584,31 @@ const NewPlanDrawer = ({
     }
   }, [isEdit, selectedLinkAccount, inView]);
 
-  useEffect(()=> {
+  useEffect(() => {
     try {
       setInitLinkAccountId(
         userLinkAccountList?.filter(
-          (item) =>
-            item?.isLogin === true && item?._id === selectedLinkAccount
+          (item) => item?.isLogin === true && item?._id === selectedLinkAccount
         )?.[0]?._id
       );
       setLinkAccountId(
-        userLinkAccountList?.filter((item) => item?.isLogin === true)?.[0]
-          ?._id
+        userLinkAccountList?.filter((item) => item?.isLogin === true)?.[0]?._id
       );
       setUserLinkAccountListState(
         userLinkAccountList?.filter((item) => item?.isLogin === true)
       );
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }, [userLinkAccountList, selectedLinkAccount])
+  }, [userLinkAccountList, selectedLinkAccount]);
 
-  useEffect(()=> {
-    setInitBotId(data?.[0]?._id)
-    setBotList(data)
-  }, [data])
+  useEffect(() => {
+    setInitBotId(data?.[0]?._id);
+    setBotList(data);
+  }, [data]);
 
   useEffect(() => {
     if (selectedTab === "Telegram Signal") {
-      
     }
   }, [selectedTab]);
 
@@ -622,7 +628,7 @@ const NewPlanDrawer = ({
       setLinkAccountId(selectedPlan?.linkAccountId);
       setBetSecond(selectedPlan?.bet_second);
       setAutoType(selectedPlan?.autoType);
-      setDefaultPlan(selectedPlan?.is_default)
+      setDefaultPlan(selectedPlan?.is_default);
       setSelectedTab(
         selectedPlan?.autoType === 1
           ? "Follow Leader"
@@ -699,12 +705,22 @@ const NewPlanDrawer = ({
         selectedPlan?.method_data?.feature_data
           ?.lose_change_method_after_win_streak
       );
-      setWinningTotalReach(selectedPlan?.method_data?.feature_data?.win_total_target)
-      setLoseTotalReach(selectedPlan?.method_data?.feature_data?.lose_total_target)
-      setWinningContinue(selectedPlan?.method_data?.feature_data?.win_streak_target)
-      setLoseContinue(selectedPlan?.method_data?.feature_data?.lose_streak_target)
-      setWhenProfit(selectedPlan?.method_data?.feature_data?.take_profit_target)
-      setWhenLosing(selectedPlan?.method_data?.feature_data?.stop_loss_target)
+      setWinningTotalReach(
+        selectedPlan?.method_data?.feature_data?.win_total_target
+      );
+      setLoseTotalReach(
+        selectedPlan?.method_data?.feature_data?.lose_total_target
+      );
+      setWinningContinue(
+        selectedPlan?.method_data?.feature_data?.win_streak_target
+      );
+      setLoseContinue(
+        selectedPlan?.method_data?.feature_data?.lose_streak_target
+      );
+      setWhenProfit(
+        selectedPlan?.method_data?.feature_data?.take_profit_target
+      );
+      setWhenLosing(selectedPlan?.method_data?.feature_data?.stop_loss_target);
       setTelegramToken(selectedPlan?.telegram_token);
       setTelegramChatId(selectedPlan?.telegram_chatId);
       setTelegramUrl(selectedPlan?.telegram_url);
@@ -717,30 +733,81 @@ const NewPlanDrawer = ({
       setLoseTotalTarget(selectedPlan?.lose_total_target);
       setIsCopyPlan(selectedPlan?.isCopy);
       setVictorEnabled(selectedPlan?.method_data?.feature_data?.victor_enabled);
-      setVictorReverseSignal(selectedPlan?.method_data?.feature_data?.victor_reverse_signal);
-      setVictorEndVictorStreak(selectedPlan?.method_data?.feature_data?.victor_end_victor_streak);
-      setVictorExactlyVictorStreak(selectedPlan?.method_data?.feature_data?.victor_exactly_victor_streak);
-      setVictorStreakEntryTarget(selectedPlan?.method_data?.feature_data?.victor_streak_entry_target);
-      setVictorTurnCount(selectedPlan?.method_data?.feature_data?.victor_turn_count);
-      setVictorChangeMethodAfterLoseStreak(selectedPlan?.method_data?.feature_data?.victor_change_method_after_lose_streak);
-      setVictorChangeMethodAfterWinStreak(selectedPlan?.method_data?.feature_data?.victor_change_method_after_win_streak);
-      setVictorChangeMethodAfterVictorStreak(selectedPlan?.method_data?.feature_data?.victor_change_method_after_victor_streak);
-      setRunWhenWinTotal(selectedPlan?.wait_signal_other_plan_data?.run_when_win_total);
-      setRunWhenLoseTotal(selectedPlan?.wait_signal_other_plan_data?.run_when_lose_total);
-      setRunWhenWinStreak(selectedPlan?.wait_signal_other_plan_data?.run_when_win_streak);
-      setRunWhenLoseStreak(selectedPlan?.wait_signal_other_plan_data?.run_when_lose_streak);
-      setRunWhenProfit(selectedPlan?.wait_signal_other_plan_data?.run_when_profit);
+      setVictorReverseSignal(
+        selectedPlan?.method_data?.feature_data?.victor_reverse_signal
+      );
+      setVictorEndVictorStreak(
+        selectedPlan?.method_data?.feature_data?.victor_end_victor_streak
+      );
+      setVictorExactlyVictorStreak(
+        selectedPlan?.method_data?.feature_data?.victor_exactly_victor_streak
+      );
+      setVictorStreakEntryTarget(
+        selectedPlan?.method_data?.feature_data?.victor_streak_entry_target
+      );
+      setVictorTurnCount(
+        selectedPlan?.method_data?.feature_data?.victor_turn_count
+      );
+      setVictorChangeMethodAfterLoseStreak(
+        selectedPlan?.method_data?.feature_data
+          ?.victor_change_method_after_lose_streak
+      );
+      setVictorChangeMethodAfterWinStreak(
+        selectedPlan?.method_data?.feature_data
+          ?.victor_change_method_after_win_streak
+      );
+      setVictorChangeMethodAfterVictorStreak(
+        selectedPlan?.method_data?.feature_data
+          ?.victor_change_method_after_victor_streak
+      );
+      setRunWhenWinTotal(
+        selectedPlan?.wait_signal_other_plan_data?.run_when_win_total
+      );
+      setRunWhenLoseTotal(
+        selectedPlan?.wait_signal_other_plan_data?.run_when_lose_total
+      );
+      setRunWhenWinStreak(
+        selectedPlan?.wait_signal_other_plan_data?.run_when_win_streak
+      );
+      setRunWhenLoseStreak(
+        selectedPlan?.wait_signal_other_plan_data?.run_when_lose_streak
+      );
+      setRunWhenProfit(
+        selectedPlan?.wait_signal_other_plan_data?.run_when_profit
+      );
       setRunWhenLoss(selectedPlan?.wait_signal_other_plan_data?.run_when_loss);
-      setStopWhenWinTotal(selectedPlan?.wait_signal_other_plan_data?.stop_when_win_total);
-      setStopWhenLoseTotal(selectedPlan?.wait_signal_other_plan_data?.stop_when_lose_total);
-      setStopWhenWinStreak(selectedPlan?.wait_signal_other_plan_data?.stop_when_win_streak);
-      setStopWhenLoseStreak(selectedPlan?.wait_signal_other_plan_data?.stop_when_lose_streak);
-      setStopWhenProfit(selectedPlan?.wait_signal_other_plan_data?.stop_when_profit);
-      setStopWhenLoss(selectedPlan?.wait_signal_other_plan_data?.stop_when_loss);
-      setRunWhenExactlyWinLose(selectedPlan?.wait_signal_other_plan_data?.run_when_exactly_win_lose);
-      setGetSignalToStopFromSignalPlan(selectedPlan?.wait_signal_other_plan_data?.get_signal_to_stop_from_signal_plan);
+      setStopWhenWinTotal(
+        selectedPlan?.wait_signal_other_plan_data?.stop_when_win_total
+      );
+      setStopWhenLoseTotal(
+        selectedPlan?.wait_signal_other_plan_data?.stop_when_lose_total
+      );
+      setStopWhenWinStreak(
+        selectedPlan?.wait_signal_other_plan_data?.stop_when_win_streak
+      );
+      setStopWhenLoseStreak(
+        selectedPlan?.wait_signal_other_plan_data?.stop_when_lose_streak
+      );
+      setStopWhenProfit(
+        selectedPlan?.wait_signal_other_plan_data?.stop_when_profit
+      );
+      setStopWhenLoss(
+        selectedPlan?.wait_signal_other_plan_data?.stop_when_loss
+      );
+      setRunWhenExactlyWinLose(
+        selectedPlan?.wait_signal_other_plan_data?.run_when_exactly_win_lose
+      );
+      setGetSignalToStopFromSignalPlan(
+        selectedPlan?.wait_signal_other_plan_data
+          ?.get_signal_to_stop_from_signal_plan
+      );
       setBotId(selectedPlan?.wait_signal_other_plan_data?.botId);
-      setWaitSignalOtherPlanEnabled(selectedPlan?.wait_signal_other_plan_enabled)
+      setWaitSignalOtherPlanEnabled(
+        selectedPlan?.wait_signal_other_plan_enabled
+      );
+      setChildTargetEnable(selectedPlan?.child_target_enabled)
+      setChildProfitTarget(selectedPlan?.child_profit_target)
+      setChildLossTarget(selectedPlan?.child_loss_target)
       if (isFromLeaderboard === true) {
         setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
         setLinkAccountId(initLinkAccountId);
@@ -762,7 +829,7 @@ const NewPlanDrawer = ({
       setBetSecond(25);
       setAutoType(AutoTypes.BOT);
       setSelectedTab("Bot AI");
-      setDefaultPlan(false)
+      setDefaultPlan(false);
       setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
       setBudgetStrategy(dataBudgetStrategy?.[0]?._id);
       setLinkAccountId(userLinkAccountListState?.[0]?._id);
@@ -822,16 +889,19 @@ const NewPlanDrawer = ({
       setStopWhenLoseStreak(0);
       setStopWhenProfit(0);
       setStopWhenLoss(0);
-      setWinningTotalReach(0)
-      setLoseTotalReach(0)
-      setWinningContinue(0)
-      setLoseContinue(0)
-      setWhenProfit(0)
-      setWhenLosing(0)
+      setWinningTotalReach(0);
+      setLoseTotalReach(0);
+      setWinningContinue(0);
+      setLoseContinue(0);
+      setWhenProfit(0);
+      setWhenLosing(0);
       setRunWhenExactlyWinLose(false);
       setGetSignalToStopFromSignalPlan(false);
-      setWaitSignalOtherPlanEnabled(false)
-      setBotId(initBotId)
+      setWaitSignalOtherPlanEnabled(false);
+      setChildTargetEnable(false)
+      setChildProfitTarget(0)
+      setChildLossTarget(0)
+      setBotId(initBotId);
     }
   }, [
     isEdit,
@@ -845,7 +915,7 @@ const NewPlanDrawer = ({
     isFromLeaderboard,
     walletMode,
     isFromCopyPlan,
-    initBotId
+    initBotId,
     // inView
   ]);
 
@@ -908,7 +978,9 @@ const NewPlanDrawer = ({
                 <Typography variant="subtitle1">{t("Plan name")}</Typography>
                 <TextField
                   fullWidth
-                  placeholder={`${t("Enter plan name")} (VD : Mua xe, mua nhà)...`}
+                  placeholder={`${t(
+                    "Enter plan name"
+                  )} (VD : Mua xe, mua nhà)...`}
                   required
                   margin="normal"
                   value={planName}
@@ -927,9 +999,7 @@ const NewPlanDrawer = ({
                     display="flex"
                     alignItems="center"
                   >
-                    <Typography variant="subtitle1">
-                      {t("Invested")}
-                    </Typography>
+                    <Typography variant="subtitle1">{t("Invested")}</Typography>
                     <Box ml={2} display="flex" alignItems="center">
                       <Button
                         variant="contained"
@@ -1116,83 +1186,92 @@ const NewPlanDrawer = ({
                     {t("linked_account")}
                   </Typography>
                   <FormControl variant="outlined" fullWidth margin="normal">
-                    {loading=== false && 
-                    <Select
-                      value={linkAccountId}
-                      onChange={(e) => {
-                        setLinkAccountId(e.target.value);
-                      }}
-                      renderValue={(value) => (
-                        <>
-                          {loading === true && <Box>Loading...</Box>}
-                          {loading === false && (
-                            <Box display={"flex"} alignItems={"center"} gap={1}>
-                              <img
-                                style={{ width: 24, height: 24 }}
-                                src={
-                                  constant.URL_ASSETS_LOGO +
-                                  "/" +
-                                  userLinkAccountListState?.find(
-                                    (item) => item?._id === value
-                                  )?.clientId +
-                                  ".ico"
-                                }
-                                alt="Can't open"
-                              />{" "}
-                              <Typography
-                                fontSize={14}
-                                textOverflow={"ellipsis"}
-                                overflow={"hidden"}
-                                whiteSpace={"nowrap"}
+                    {loading === false && (
+                      <Select
+                        value={linkAccountId}
+                        onChange={(e) => {
+                          setLinkAccountId(e.target.value);
+                        }}
+                        renderValue={(value) => (
+                          <>
+                            {loading === true && <Box>Loading...</Box>}
+                            {loading === false && (
+                              <Box
+                                display={"flex"}
+                                alignItems={"center"}
+                                gap={1}
                               >
-                                {
-                                  userLinkAccountListState?.find(
-                                    (item) => item?._id === value
-                                  )?.nickName
-                                }
-                              </Typography>
-                            </Box>
-                          )}
-                        </>
-                      )}
-                      size="medium"
-                    >
-                      {loading === true && (
-                        <MenuItem value={undefined}>Đang tải</MenuItem>
-                      )}
-                      {loading === false &&
-                        userLinkAccountListState?.map((item, key) => (
-                          <MenuItem key={key} value={item?._id}>
-                            <Box display={"flex"} alignItems={"center"} gap={1}>
-                              <img
-                                style={{ width: 32, height: 32 }}
-                                src={
-                                  constant.URL_ASSETS_LOGO +
-                                  "/" +
-                                  item?.clientId +
-                                  ".ico"
-                                }
-                                alt="Can't open"
-                              />{" "}
-                              <Typography
-                                fontSize={14}
-                                textOverflow={"ellipsis"}
-                                overflow={"hidden"}
-                                whiteSpace={"nowrap"}
+                                <img
+                                  style={{ width: 24, height: 24 }}
+                                  src={
+                                    constant.URL_ASSETS_LOGO +
+                                    "/" +
+                                    userLinkAccountListState?.find(
+                                      (item) => item?._id === value
+                                    )?.clientId +
+                                    ".ico"
+                                  }
+                                  alt="Can't open"
+                                />{" "}
+                                <Typography
+                                  fontSize={14}
+                                  textOverflow={"ellipsis"}
+                                  overflow={"hidden"}
+                                  whiteSpace={"nowrap"}
+                                >
+                                  {
+                                    userLinkAccountListState?.find(
+                                      (item) => item?._id === value
+                                    )?.nickName
+                                  }
+                                </Typography>
+                              </Box>
+                            )}
+                          </>
+                        )}
+                        size="medium"
+                      >
+                        {loading === true && (
+                          <MenuItem value={undefined}>Đang tải</MenuItem>
+                        )}
+                        {loading === false &&
+                          userLinkAccountListState?.map((item, key) => (
+                            <MenuItem key={key} value={item?._id}>
+                              <Box
+                                display={"flex"}
+                                alignItems={"center"}
+                                gap={1}
                               >
-                                {item?.nickName}
-                              </Typography>
-                            </Box>
-                          </MenuItem>
-                        ))}
-                    </Select>
-                    }
-                    {loading=== true && 
-                    <Skeleton height={56} />}
+                                <img
+                                  style={{ width: 32, height: 32 }}
+                                  src={
+                                    constant.URL_ASSETS_LOGO +
+                                    "/" +
+                                    item?.clientId +
+                                    ".ico"
+                                  }
+                                  alt="Can't open"
+                                />{" "}
+                                <Typography
+                                  fontSize={14}
+                                  textOverflow={"ellipsis"}
+                                  overflow={"hidden"}
+                                  whiteSpace={"nowrap"}
+                                >
+                                  {item?.nickName}
+                                </Typography>
+                              </Box>
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    )}
+                    {loading === true && <Skeleton height={56} />}
                   </FormControl>
                 </Box>
                 <Box className="akaskwas" flex={1}>
-                  <Typography variant="subtitle1">{t("account_type")}</Typography>
+                  <Typography variant="subtitle1">
+                    {t("account_type")}
+                  </Typography>
                   <FormControl variant="outlined" fullWidth margin="normal">
                     <Select
                       value={accountType}
@@ -1263,7 +1342,9 @@ const NewPlanDrawer = ({
                   </>
                 )}
                 <Box sx={{ width: "100%" }} mt={2}>
-                  <Typography variant="subtitle1">{t("Base Amount")}</Typography>
+                  <Typography variant="subtitle1">
+                    {t("Base Amount")}
+                  </Typography>
                   <Box mt={2} display="flex" alignItems="center" height={56}>
                     <Button
                       variant="contained"
@@ -1328,7 +1409,9 @@ const NewPlanDrawer = ({
                     <>
                       {" "}
                       <Box mt={1}>
-                        <Typography variant="subtitle1">{t("Select Bot...")}</Typography>
+                        <Typography variant="subtitle1">
+                          {t("Select Bot...")}
+                        </Typography>
                         <FormControl
                           variant="outlined"
                           fullWidth
@@ -1405,39 +1488,46 @@ const NewPlanDrawer = ({
                       selectedTab === "Telegram Signal") && (
                       <Box sx={{ width: "100%" }} fullWidth>
                         <Typography variant="subtitle1">
-                         {t("budget_strategy")}*
+                          {t("budget_strategy")}*
                         </Typography>
                         <FormControl
                           variant="outlined"
                           fullWidth
                           margin="normal"
                         >
-                          {loading=== true && 
-                          <Skeleton animation="wave" sx={{height: 56}} />}
-                          {loading=== false &&
-                          <Select
-                            value={budgetStrategy}
-                            onChange={(e) => setBudgetStrategy(e.target.value)}
-                            renderValue={(value) => (
-                              <> 
-                              {/* {console.log(dataBudgetStrategy)} */}
-                                {loading === true && <>Loading...</>}
-                                {loading === false &&
-                                  dataBudgetStrategy?.find(
-                                    (item) => item?._id === value
-                                  )?.name}
-                              </>
-                            )}
-                            size="medium"
-                          >
-                            {loading === false && sortDataAlphabet(dataBudgetStrategy, "name")?.map((item, key) => (
-                              <MenuItem key={key} value={item?._id}>
-                                {item?.name}
-                              </MenuItem>
-                            ))}
-                            {/* Thêm các tùy chọn khác nếu cần */}
-                          </Select>
-                          }
+                          {loading === true && (
+                            <Skeleton animation="wave" sx={{ height: 56 }} />
+                          )}
+                          {loading === false && (
+                            <Select
+                              value={budgetStrategy}
+                              onChange={(e) =>
+                                setBudgetStrategy(e.target.value)
+                              }
+                              renderValue={(value) => (
+                                <>
+                                  {/* {console.log(dataBudgetStrategy)} */}
+                                  {loading === true && <>Loading...</>}
+                                  {loading === false &&
+                                    dataBudgetStrategy?.find(
+                                      (item) => item?._id === value
+                                    )?.name}
+                                </>
+                              )}
+                              size="medium"
+                            >
+                              {loading === false &&
+                                sortDataAlphabet(
+                                  dataBudgetStrategy,
+                                  "name"
+                                )?.map((item, key) => (
+                                  <MenuItem key={key} value={item?._id}>
+                                    {item?.name}
+                                  </MenuItem>
+                                ))}
+                              {/* Thêm các tùy chọn khác nếu cần */}
+                            </Select>
+                          )}
                         </FormControl>
                       </Box>
                     )}
@@ -1450,189 +1540,267 @@ const NewPlanDrawer = ({
                           {selectedTab === "Telegram Signal" && t("Signal")}
                         </Typography>
                         <>
-                            {loading=== false && <>
+                          {loading === false && (
+                            <>
                               {selectedTab === "Bot AI" && (
-                            <FormControl
-                              variant="outlined"
-                              fullWidth
-                              margin="normal"
-                            >
-                              {featureType ===
-                              SignalFeatureTypes.SINGLE_METHOD ? (
-                                <>
-                                  <Select
-                                    value={signalStrategy}
-                                    onChange={(e) =>
-                                      setSignalStrategy(e.target.value)
-                                    }
-                                    size="medium"
-                                  >
-                                    {sortDataAlphabet(dataSignalStrategy, "name")?.map((item, key) => (
-                                      <MenuItem key={key} value={item?._id}>
-                                        {item?.name}
-                                      </MenuItem>
-                                    ))}
-                                  </Select>
-                                </>
-                              ) : (
-                                <>
-                                  <Select
-                                    multiple
-                                    value={arraySignalStrategy}
-                                    onChange={(e) =>
-                                      setArraySignalStrategy(e.target.value)
-                                    }
-                                    size="medium"
-                                    renderValue={(selected) => (
-                                      <Box
-                                        sx={{
-                                          display: "flex",
-                                          flexWrap: "wrap",
-                                          gap: 0.5,
+                                <FormControl
+                                  variant="outlined"
+                                  fullWidth
+                                  margin="normal"
+                                >
+                                  {featureType ===
+                                  SignalFeatureTypes.SINGLE_METHOD ? (
+                                    <>
+                                      <Autocomplete
+                                        value={dataSignalStrategy.find((item) => item._id === signalStrategy) || null}
+                                        onChange={(event, newValue) => {
+                                          setSignalStrategy(newValue ? newValue._id : null);
                                         }}
-                                      >
-                                        {selected.map((value) => (
-                                          <Chip
-                                            key={value}
-                                            label={
-                                              dataSignalStrategy.find(
-                                                (item) => item._id === value
-                                              )?.name
-                                            }
+                                        options={sortDataAlphabet(dataSignalStrategy, "name")}
+                                        getOptionLabel={(option) => option.name}
+                                        renderInput={(params) => (
+                                          <TextField
+                                            {...params}
+                                            variant="outlined"
+                                            label={t("Signal Strategy")}
+                                            size="medium"
+                                            placeholder={t("Search")}
                                           />
-                                        ))}
-                                      </Box>
-                                    )}
-                                  >
-                                    {sortData(dataSignalStrategy, "name", "asc")?.map((item, key) => (
-                                      <MenuItem key={key} value={item?._id}>
-                                        <Checkbox
-                                          checked={
-                                            arraySignalStrategy.indexOf(
+                                        )}
+                                        isOptionEqualToValue={(option, value) => option._id === value._id}
+                                      />
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Autocomplete
+                                        size={"medium"}
+                                        multiple
+                                        options={sortData(
+                                          dataSignalStrategy,
+                                          "name",
+                                          "asc"
+                                        )}
+                                        getOptionLabel={(option) => option.name}
+                                        value={dataSignalStrategy.filter(
+                                          (item) =>
+                                            arraySignalStrategy.includes(
                                               item._id
-                                            ) > -1
-                                          }
-                                        />
-                                        <ListItemText primary={item.name} />
-                                      </MenuItem>
-                                    ))}
-                                  </Select>
-                                </>
-                              )}
-                            </FormControl>
-                          )}
-                          {/*  */}
-                          {selectedTab === "Follow Leader" && (
-                            <Box sx={{ width: "100%" }} mt={2}>
-                              <MuiChipsInput
-                                value={arraySignalStrategy}
-                                onChange={(value) =>
-                                  setArraySignalStrategy(value)
-                                }
-                                placeholder={t("Press enter to add...")}
-                                sx={{ width: "100%" }}
-                                size={"medium"}
-                              />
-                            </Box>
-                          )}
-                          {/*  */}
-                          {/* {console.log("signalStrategy", signalStrategy)} */}
-                          {/*  */}
-                          {selectedTab === "Telegram Signal" && (
-                            <Box sx={{ width: "100%" }} mt={2} mb={1}>
-                              {featureType ===
-                              SignalFeatureTypes.SINGLE_METHOD ? (
-                                <Select
-                                  fullWidth
-                                  value={signalStrategy}
-                                  onChange={(e) =>
-                                    setSignalStrategy(e.target.value)
-                                  }
-                                  size="medium"
-                                >
-                                  {sortDataAlphabet(dataSignalStrategyTelegramSignal, "name")?.map(
-                                    (item, key) => (
-                                      <MenuItem key={key} value={item?._id}>
-                                        {item?.name}
-                                      </MenuItem>
-                                    )
-                                  )}
-                                </Select>
-                              ) : (
-                                <Select
-                                  fullWidth
-                                  multiple
-                                  value={arraySignalStrategy}
-                                  onChange={(e) =>
-                                    setArraySignalStrategy(e.target.value)
-                                  }
-                                  size="medium"
-                                  renderValue={(selected) => (
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        flexWrap: "wrap",
-                                        gap: 0.5,
-                                      }}
-                                    >
-                                      {selected?.length > 0 &&
-                                        selected.map((value) => (
-                                          <Chip
-                                            sx={{
-                                              // height: allowSelectedTab ? "" : 50,
-                                              display:
-                                                dataSignalStrategyTelegramSignal.find(
-                                                  (item) => item._id === value
-                                                )
-                                                  ? "aa"
-                                                  : "none",
+                                            )
+                                        )}
+                                        onChange={(event, newValue) => {
+                                          setArraySignalStrategy(
+                                            newValue.map((item) => item._id)
+                                          );
+                                        }}
+                                        renderTags={(value, getTagProps) =>
+                                          value.map((option, index) => (
+                                            <Chip
+                                              key={index}
+                                              label={option.name}
+                                              {...getTagProps({ index })}
+                                            />
+                                          ))
+                                        }
+                                        filterOptions={(
+                                          options,
+                                          { inputValue }
+                                        ) => {
+                                          // console.log(options)
+                                          // console.log(inputValue)
+                                          return options.filter((option) =>
+                                            option.name
+                                              .toLowerCase()
+                                              .includes(
+                                                inputValue.toLowerCase()
+                                              )
+                                          );
+                                        }}
+                                        // PaperComponent={({ children }) => (
+                                        //   <Paper>
+                                        //     <Box sx={{ padding: '8px' }}>
+                                        //       <TextField
+                                        //         variant="outlined"
+                                        //         placeholder="Search..."
+                                        //         fullWidth
+                                        //         // value={searchInput}
+                                        //         // onChange={handleSearchChange}
+                                        //       />
+                                        //     </Box>
+                                        //     {children}
+                                        //   </Paper>
+                                        // )}
+                                        renderInput={(params) => (
+                                          <TextField
+                                            size={"large"}
+                                            {...params}
+                                            variant="outlined"
+                                            placeholder={t("Search")}
+                                            // label={t("Signal Strategy")}
+                                            // placeholder="Search st"
+                                            InputProps={{
+                                              ...params.InputProps,
+                                              style: { minHeight: "56px" }, // Adjust the height as needed
                                             }}
-                                            key={value}
-                                            label={
-                                              <Box>
-                                                <Box>
-                                                  {sortData(dataSignalStrategyTelegramSignal, "name", "asc").find(
-                                                    (item) => item._id === value
-                                                  )?.name || ""}
-                                                </Box>
-                                                {/* {!allowSelectedTab && (
-                                              <Box fontSize={12}>
-                                                {
-                                                  dataSignalStrategyTelegramSignal.find(
-                                                    (item) => item._id === value
-                                                  )?.url
-                                                }
-                                              </Box>
-                                            )} */}
-                                              </Box>
-                                            }
                                           />
-                                        ))}
-                                    </Box>
+                                        )}
+                                        renderOption={(
+                                          props,
+                                          option,
+                                          { selected }
+                                        ) => (
+                                          <MenuItem {...props}>
+                                            <Checkbox
+                                              style={{ marginRight: 8 }}
+                                              checked={selected}
+                                            />
+                                            <ListItemText
+                                              primary={option.name}
+                                            />
+                                          </MenuItem>
+                                        )}
+                                      />
+                                    </>
                                   )}
-                                >
-                                  {sortData(dataSignalStrategyTelegramSignal, "name", "asc")?.map(
-                                    (item, key) => (
-                                      <MenuItem key={key} value={item?._id}>
-                                        <Checkbox
-                                          checked={
-                                            arraySignalStrategy.indexOf(
-                                              item._id
-                                            ) > -1
-                                          }
-                                        />
-                                        <ListItemText primary={item.name} />
-                                      </MenuItem>
-                                    )
-                                  )}
-                                </Select>
+                                </FormControl>
                               )}
+                              {/*  */}
+                              {selectedTab === "Follow Leader" && (
+                                <Box sx={{ width: "100%" }} mt={2}>
+                                  <MuiChipsInput
+                                    value={arraySignalStrategy}
+                                    onChange={(value) =>
+                                      setArraySignalStrategy(value)
+                                    }
+                                    placeholder={t("Press enter to add...")}
+                                    sx={{ width: "100%" }}
+                                    size={"medium"}
+                                  />
+                                </Box>
+                              )}
+                              {/*  */}
+                              {/* {console.log("signalStrategy", signalStrategy)} */}
+                              {/*  */}
+                              {selectedTab === "Telegram Signal" && (
+                                <Box sx={{ width: "100%" }} mt={2} mb={1}>
+                                  {featureType ===
+                                  SignalFeatureTypes.SINGLE_METHOD ? (
+                                    <Select
+                                      fullWidth
+                                      value={signalStrategy}
+                                      onChange={(e) =>
+                                        setSignalStrategy(e.target.value)
+                                      }
+                                      size="medium"
+                                    >
+                                      {sortDataAlphabet(
+                                        dataSignalStrategyTelegramSignal,
+                                        "name"
+                                      )?.map((item, key) => (
+                                        <MenuItem key={key} value={item?._id}>
+                                          {item?.name}
+                                        </MenuItem>
+                                      ))}
+                                    </Select>
+                                  ) : (
+                                    <>
+                                      <Autocomplete
+                                        size={"medium"}
+                                        multiple
+                                        options={sortData(
+                                          dataSignalStrategy,
+                                          "name",
+                                          "asc"
+                                        )}
+                                        getOptionLabel={(option) => option.name}
+                                        value={dataSignalStrategy.filter(
+                                          (item) =>
+                                            arraySignalStrategy.includes(
+                                              item._id
+                                            )
+                                        )}
+                                        onChange={(event, newValue) => {
+                                          setArraySignalStrategy(
+                                            newValue.map((item) => item._id)
+                                          );
+                                        }}
+                                        renderTags={(value, getTagProps) =>
+                                          value.map((option, index) => (
+                                            <Chip
+                                              key={index}
+                                              label={option.name}
+                                              {...getTagProps({ index })}
+                                            />
+                                          ))
+                                        }
+                                        filterOptions={(
+                                          options,
+                                          { inputValue }
+                                        ) => {
+                                          // console.log(options)
+                                          // console.log(inputValue)
+                                          return options.filter((option) =>
+                                            option.name
+                                              .toLowerCase()
+                                              .includes(
+                                                inputValue.toLowerCase()
+                                              )
+                                          );
+                                        }}
+                                        // PaperComponent={({ children }) => (
+                                        //   <Paper>
+                                        //     <Box sx={{ padding: '8px' }}>
+                                        //       <TextField
+                                        //         variant="outlined"
+                                        //         placeholder="Search..."
+                                        //         fullWidth
+                                        //         // value={searchInput}
+                                        //         // onChange={handleSearchChange}
+                                        //       />
+                                        //     </Box>
+                                        //     {children}
+                                        //   </Paper>
+                                        // )}
+                                        renderInput={(params) => (
+                                          <TextField
+                                            size={"large"}
+                                            {...params}
+                                            variant="outlined"
+                                            placeholder={t("Search")}
+                                            // label={t("Signal Strategy")}
+                                            // placeholder="Search st"
+                                            InputProps={{
+                                              ...params.InputProps,
+                                              style: { minHeight: "56px" }, // Adjust the height as needed
+                                            }}
+                                          />
+                                        )}
+                                        renderOption={(
+                                          props,
+                                          option,
+                                          { selected }
+                                        ) => (
+                                          <MenuItem {...props}>
+                                            <Checkbox
+                                              style={{ marginRight: 8 }}
+                                              checked={selected}
+                                            />
+                                            <ListItemText
+                                              primary={option.name}
+                                            />
+                                          </MenuItem>
+                                        )}
+                                      />
+                                    </>
+                                  )}
+                                </Box>
+                              )}
+                            </>
+                          )}
+                          {loading === true && (
+                            <Box mt={2} mb={1}>
+                              <Skeleton height={56} />
                             </Box>
                           )}
-                            </>}
-                          {loading=== true && <Box mt={2} mb={1}>
-                            <Skeleton height={56} />
-                          </Box>}
                         </>
                       </Box>
                     )}
@@ -1718,7 +1886,9 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label={t("enter_at_the_end_of_the_winning_streak")}
+                                      label={t(
+                                        "enter_at_the_end_of_the_winning_streak"
+                                      )}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1731,14 +1901,18 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label={t("order_when_exactly_winning_streak")}
+                                      label={t(
+                                        "order_when_exactly_winning_streak"
+                                      )}
                                     />
 
                                     <Grid container spacing={2}>
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("order_when_winning_streak_reached")}
+                                          label={t(
+                                            "order_when_winning_streak_reached"
+                                          )}
                                           variant="outlined"
                                           value={winStreakEntryTarget}
                                           onChange={(e) =>
@@ -1764,7 +1938,9 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("change_method_when_losing_streak")}
+                                          label={t(
+                                            "change_method_when_losing_streak"
+                                          )}
                                           variant="outlined"
                                           value={winChangeMethodAfterLoseStreak}
                                           onChange={(e) =>
@@ -1778,7 +1954,9 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("change_method_when_winning_streak")}
+                                          label={t(
+                                            "change_method_when_winning_streak"
+                                          )}
                                           variant="outlined"
                                           value={winChangeMethodAfterWinStreak}
                                           onChange={(e) =>
@@ -1830,7 +2008,9 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label={t("enter_at_the_end_of_the_losing_streak")}
+                                      label={t(
+                                        "enter_at_the_end_of_the_losing_streak"
+                                      )}
                                     />
                                     <FormControlLabel
                                       control={
@@ -1843,14 +2023,18 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label={t("order_when_exactly_losing_streak")}
+                                      label={t(
+                                        "order_when_exactly_losing_streak"
+                                      )}
                                     />
 
                                     <Grid container spacing={2}>
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("order_when_losing_streak_reached")}
+                                          label={t(
+                                            "order_when_losing_streak_reached"
+                                          )}
                                           variant="outlined"
                                           value={loseStreakEntryTarget}
                                           onChange={(e) =>
@@ -1876,7 +2060,9 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("change_method_when_losing_streak")}
+                                          label={t(
+                                            "change_method_when_losing_streak"
+                                          )}
                                           variant="outlined"
                                           value={
                                             loseChangeMethodAfterLoseStreak
@@ -1892,7 +2078,9 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("change_method_when_winning_streak")}
+                                          label={t(
+                                            "change_method_when_winning_streak"
+                                          )}
                                           variant="outlined"
                                           value={loseChangeMethodAfterWinStreak}
                                           onChange={(e) =>
@@ -1957,14 +2145,18 @@ const NewPlanDrawer = ({
                                           }
                                         />
                                       }
-                                      label={t("order_when_exactly_victor_streak")}
+                                      label={t(
+                                        "order_when_exactly_victor_streak"
+                                      )}
                                     />
 
                                     <Grid container spacing={2}>
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("order_when_victor_streak_reached")}
+                                          label={t(
+                                            "order_when_victor_streak_reached"
+                                          )}
                                           variant="outlined"
                                           value={victorStreakEntryTarget}
                                           onChange={(e) =>
@@ -1990,7 +2182,9 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("change_method_when_losing_streak")}
+                                          label={t(
+                                            "change_method_when_losing_streak"
+                                          )}
                                           variant="outlined"
                                           value={
                                             victorChangeMethodAfterLoseStreak
@@ -2006,7 +2200,9 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("change_method_when_winning_streak")}
+                                          label={t(
+                                            "change_method_when_winning_streak"
+                                          )}
                                           variant="outlined"
                                           value={
                                             victorChangeMethodAfterWinStreak
@@ -2022,7 +2218,9 @@ const NewPlanDrawer = ({
                                       <Grid item xs={12} sm={6}>
                                         <TextField
                                           fullWidth
-                                          label={t("change_method_when_victor_streak")}
+                                          label={t(
+                                            "change_method_when_victor_streak"
+                                          )}
                                           variant="outlined"
                                           value={
                                             victorChangeMethodAfterVictorStreak
@@ -2168,7 +2366,9 @@ const NewPlanDrawer = ({
                     {t("Take Profit/Stoploss Conditions")}
                   </Typography>
                   <Typography variant="body2">
-                    {t("The plan will take profit/stoploss when one of these conditions is reached.")}
+                    {t(
+                      "The plan will take profit/stoploss when one of these conditions is reached."
+                    )}
                   </Typography>
                 </Box>
                 <FormControlLabel
@@ -2270,7 +2470,75 @@ const NewPlanDrawer = ({
                     </Typography>
                   </AccordionSummary>
                   <Box p={2}>
-                  {decodedData?.data?.levelStaff >= 3 &&
+                    {decodedData?.data?.levelStaff >= 3 && (
+                      <Box
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                        alignItems={"center"}
+                        gap={1}
+                        mb={1}
+                      >
+                        <Typography variant="h6">
+                          {t("Default Plan")}
+                        </Typography>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={defaultPlan}
+                              onChange={() => setDefaultPlan(!defaultPlan)}
+                            />
+                          }
+                        />
+                      </Box>
+                    )}
+                    <Box
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                        alignItems={"center"}
+                        gap={1}
+                        mb={1}
+                      >
+                        <Typography variant="h6">
+                          {t("Lãi/Lỗ con")}
+                        </Typography>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={childTargetEnable}
+                              onChange={() => setChildTargetEnable(!childTargetEnable)}
+                            />
+                          }
+                        />
+                    </Box>
+                    {childTargetEnable && 
+                    <>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label="Lãi con"
+                          variant="outlined"
+                          value={childProfitTarget}
+                          onChange={(e) =>
+                            setChildProfitTarget(e.target.value)
+                          }
+                          margin="normal"
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          fullWidth
+                          label="Lỗ con"
+                          variant="outlined"
+                          value={childLossTarget}
+                          onChange={(e) =>
+                            setChildLossTarget(e.target.value)
+                          }
+                          margin="normal"
+                        />
+                      </Grid>
+                    </Grid>
+                    </>}
                     <Box
                       display={"flex"}
                       justifyContent={"space-between"}
@@ -2278,38 +2546,27 @@ const NewPlanDrawer = ({
                       gap={1}
                       mb={1}
                     >
-                      <Typography variant="h6">{t("Default Plan")}</Typography>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={defaultPlan}
-                            onChange={() => setDefaultPlan(!defaultPlan)}
-                          />
-                        }
-                      />
-                    </Box>}
-                  <Box
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      gap={1}
-                      mb={1}
-                    >
-                      <Typography variant="h6">{t("wait_signal_from_other_bot")}</Typography>
+                      <Typography variant="h6">
+                        {t("wait_signal_from_other_bot")}
+                      </Typography>
                       <FormControlLabel
                         control={
                           <Switch
                             checked={waitSignalOtherPlanEnabled}
-                            onChange={() => setWaitSignalOtherPlanEnabled(!waitSignalOtherPlanEnabled)}
+                            onChange={() =>
+                              setWaitSignalOtherPlanEnabled(
+                                !waitSignalOtherPlanEnabled
+                              )
+                            }
                           />
                         }
                       />
                     </Box>
-                    {waitSignalOtherPlanEnabled && 
+                    {waitSignalOtherPlanEnabled && (
                       <Grid container spacing={2}>
                         <Grid item xs={12} md={12}>
-                          <TextField 
-                            onChange={(e)=> setBotId(e.target.value)}
+                          <TextField
+                            onChange={(e) => setBotId(e.target.value)}
                             value={botId}
                             size="small"
                             fullWidth
@@ -2330,16 +2587,23 @@ const NewPlanDrawer = ({
                               ? sortDataAlphabet(botList, "name")
                                   ?.filter((a) => a?._id !== selectedPlan?._id)
                                   ?.map((option) => (
-                                    <MenuItem key={option?._id} value={option?._id}>
+                                    <MenuItem
+                                      key={option?._id}
+                                      value={option?._id}
+                                    >
                                       {t(option?.name)}
                                     </MenuItem>
                                   ))
-                              : sortDataAlphabet(botList, "name")
-                              ?.map((option) => (
-                                  <MenuItem key={option?._id} value={option?._id}>
-                                    {t(option?.name)}
-                                  </MenuItem>
-                                ))}
+                              : sortDataAlphabet(botList, "name")?.map(
+                                  (option) => (
+                                    <MenuItem
+                                      key={option?._id}
+                                      value={option?._id}
+                                    >
+                                      {t(option?.name)}
+                                    </MenuItem>
+                                  )
+                                )}
                           </TextField>
                         </Grid>
                         <Grid item xs={12} md={12}>
@@ -2355,9 +2619,7 @@ const NewPlanDrawer = ({
                             label={t("start_when_win_total")}
                             size="small"
                             value={runWhenWinTotal}
-                            onChange={(e) =>
-                              setRunWhenWinTotal((e.target.value))
-                            }
+                            onChange={(e) => setRunWhenWinTotal(e.target.value)}
                           />
                         </Grid>
                         <Grid item xs={12} md={6}>
@@ -2369,7 +2631,7 @@ const NewPlanDrawer = ({
                             size="small"
                             value={runWhenLoseTotal}
                             onChange={(e) =>
-                              setRunWhenLoseTotal((e.target.value))
+                              setRunWhenLoseTotal(e.target.value)
                             }
                           />
                         </Grid>
@@ -2383,7 +2645,7 @@ const NewPlanDrawer = ({
                             size="small"
                             value={runWhenWinStreak}
                             onChange={(e) =>
-                              setRunWhenWinStreak((e.target.value))
+                              setRunWhenWinStreak(e.target.value)
                             }
                           />
                         </Grid>
@@ -2396,7 +2658,7 @@ const NewPlanDrawer = ({
                             size="small"
                             value={runWhenLoseStreak}
                             onChange={(e) =>
-                              setRunWhenLoseStreak((e.target.value))
+                              setRunWhenLoseStreak(e.target.value)
                             }
                           />
                         </Grid>
@@ -2408,9 +2670,7 @@ const NewPlanDrawer = ({
                             label={t("start_when_profit")}
                             size="small"
                             value={runWhenProfit}
-                            onChange={(e) =>
-                              setRunWhenProfit((e.target.value))
-                            }
+                            onChange={(e) => setRunWhenProfit(e.target.value)}
                           />
                         </Grid>
                         <Grid item xs={12} md={6}>
@@ -2421,9 +2681,7 @@ const NewPlanDrawer = ({
                             label={t("start_when_loss")}
                             size="small"
                             value={runWhenLoss}
-                            onChange={(e) =>
-                              setRunWhenLoss((e.target.value))
-                            }
+                            onChange={(e) => setRunWhenLoss(e.target.value)}
                           />
                         </Grid>
 
@@ -2441,7 +2699,7 @@ const NewPlanDrawer = ({
                             size="small"
                             value={stopWhenWinTotal}
                             onChange={(e) =>
-                              setStopWhenWinTotal((e.target.value))
+                              setStopWhenWinTotal(e.target.value)
                             }
                           />
                         </Grid>
@@ -2454,7 +2712,7 @@ const NewPlanDrawer = ({
                             size="small"
                             value={stopWhenLoseTotal}
                             onChange={(e) =>
-                              setStopWhenLoseTotal((e.target.value))
+                              setStopWhenLoseTotal(e.target.value)
                             }
                           />
                         </Grid>
@@ -2467,7 +2725,7 @@ const NewPlanDrawer = ({
                             size="small"
                             value={stopWhenWinStreak}
                             onChange={(e) =>
-                              setStopWhenWinStreak((e.target.value))
+                              setStopWhenWinStreak(e.target.value)
                             }
                           />
                         </Grid>
@@ -2476,11 +2734,13 @@ const NewPlanDrawer = ({
                             fullWidth
                             name="stop_when_lose_streak"
                             type="number"
-                            label={t("stop_for_waiting_signal_when_lose_streak")}
+                            label={t(
+                              "stop_for_waiting_signal_when_lose_streak"
+                            )}
                             size="small"
                             value={stopWhenLoseStreak}
                             onChange={(e) =>
-                              setStopWhenLoseStreak((e.target.value))
+                              setStopWhenLoseStreak(e.target.value)
                             }
                           />
                         </Grid>
@@ -2492,9 +2752,7 @@ const NewPlanDrawer = ({
                             label={t("stop_for_waiting_signal_when_profit")}
                             size="small"
                             value={stopWhenProfit}
-                            onChange={(e) =>
-                              setStopWhenProfit((e.target.value))
-                            }
+                            onChange={(e) => setStopWhenProfit(e.target.value)}
                           />
                         </Grid>
                         <Grid item xs={12} md={6}>
@@ -2505,9 +2763,7 @@ const NewPlanDrawer = ({
                             label={t("stop_for_waiting_signal_when_loss")}
                             size="small"
                             value={stopWhenLoss}
-                            onChange={(e) =>
-                              setStopWhenLoss((e.target.value))
-                            }
+                            onChange={(e) => setStopWhenLoss(e.target.value)}
                           />
                         </Grid>
                         <Grid item xs={12} md={12}>
@@ -2550,7 +2806,7 @@ const NewPlanDrawer = ({
                           </Typography>
                         </Grid>
                       </Grid>
-                    }
+                    )}
                     <Box
                       mt={2}
                       display={"flex"}
@@ -2576,9 +2832,11 @@ const NewPlanDrawer = ({
                       gap={1}
                     >
                       <Box>
-                        <Typography variant="h6">{t("FormCreatePlan_advanced_privateMode_label")}</Typography>
+                        <Typography variant="h6">
+                          {t("FormCreatePlan_advanced_privateMode_label")}
+                        </Typography>
                         <Typography variant="body2">
-                         {t("FormCreatePlan_advanced_privateMode_desc")}
+                          {t("FormCreatePlan_advanced_privateMode_desc")}
                         </Typography>
                       </Box>
                       <FormControlLabel
@@ -2598,7 +2856,9 @@ const NewPlanDrawer = ({
                       gap={1}
                     >
                       <Box>
-                        <Typography variant="h6">{t("FormCreatePlan_advanced_reverseSignal_label")}</Typography>
+                        <Typography variant="h6">
+                          {t("FormCreatePlan_advanced_reverseSignal_label")}
+                        </Typography>
                         <Typography variant="body2">
                           {t("FormCreatePlan_advanced_reverseSignal_desc")}
                         </Typography>
@@ -2668,7 +2928,9 @@ const NewPlanDrawer = ({
                 <Typography variant="subtitle1">{planName}</Typography>
                 <Box mt={2} display="flex" justifyContent="space-between">
                   <Box sx={{ width: "calc(100% / 3)" }}>
-                    <Typography variant="body2">{t("Allocated Budget")}</Typography>
+                    <Typography variant="body2">
+                      {t("Allocated Budget")}
+                    </Typography>
                     <Typography variant="subtitle1">
                       ${investmentFund?.toFixed(2)}
                     </Typography>
@@ -2694,11 +2956,15 @@ const NewPlanDrawer = ({
                     </Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
-                    <Typography variant="body2">{t("budget_strategy")}</Typography>
+                    <Typography variant="body2">
+                      {t("budget_strategy")}
+                    </Typography>
                     <Typography variant="subtitle1">${baseAmount}</Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
-                    <Typography variant="body2">{t("signal_strategy")}</Typography>
+                    <Typography variant="body2">
+                      {t("signal_strategy")}
+                    </Typography>
                     <Typography variant="subtitle1">{selectedTab}</Typography>
                   </Box>
                 </Box>

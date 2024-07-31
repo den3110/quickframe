@@ -45,6 +45,17 @@ ChartJS.register(
   Legend
 );
 
+const subtractOneDayFromDates = (data) => {
+  return data.map(item => {
+    const date = new Date(item.createdAt);
+    date.setDate(date.getDate() - 1);
+    return {
+      ...item,
+      createdAt: date.toISOString()
+    };
+  });
+};
+
 const StatPortfolio = (props) => {
   const { t } = useTranslation();
   const { dataStat, setDataStat } = props;
@@ -64,7 +75,7 @@ const StatPortfolio = (props) => {
     (async () => {
       if (id) {
         try {
-          const today = new Date();
+          const today = new Date();   
           const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
           const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
           const payload = {
@@ -102,8 +113,9 @@ const StatPortfolio = (props) => {
             selectedLinkAccount
           );
           if (response?.data?.ok === true) {
+            const updatedData = subtractOneDayFromDates(response?.data?.d);
             // console.log(response?.data?.d);
-            setData(response?.data?.d);
+            setData(updatedData);
           } else if (response?.data?.d === false) {
           }
         } catch (error) {

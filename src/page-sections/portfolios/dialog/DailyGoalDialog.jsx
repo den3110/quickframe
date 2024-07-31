@@ -34,15 +34,24 @@ const DailyGoalDialog = ({
   const { t } = useTranslation();
 
   const handleProfitTargetChange = (e) => {
-    const value = e.target.value.replace(/[^0-9]/g, "");
+    const value = e.target.value
+        .replace(/[^0-9.]/g, "")                  
+        .replace(/^\./, "")                       
+        .replace(/\.{2,}/g, ".")                  
+        .replace(/(\..*)\./g, "$1");              
+
     setProfitTarget(value ? `$${value}` : "");
-  };
+};
 
-  const handleLossTargetChange = (e) => {
-    const value = e.target.value.replace(/[^0-9]/g, "");
+const handleLossTargetChange = (e) => {
+    const value = e.target.value
+        .replace(/[^0-9.]/g, "")                  
+        .replace(/^\./, "")                       
+        .replace(/\.{2,}/g, ".")                  
+        .replace(/(\..*)\./g, "$1");              
+
     setLossTarget(value ? `$${value}` : "");
-  };
-
+};
   useEffect(() => {
     if (dailyTarget) {
       setProfitTarget(
