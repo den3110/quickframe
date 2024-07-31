@@ -65,16 +65,8 @@ const StatPortfolio = (props) => {
       if (id) {
         try {
           const today = new Date();
-          const firstDayOfMonth = new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            1
-          );
-          const lastDayOfMonth = new Date(
-            today.getFullYear(),
-            today.getMonth() + 1,
-            0
-          );
+          const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+          const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
           const payload = {
             // id:sele
             botId: id,
@@ -110,7 +102,7 @@ const StatPortfolio = (props) => {
             selectedLinkAccount
           );
           if (response?.data?.ok === true) {
-            console.log(response?.data?.d);
+            // console.log(response?.data?.d);
             setData(response?.data?.d);
           } else if (response?.data?.d === false) {
           }
