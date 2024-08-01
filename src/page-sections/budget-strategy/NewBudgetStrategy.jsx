@@ -175,6 +175,7 @@ const NewBudgetStrategy = ({
         break;
     }
     try {
+      setDisableButton(true)
       if (is_edit === true && isFromCopyPlan!== true) {
         response = await budgetStrategyApi.userBudgetStrategyUpdate(
           idBudegetStrategy,
@@ -216,6 +217,9 @@ const NewBudgetStrategy = ({
     } catch (error) {
       console.log(error)
       showToast(error?.response?.data?.m);
+    }
+    finally {
+      setDisableButton(false)
     }
   };
 

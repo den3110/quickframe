@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Grid, Box, Tabs, Tab, Typography, useMediaQuery } from "@mui/material";
+import { Grid, Box, Tabs, Tab, Typography, useMediaQuery, CircularProgress } from "@mui/material";
 import InvestmentOverview from "../component/InvestmentOverview";
 import Timeline from "../component/Timeline";
 import Statistics from "../component/Statistics";
@@ -19,6 +19,7 @@ import { showToast } from "components/toast/toast";
 import StatPortfolio from "./stat";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { useTranslation } from "react-i18next";
+import ErrorPageView from "page-sections/error/ErrorPageView";
 
 const TabPanel = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -55,7 +56,7 @@ const PortfolioDetail = (props) => {
   const { isConnected, socket } = useContext(SocketContext);
   const [value, setValue] = useState(0);
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState();
   const [data, setData] = useState([]);
   const [dataStat, setDataStat] = useState({
     lastData: { budgetStrategy: { bs: {} } },
@@ -99,10 +100,10 @@ const PortfolioDetail = (props) => {
         const dataResult = mergeAndSortData(response?.data);
         setData(dataResult);
       } else {
-        showToast("Failed to fetch user bot history", "error");
+        // showToast("Failed to fetch user bot history", "error");
       }
     } catch (error) {
-      showToast(error?.response?.data?.m, "error");
+      // showToast(error?.response?.data?.m, "error");
     } finally {
       decreaseLoading();
     }
@@ -185,45 +186,51 @@ const PortfolioDetail = (props) => {
           setChange,
         }}
       >
-        <Box padding={downLg ? 1 : 2}>
-          <MenuComponent
-            dataStat={dataStat}
-            setDataStat={setDataStat}
-            {...props}
-          />
-          <Tabs value={value} onChange={handleChange} aria-label="tabs example">
-            <Tab label={t("Plan Timeline")} {...a11yProps(0)} />
-            {props?.isSignalStrategy !== true && (
-              <Tab label={t("statics")} {...a11yProps(1)} />
-            )}
-          </Tabs>
-          <TabPanel value={value} index={0}>
-            <Box sx={{ pt: 4 }}>
-              <Grid container spacing={4}>
-                <Grid item xs={12} md={4}>
-                  <InvestmentOverview {...props} />
-                  <Statistics {...props} />
+        {loading=== false && dataStat && 
+          <Box padding={downLg ? 1 : 2}>
+            <MenuComponent
+              dataStat={dataStat}
+              setDataStat={setDataStat}
+              {...props}
+            />
+            <Tabs value={value} onChange={handleChange} aria-label="tabs example">
+              <Tab label={t("Plan Timeline")} {...a11yProps(0)} />
+              {props?.isSignalStrategy !== true && (
+                <Tab label={t("statics")} {...a11yProps(1)} />
+              )}
+            </Tabs>
+            <TabPanel value={value} index={0}>
+              <Box sx={{ pt: 4 }}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} md={4}>
+                    <InvestmentOverview {...props} />
+                    <Statistics {...props} />
+                  </Grid>
+                  <Grid className="aksalwqzz" item xs={12} md={8}>
+                    <Timeline {...props} />
+                  </Grid>
+                  <Grid item xs={12}></Grid>
                 </Grid>
-                <Grid className="aksalwqzz" item xs={12} md={8}>
-                  <Timeline {...props} />
-                </Grid>
-                <Grid item xs={12}></Grid>
-              </Grid>
-            </Box>
-          </TabPanel>
-          {props?.isSignalStrategy !== true && (
-            <TabPanel value={value} index={1}>
-              <Box>
-                <StatPortfolio
-                  {...props}
-                  isSubPage={true}
-                  dataStat={dataStat}
-                  loading={loading}
-                />
               </Box>
             </TabPanel>
-          )}
-        </Box>
+            {props?.isSignalStrategy !== true && (
+              <TabPanel value={value} index={1}>
+                <Box>
+                  <StatPortfolio
+                    {...props}
+                    isSubPage={true}
+                    dataStat={dataStat}
+                    loading={loading}
+                  />
+                </Box>
+              </TabPanel>
+            )}
+          </Box>
+        }
+        {loading=== false && !dataStat && <ErrorPageView />}
+        {loading=== true && <Box sx={{width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+          <CircularProgress />
+        </Box>}
       </PortfolioDetailContext.Provider>
     </RefreshProvider>
   );

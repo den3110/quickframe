@@ -12,11 +12,11 @@ export const ActionBotType = {
 
 export const ActionBotTypeMessageSucces = {
   PAUSE: "Tạm ngưng gói thành công",
-  RESUME: "Tiêp tục gói thành công",
+  RESUME: "Tiếp tục gói thành công",
   RESTART: "Restart plan successfully!",
   RESET: "Reset gói thành công",
   REMOVE: "Xoá gói thành công",
-  START: "Khởi dộng gói thành công",
+  START: "Khởi động gói thành công",
   STOP: "Ngừng gói thành công",
   RESET_PNL: "Đặt lại Pnl thành công"
 };

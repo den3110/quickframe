@@ -17,12 +17,13 @@ import { useParams } from "react-router-dom";
 import { showToast } from "components/toast/toast";
 import AuthContext from "contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import round2number from "util/round2number";
 
 const InvestmentOverview = (props) => {
   const {t }= useTranslation()
   const { dataStat } = useContext(PortfolioDetailContext);
   const { selectedLinkAccount } = useContext(AuthContext);
-  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  // const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { id } = useParams();
 
   const handleChangeIsRunning = async (action) => {
@@ -74,7 +75,7 @@ const InvestmentOverview = (props) => {
                 variant="h6"
                 sx={{ color: "#fff" }}
               >
-                ${dataStat?.budget_amount?.toFixed(2)}
+                ${round2number(dataStat?.budget_amount)}
               </Typography>
               <Typography
                 textAlign={"center"}
@@ -82,7 +83,7 @@ const InvestmentOverview = (props) => {
                 sx={{ color: "rgba(255, 255, 255, 0.46)" }}
                 fontSize={12}
               >
-                Tiền vốn
+                {t("Invested Amount")}
               </Typography>
             </Box>
             <Box>
@@ -104,7 +105,7 @@ const InvestmentOverview = (props) => {
                 fontSize={12}
               >
                 {t("Profits")} (
-                {formatCurrency(dataStat?.lastData?.profit)?.replaceAll(
+                {formatCurrency(dataStat?.lastData?.profit / dataStat?.budget_amount * 100)?.replaceAll(
                   "$",
                   ""
                 )}
@@ -124,7 +125,7 @@ const InvestmentOverview = (props) => {
             <Typography variant="body2">{t("Take Profit/Stop Loss")}</Typography>
             {/* e co ham day a */}
             <Typography variant="body2">
-              +${dataStat?.take_profit_target}/-${dataStat?.stop_loss_target}
+              +${round2number(dataStat?.take_profit_target)}/-${round2number(dataStat?.stop_loss_target)}
             </Typography>
           </Box>
           {/* <Box

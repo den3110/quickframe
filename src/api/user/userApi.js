@@ -85,6 +85,10 @@ const userApi = {
   getUserLinkAccountList(data) {
     const url= `/users/exchange/link-account/list`
     return axiosClient.get(url, data)
+  },
+  userExchangeLinkAccountHistoryComission(id, data) {
+    const url= `/users/exchange/link-account/history-commissions/` + id
+    return axiosClient.get(url, data)
   }
 };
 

@@ -70,7 +70,7 @@ const MultiplyIndex = () => {
     if(isConnected && selectedLinkAccount) {
       socket.emit("LINK_ACCOUNT_SUBCRIBE", selectedLinkAccount)
       return ()=> {
-        socket.emit("PLAN_HISTORY_UNSUBCRIBE", selectedLinkAccount)
+        socket.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount)
       }
     }
   }, [isConnected, socket, selectedLinkAccount])

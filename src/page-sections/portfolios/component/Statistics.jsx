@@ -67,6 +67,12 @@ const Statistics = () => {
                           percentage={`${formatCurrency(dataStat?.win_day / (dataStat?.lose_day  + dataStat?.win_day) * 100)?.replaceAll("$", "")}% ${t("Win rate")}`}
                         />
                         <StatisticCard
+                          title={t("Win/Lose")}
+                          value={`${dataStat?.lastData?.winTotal }/${dataStat?.lastData?.loseTotal }`}
+                          percentage={`${dataStat?.lastData?.winTotal }/${dataStat?.lastData?.loseTotal }`}
+                          hidden={true}
+                        />
+                        <StatisticCard
                           title={t("day_profit")}
                           value={formatCurrency(dataStat?.day_profit)}
                           percentage={t("day_profit")}
@@ -85,18 +91,18 @@ const Statistics = () => {
                         />
                         <StatisticCard
                           title="Chuỗi thắng / tối đa"
-                          value={`${dataStat.lastData?.winStreak}/${dataStat.lastData?.longestWinStreak}`}
+                          value={`${dataStat?.lastData?.winStreak}/${dataStat?.lastData?.longestWinStreak}`}
                           color="success.main"
                         />
                         <StatisticCard
                           title="Chuỗi thua / tối đa"
-                          value={`${dataStat.lastData?.loseStreak}/${dataStat.lastData?.longestLoseStreak}`}
+                          value={`${dataStat?.lastData?.loseStreak}/${dataStat?.lastData?.longestLoseStreak}`}
                           color="error.main"
                         />
                          <StatisticCard
                           title="Chuỗi Victor / tối đa"
-                          value={`${dataStat.lastData?.victorStreak }/${dataStat.lastData?.longestVictorStreak}`}
-                          color="error.main"
+                          value={`${dataStat?.lastData?.victorStreak }/${dataStat?.lastData?.longestVictorStreak}`}
+                          // color="error.main"
                         />
                       </Grid>
                     </Box>

@@ -151,7 +151,9 @@ const TopSignalPageView = () => {
   }, [checkedRows]);
 
   useEffect(()=> {
-    setDataState(data)
+    setDataState(_.orderBy(data, function(e) { return (e.win_day /
+      (e.win_day + e.lose_day)) *
+      100}, "desc"))
   }, [data])
 
   const handleFilter = (value) => {

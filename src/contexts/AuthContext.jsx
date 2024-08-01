@@ -32,6 +32,9 @@ export const AuthProvider = ({ children }) => {
         setSelectedLinkAccount(undefined)
         setDataSelectedLinkAccount(undefined)
         setAccessToken(undefined)
+        if(error?.response?.status=== 401) {
+          window.location.href= window.location.origin + "/login"
+        }
       }
     }
     setLoading(false);

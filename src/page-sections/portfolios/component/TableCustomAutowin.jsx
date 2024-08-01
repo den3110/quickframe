@@ -69,10 +69,10 @@ const CustomAutowinTable = () => {
   useEffect(() => {
     try {
       if(downLg) {
-        console.log((dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
-          ?.toString()
-          .split("-")?.length /
-          itemColumnTable))
+        // console.log((dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+        //   ?.toString()
+        //   .split("-")?.length /
+        //   itemColumnTable))
           if (
             (dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
               ?.toString()
@@ -104,10 +104,10 @@ const CustomAutowinTable = () => {
       }
       else {
 
-        console.log((dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
-          ?.toString()
-          .split("-")?.length /
-          itemColumnTable))
+        // console.log((dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
+        //   ?.toString()
+        //   .split("-")?.length /
+        //   itemColumnTable))
           if (
             (dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
               ?.toString()
@@ -173,18 +173,18 @@ const CustomAutowinTable = () => {
             }}
           >
             {/* {console.log(dataStat?.lastData?.budgetStrategy)} */}
-            {console.log(dataStat?.lastData?.budgetStrategy?.bs?.method_data)}
+            {/* {console.log(dataStat?.lastData?.budgetStrategy?.bs?.method_data)} */}
             
             {Array.from(
               Array(
                 isNumber(
-                  Math.floor(
+                  Math.ceil(
                     dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
                       ?.toString()
                       ?.split("-")?.length / itemColumnTable
                   )
                 )
-                  ? Math.floor(
+                  ? Math.ceil(
                       dataStat?.lastData?.budgetStrategy?.bs?.method_data?.[0]
                         ?.toString()
                         ?.split("-")?.length / itemColumnTable

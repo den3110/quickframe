@@ -33,10 +33,9 @@ const Statistics = () => {
     dayLoseLiveRef.current= dataStat?.day_lose_live
     dayWinDemoRef.current= dataStat?.day_win_demo
     dayLoseDemoRef.current= dataStat?.day_lose_demo
-  }, [dataStat])
+  }, [dataStat, walletMode])
 
   const renderWinLoseRate = (rate) => {
-    /// do có số = 0 nên setPercent nó lỗi oke a
     if (rate) {
       switch (walletMode) {
         case true:
@@ -124,29 +123,48 @@ const Statistics = () => {
         default:
           return;
       }
-    } else {
-      if(dataStat?.day_lose_live + dataStat?.day_win_live === 0) {
+    } 
+    else {
+      console.log(dataStat)
+      console.log(walletMode)
+      if(walletMode && parseInt(dataStat?.day_lose_live) + parseInt(dataStat?.day_win_live) === 0) {
         return 0
       }
-      if(dataStat?.day_lose_demo + dataStat?.day_win_demo === 0) {
+      else if(!walletMode && parseInt(dataStat?.day_lose_demo) + parseInt(dataStat?.day_win_demo) === 0) {
         return 0
       }
-      switch (walletMode) {
-        case true:
-          return round2number(
-            (dataStat?.day_win_live /
-              (dataStat?.day_lose_live + dataStat?.day_win_live)) *
-              100
-          );
-        case false:
-          return round2number(
-            (dataStat?.day_win_demo /
-              (dataStat?.day_lose_demo + dataStat?.day_win_demo)) *
-              100
-          );
-        default:
-          return;
+      else if(walletMode) {
+        return round2number(
+          (dataStat?.day_win_live /
+            (dataStat?.day_lose_live + dataStat?.day_win_live)) *
+            100
+        );
       }
+      else if(!walletMode) {
+        return round2number(
+          (dataStat?.day_win_demo /
+            (dataStat?.day_lose_demo + dataStat?.day_win_demo)) *
+            100
+        );
+      }
+      // switch (walletMode) {
+      //   case true:
+      //     return round2number(
+      //       (dataStat?.day_win_live /
+      //         (dataStat?.day_lose_live + dataStat?.day_win_live)) *
+      //         100
+      //     );
+      //   case false:
+      //     console.log("abc")
+      //     console.log("dataStat", dataStat)
+      //     return round2number(
+      //       (dataStat?.day_win_demo /
+      //         (dataStat?.day_lose_demo + dataStat?.day_win_demo)) *
+      //         100
+      //     );
+      //   default:
+      //     return 0;
+      // }
     }
   };
 

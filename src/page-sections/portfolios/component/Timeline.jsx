@@ -285,6 +285,8 @@ const CustomTimeline = ({isSignalStrategy}) => {
               loseStreak: data?.runningData?.loseStreak,
               victorStreak: data?.runningData?.victorStreak,
               longestVictorStreak: data?.runningData?.longestVictorStreak,
+              winTotal: data?.runningData?.winTotal,
+              loseTotal: data?.runningData?.loseTotal,
               budgetStrategy: {
                 ...dataStatTemp.lastData.budgetStrategy,
                 bs: {
@@ -514,6 +516,7 @@ const CustomTimeline = ({isSignalStrategy}) => {
                     <Card onClick={(event) => {
                         handleMenuOpen(index, event)
                         if(isSignalStrategy !== true && decodedData?.data?.levelStaff < 3) {
+                          setSelectedItem(item)
                           setOpenDetailTimelineDialog(true)
                         }
                       }} variant="outlined" sx={{ mb: 2 }}>

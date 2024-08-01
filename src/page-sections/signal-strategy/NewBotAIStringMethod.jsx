@@ -41,11 +41,12 @@ const NewBotAIStringMethod = ({
   const [allResults, setAllResults] = useState(false);
   const [isDefault, setIsDefault] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
+  const [isCopy, setIsCopy]= useState(false)
   const { t } = useTranslation();
 
   const isDisableButton = name?.length <= 0 || chainSignal?.length <= 0;
   const handleChangeChainSignal = (value) => {
-    setChainSignal(value);
+    setChainSignal(value?.map(item=> item?.toString()?.toLowerCase()));
   };
 
   const handleChangeAllResult = (e) => {
@@ -108,11 +109,13 @@ const NewBotAIStringMethod = ({
       setChainSignal(selectedBot?.sources?.conditions);
       setAllResults(selectedBot?.sources?.allResults);
       setIsDefault(selectedBot?.is_default);
+      setIsCopy(selectedBot?.is_copy)
     } else {
       setName("");
       setChainSignal([]);
       setAllResults(false);
       setIsDefault(false);
+      setIsCopy(false)
     }
   }, [is_edit, selectedBot]);
 
@@ -171,7 +174,7 @@ const NewBotAIStringMethod = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {selectedBot?.is_copy !== true && (
+          {isCopy !== true && (
             <>
               <Typography variant="subtitle1">2. {t("Strategy")}*</Typography>
               <Select

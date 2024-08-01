@@ -7,7 +7,9 @@
 :root {
     --swiper-navigation-size: 24px !important;
 }
-
+/* .swiper-slide {
+    height: auto;
+  } */
 .language-select-container {
     position: absolute;
     top: 16px;

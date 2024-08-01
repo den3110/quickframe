@@ -891,6 +891,7 @@ export const resources = {
       "C. Information from Other Sources - text 1":
         "We may obtain information about you from other sources, including through third-party services and organizations. For example, if you access our Platform or Services through a third-party application, such as a social networking site or a third-party login service (Facebook or Google), the third-party platform will share information such as your email address, and public profile. ",
       COOL_DOWN: "Cool down",
+      "unknow_error": "Unknown error",
       "Calculating...": "Calculating...",
       Calendar: "Calendar",
       "Can I get a profit on the demo account - answer":
@@ -6260,6 +6261,7 @@ PENDING: "Chờ duyệt",
         "Có một hoặc nhiều leader đang chặn bạn.",
       "There are {{amount}} rows above and below":
         "Có {{amount}} hàng bên trên và bên dưới",
+      "unknow_error": "Lỗi không xác định",
       "There are {{amount}} shadows with incorrect conditions.":
         "Có {{amount}} bóng điều kiện bị sai.",
       "There is another account connected already.":

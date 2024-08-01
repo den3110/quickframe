@@ -752,7 +752,7 @@ const PortfoliosList = () => {
                       endIcon={<FilterIcon />}
                       // onClick={handleDialogOpen}
                     >
-                      {downLg ? "" : "Filter"}
+                      {downLg ? "" : t("Filter")}
                     </Button>
                   )}
                   {downLg && (
@@ -772,7 +772,7 @@ const PortfoliosList = () => {
                       endIcon={<FilterIcon />}
                       // onClick={handleDialogOpen}
                     >
-                      {downLg ? "" : "Filter"}
+                      {downLg ? "" : t("Filter")}
                     </Button>
                   )}
                   <Button
@@ -791,7 +791,7 @@ const PortfoliosList = () => {
                     }}
                     // onClick={handleDialogOpen}
                   >
-                    {downLg ? "" : "Copy"}
+                    {downLg ? "" : t("Copy")}
                   </Button>
                   <Button
                     variant="contained"
@@ -1400,7 +1400,7 @@ const PortfoliosList = () => {
           isEdit={isEdit}
           selectedPlan={selectedPlan}
           setData={setDataState}
-          dataProps={data}
+          dataProps={dataState}
           setIsEdit={setIsEdit}
           setChangeState={setChangeState}
         />

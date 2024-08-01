@@ -17,6 +17,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  CircularProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -33,6 +34,7 @@ const HistoryTable = () => {
   const {t }= useTranslation()
   const {
     data,
+    loading
     // setData,
   } = useContext(ManualTradeContext);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
@@ -144,209 +146,214 @@ const HistoryTable = () => {
 
   return (
     <Box mt={2}>
-      <Card variant="outlined">
-        <Accordion sx={{ border: "none" }} expanded={isFilterVisible}>
-          <AccordionSummary
-            expandIcon={
-              <Box onClick={toggleFilterVisibility}>
-                <ExpandMoreIcon />
-              </Box>
-            }
-            onClick={toggleFilterVisibility}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography onClick={toggleFilterVisibility} variant="body1">{t("Filters")}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box display={"flex"} alignItems={"center"} gap={2}>
-              <Button
-                aria-controls="time-menu"
-                aria-haspopup="true"
-                onClick={(event) => handleClick(event, "time")}
-              >
-                {t("time")}: {t("Recently")}
-              </Button>
-              <Button
-                aria-controls="amount-menu"
-                aria-haspopup="true"
-                onClick={(event) => handleClick(event, "amount")}
-              >
-                {t("Trade amount")}:{" "}
-                {selectedAmount === "all" ? "Tất cả" : t(selectedAmount)}
-              </Button>
-
-              <Menu // Menu 2
-                id="time-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl) && selectedMenu === "time"}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>{t("Recently")}</MenuItem>
-                <MenuItem onClick={handleOpenDateDialog}>{t("Custom")}</MenuItem>
-              </Menu>
-
-              <Dialog
-                fullWidth
-                maxWidth={"sm"}
-                open={openDateDialog}
-                onClose={handleCloseDateDialog}
-              >
-                <DialogTitle>{t("Custom")}</DialogTitle>
-                <DialogContent>
-                  <Box sx={{ overflow: "hidden" }}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        gap={2}
-                      >
-                        <Box>
-                          <DateCalendar
-                            value={selectedDate}
-                            onChange={handleDateChange}
-                            disableFuture
-                          />
-                        </Box>
-                        <Box display="flex" justifyContent="space-between">
-                          <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="center"
-                          >
-                            <Box mb={1}>{t("Start time")}</Box>
-                            <TimeClock
-                              ampm={false}
-                              value={startTime}
-                              onChange={handleStartTimeChange}
-                            />
-                          </Box>
-                          <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="center"
-                          >
-                            <Box mb={1}>End Time</Box>
-                            <TimeClock
-                              ampm={false}
-                              value={endTime}
-                              onChange={handleEndTimeChange}
-                            />
-                          </Box>
-                        </Box>
-                      </Box>
-                    </LocalizationProvider>
-                  </Box>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseDateDialog}>Cancel</Button>
-                  <Button onClick={handleFilterByDate}>OK</Button>
-                </DialogActions>
-              </Dialog>
-
-              <Menu
-                id="amount-menu" // menu 3
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl) && selectedMenu === "amount"}
-                onClose={handleClose}
-              >
-                <Box px={2} py={1}>
-                  <Typography
-                    variant="subtitle1"
-                    gutterBottom
-                    sx={{ fontSize: "16px" }}
-                  >
-                    {t("Trade amount")}
-                  </Typography>
-                  <RadioGroup
-                    value={selectedAmount}
-                    onChange={handleAmountChange}
-                    
-                  >
-                    <FormControlLabel
-                      value="all"
-                      control={<Radio />}
-                      label={
-                        <Typography
-                          sx={{ fontSize: "14px" }}
-                        >
-                          {t("All")}
-                        </Typography>
-                      }
-                    />
-                    <FormControlLabel
-                      value="lessThan10"
-                      control={<Radio />}
-                      label={
-                        <Typography
-                          sx={{ fontSize: "14px" }}
-                        >
-                          {t("lessThan10")}
-                        </Typography>
-                      }
-                    />
-                    <FormControlLabel
-                      value="1to2"
-                      control={<Radio />}
-                      
-                      label={
-                        <Typography
-                          sx={{ fontSize: "14px" }}
-                        >
-                          {t("1to2")}
-                        </Typography>
-                      }
-                    />
-                    <FormControlLabel
-                      value="1to5"
-                      control={<Radio />}
-                      label={
-                        <Typography
-                          sx={{ fontSize: "14px" }}
-                        >
-                          {t("1to5")}
-                        </Typography>
-                      }
-                    />
-                    <FormControlLabel
-                      value="5to10"
-                      control={<Radio />}
-                      label={
-                        <Typography
-                          sx={{ fontSize: "14px" }}
-                        >
-                          {t("5to10")}
-                        </Typography>
-                      }
-                    />
-                    <FormControlLabel
-                      value="moreThan10"
-                      control={<Radio />}
-                      label={
-                        <Typography
-                          sx={{ fontSize: "14px" }}
-                        >
-                          {t("moreThan10")}
-                        </Typography>
-                      }
-                    />
-                  </RadioGroup>
+      {loading=== true && <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+        <CircularProgress />
+      </Box>}
+      {loading=== false && 
+        <Card variant="outlined">
+          <Accordion sx={{ border: "none" }} expanded={isFilterVisible}>
+            <AccordionSummary
+              expandIcon={
+                <Box onClick={toggleFilterVisibility}>
+                  <ExpandMoreIcon />
                 </Box>
-              </Menu>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-        <Divider />
-        <Box p={2}>
-          <TableDetailTrade dataState={dataState} />
-        </Box>
-      </Card>
+              }
+              onClick={toggleFilterVisibility}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography onClick={toggleFilterVisibility} variant="body1">{t("Filters")}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box display={"flex"} alignItems={"center"} gap={2}>
+                <Button
+                  aria-controls="time-menu"
+                  aria-haspopup="true"
+                  onClick={(event) => handleClick(event, "time")}
+                >
+                  {t("time")}: {t("Recently")}
+                </Button>
+                <Button
+                  aria-controls="amount-menu"
+                  aria-haspopup="true"
+                  onClick={(event) => handleClick(event, "amount")}
+                >
+                  {t("Trade amount")}:{" "}
+                  {selectedAmount === "all" ? "Tất cả" : t(selectedAmount)}
+                </Button>
+
+                <Menu // Menu 2
+                  id="time-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl) && selectedMenu === "time"}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>{t("Recently")}</MenuItem>
+                  <MenuItem onClick={handleOpenDateDialog}>{t("Custom")}</MenuItem>
+                </Menu>
+
+                <Dialog
+                  fullWidth
+                  maxWidth={"sm"}
+                  open={openDateDialog}
+                  onClose={handleCloseDateDialog}
+                >
+                  <DialogTitle>{t("Custom")}</DialogTitle>
+                  <DialogContent>
+                    <Box sx={{ overflow: "hidden" }}>
+                      <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="center"
+                          gap={2}
+                        >
+                          <Box>
+                            <DateCalendar
+                              value={selectedDate}
+                              onChange={handleDateChange}
+                              disableFuture
+                            />
+                          </Box>
+                          <Box display="flex" justifyContent="space-between">
+                            <Box
+                              display="flex"
+                              flexDirection="column"
+                              alignItems="center"
+                            >
+                              <Box mb={1}>{t("Start time")}</Box>
+                              <TimeClock
+                                ampm={false}
+                                value={startTime}
+                                onChange={handleStartTimeChange}
+                              />
+                            </Box>
+                            <Box
+                              display="flex"
+                              flexDirection="column"
+                              alignItems="center"
+                            >
+                              <Box mb={1}>End Time</Box>
+                              <TimeClock
+                                ampm={false}
+                                value={endTime}
+                                onChange={handleEndTimeChange}
+                              />
+                            </Box>
+                          </Box>
+                        </Box>
+                      </LocalizationProvider>
+                    </Box>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseDateDialog}>Cancel</Button>
+                    <Button onClick={handleFilterByDate}>OK</Button>
+                  </DialogActions>
+                </Dialog>
+
+                <Menu
+                  id="amount-menu" // menu 3
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl) && selectedMenu === "amount"}
+                  onClose={handleClose}
+                >
+                  <Box px={2} py={1}>
+                    <Typography
+                      variant="subtitle1"
+                      gutterBottom
+                      sx={{ fontSize: "16px" }}
+                    >
+                      {t("Trade amount")}
+                    </Typography>
+                    <RadioGroup
+                      value={selectedAmount}
+                      onChange={handleAmountChange}
+                      
+                    >
+                      <FormControlLabel
+                        value="all"
+                        control={<Radio />}
+                        label={
+                          <Typography
+                            sx={{ fontSize: "14px" }}
+                          >
+                            {t("All")}
+                          </Typography>
+                        }
+                      />
+                      <FormControlLabel
+                        value="lessThan10"
+                        control={<Radio />}
+                        label={
+                          <Typography
+                            sx={{ fontSize: "14px" }}
+                          >
+                            {t("lessThan10")}
+                          </Typography>
+                        }
+                      />
+                      <FormControlLabel
+                        value="1to2"
+                        control={<Radio />}
+                        
+                        label={
+                          <Typography
+                            sx={{ fontSize: "14px" }}
+                          >
+                            {t("1to2")}
+                          </Typography>
+                        }
+                      />
+                      <FormControlLabel
+                        value="1to5"
+                        control={<Radio />}
+                        label={
+                          <Typography
+                            sx={{ fontSize: "14px" }}
+                          >
+                            {t("1to5")}
+                          </Typography>
+                        }
+                      />
+                      <FormControlLabel
+                        value="5to10"
+                        control={<Radio />}
+                        label={
+                          <Typography
+                            sx={{ fontSize: "14px" }}
+                          >
+                            {t("5to10")}
+                          </Typography>
+                        }
+                      />
+                      <FormControlLabel
+                        value="moreThan10"
+                        control={<Radio />}
+                        label={
+                          <Typography
+                            sx={{ fontSize: "14px" }}
+                          >
+                            {t("moreThan10")}
+                          </Typography>
+                        }
+                      />
+                    </RadioGroup>
+                  </Box>
+                </Menu>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+          <Divider />
+          <Box p={2}>
+            <TableDetailTrade dataState={dataState} />
+          </Box>
+        </Card>
+      }
     </Box>
   );
 };

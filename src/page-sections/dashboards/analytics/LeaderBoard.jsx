@@ -32,8 +32,8 @@ import RefreshProvider from "contexts/RefreshContext";
 import formatCurrency from "util/formatCurrency";
 import sortData from "util/sortData";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import AuthContext from "contexts/AuthContext";
+// import { useNavigate } from "react-router-dom";
+// import AuthContext from "contexts/AuthContext";
 import NewPlanDrawer from "page-sections/portfolios/drawer/NewPlanDrawer";
 import round2number from "util/round2number";
 import numberWithCommas from "util/numberSeparatorThousand";
@@ -63,7 +63,7 @@ const LeaderBoard = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState();
-  const [openCopyPlan, setOpenCopyPlan]= useState(false)
+  const [openCopyPlan, setOpenCopyPlan] = useState(false);
   // const { logoutFromSystem, logoutToConnect } = useContext(AuthContext);
   const fetchDataUser = useCallback(async () => {
     try {
@@ -186,8 +186,9 @@ const LeaderBoard = () => {
                 <Box
                   style={{
                     padding: "20px 0",
-                    height: "100%",
+                    // height: "100%",
                     maxWidth: 300,
+                    height: 300,
                   }}
                 >
                   <Box
@@ -214,7 +215,9 @@ const LeaderBoard = () => {
                       style={{
                         width: "100%",
                         height: "50%",
-                        background: renderBackgroundLeaderBoardBot(parseInt(index) + 1),
+                        background: renderBackgroundLeaderBoardBot(
+                          parseInt(index) + 1
+                        ),
                         top: 0,
                         left: 0,
                         borderRadius: 8,
@@ -297,20 +300,39 @@ const LeaderBoard = () => {
                         )}
                     </Box>
                     <Typography
-                      // variant={downLg ? "body1" : "h6"}
                       mb={1}
                       fontSize={14}
                       fontWeight={600}
-                      // color="textPrimary"
                       color="text.main"
+                      style={{
+                        display: "-webkit-box",
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        WebkitLineClamp: 2, 
+                        lineHeight: "1.2em",
+                        maxHeight: "2.4em", 
+                      }}
                     >
                       {item.name}
                     </Typography>
-                    <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                    <Box
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
                       <Typography fontSize={12} color="textSecondary">
                         PnL 24h {item.pnl}&nbsp;
                       </Typography>
-                      <Typography fontWeight={600} fontSize={12} color={parseFloat(item?.profitRate) > 0 ? "success.main" : "error.main"}>
+                      <Typography
+                        fontWeight={600}
+                        fontSize={12}
+                        color={
+                          parseFloat(item?.profitRate) > 0
+                            ? "success.main"
+                            : "error.main"
+                        }
+                      >
                         ({formatCurrency(item?.profitRate)?.replace("$", "")}%)
                       </Typography>
                     </Box>
@@ -321,17 +343,26 @@ const LeaderBoard = () => {
                     >
                       ${numberWithCommas(round2number(item.profit))}
                     </Typography>
-                    {
-                      item?.isPrivate=== true && 
-                      <Button sx={{cursor: "context-menu"}} disableRipple variant="outlined">{t("Private plan")}</Button>
-                    }
-                    {
-                      item?.isPrivate=== false && 
-                      <Button variant={"contained"} onClick={()=> {
-                        setSelectedPlan(item)
-                        setOpenCopyPlan(true)
-                      }}>{t("Copy plan")}</Button>
-                    }
+                    {item?.isPrivate === true && (
+                      <Button
+                        sx={{ cursor: "context-menu" }}
+                        disableRipple
+                        variant="outlined"
+                      >
+                        {t("Private plan")}
+                      </Button>
+                    )}
+                    {item?.isPrivate === false && (
+                      <Button
+                        variant={"contained"}
+                        onClick={() => {
+                          setSelectedPlan(item);
+                          setOpenCopyPlan(true);
+                        }}
+                      >
+                        {t("Copy plan")}
+                      </Button>
+                    )}
                   </Box>
                 </Box>
               </SwiperSlide>
@@ -403,19 +434,25 @@ const LeaderBoard = () => {
                     )[0]?.name
                   }
                   imgRank={"/static/icons/rank-1.png"}
-                  avatarUser={  sortData(
-                    dataUser,
-                    function (e) {
-                      return parseFloat(e.pnl);
-                    },
-                    "desc"
-                  )[0]?.photoUrl ? `/users/avatar/${ sortData(
-                    dataUser,
-                    function (e) {
-                      return parseFloat(e.pnl);
-                    },
-                    "desc"
-                  )[0]?.photoUrl}` :"/static/logo/luxcoin.png"}
+                  avatarUser={
+                    sortData(
+                      dataUser,
+                      function (e) {
+                        return parseFloat(e.pnl);
+                      },
+                      "desc"
+                    )[0]?.photoUrl
+                      ? `/users/avatar/${
+                          sortData(
+                            dataUser,
+                            function (e) {
+                              return parseFloat(e.pnl);
+                            },
+                            "desc"
+                          )[0]?.photoUrl
+                        }`
+                      : "/static/logo/luxcoin.png"
+                  }
                   bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
                   border="3.28125px solid rgb(255, 222, 101)"
                 />
@@ -461,19 +498,25 @@ const LeaderBoard = () => {
                   )[1]?.name
                 }
                 imgRank={"/static/icons/rank-2.png"}
-                avatarUser={  sortData(
-                  dataUser,
-                  function (e) {
-                    return parseFloat(e.pnl);
-                  },
-                  "desc"
-                )[1]?.photoUrl ? `/users/avatar/${ sortData(
-                  dataUser,
-                  function (e) {
-                    return parseFloat(e.pnl);
-                  },
-                  "desc"
-                )[1]?.photoUrl}` :"/static/logo/luxcoin.png"}
+                avatarUser={
+                  sortData(
+                    dataUser,
+                    function (e) {
+                      return parseFloat(e.pnl);
+                    },
+                    "desc"
+                  )[1]?.photoUrl
+                    ? `/users/avatar/${
+                        sortData(
+                          dataUser,
+                          function (e) {
+                            return parseFloat(e.pnl);
+                          },
+                          "desc"
+                        )[1]?.photoUrl
+                      }`
+                    : "/static/logo/luxcoin.png"
+                }
                 bgRadient="linear-gradient(272.63deg, rgb(194, 194, 194) -33.55%, rgb(79, 86, 112) 96.85%)"
                 border="3.28125px solid rgb(160, 174, 192)"
               />
@@ -520,19 +563,25 @@ const LeaderBoard = () => {
                     )[0]?.name
                   }
                   imgRank={"/static/icons/rank-1.png"}
-                  avatarUser={  sortData(
-                    dataUser,
-                    function (e) {
-                      return parseFloat(e.pnl);
-                    },
-                    "desc"
-                  )[0]?.photoUrl ? `/users/avatar/${ sortData(
-                    dataUser,
-                    function (e) {
-                      return parseFloat(e.pnl);
-                    },
-                    "desc"
-                  )[0]?.photoUrl}` :"/static/logo/luxcoin.png"}
+                  avatarUser={
+                    sortData(
+                      dataUser,
+                      function (e) {
+                        return parseFloat(e.pnl);
+                      },
+                      "desc"
+                    )[0]?.photoUrl
+                      ? `/users/avatar/${
+                          sortData(
+                            dataUser,
+                            function (e) {
+                              return parseFloat(e.pnl);
+                            },
+                            "desc"
+                          )[0]?.photoUrl
+                        }`
+                      : "/static/logo/luxcoin.png"
+                  }
                   bgRadient="linear-gradient(95.4deg, rgba(216, 146, 41, 0.89) 6.95%, rgba(165, 138, 0, 0.176) 100%)"
                   border="3.28125px solid rgb(255, 222, 101)"
                 />
@@ -579,19 +628,25 @@ const LeaderBoard = () => {
                   )[2]?.name
                 }
                 imgRank={"/static/icons/rank-3.png"}
-                avatarUser={  sortData(
-                  dataUser,
-                  function (e) {
-                    return parseFloat(e.pnl);
-                  },
-                  "desc"
-                )[2]?.photoUrl ? `/users/avatar/${ sortData(
-                  dataUser,
-                  function (e) {
-                    return parseFloat(e.pnl);
-                  },
-                  "desc"
-                )[2]?.photoUrl}` :"/static/logo/luxcoin.png"}
+                avatarUser={
+                  sortData(
+                    dataUser,
+                    function (e) {
+                      return parseFloat(e.pnl);
+                    },
+                    "desc"
+                  )[2]?.photoUrl
+                    ? `/users/avatar/${
+                        sortData(
+                          dataUser,
+                          function (e) {
+                            return parseFloat(e.pnl);
+                          },
+                          "desc"
+                        )[2]?.photoUrl
+                      }`
+                    : "/static/logo/luxcoin.png"
+                }
                 bgRadient="linear-gradient(92.33deg, rgba(7, 200, 140, 0.89) 2.82%, rgba(53, 214, 202, 0.518) 99.42%)"
                 border="3.28125px solid rgb(13, 148, 109)"
               />
@@ -628,7 +683,14 @@ const LeaderBoard = () => {
                         #{parseInt(index) + 4}
                       </Typography>
                       <ListItemAvatar>
-                        <Avatar alt={item.name} src={item.photoUrl ? `/api/users/avatar/${item.photoUrl}` : ""} />
+                        <Avatar
+                          alt={item.name}
+                          src={
+                            item.photoUrl
+                              ? `/api/users/avatar/${item.photoUrl}`
+                              : ""
+                          }
+                        />
                       </ListItemAvatar>
                       <ListItemText primary={item.name} />
                     </Box>
@@ -668,7 +730,12 @@ const LeaderBoard = () => {
         isFromLeaderboard={true}
         // setData={setDataStat}
       />
-      <CopyPlanDrawer open={openCopyPlan} setOpen={setOpenCopyPlan} selectedPlan={selectedPlan} isFromCopyPlan={true} />
+      <CopyPlanDrawer
+        open={openCopyPlan}
+        setOpen={setOpenCopyPlan}
+        selectedPlan={selectedPlan}
+        isFromCopyPlan={true}
+      />
     </RefreshProvider>
   );
 };

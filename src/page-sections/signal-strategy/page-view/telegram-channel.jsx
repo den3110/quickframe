@@ -41,6 +41,7 @@ import PopupTrade from "./component/PopupTrade";
 import { sortDataAlphabet } from "util/sortDataAlphabet";
 import CopyAllIcon from "@mui/icons-material/CopyAll";
 import { showToast } from "components/toast/toast";
+import BubbleHistory from "page-sections/manual-trade/section/BubbleHistory";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -51,7 +52,7 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   gap: 2,
 }));
 
-const TelegramChannelSignalStrategy = () => {
+const TelegramChannelSignalStrategy = ({isFromTeleChannel}) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
   // const navigate = useNavigate();
@@ -678,6 +679,7 @@ const TelegramChannelSignalStrategy = () => {
           mb={2}
         >
           <Box width={"100%"} sx={{ padding: downLg ? 1 : "24px" }}>
+            <BubbleHistory />
             <TableInvest selectedBot={{ ...selectedBot }} />
           </Box>
         </Card>

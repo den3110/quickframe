@@ -11,7 +11,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   ActionBotType,
   ActionBotTypeMessageSucces,
-  ActionBotTypeStatus,
+  // ActionBotTypeStatus,
 } from "type/ActionBotType";
 import portfolioApi from "api/portfolios/portfolioApi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,7 +19,7 @@ import { showToast } from "components/toast/toast";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import { Replay } from "@mui/icons-material";
-import useQuery from "hooks/useQuery";
+// import useQuery from "hooks/useQuery";
 import AuthContext from "contexts/AuthContext";
 import NewPlanDrawer from "../drawer/NewPlanDrawer";
 import ShareArchievement from "../dialog/ShareArchievement";
@@ -27,6 +27,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { SignalFeatureTypes } from "type/SignalFeatureTypes";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { useTranslation } from "react-i18next";
+import StopIcon from '@mui/icons-material/Stop';
 
 const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -76,19 +77,52 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
         linkAccountId: selectedLinkAccount,
       };
       // const { data, error, loading, refetch }= useQuery()
-      await portfolioApi.userBotAction(id, payload);
+      const response= await portfolioApi.userBotAction(id, payload);
       // setData()
       // setIsRunning(ActionBotTypeStatus[action]);
-      setIsPause(!isPause);
-      showToast(ActionBotTypeMessageSucces[action], "success");
-      setDataStat({
-        ...dataStat,
-        lastData: { ...dataStat.lastData, isPause: !isPause },
-      });
+      if(response?.data?.ok=== true) {
+        setIsPause(!isPause);
+        showToast(ActionBotTypeMessageSucces[action], "success");
+        setDataStat({
+          ...dataStat,
+          lastData: { ...dataStat.lastData, isPause: !isPause },
+        });
+      }
+      else if(response?.data?.ok=== false ){
+        showToast(t(response?.data?.err_code), "error")
+      }
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }
   };
+
+  const handleStopBot = async (action) => {
+    try {
+      const payload = {
+        action: ActionBotType[action],
+        linkAccountId: selectedLinkAccount,
+      };
+      // const { data, error, loading, refetch }= useQuery()
+      const response= await portfolioApi.userBotAction(id, payload);
+      // setData()
+      // setIsRunning(ActionBotTypeStatus[action]);
+      if(response?.data?.ok=== true) {
+        setIsPause(!isPause);
+        showToast(ActionBotTypeMessageSucces[action], "success");
+        setDataStat({
+          ...dataStat,
+          isRunning: false,
+          lastData: { ...dataStat.lastData },
+        });
+      }
+      else if(response?.data?.ok=== false ){
+        showToast(t(response?.data?.err_code), "error")
+      }
+    } catch (error) {
+      showToast(error?.response?.data?.m, "error");
+    }
+  };
+
 
   const resetPnlToday = async () => {
     try {
@@ -104,6 +138,41 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
       }
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
+    }
+  };
+
+  const handleRemovePlan = async () => {
+    try {
+      const payload = {
+        ids: [id],
+        action: ActionBotType.REMOVE,
+      };
+      const responses = await portfolioApi.userBotActionList(payload);
+      if (responses?.data?.ok === true) {
+        showToast(ActionBotTypeMessageSucces[ActionBotType.REMOVE], "success");
+        setDataStat(undefined)
+        // setChangeData((prev) => !prev);
+      }
+      // const requests = selectedPlans.map((plan, index) =>
+      //   axiosClient.post(`/users/bot/action/${plan?._id}`, {
+      //     action: ActionBotType.REMOVE,
+      //   })
+      // );
+
+      // const responses = await Promise.all(requests);
+      // // const listResult = responses?.map((item) => item.data.ok);
+      // // setData();
+      // showToast("Xoá các gói đã chọn thành công", "success");
+      // setData(
+      //   dataState?.filter(
+      //     (item, key) => !selectedPlans.find((a) => a._id === item._id)
+      //   )
+      // );
+      // setChange((prev) => !prev);
+    } catch (error) {
+      console.error("Error sending requests:", error);
+    } finally {
+      // setLoading(false);
     }
   };
 
@@ -140,6 +209,23 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
         <Box>
           {isSignalStrategy === false && (
             <>
+              {isRunning === true && (
+                <Button
+                  sx={{
+                    "& .MuiButton-startIcon": {
+                      margin: downLg ? 0 : "",
+                    },
+                  }}
+                  startIcon={<StopIcon />}
+                  variant="contained"
+                  color="warning"
+                  size={"large"}
+                  style={{ marginRight: "8px" }}
+                  onClick={() => handleStopBot("STOP")}
+                >
+                  {downLg ? "" : t("stop")}
+                </Button>
+              )}
               {isRunning === false && (
                 <Button
                   sx={{
@@ -274,7 +360,11 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
           >
             {t("Reset today P/L")}
           </MenuItem>
-          <MenuItem onClick={handleSubMenuClick}>{t("Delete Plan")}</MenuItem>
+          <MenuItem onClick={async (e)=> {
+            handleSubMenuClick(e)
+            await handleRemovePlan()
+
+          }}>{t("Delete Plan")}</MenuItem>
         </Box>
       </Popover>
       <NewPlanDrawer

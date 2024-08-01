@@ -58,6 +58,8 @@ import { useTranslation } from "react-i18next";
 import PortfoliosContext from "contexts/PortfoliosContext";
 import sortData from "util/sortData";
 import { sortDataAlphabet } from "util/sortDataAlphabet";
+import formatCurrency from "util/formatCurrency";
+import round2number from "util/round2number";
 
 const NewPlanDrawer = ({
   open,
@@ -92,6 +94,7 @@ const NewPlanDrawer = ({
   const [childTargetEnable, setChildTargetEnable] = useState(false);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
+  // const [sending, setSending]= useState
   const [planName, setPlanName] = useState("");
   const [autoType, setAutoType] = useState(AutoTypes.BOT);
   const [investmentFund, setInvestmentFund] = useState(100);
@@ -143,6 +146,14 @@ const NewPlanDrawer = ({
   const [loseContinue, setLoseContinue] = useState(0);
   const [whenProfit, setWhenProfit] = useState(0);
   const [whenLosing, setWhenLosing] = useState(0);
+  const [waitTelegramSessionEnable, setWaitTelegramSessionEnable]= useState(false)
+  const [fireXSessions, setFireXSessions]= useState(0)
+  const [inXSessions, setInXSessions]= useState(0)
+  const [skipXSessions, setSkipXSessions]= useState(0)
+  const [betXSessions, setBetXSessions]= useState(0)
+  const [noStopWhenUnauthorize, setNoStopWhenUnauthorize]= useState(false)
+  const [noStopWhenNotEBalance, setNoStopWhenNotEBalance]= useState(false)
+  const [autoReloadDemoBalance, setAutoReloadDemoBalance]= useState(false)
   // const [selectedTab, setSelectedTab] = useState(0);
   const isDisableButton = planName?.length <= 0;
   const [selectedTab1, setSelectedTab1] = useState(0);
@@ -303,6 +314,13 @@ const NewPlanDrawer = ({
               signal_feature: featureType,
               enabled_tpsl: takeProfit,
               linkAccountId: linkAccountId,
+              wait_telegram_session_enabled: waitTelegramSessionEnable,
+              wait_telegram_session_data: {
+                fire_x_sessions: fireXSessions, // Cháy x phiên
+                in_x_sessions: inXSessions, // trong x phiên
+                skip_x_sessions: skipXSessions, // bỏ x phiên
+                bet_x_sessions: betXSessions // Vào x phiên
+              },
             };
 
             break;
@@ -501,6 +519,10 @@ const NewPlanDrawer = ({
           run_when_exactly_win_lose: runWhenExactlyWinLose,
           get_signal_to_stop_from_signal_plan: getSignalToStopFromSignalPlan,
         },
+        no_stop_when_unauthorize: noStopWhenUnauthorize,
+        no_stop_when_not_e_balance: noStopWhenNotEBalance,
+        auto_reload_demo_balance: autoReloadDemoBalance,
+
       };
       if (decodedData?.data?.levelStaff >= 3) {
         data = { ...data, is_default: defaultPlan };
@@ -526,14 +548,15 @@ const NewPlanDrawer = ({
           setData({ ...selectedPlan, ...data });
         } else if (isEdit === true) {
           if (isFromCopyPlan) {
-          } else {
+          } 
+          else {
             let dataTemp = dataProps;
             const indexData = dataTemp?.findIndex(
               (item) => item?._id === selectedPlan?._id
             );
             dataTemp[indexData] = response?.data?.d;
             setData(dataTemp);
-            setChangeState((prev) => !prev);
+            // setChangeState((prev) => !prev);
           }
         } else {
           setChange((prev) => !prev);
@@ -810,6 +833,15 @@ const NewPlanDrawer = ({
       setChildTargetEnable(selectedPlan?.child_target_enabled);
       setChildProfitTarget(selectedPlan?.child_profit_target);
       setChildLossTarget(selectedPlan?.child_loss_target);
+      setWaitTelegramSessionEnable(selectedPlan?.wait_telegram_session_enabled);
+
+      setFireXSessions(selectedPlan?.wait_telegram_session_data?.fire_x_sessions);
+      setInXSessions(selectedPlan?.wait_telegram_session_data?.in_x_sessions);
+      setSkipXSessions(selectedPlan?.wait_telegram_session_data?.skip_x_sessions);
+      setBetXSessions(selectedPlan?.wait_telegram_session_data?.bet_x_sessions);
+      setNoStopWhenUnauthorize(selectedPlan?.no_stop_when_unauthorize);
+      setNoStopWhenNotEBalance(selectedPlan?.no_stop_when_not_e_balance);
+      setAutoReloadDemoBalance(selectedPlan?.auto_reload_demo_balance);
       if (isFromLeaderboard === true) {
         setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
         setLinkAccountId(initLinkAccountId);
@@ -824,7 +856,20 @@ const NewPlanDrawer = ({
         setArraySignalStrategy(selectedPlan?.method_data?.method_list);
         setIsCopyPlan(isFromCopyPlan);
       }
-    } else {
+    } 
+    else if(isEdit !== true && allowSelectedTab) {
+      setArraySignalStrategy(selectedSignal);
+      setSignalStrategy(selectedSignal[0]);
+      setSelectedTab("Telegram Signal")
+      setAutoType(3)
+      if(selectedSignal?.length > 1) {
+        setFeatureType(SignalFeatureTypes.AUTO_CHANGE_METHODS)
+      }
+      else {
+        setFeatureType(SignalFeatureTypes.SINGLE_METHOD)
+      }
+    }
+    else {
       setIdPlan();
       setPlanName("");
       setInvestmentFund(100);
@@ -903,6 +948,14 @@ const NewPlanDrawer = ({
       setChildTargetEnable(false);
       setChildProfitTarget(0);
       setChildLossTarget(0);
+      setWaitTelegramSessionEnable(false);
+      setFireXSessions(0);
+      setInXSessions(0);
+      setSkipXSessions(0);
+      setBetXSessions(0);
+      setNoStopWhenUnauthorize(false);
+      setNoStopWhenNotEBalance(false);
+      setAutoReloadDemoBalance(false);
       setBotId(initBotId);
     }
   }, [
@@ -1611,6 +1664,7 @@ const NewPlanDrawer = ({
                                   ) : (
                                     <>
                                       <Autocomplete
+                                        disableCloseOnSelect={true}
                                         size={"medium"}
                                         multiple
                                         options={sortData(
@@ -1768,6 +1822,7 @@ const NewPlanDrawer = ({
                                   ) : (
                                     <>
                                       <Autocomplete
+                                        disableCloseOnSelect={true}
                                         size={"medium"}
                                         multiple
                                         options={sortData(
@@ -2395,6 +2450,79 @@ const NewPlanDrawer = ({
                       </Box>
                     )}
                   </Box>
+                  {selectedTab === "Telegram Signal" && featureType === SignalFeatureTypes.SINGLE_METHOD &&  
+                    <Box mt={2}>
+                      <Box
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                        alignItems={"center"}
+                        gap={1}
+                        mb={1}
+                      >
+                        <Typography variant="h6">{t("Đợi tín hiệu phiên")}</Typography>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={waitTelegramSessionEnable}
+                              onChange={() =>
+                                setWaitTelegramSessionEnable(!waitTelegramSessionEnable)
+                              }
+                            />
+                          }
+                        />
+                      </Box>
+                      {/* {console.log(waitSignalOtherPlanEnabled)} */}
+                      {waitTelegramSessionEnable && 
+                      <>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6} md={6}>
+                            <TextField
+                              fullWidth
+                              value={fireXSessions}
+                              onChange={(e)=> setFireXSessions(e.target.value)}
+                              name="fs_fire_x_sessions"
+                              type={'number'}
+                              label={t('fire_x_sessions')}
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid item xs={6} md={6}>
+                            <TextField value={inXSessions}
+                                onChange={(e) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value) && value <= 80) {
+      setInXSessions(value);
+    } else if (isNaN(value)) {
+      setInXSessions(0);
+    }
+  }} fullWidth name="fs_in_x_session" type={'number'} label={t('in_x_sessions')} size="small" />
+                          </Grid>
+                          <Grid item xs={6} md={6}>
+                            <TextField
+                              fullWidth
+                              value={skipXSessions}
+                              onChange={(e)=> setSkipXSessions(e.target.value)}
+                              name="fs_skip_x_session"
+                              type={'number'}
+                              label={t('skip_x_sessions')}
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid item xs={6} md={6}>
+                            <TextField
+                              value={betXSessions}
+                              onChange={(e)=> setBetXSessions(e.target.value)}
+                              fullWidth
+                              name="fs_order_x_session"
+                              type={'number'}
+                              label={t('order_x_sessions')}
+                              size="small"
+                            />
+                          </Grid>
+                        </Grid>
+                      </>}
+                    </Box>
+                  }
                 </>
               )}
               {/*  */}
@@ -2569,6 +2697,66 @@ const NewPlanDrawer = ({
                             checked={childTargetEnable}
                             onChange={() =>
                               setChildTargetEnable(!childTargetEnable)
+                            }
+                          />
+                        }
+                      />
+                    </Box>
+                    {/*  */}
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                      mb={1}
+                    >
+                      <Typography variant="h6">{t("Không tắt bot khi đăng xuất tài khoản Sàn")}</Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={noStopWhenUnauthorize}
+                            onChange={() =>
+                              setNoStopWhenUnauthorize(!noStopWhenUnauthorize)
+                            }
+                          />
+                        }
+                      />
+                    </Box>
+                    {/*  */}
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                      mb={1}
+                    >
+                      <Typography variant="h6">{t("Không tắt bot khi không đủ số dư")}</Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={noStopWhenNotEBalance}
+                            onChange={() =>
+                              setNoStopWhenNotEBalance(!noStopWhenNotEBalance)
+                            }
+                          />
+                        }
+                      />
+                    </Box>
+                    {/*  */}
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                      mb={1}
+                    >
+                      <Typography variant="h6">{t("Tự làm mới số dư DEMO khi không đủ")}</Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={autoReloadDemoBalance}
+                            onChange={() =>
+                              setAutoReloadDemoBalance(!autoReloadDemoBalance)
                             }
                           />
                         }
@@ -3017,14 +3205,16 @@ const NewPlanDrawer = ({
                       {t("Take Profit/Stoploss")}
                     </Typography>
                     <Typography variant="subtitle1">
-                      ${investmentFund?.toFixed(2)}
+                      ${round2number(takeProfitTarget)} / ${round2number(stopLossTarget)}
                     </Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
                     <Typography variant="body2">
                       {t("budget_strategy")}
                     </Typography>
-                    <Typography variant="subtitle1">${baseAmount}</Typography>
+                    <Typography variant="subtitle1">{dataBudgetStrategy.find(
+                                  (item) => item._id === budgetStrategy
+                                )?.name || null}</Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
                     <Typography variant="body2">

@@ -5,7 +5,14 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  MenuItem,
+  Table,
+  TableCell,
+  TableHead,
+  TextField,
   Typography,
+  TableRow,
+  TableBody,
 } from "@mui/material";
 import {
   ArrowForward,
@@ -19,6 +26,11 @@ import { isDark } from "util/constants";
 import { showToast } from "components/toast/toast";
 import AuthContext from "contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import Amount from "components/wallet/Amount";
+import moment from "moment";
+import TxId from "components/wallet/Txtd";
+import Memo from "components/wallet/Memo";
+import Status from "components/wallet/Status";
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -34,13 +46,31 @@ const useStyles = makeStyles(() => ({
 }));
 
 const TransactionWallet = (props) => {
-  const {t }= useTranslation()
+  const { t } = useTranslation();
   const classes = useStyles();
-  const {selectedLinkAccount }= useContext(AuthContext)
+  const { selectedLinkAccount } = useContext(AuthContext);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [dataBalance, setDataBalance] = useState({ d: { c: [] } });
   const [dataBalanceSpot, setDataBalanceSpot] = useState({ d: { c: [] } });
+  const [type, setType] = useState("usdt");
+  const [dataTradingComission, setDataTradingComission] = useState([]);
+
+  const handleChange = async (e) => {
+    setPage(1);
+    setType(e.target.value);
+    if (e.target.value === "TRADING_COMMISION") {
+      const response = await userApi.userExchangeLinkAccountHistoryComission(
+        selectedLinkAccount
+      );
+      if (response?.data?.ok === true) {
+        setDataTradingComission(response?.data?.d?.c);
+      } else if (response?.data?.ok === false) {
+        showToast(response?.data?.m, "error");
+      }
+    }
+  };
+
   const handleOpenTransaction = () => {
     props?.handleOpenDetailTransaction();
   };
@@ -85,17 +115,32 @@ const TransactionWallet = (props) => {
     }
   };
 
+  const CURRENCIES = [
+    { name: "usdt", value: "usdt", iconSrc: "/static/icons/usdt.svg" },
+    {
+      name: "trading_commission",
+      value: "TRADING_COMMISION",
+      iconSrc: "/static/icons/win_coms.svg",
+    },
+  ];
+
   useEffect(() => {
     (async () => {
       try {
         const response1 =
-          await userApi.getUserExchangeLinkAccountTransactionsBalance({
-            params: { page, size },
-          }, selectedLinkAccount);
+          await userApi.getUserExchangeLinkAccountTransactionsBalance(
+            {
+              params: { page, size },
+            },
+            selectedLinkAccount
+          );
         const response2 =
-          await userApi.getUserExchangeLinkAccountSpotWalletTransactions({
-            params: { page, size },
-          }, selectedLinkAccount);
+          await userApi.getUserExchangeLinkAccountSpotWalletTransactions(
+            {
+              params: { page, size },
+            },
+            selectedLinkAccount
+          );
         setDataBalance(response1?.data);
         setDataBalanceSpot(response2?.data);
       } catch (error) {
@@ -107,62 +152,154 @@ const TransactionWallet = (props) => {
   return (
     <>
       <Typography variant="h6">{t("recent_transaction")}</Typography>
-      {sortedData?.length <= 0 && (
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          mt={2}
-          mb={2}
-          color="grey.500"
+      <Box mt={1} sx={{ width: "100%" }}>
+        <TextField
+          fullWidth
+          select
+          label={t("type")}
+          value={type}
+          onChange={handleChange}
         >
-          <NoTransactionIcon />
-          <Typography>{t("no_transaction")}</Typography>
+          {CURRENCIES.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              <div style={{ display: "flex" }}>
+                <img
+                  src={option.iconSrc}
+                  style={{
+                    width: "15px",
+                    height: "15px",
+                    marginRight: "0.5em",
+                    marginTop: "0.2em",
+                  }}
+                  alt="icon "
+                />
+                {t(option.name)}
+              </div>
+            </MenuItem>
+          ))}
+        </TextField>
+      </Box>
+
+      {type === "usdt" && (
+        <Box sx={{ width: "100%" }} mt={1}>
+          {sortedData?.length <= 0 && (
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              mt={2}
+              mb={2}
+              color="grey.500"
+            >
+              <NoTransactionIcon />
+              <Typography>{t("no_transaction")}</Typography>
+            </Box>
+          )}
+          {sortedData?.length > 0 && (
+            <List>
+              {sortedData?.slice(0, 7)?.map((transaction, index) => (
+                <ListItem
+                  onClick={handleOpenTransaction}
+                  key={index}
+                  className={classes.listItem}
+                  sx={{
+                    borderBottom: (theme) =>
+                      isDark(theme)
+                        ? "1px solid rgb(51, 50, 70)"
+                        : "1px solid rgb(239, 241, 245)",
+                    padding: "10px 6px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <ListItemIcon>{getIconByType(transaction.type)}</ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          className={classes.amount}
+                        >
+                          ${transaction.amount.toFixed(2)}
+                        </Typography>
+                        {" - "}
+                        {transaction.type}
+                      </React.Fragment>
+                    }
+                  />
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.date}
+                  >
+                    {new Date(transaction.ts).toLocaleString()}
+                  </Typography>
+                </ListItem>
+              ))}
+            </List>
+          )}
         </Box>
       )}
-      {sortedData?.length > 0 && (
-        <Box sx={{ width: "100%" }}>
-          <List>
-            {sortedData?.slice(0, 7)?.map((transaction, index) => (
-              <ListItem
-                onClick={handleOpenTransaction}
-                key={index}
-                className={classes.listItem}
-                sx={{
-                  borderBottom: (theme) =>
-                    isDark(theme)
-                      ? "1px solid rgb(51, 50, 70)"
-                      : "1px solid rgb(239, 241, 245)",
-                  padding: "10px 6px",
-                  cursor: "pointer",
-                }}
+      {type === "TRADING_COMMISION" && (
+        <Box sx={{ width: "100%" }} mt={1}>
+          {dataTradingComission?.length > 0 && (
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead className={classes.thead}>
+                <TableRow>
+                  {/* <TableCell padding="checkbox" /> */}
+                  <TableCell>{t("time")}</TableCell>
+                  <TableCell>{t("value")}</TableCell>
+                  <TableCell>{t("txid/description")}</TableCell>
+                  <TableCell>{t("memo")}</TableCell>
+                  <TableCell>{t("status")}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dataTradingComission.map((row, index) => (
+                  <TableRow
+                    hover
+                    sx={{
+                      borderBottom: (theme) =>
+                        index !== dataTradingComission.length - 1 &&
+                        `solid 1px ${theme.palette.divider}`,
+                    }}
+                    key={row.ts}
+                  >
+                    <TableCell>
+                      {moment(row?.ts).format("HH:mm:ss DD/MM")}
+                    </TableCell>
+                    <TableCell>
+                      <Amount row={row} />
+                    </TableCell>
+                    <TableCell>
+                      <TxId row={row} />
+                    </TableCell>
+                    <TableCell>
+                      <Memo row={row} />
+                    </TableCell>
+                    <TableCell>
+                      <Status row={row} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+          {dataTradingComission?.length <= 0 && (
+            <>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                mt={2}
+                mb={2}
+                color="grey.500"
               >
-                <ListItemIcon>{getIconByType(transaction.type)}</ListItemIcon>
-                <ListItemText
-                  primary={
-                    <React.Fragment>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.amount}
-                      >
-                        ${transaction.amount.toFixed(2)}
-                      </Typography>
-                      {" - "}
-                      {transaction.type}
-                    </React.Fragment>
-                  }
-                />
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.date}
-                >
-                  {new Date(transaction.ts).toLocaleString()}
-                </Typography>
-              </ListItem>
-            ))}
-          </List>
+                <NoTransactionIcon />
+                <Typography>{t("no_transaction")}</Typography>
+              </Box>
+            </>
+          )}
         </Box>
       )}
     </>
