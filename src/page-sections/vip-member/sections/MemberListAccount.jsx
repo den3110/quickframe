@@ -55,7 +55,7 @@ const MemberListAccount = () => {
   const {t }= useTranslation()
 
   const { data, loading, page, setPage } = useContext(VipMemberContext);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [dataState, setDataState] = useState({ c: [] });
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme= useTheme()

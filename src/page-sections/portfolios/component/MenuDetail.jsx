@@ -151,6 +151,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
       if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.REMOVE], "success");
         setDataStat(undefined)
+        navigate("/portfolios", {state: {isFromDeleteBot: true, botId: dataStat?._id}})
         // setChangeData((prev) => !prev);
       }
       // const requests = selectedPlans.map((plan, index) =>

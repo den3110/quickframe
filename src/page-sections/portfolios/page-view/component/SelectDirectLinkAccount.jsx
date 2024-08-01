@@ -1,4 +1,4 @@
-import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
 import { constant } from "constant/constant";
@@ -44,7 +44,9 @@ const SelectDirectLinkAccount = ({plan, userLinkAccountList, setData, data}) => 
   return (
     <Box width={180}> 
       <FormControl fullWidth>
+        <InputLabel id="demo-simple-select">{plan?.accountType}</InputLabel>
         <Select
+          label={plan?.accountType}// botinfo.accountType
           size="small"
           id="demo-simple-select"
           value={linkAccountIdSelected}

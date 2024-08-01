@@ -75,7 +75,7 @@ const NewPlanDrawer = ({
   isFromLeaderboard,
   setChangeState,
   isFromCopyPlan,
-  isFromSignalStrategy
+  isFromSignalStrategy,
 }) => {
   const { ref, inView } = useInView({
     /* Optional options */
@@ -146,14 +146,15 @@ const NewPlanDrawer = ({
   const [loseContinue, setLoseContinue] = useState(0);
   const [whenProfit, setWhenProfit] = useState(0);
   const [whenLosing, setWhenLosing] = useState(0);
-  const [waitTelegramSessionEnable, setWaitTelegramSessionEnable]= useState(false)
-  const [fireXSessions, setFireXSessions]= useState(0)
-  const [inXSessions, setInXSessions]= useState(0)
-  const [skipXSessions, setSkipXSessions]= useState(0)
-  const [betXSessions, setBetXSessions]= useState(0)
-  const [noStopWhenUnauthorize, setNoStopWhenUnauthorize]= useState(false)
-  const [noStopWhenNotEBalance, setNoStopWhenNotEBalance]= useState(false)
-  const [autoReloadDemoBalance, setAutoReloadDemoBalance]= useState(false)
+  const [waitTelegramSessionEnable, setWaitTelegramSessionEnable] =
+    useState(false);
+  const [fireXSessions, setFireXSessions] = useState(0);
+  const [inXSessions, setInXSessions] = useState(0);
+  const [skipXSessions, setSkipXSessions] = useState(0);
+  const [betXSessions, setBetXSessions] = useState(0);
+  const [noStopWhenUnauthorize, setNoStopWhenUnauthorize] = useState(false);
+  const [noStopWhenNotEBalance, setNoStopWhenNotEBalance] = useState(false);
+  const [autoReloadDemoBalance, setAutoReloadDemoBalance] = useState(false);
   // const [selectedTab, setSelectedTab] = useState(0);
   const isDisableButton = planName?.length <= 0;
   const [selectedTab1, setSelectedTab1] = useState(0);
@@ -319,7 +320,7 @@ const NewPlanDrawer = ({
                 fire_x_sessions: fireXSessions, // Cháy x phiên
                 in_x_sessions: inXSessions, // trong x phiên
                 skip_x_sessions: skipXSessions, // bỏ x phiên
-                bet_x_sessions: betXSessions // Vào x phiên
+                bet_x_sessions: betXSessions, // Vào x phiên
               },
             };
 
@@ -522,7 +523,6 @@ const NewPlanDrawer = ({
         no_stop_when_unauthorize: noStopWhenUnauthorize,
         no_stop_when_not_e_balance: noStopWhenNotEBalance,
         auto_reload_demo_balance: autoReloadDemoBalance,
-
       };
       if (decodedData?.data?.levelStaff >= 3) {
         data = { ...data, is_default: defaultPlan };
@@ -548,8 +548,7 @@ const NewPlanDrawer = ({
           setData({ ...selectedPlan, ...data });
         } else if (isEdit === true) {
           if (isFromCopyPlan) {
-          } 
-          else {
+          } else {
             let dataTemp = dataProps;
             const indexData = dataTemp?.findIndex(
               (item) => item?._id === selectedPlan?._id
@@ -835,9 +834,13 @@ const NewPlanDrawer = ({
       setChildLossTarget(selectedPlan?.child_loss_target);
       setWaitTelegramSessionEnable(selectedPlan?.wait_telegram_session_enabled);
 
-      setFireXSessions(selectedPlan?.wait_telegram_session_data?.fire_x_sessions);
+      setFireXSessions(
+        selectedPlan?.wait_telegram_session_data?.fire_x_sessions
+      );
       setInXSessions(selectedPlan?.wait_telegram_session_data?.in_x_sessions);
-      setSkipXSessions(selectedPlan?.wait_telegram_session_data?.skip_x_sessions);
+      setSkipXSessions(
+        selectedPlan?.wait_telegram_session_data?.skip_x_sessions
+      );
       setBetXSessions(selectedPlan?.wait_telegram_session_data?.bet_x_sessions);
       setNoStopWhenUnauthorize(selectedPlan?.no_stop_when_unauthorize);
       setNoStopWhenNotEBalance(selectedPlan?.no_stop_when_not_e_balance);
@@ -856,20 +859,17 @@ const NewPlanDrawer = ({
         setArraySignalStrategy(selectedPlan?.method_data?.method_list);
         setIsCopyPlan(isFromCopyPlan);
       }
-    } 
-    else if(isEdit !== true && allowSelectedTab) {
+    } else if (isEdit !== true && allowSelectedTab) {
       setArraySignalStrategy(selectedSignal);
       setSignalStrategy(selectedSignal[0]);
-      setSelectedTab("Telegram Signal")
-      setAutoType(3)
-      if(selectedSignal?.length > 1) {
-        setFeatureType(SignalFeatureTypes.AUTO_CHANGE_METHODS)
+      setSelectedTab("Telegram Signal");
+      setAutoType(3);
+      if (selectedSignal?.length > 1) {
+        setFeatureType(SignalFeatureTypes.AUTO_CHANGE_METHODS);
+      } else {
+        setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
       }
-      else {
-        setFeatureType(SignalFeatureTypes.SINGLE_METHOD)
-      }
-    }
-    else {
+    } else {
       setIdPlan();
       setPlanName("");
       setInvestmentFund(100);
@@ -974,12 +974,12 @@ const NewPlanDrawer = ({
     // inView
   ]);
 
-  useEffect(()=> {
-    if(allowSelectedTab) {
+  useEffect(() => {
+    if (allowSelectedTab) {
       setArraySignalStrategy(selectedSignal);
       setSignalStrategy(selectedSignal[0]);
     }
-  }, [allowSelectedTab, selectedSignal])
+  }, [allowSelectedTab, selectedSignal]);
 
   useEffect(() => {
     if (inView === false) {
@@ -1083,7 +1083,7 @@ const NewPlanDrawer = ({
                         <TextField
                           value={investmentFund}
                           onChange={(e) => {
-                            setInvestmentFund(parseFloat(e.target.value) || 0);
+                            setInvestmentFund((e.target.value) || 0);
                           }}
                           inputProps={{
                             min: 0,
@@ -1573,7 +1573,10 @@ const NewPlanDrawer = ({
                               getOptionLabel={(option) =>
                                 option ? option.name : ""
                               }
-                              options={dataBudgetStrategy}
+                              options={sortDataAlphabet(
+                                dataBudgetStrategy,
+                                "name"
+                              )}
                               loading={loading}
                               renderInput={(params) => (
                                 <TextField
@@ -1667,10 +1670,9 @@ const NewPlanDrawer = ({
                                         disableCloseOnSelect={true}
                                         size={"medium"}
                                         multiple
-                                        options={sortData(
+                                        options={sortDataAlphabet(
                                           dataSignalStrategy,
-                                          "name",
-                                          "asc"
+                                          "name"
                                         )}
                                         getOptionLabel={(option) => option.name}
                                         value={dataSignalStrategy.filter(
@@ -1791,7 +1793,10 @@ const NewPlanDrawer = ({
                                       getOptionLabel={(option) =>
                                         option ? option.name : ""
                                       }
-                                      options={dataSignalStrategyTelegramSignal}
+                                      options={sortDataAlphabet(
+                                        dataSignalStrategyTelegramSignal,
+                                        "name"
+                                      )}
                                       loading={loading}
                                       renderInput={(params) => (
                                         <TextField
@@ -2450,79 +2455,98 @@ const NewPlanDrawer = ({
                       </Box>
                     )}
                   </Box>
-                  {selectedTab === "Telegram Signal" && featureType === SignalFeatureTypes.SINGLE_METHOD &&  
-                    <Box mt={2}>
-                      <Box
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        alignItems={"center"}
-                        gap={1}
-                        mb={1}
-                      >
-                        <Typography variant="h6">{t("Đợi tín hiệu phiên")}</Typography>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={waitTelegramSessionEnable}
-                              onChange={() =>
-                                setWaitTelegramSessionEnable(!waitTelegramSessionEnable)
-                              }
-                            />
-                          }
-                        />
+                  {selectedTab === "Telegram Signal" &&
+                    featureType === SignalFeatureTypes.SINGLE_METHOD && (
+                      <Box mt={2}>
+                        <Box
+                          display={"flex"}
+                          justifyContent={"space-between"}
+                          alignItems={"center"}
+                          gap={1}
+                          mb={1}
+                        >
+                          <Typography variant="h6">
+                            {t("Đợi tín hiệu phiên")}
+                          </Typography>
+                          <FormControlLabel
+                            control={
+                              <Switch
+                                checked={waitTelegramSessionEnable}
+                                onChange={() =>
+                                  setWaitTelegramSessionEnable(
+                                    !waitTelegramSessionEnable
+                                  )
+                                }
+                              />
+                            }
+                          />
+                        </Box>
+                        {/* {console.log(waitSignalOtherPlanEnabled)} */}
+                        {waitTelegramSessionEnable && (
+                          <>
+                            <Grid container spacing={1}>
+                              <Grid item xs={6} md={6}>
+                                <TextField
+                                  fullWidth
+                                  value={fireXSessions}
+                                  onChange={(e) =>
+                                    setFireXSessions(e.target.value)
+                                  }
+                                  name="fs_fire_x_sessions"
+                                  type={"number"}
+                                  label={t("fire_x_sessions")}
+                                  size="small"
+                                />
+                              </Grid>
+                              <Grid item xs={6} md={6}>
+                                <TextField
+                                  value={inXSessions}
+                                  onChange={(e) => {
+                                    const value = parseInt(e.target.value, 10);
+                                    if (!isNaN(value) && value <= 80) {
+                                      setInXSessions(value);
+                                    } else if (isNaN(value)) {
+                                      setInXSessions(0);
+                                    }
+                                  }}
+                                  fullWidth
+                                  name="fs_in_x_session"
+                                  type={"number"}
+                                  label={t("in_x_sessions")}
+                                  size="small"
+                                />
+                              </Grid>
+                              <Grid item xs={6} md={6}>
+                                <TextField
+                                  fullWidth
+                                  value={skipXSessions}
+                                  onChange={(e) =>
+                                    setSkipXSessions(e.target.value)
+                                  }
+                                  name="fs_skip_x_session"
+                                  type={"number"}
+                                  label={t("skip_x_sessions")}
+                                  size="small"
+                                />
+                              </Grid>
+                              <Grid item xs={6} md={6}>
+                                <TextField
+                                  value={betXSessions}
+                                  onChange={(e) =>
+                                    setBetXSessions(e.target.value)
+                                  }
+                                  fullWidth
+                                  name="fs_order_x_session"
+                                  type={"number"}
+                                  label={t("order_x_sessions")}
+                                  size="small"
+                                />
+                              </Grid>
+                            </Grid>
+                          </>
+                        )}
                       </Box>
-                      {/* {console.log(waitSignalOtherPlanEnabled)} */}
-                      {waitTelegramSessionEnable && 
-                      <>
-                        <Grid container spacing={1}>
-                          <Grid item xs={6} md={6}>
-                            <TextField
-                              fullWidth
-                              value={fireXSessions}
-                              onChange={(e)=> setFireXSessions(e.target.value)}
-                              name="fs_fire_x_sessions"
-                              type={'number'}
-                              label={t('fire_x_sessions')}
-                              size="small"
-                            />
-                          </Grid>
-                          <Grid item xs={6} md={6}>
-                            <TextField value={inXSessions}
-                                onChange={(e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value <= 80) {
-      setInXSessions(value);
-    } else if (isNaN(value)) {
-      setInXSessions(0);
-    }
-  }} fullWidth name="fs_in_x_session" type={'number'} label={t('in_x_sessions')} size="small" />
-                          </Grid>
-                          <Grid item xs={6} md={6}>
-                            <TextField
-                              fullWidth
-                              value={skipXSessions}
-                              onChange={(e)=> setSkipXSessions(e.target.value)}
-                              name="fs_skip_x_session"
-                              type={'number'}
-                              label={t('skip_x_sessions')}
-                              size="small"
-                            />
-                          </Grid>
-                          <Grid item xs={6} md={6}>
-                            <TextField
-                              value={betXSessions}
-                              onChange={(e)=> setBetXSessions(e.target.value)}
-                              fullWidth
-                              name="fs_order_x_session"
-                              type={'number'}
-                              label={t('order_x_sessions')}
-                              size="small"
-                            />
-                          </Grid>
-                        </Grid>
-                      </>}
-                    </Box>
-                  }
+                    )}
                 </>
               )}
               {/*  */}
@@ -2710,7 +2734,9 @@ const NewPlanDrawer = ({
                       gap={1}
                       mb={1}
                     >
-                      <Typography variant="h6">{t("Không tắt bot khi đăng xuất tài khoản Sàn")}</Typography>
+                      <Typography variant="h6">
+                        {t("Không tắt bot khi đăng xuất tài khoản Sàn")}
+                      </Typography>
                       <FormControlLabel
                         control={
                           <Switch
@@ -2730,7 +2756,9 @@ const NewPlanDrawer = ({
                       gap={1}
                       mb={1}
                     >
-                      <Typography variant="h6">{t("Không tắt bot khi không đủ số dư")}</Typography>
+                      <Typography variant="h6">
+                        {t("Không tắt bot khi không đủ số dư")}
+                      </Typography>
                       <FormControlLabel
                         control={
                           <Switch
@@ -2750,7 +2778,9 @@ const NewPlanDrawer = ({
                       gap={1}
                       mb={1}
                     >
-                      <Typography variant="h6">{t("Tự làm mới số dư DEMO khi không đủ")}</Typography>
+                      <Typography variant="h6">
+                        {t("Tự làm mới số dư DEMO khi không đủ")}
+                      </Typography>
                       <FormControlLabel
                         control={
                           <Switch
@@ -2818,46 +2848,41 @@ const NewPlanDrawer = ({
                     {waitSignalOtherPlanEnabled && (
                       <Grid container spacing={2}>
                         <Grid item xs={12} md={12}>
-                          <TextField
-                            onChange={(e) => setBotId(e.target.value)}
-                            value={botId}
-                            size="small"
-                            fullWidth
-                            select
-                            name="wait_signal_from_other_bot_id"
-                            label={t("configuration_name_want_to_waiting")}
-                            SelectProps={{
-                              MenuProps: {
-                                sx: { "& .MuiPaper-root": { maxHeight: 260 } },
-                              },
-                            }}
+                          <Autocomplete
+                            value={
+                              botList.find((option) => option._id === botId) ||
+                              null
+                            }
+                            onChange={(event, newValue) =>
+                              setBotId(newValue?._id || "")
+                            }
+                            options={
+                              isEdit
+                                ? sortDataAlphabet(botList, "name")?.filter(
+                                    (a) => a?._id !== selectedPlan?._id
+                                  )
+                                : sortDataAlphabet(botList, "name") || []
+                            }
+                            getOptionLabel={(option) => t(option?.name)}
+                            isOptionEqualToValue={(option, value) =>
+                              option._id === value._id
+                            }
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label={t("configuration_name_want_to_waiting")}
+                                size="small"
+                                fullWidth
+                                sx={{
+                                  maxWidth: { sm: "100%" },
+                                  textTransform: "capitalize",
+                                }}
+                              />
+                            )}
                             sx={{
                               maxWidth: { sm: "100%" },
-                              textTransform: "capitalize",
                             }}
-                          >
-                            {isEdit
-                              ? sortDataAlphabet(botList, "name")
-                                  ?.filter((a) => a?._id !== selectedPlan?._id)
-                                  ?.map((option) => (
-                                    <MenuItem
-                                      key={option?._id}
-                                      value={option?._id}
-                                    >
-                                      {t(option?.name)}
-                                    </MenuItem>
-                                  ))
-                              : sortDataAlphabet(botList, "name")?.map(
-                                  (option) => (
-                                    <MenuItem
-                                      key={option?._id}
-                                      value={option?._id}
-                                    >
-                                      {t(option?.name)}
-                                    </MenuItem>
-                                  )
-                                )}
-                          </TextField>
+                          />
                         </Grid>
                         <Grid item xs={12} md={12}>
                           <Divider>
@@ -3205,16 +3230,19 @@ const NewPlanDrawer = ({
                       {t("Take Profit/Stoploss")}
                     </Typography>
                     <Typography variant="subtitle1">
-                      ${round2number(takeProfitTarget)} / ${round2number(stopLossTarget)}
+                      ${round2number(takeProfitTarget)} / $
+                      {round2number(stopLossTarget)}
                     </Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
                     <Typography variant="body2">
                       {t("budget_strategy")}
                     </Typography>
-                    <Typography variant="subtitle1">{dataBudgetStrategy.find(
-                                  (item) => item._id === budgetStrategy
-                                )?.name || null}</Typography>
+                    <Typography variant="subtitle1">
+                      {dataBudgetStrategy.find(
+                        (item) => item._id === budgetStrategy
+                      )?.name || null}
+                    </Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
                     <Typography variant="body2">

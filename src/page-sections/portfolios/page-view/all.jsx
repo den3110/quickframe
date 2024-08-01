@@ -1,8 +1,8 @@
 import {
   Box,
-  Avatar,
+  // Avatar,
   styled,
-  Tooltip,
+  // Tooltip,
   Checkbox,
   IconButton,
   useMediaQuery,
@@ -22,7 +22,7 @@ import {
   Select,
   Pagination,
   CircularProgress,
-  Switch,
+  // Switch,
   Collapse,
   FormControlLabel,
 } from "@mui/material";
@@ -48,23 +48,23 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ShareArchievement from "../dialog/ShareArchievement";
 import RunningPlan from "../component/RunningPlan";
 import PopupControll from "../popup/PopupControll";
-import axiosClient from "api/axiosClient";
+// import axiosClient from "api/axiosClient";
 import { showToast } from "components/toast/toast";
 import userApi from "api/user/userApi";
 import { SettingsContext } from "contexts/settingsContext";
 import { ActionBotType, ActionBotTypeMessageSucces } from "type/ActionBotType";
 import { SignalFeatureTypesTitle } from "type/SignalFeatureTypes";
 import sortData from "util/sortData";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import formatCurrency from "util/formatCurrency";
 import DuplicatePlan from "../dialog/DuplicatePlan";
 import SharePlan from "../dialog/SharePlan";
 import FilterIcon from "icons/duotone/FilterIcon";
 import { GlobalContext } from "contexts/GlobalContext";
 import AuthContext from "contexts/AuthContext";
-import { constant } from "constant/constant";
+// import { constant } from "constant/constant";
 import SelectDirectLinkAccount from "./component/SelectDirectLinkAccount";
-import { AutoTypesTitle } from "type/AutoTypes";
+// import { AutoTypesTitle } from "type/AutoTypes";
 import { BudgetStrategyTypeTitle } from "type/BudgetStrategyType";
 import { useTranslation } from "react-i18next";
 import OpenCopyPlanDialog from "../dialog/OpenCopyPlanDialog";
@@ -142,6 +142,7 @@ const PortfoliosList = () => {
   const [showAllLinkAccountId, setShowAllLinkAccountId] = useState(false);
   const [changeState, setChangeState] = useState(false);
   const [openCopyPlanPopup, setOpenCopyPlanPopup] = useState(false);
+  const location= useLocation()
   const handleDuplicateClose = () => {
     setDuplicateOpen(false);
   };
@@ -583,15 +584,30 @@ const PortfoliosList = () => {
 
   useEffect(() => {
     if (showAllLinkAccountId === true) {
-      setDataState(sortData(data, "createdAt", "desc"));
+      if(walletMode) {
+        setDataState(sortData(data?.filter(item=> item?.accountType=== "LIVE"), "createdAt", "desc"));
+      }
+      else {
+        setDataState(sortData(data?.filter(item=> item?.accountType=== "DEMO"), "createdAt", "desc"));
+      }
     } else {
-      setDataState(
-        sortData(data, "createdAt", "desc")?.filter(
-          (item) => item?.linkAccountId === selectedLinkAccount
-        )
-      );
+      if(walletMode) {
+        setDataState(
+          sortData(data?.filter(item=> item?.accountType=== "LIVE"), "createdAt", "desc")?.filter(
+            (item) => item?.linkAccountId === selectedLinkAccount
+          )
+        );
+      }
+      else {
+        setDataState(
+          sortData(data?.filter(item=> item?.accountType=== "DEMO"), "createdAt", "desc")?.filter(
+            (item) => item?.linkAccountId === selectedLinkAccount
+          )
+        );
+      }
+      
     }
-  }, [data, showAllLinkAccountId, selectedLinkAccount, changeState]);
+  }, [data, showAllLinkAccountId, selectedLinkAccount, changeState, walletMode]);
 
   // useEffect(() => {
   //   if (showAllLinkAccountId === true) {
@@ -602,6 +618,15 @@ const PortfoliosList = () => {
   //     );
   //   }
   // }, [data, selectedLinkAccount, showAllLinkAccountId]);
+
+  useEffect(()=> {
+    if(location?.state?.isFromDeleteBot && location?.state?.isFromDeleteBot=== true) {
+      // console.log(dataState?.filter(item=> item?._id !== location?.state?.botId))
+      // setDataState(dataState?.filter(item=> item?._id !== location?.state?.botId))
+      setChangeData(prev=> !prev)
+      // window.history.replaceState({}, '')
+    }
+  }, [location])
 
   return (
     <Layout>

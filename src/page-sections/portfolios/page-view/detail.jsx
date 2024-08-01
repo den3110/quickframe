@@ -227,7 +227,7 @@ const PortfolioDetail = (props) => {
             )}
           </Box>
         }
-        {loading=== false && !dataStat && <ErrorPageView />}
+        {loading=== false && !dataStat && <ErrorPageView link={"/portfolios"} />}
         {loading=== true && <Box sx={{width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
           <CircularProgress />
         </Box>}

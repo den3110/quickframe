@@ -15,7 +15,7 @@ function VipPage() {
   const { selectedLinkAccount } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [page, setPage]= useState(1)
-  const [size, setSize]= useState(6)
+  const [size, setSize]= useState(10)
   const [level, setLevel]= useState()
   const [nickName, setNickName]= useState()
   const [days, setDays]= useState()
@@ -75,7 +75,7 @@ function VipPage() {
     <VipMemberContext.Provider value={{dataOverview, setDataOverview, data, setData, loading, setLoading, page, size, level, nickName, days, setPage, setSize, setLevel, setNickName, setDays}}>
       <Box>
         <VIPInformation />
-        <TabsComponent />
+        <TabsComponent data={data} dataOverview={dataOverview} />
         {/* <Commissions /> */}
       </Box>
     </VipMemberContext.Provider>

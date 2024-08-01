@@ -249,8 +249,8 @@ const TransactionWallet = (props) => {
                   {/* <TableCell padding="checkbox" /> */}
                   <TableCell>{t("time")}</TableCell>
                   <TableCell>{t("value")}</TableCell>
-                  <TableCell>{t("txid/description")}</TableCell>
-                  <TableCell>{t("memo")}</TableCell>
+                  {/* <TableCell>{t("txid/description")}</TableCell> */}
+                  {/* <TableCell>{t("memo")}</TableCell> */}
                   <TableCell>{t("status")}</TableCell>
                 </TableRow>
               </TableHead>
@@ -261,7 +261,7 @@ const TransactionWallet = (props) => {
                     sx={{
                       borderBottom: (theme) =>
                         index !== dataTradingComission.length - 1 &&
-                        `solid 1px ${theme.palette.divider}`,
+                        `solid 1px ${theme.palette.border}`,
                     }}
                     key={row.ts}
                   >
@@ -271,12 +271,12 @@ const TransactionWallet = (props) => {
                     <TableCell>
                       <Amount row={row} />
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       <TxId row={row} />
                     </TableCell>
                     <TableCell>
                       <Memo row={row} />
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell>
                       <Status row={row} />
                     </TableCell>

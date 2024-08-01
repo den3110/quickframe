@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 import { H1, Paragraph } from "components/typography";
 // CUSTOM DEFINED HOOK
 import useNavigate from "hooks/useNavigate";
-const ErrorPageView = () => {
+const ErrorPageView = ({link="/"}) => {
   const navigate = useNavigate();
   return <Container>
       <Box textAlign="center" py={6}>
@@ -22,7 +22,7 @@ const ErrorPageView = () => {
           <img src="/static/pages/error.svg" alt="error" width="100%" />
         </Box>
 
-        <Button onClick={() => navigate("/")}>Go Home</Button>
+        <Button onClick={() => navigate(link)}>Go Home</Button>
       </Box>
     </Container>;
 };
