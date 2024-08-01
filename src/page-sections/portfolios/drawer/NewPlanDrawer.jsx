@@ -2707,122 +2707,8 @@ const NewPlanDrawer = ({
                         />
                       </Box>
                     )}
-                    <Box
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      gap={1}
-                      mb={1}
-                    >
-                      <Typography variant="h6">{t("Lãi/Lỗ con")}</Typography>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={childTargetEnable}
-                            onChange={() =>
-                              setChildTargetEnable(!childTargetEnable)
-                            }
-                          />
-                        }
-                      />
-                    </Box>
-                    {/*  */}
-                    <Box
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      gap={1}
-                      mb={1}
-                    >
-                      <Typography variant="h6">
-                        {t("Không tắt bot khi đăng xuất tài khoản Sàn")}
-                      </Typography>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={noStopWhenUnauthorize}
-                            onChange={() =>
-                              setNoStopWhenUnauthorize(!noStopWhenUnauthorize)
-                            }
-                          />
-                        }
-                      />
-                    </Box>
-                    {/*  */}
-                    <Box
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      gap={1}
-                      mb={1}
-                    >
-                      <Typography variant="h6">
-                        {t("Không tắt bot khi không đủ số dư")}
-                      </Typography>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={noStopWhenNotEBalance}
-                            onChange={() =>
-                              setNoStopWhenNotEBalance(!noStopWhenNotEBalance)
-                            }
-                          />
-                        }
-                      />
-                    </Box>
-                    {/*  */}
-                    <Box
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      gap={1}
-                      mb={1}
-                    >
-                      <Typography variant="h6">
-                        {t("Tự làm mới số dư DEMO khi không đủ")}
-                      </Typography>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={autoReloadDemoBalance}
-                            onChange={() =>
-                              setAutoReloadDemoBalance(!autoReloadDemoBalance)
-                            }
-                          />
-                        }
-                      />
-                    </Box>
-                    {childTargetEnable && (
-                      <>
-                        <Grid container spacing={2}>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              fullWidth
-                              label="Lãi con"
-                              variant="outlined"
-                              value={childProfitTarget}
-                              onChange={(e) =>
-                                setChildProfitTarget(e.target.value)
-                              }
-                              margin="normal"
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              fullWidth
-                              label="Lỗ con"
-                              variant="outlined"
-                              value={childLossTarget}
-                              onChange={(e) =>
-                                setChildLossTarget(e.target.value)
-                              }
-                              margin="normal"
-                            />
-                          </Grid>
-                        </Grid>
-                      </>
-                    )}
-                    <Box
+
+<Box
                       display={"flex"}
                       justifyContent={"space-between"}
                       alignItems={"center"}
@@ -3085,6 +2971,125 @@ const NewPlanDrawer = ({
                         </Grid>
                       </Grid>
                     )}
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                      mb={1}
+                    >
+                      <Typography variant="h6">{t("Lãi/Lỗ con")}</Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={childTargetEnable}
+                            onChange={() =>
+                              setChildTargetEnable(!childTargetEnable)
+                            }
+                          />
+                        }
+                      />
+                    </Box>
+
+                    {childTargetEnable && (
+                      <>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              fullWidth
+                              label="Lãi con"
+                              variant="outlined"
+                              value={childProfitTarget}
+                              onChange={(e) =>
+                                setChildProfitTarget(e.target.value)
+                              }
+                              margin="normal"
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              fullWidth
+                              label="Lỗ con"
+                              variant="outlined"
+                              value={childLossTarget}
+                              onChange={(e) =>
+                                setChildLossTarget(e.target.value)
+                              }
+                              margin="normal"
+                            />
+                          </Grid>
+                        </Grid>
+                      </>
+                    )}
+
+                    {/*  */}
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                      mb={1}
+                    >
+                      <Typography variant="h6">
+                        {t("Không tắt bot khi đăng xuất tài khoản Sàn")}
+                      </Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={noStopWhenUnauthorize}
+                            onChange={() =>
+                              setNoStopWhenUnauthorize(!noStopWhenUnauthorize)
+                            }
+                          />
+                        }
+                      />
+                    </Box>
+                    {/*  */}
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                      mb={1}
+                    >
+                      <Typography variant="h6">
+                        {t("Không tắt bot khi không đủ số dư")}
+                      </Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={noStopWhenNotEBalance}
+                            onChange={() =>
+                              setNoStopWhenNotEBalance(!noStopWhenNotEBalance)
+                            }
+                          />
+                        }
+                      />
+                    </Box>
+                    {/*  */}
+                    <Box
+                      display={"flex"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      gap={1}
+                      mb={1}
+                    >
+                      <Typography variant="h6">
+                        {t("Tự làm mới số dư DEMO khi không đủ")}
+                      </Typography>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={autoReloadDemoBalance}
+                            onChange={() =>
+                              setAutoReloadDemoBalance(!autoReloadDemoBalance)
+                            }
+                          />
+                        }
+                      />
+                    </Box>
+                
+                   
                     <Box
                       mt={2}
                       display={"flex"}
