@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function OpenDetailTimeline(props) {
   const { open, setOpen, selectedData } = props;
+  console.log(props)
   const theme = useTheme();
   const {t }= useTranslation()
 

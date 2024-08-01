@@ -99,7 +99,7 @@ const ManualTradeProvider = ({children}) => {
         let dataStatTemp = dataStat;
         const index = dataTemp?.findIndex(
           (item) => item.betTime === dataSocket.betTime && dataSocket.autoType === 4);
-        console.log("index", index)
+        // console.log("index", index)
         if (index !== -1) {
           dataTemp[index] = dataSocket;
           const newObjData = {
@@ -168,7 +168,7 @@ const ManualTradeProvider = ({children}) => {
   }, [isConnected, socket, data, dataStat]);
 
   return (
-    <ManualTradeContext.Provider value={{ dataSignal, setDataSignal, data, setData, dataStat, setDataStat}}>
+    <ManualTradeContext.Provider value={{ dataSignal, setDataSignal, data, setData, dataStat, setDataStat, loading}}>
       {children}
     </ManualTradeContext.Provider>
   )

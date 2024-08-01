@@ -74,11 +74,11 @@ const PopupTrade = ({selectedBot}) => {
           if (response?.data?.ok === true) {
             showToast("Đặt lệnh thành công", "success");
           } else if (response?.data?.ok === false) {
-            showToast(response?.data?.d?.err_code || "Unknow error", "error");
+            showToast(t(response?.data?.d?.err_code) || t("unknow_err"), "error");
           }
         } catch (error) {
           console.log(error);
-          showToast(error?.response?.data?.err_code || "Unknow error", "error");
+          showToast(error?.response?.data?.err_code || t("unknow_err"), "error");
         }
       };
 

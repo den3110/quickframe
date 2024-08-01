@@ -14,6 +14,7 @@ import {
   Pagination,
   Menu,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import {
   Timeline,
@@ -43,6 +44,9 @@ import { constant } from "constant/constant";
 import AuthContext from "contexts/AuthContext";
 import { showToast } from "components/toast/toast";
 import { useTranslation } from "react-i18next";
+import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
+import round2number from "util/round2number";
+import OpenDetailTimeline from "page-sections/portfolios/component/OpenDetailTimeline";
 
 const PaginationContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -59,18 +63,20 @@ const TableDetailTrade = ({dataState}) => {
   const {userLinkAccountList }= useContext(AuthContext)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [countDown, setCountDown] = useState();
+  const [openDetailTimelineDialog, setOpenDetailTimelineDialog]= useState(false)
   // const [data, setData]= useState([])
   const { socket, isConnected } = useContext(SocketContext);
   const {
     data: dataProps,
     dataStat: dataStatProps,
     setData,
-    setDataStat
+    setDataStat,
+    loading
   } = useContext(ManualTradeContext);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [anchorEls, setAnchorEls] = useState([]);
   const [page, setPage] = useState(1);
-
+  const [selectedItem, setSelectedItem]= useState()
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event.target.value);
     setPage(1);
@@ -116,6 +122,23 @@ const TableDetailTrade = ({dataState}) => {
         return type;
     }
   };
+
+  const renderColorZero= (data)=> {
+    if(data?.winAmount < 0) {
+      return "error"
+    }
+    else if(data?.winAmount=== 0) {
+      if(data?.result=== "WIN") {
+        return theme.palette.success.main
+      }
+      else { 
+        return "error"
+      }
+    }
+    else {
+      return theme.palette.success.main
+    }
+  }
 
   const renderTypeIcon = (data) => {
     switch (true) {
@@ -215,7 +238,7 @@ const TableDetailTrade = ({dataState}) => {
         const index = dataTemp?.findIndex(
           (item) => item.betTime === data.betTime && data.autoType === 4
         );
-        console.log("index", index)
+        // console.log("index", index)
         if (index !== -1) {
           dataTemp[index] = data;
         } else {
@@ -262,7 +285,7 @@ const TableDetailTrade = ({dataState}) => {
       socket.on("ADD_OPEN_ORDER", (data) => {
         const index = dataTemp?.findIndex(
           (item) => item.betTime === data.betTime && data.autoType === 4);
-        console.log("index", index)
+        // console.log("index", index)
         if (index !== -1) {
           dataTemp[index] = data;
         } else {
@@ -333,275 +356,333 @@ const TableDetailTrade = ({dataState}) => {
         {t("Plan Timeline")}
       </Typography>
       <Box>
-        <Timeline className="askskaa" sx={{ padding: downLg ? 0 : "" }}>
-          {dataState
-            ?.slice(
-              rowsPerPage * (page - 1),
-              rowsPerPage * (page - 1) + rowsPerPage
-            )
-            ?.map((item, index) => (
-              <TimelineItem
-                sx={{
-                  "&:before": {
-                    display: "none",
-                  },
-                }}
-                key={index}
-              >
-                <TimelineSeparator>
-                  <TimelineDot
-                    style={{ backgroundColor: renderBackgroundTypeIcon(item) }}
-                  >
-                    {renderTypeIcon(item)}
-                  </TimelineDot>
-                  {index < dataProps.length - 1 && <TimelineConnector />}
-                </TimelineSeparator>
-                <TimelineContent sx={{ paddingRight: 0 }}>
-                  <Box width="100%" display={"flex"} flexDirection={"row-reverse"}>
-                    <Box display={"flex"} alignItems={"center"} gap={.5} sx={{opacity: .6}}>
-                      <img
-                        style={{ width: 32, height: 32 }}
-                        src={constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".ico"}
-                        alt="Can't open"
-                      />
-                      <Typography fontSize={14} fontWeight={600}>{userLinkAccountList?.find(row=> row?._id=== item?.linkAccountId)?.nickName}</Typography>
-                    </Box>
-                  </Box>
-                  <Card onClick={(event) => handleMenuOpen(index, event)} variant="outlined" sx={{ mb: 2 }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        padding: downLg ? 1 : 2.5,
-                        flexWrap: downLg ? "wrap" : "",
+      {loading === true && (
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+        {loading === false && (
+          <Timeline className="askskaa" sx={{ padding: downLg ? 0 : "" }}>
+            {dataState
+              ?.slice(
+                rowsPerPage * (page - 1),
+                rowsPerPage * (page - 1) + rowsPerPage
+              )
+              ?.map((item, index) => (
+                <TimelineItem
+                  sx={{
+                    "&:before": {
+                      display: "none",
+                    },
+                  }}
+                  key={index}
+                >
+                  <TimelineSeparator>
+                    <TimelineDot
+                      style={{
+                        backgroundColor: renderBackgroundTypeIcon(item),
                       }}
                     >
-                      {/* row 1 */}
+                      {renderTypeIcon(item)}
+                    </TimelineDot>
+                    {index < dataProps.length - 1 && <TimelineConnector />}
+                  </TimelineSeparator>
+                  <TimelineContent sx={{ paddingRight: 0 }}>
+                    <Box
+                      width="100%"
+                      display={"flex"}
+                      flexDirection={"row-reverse"}
+                      
+                    >
                       <Box
-                        mb={downLg ? 1.5 : 0}
-                        sx={{ width: downLg ? "calc(100% * 2 / 3)" : "20%" }}
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={0.5}
+                        sx={{ opacity: 0.6 }}
                       >
-                        <Typography fontSize={12} fontWeight={600} mb={1}>
-                          {moment(item.betTime).format("DD/MM/YYYY, HH:mm:ss")}
+                        <img
+                          style={{ width: 32, height: 32 }}
+                          src={
+                            constant.URL_ASSETS_LOGO +
+                            "/" +
+                            item?.clientId +
+                            ".ico"
+                          }
+                          alt="Can't open"
+                        />
+                        <Typography fontSize={14} fontWeight={600}>
+                          {
+                            userLinkAccountList?.find(
+                              (row) => row?._id === item?.linkAccountId
+                            )?.nickName
+                          }
                         </Typography>
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <Typography fontSize={12}>
-                          {t("time")} (UTC + 7){" "}
-                          </Typography>
-                          {item?.message === "success" &&
-                            item?.bet_second > 0 && (
-                              <Box
-                                display={"flex"}
-                                alignItems="center"
-                                gap={0.5}
-                                ml={0.5}
-                              >
-                                <AccessTimeIcon
-                                  fontSize="16"
-                                  sx={{ color: theme.palette.success.main }}
-                                />
-                                <Typography
-                                  fontSize={12}
-                                  sx={{ color: theme.palette.success.main }}
-                                >
-                                  {item?.bet_second}
-                                </Typography>
-                              </Box>
+                      </Box>
+                    </Box>
+                    <Card onClick={(event) => {
+                        // handleMenuOpen(index, event)
+                        // if(isSignalStrategy !== true && decodedData?.data?.levelStaff < 3) {
+                        //   setOpenDetailTimelineDialog(true)
+                        // }
+                      }} variant="outlined" sx={{ mb: 2 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: downLg ? 1 : 2.5,
+                          flexWrap: downLg ? "wrap" : "", cursor: "pointer"
+                        }}
+                        
+                      >
+                        {/* row 1 */}
+                        <Box
+                          mb={downLg ? 1.5 : 0}
+                          sx={{ width: downLg ? "calc(100% * 2 / 3)" : "20%" }}
+                        >
+                          <Typography fontSize={12} fontWeight={600} mb={1}>
+                            {moment(item.betTime).format(
+                              "DD/MM/YYYY, HH:mm:ss"
                             )}
-                        </Box>
-                      </Box>
-                      {/* row 2 */}
-                      <Box
-                        mb={downLg ? 1.5 : 0}
-                        sx={{ width: downLg ? "calc(100% * 1 / 3)" : "20%" }}
-                      >
-                        {item?.message === "success" && (
-                          <Typography
-                            fontSize={12}
-                            fontWeight={600}
-                            mb={1}
-                            color={
-                              item.betType === "UP"
-                                ? theme.palette.success.main
-                                : "error"
-                            }
-                          >
-                            {item.betType === "UP" ? "Buy" : "Sell"}
                           </Typography>
-                        )}
-                        {item?.result === "ACTION_BOT" && (
-                          <Typography
-                            fontSize={12}
-                            fontWeight={600}
-                            mb={1}
-                            sx={{ color: theme.palette.primary.main }}
-                          >
-                            {renderBetType(item.message)}
-                          </Typography>
-                        )}
-                        {item?.result === "ERROR" && (
-                          <Typography
-                            fontSize={12}
-                            fontWeight={600}
-                            mb={1}
-                            sx={{ color: "error.main" }}
-                          >
-                            {renderBetType(item.message)}
-                          </Typography>
-                        )}
-                        {/* a no */}
-                        <Typography fontSize={12}>Loại</Typography>
-                      </Box>
-                      {/* row 3 */}
-                      <Box
-                        sx={{
-                          width: downLg ? "aaa" : "20%",
-                          flex: downLg ? 1 : "aaa",
-                        }}
-                      >
-                        <Typography fontSize={12} fontWeight={600} mb={1}>
-                          {item.profit}
-                        </Typography>
-                        {(item?.betType === "UP" ||
-                          item?.betType === "DOWN") && (
-                          <>
-                            <Typography fontSize={12} fontWeight={600} mb={1}>
-                              ${item.betAmount?.toFixed(2)}
-                            </Typography>
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Typography fontSize={12}>
-                              {t("Trade amount")}
+                              {t("time")} (UTC + 7){" "}
                             </Typography>
-                          </>
-                        )}
-                        {/* tiep di a nay e  */}
-                        {item?.message === "stop_plan_take_profit_target" &&
-                          item?.result === "ACTION_BOT" && (
-                            <>
-                              <Typography fontSize={12} fontWeight={600} mb={1}>
-                                $1.00/-$1.00
-                              </Typography>
-                              <Typography fontSize={12}>
-                                Giới hạn PnL
-                              </Typography>
-                            </>
-                          )}
-                      </Box>
-                      {/* row 4 */}
-                      <Box
-                        sx={{
-                          width: downLg ? "aaa" : "20%",
-                          flex: downLg ? 1 : "aaa",
-                        }}
-                      >
-                        {(item?.betType === "UP" ||
-                          item?.betType === "DOWN") && (
-                          <>
+                            {item?.message === "success" &&
+                              item?.bet_second > 0 && (
+                                <Box
+                                  display={"flex"}
+                                  alignItems="center"
+                                  gap={0.5}
+                                  ml={0.5}
+                                >
+                                  <AccessTimeIcon
+                                    fontSize="16"
+                                    sx={{ color: theme.palette.success.main }}
+                                  />
+                                  <Typography
+                                    fontSize={12}
+                                    sx={{ color: theme.palette.success.main }}
+                                  >
+                                    {item?.bet_second}
+                                  </Typography>
+                                </Box>
+                              )}
+                          </Box>
+                        </Box>
+                        {/* row 2 */}
+                        <Box
+                          mb={downLg ? 1.5 : 0}
+                          sx={{ width: downLg ? "calc(100% * 1 / 3)" : "20%" }}
+                        >
+                          {item?.message === "success" && (
                             <Typography
                               fontSize={12}
                               fontWeight={600}
                               mb={1}
                               color={
-                                item.current_profit >= 0
+                                item.betType === "UP"
                                   ? theme.palette.success.main
                                   : "error"
                               }
                             >
-                              {formatCurrency(item.current_profit)}
+                              {item.betType === "UP" ? "Buy" : "Sell"}
                             </Typography>
-                            <Typography fontSize={12}>{t("Profits")}</Typography>
-                          </>
-                        )}
-                        {item?.message === "stop_plan_take_profit_target" &&
-                          item?.result === "ACTION_BOT" && (
-                            <Box>
-                              <Typography fontSize={12} fontWeight={600} mb={1}>
-                                Thủ công
-                              </Typography>
-                              <Typography fontSize={12}>Mô tả</Typography>
-                            </Box>
                           )}
-                      </Box>
-                      {/* row 5 */}
-                      <Box
-                        sx={{
-                          width: downLg ? "aaa" : "20%",
-                          flex: downLg ? 1 : "aaa",
-                        }}
-                      >
-                        {(item?.betType === "UP" || item?.betType === "DOWN") &&
-                          item.result &&
-                          item.message === "success" && (
+                          {item?.result === "ACTION_BOT" && (
+                            <Typography
+                              fontSize={12}
+                              fontWeight={600}
+                              mb={1}
+                              sx={{ color: theme.palette.primary.main }}
+                            >
+                              {renderBetType(item.message)}
+                            </Typography>
+                          )}
+                          {item?.result === "ERROR" && (
+                            <Typography
+                              fontSize={12}
+                              fontWeight={600}
+                              mb={1}
+                              sx={{ color: "error.main" }}
+                            >
+                              {renderBetType(item.message)}
+                            </Typography>
+                          )}
+                          {/* a no */}
+                          <Typography fontSize={12}>Loại</Typography>
+                        </Box>
+                        {/* row 3 */}
+                        <Box
+                          sx={{
+                            width: downLg ? "aaa" : "20%",
+                            flex: downLg ? 1 : "aaa",
+                          }}
+                        >
+                          <Typography fontSize={12} fontWeight={600} mb={1}>
+                            {item.profit}
+                          </Typography>
+                          {(item?.betType === "UP" ||
+                            item?.betType === "DOWN") && (
+                            <>
+                              <Typography fontSize={12} fontWeight={600} mb={1}>
+                                ${round2number(item.betAmount)}
+                              </Typography>
+                              <Typography fontSize={12}>
+                                {t("Trade amount")}
+                              </Typography>
+                            </>
+                          )}
+                          {/* tiep di a nay e  */}
+                          {item?.message === "stop_plan_take_profit_target" &&
+                            item?.result === "ACTION_BOT" && (
+                              <>
+                                <Typography
+                                  fontSize={12}
+                                  fontWeight={600}
+                                  mb={1}
+                                >
+                                  $1.00/-$1.00
+                                </Typography>
+                                <Typography fontSize={12}>
+                                  Giới hạn PnL
+                                </Typography>
+                              </>
+                            )}
+                        </Box>
+                        {/* row 4 */}
+                        <Box
+                          sx={{
+                            width: downLg ? "aaa" : "20%",
+                            flex: downLg ? 1 : "aaa",
+                          }}
+                        >
+                          {(item?.betType === "UP" ||
+                            item?.betType === "DOWN") && (
                             <>
                               <Typography
                                 fontSize={12}
                                 fontWeight={600}
                                 mb={1}
                                 color={
-                                  item?.winAmount >= 0
+                                  item.current_profit >= 0
                                     ? theme.palette.success.main
                                     : "error"
                                 }
                               >
-                                {formatCurrency(item?.winAmount)}
+                                {formatCurrency(item.current_profit)}
+                              </Typography>
+                              <Typography fontSize={12}>{t("Profits")}</Typography>
+                            </>
+                          )}
+                          {item?.message === "stop_plan_take_profit_target" &&
+                            item?.result === "ACTION_BOT" && (
+                              <Box>
+                                <Typography
+                                  fontSize={12}
+                                  fontWeight={600}
+                                  mb={1}
+                                >
+                                  Thủ công
+                                </Typography>
+                                <Typography fontSize={12}>Mô tả</Typography>
+                              </Box>
+                            )}
+                        </Box>
+                        {/* row 5 */}
+                        <Box
+                          sx={{
+                            width: downLg ? "aaa" : "20%",
+                            flex: downLg ? 1 : "aaa",
+                          }}
+                        >
+                          {(item?.betType === "UP" ||
+                            item?.betType === "DOWN") &&
+                            item.result &&
+                            item.message === "success" && (
+                              <>
+                                <Typography
+                                  fontSize={12}
+                                  fontWeight={600}
+                                  mb={1}
+                                  color={
+                                    renderColorZero(item)
+                                  }
+                                >
+                                  {formatCurrency(item?.winAmount)}
+                                </Typography>
+                                <Typography fontSize={12}>{t("Payout")}</Typography>
+                              </>
+                            )}
+                          {!item.result && item.message === "success" && (
+                            <>
+                              <Typography
+                                fontSize={12}
+                                fontWeight={600}
+                                mb={1}
+                                color={"warning.main"}
+                              >
+                                {t("Wait")} {countDown}s
                               </Typography>
                               <Typography fontSize={12}>{t("Payout")}</Typography>
                             </>
                           )}
-                        {!item.result && item.message === "success" && (
-                          <>
-                            <Typography
-                              fontSize={12}
-                              fontWeight={600}
-                              mb={1}
-                              color={"warning.main"}
-                            >
-                              {t("wait")} {countDown}s
-                            </Typography>
-                            <Typography fontSize={12}>{t("Payout")}</Typography>
-                          </>
-                        )}
+                        </Box>
+                        {/* {event.income && (
+                        <Typography sx={{width: "20%"}} variant="body2">{event.income}</Typography>
+                      )} */}
                       </Box>
-                      {/* {event.income && (
-                      <Typography sx={{width: "20%"}} variant="body2">{event.income}</Typography>
-                    )} */}
-                    </Box>
-                  </Card>
-                  <Menu
-                      disableScrollLock
-                      anchorEl={anchorEls[index]}
-                      open={Boolean(anchorEls[index])}
-                      onClose={() => handleMenuClose(index)}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right",
-                      }}
-                    >
-                      <MenuItem onClick={() => {
-                        handleMenuClose(index)
-                        navigator.clipboard.writeText(JSON.stringify(item))
-                        .then(() => {
-                          console.log('Copied to clipboard:', item);
-                          alert('Copied to clipboard');
-                        })
-                        .then(()=> {
-                          showToast("Copy dữ liệu thành công", "success")
-                        })
-                        .catch((err) => {
-                          alert('Failed to copy text:', err);
-                        })
-                      }}>
-                        <Button>Copy dữ liệu</Button>
-                      </MenuItem>
-                      <MenuItem onClick={() => handleMenuClose(index)}>
-                        
-                        <Button color="success">{t("View Details")}</Button>
-                      </MenuItem>
-                     
-                    </Menu>
-                </TimelineContent>
-              </TimelineItem>
-            ))}
-        </Timeline>
+                    </Card>
+                    {/* signal strategy and is admin */}
+                      <Menu
+                        disableScrollLock
+                        anchorEl={anchorEls[index]}
+                        open={Boolean(anchorEls[index])}
+                        onClose={() => handleMenuClose(index)}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                      >
+                        <MenuItem onClick={() => {
+                          handleMenuClose(index)
+                            navigator.clipboard.writeText(JSON.stringify(item))
+                          .then(()=> {
+                            showToast("Copy dữ liệu thành công", "success")
+                          })
+                          .catch((err) => {
+                            alert('Failed to copy text:', err);
+                          })
+                        }}>
+                          <Button>Copy dữ liệu</Button>
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                          handleMenuClose(index)
+                          setSelectedItem(item)
+                          setOpenDetailTimelineDialog(true)
+                        }}>             
+                          <Button color="success">{t("View Details")}</Button>
+                        </MenuItem>
+                      
+                      </Menu>
+                  </TimelineContent>
+                </TimelineItem>
+              ))}
+          </Timeline>
+        )}
+        {loading === false && dataState?.length <= 0 && (
+          <EmptyPage
+            title={t("no_data_to_display")}
+            disableButton={true}
+          />
+        )}
         <PaginationContainer>
           <Box
             display={"flex"}
@@ -626,6 +707,7 @@ const TableDetailTrade = ({dataState}) => {
             shape="rounded"
           />
         </PaginationContainer>
+        <OpenDetailTimeline open={openDetailTimelineDialog} setOpen={setOpenDetailTimelineDialog} selectedData={selectedItem} />
       </Box>
     </Box>
   );

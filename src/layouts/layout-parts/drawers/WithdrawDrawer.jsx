@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 export default function WithdrawDrawer(props) {
   const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const { spotBalance } = React.useContext(SpotBalanceContext);
+  const { spotBalance, setChange } = React.useContext(SpotBalanceContext);
   const { open, setOpen } = props;
   const [amount, setAmount] = React.useState("");
   const [toAddress, setToAddress] = React.useState("");
@@ -100,7 +100,8 @@ export default function WithdrawDrawer(props) {
       }
       const response= await userApi.userExchangeLinkAccountTransfer(data, selectedLinkAccount)
       if(response?.data?.ok=== true) {
-        
+        showToast("Rút USDT thành công", "success")
+        setChange(prev=> !prev)
       }
       else if(response?.data?.ok=== false ) {
         showToast(response?.data?.m, "error")
@@ -129,10 +130,10 @@ export default function WithdrawDrawer(props) {
         justifyContent={"space-between"}
       >
         <Box>
-          <Typography variant="h6">Rút USDT (BEP-20)</Typography>
+          <Typography variant="h6">{t("Withdraw USDT (BEP-20)")}</Typography>
 
           <Typography variant="subtitle1" fontWeight={600} sx={{ mt: 2 }}>
-            Mạng chuyển
+            {t("Transfer network")}
           </Typography>
           <Grid container spacing={1} sx={{ mt: 1 }}>
             <Grid item xs={6}>
@@ -146,7 +147,7 @@ export default function WithdrawDrawer(props) {
                 }}
                 onClick={() => setNetwork("internal")}
               >
-                Nội bộ
+                {t("internal")}
                 <br />
                 Phí: 0 USDT
               </Button>
@@ -188,10 +189,10 @@ export default function WithdrawDrawer(props) {
               onClick={handleWithdrawAllBalance}
             >
               <Typography fontSize={14}>
-                Số dư: {spotBalance?.usdtAvailableBalance?.toFixed(2)}{" "}
+                {t("balance")}: {spotBalance?.usdtAvailableBalance?.toFixed(2)}{" "}
               </Typography>
               <Typography fontSize={14} sx={{ color: "#28a745" }}>
-                TỐI ĐA
+                {t("MAX")}
               </Typography>
             </Box>
           </Box>
@@ -208,11 +209,11 @@ export default function WithdrawDrawer(props) {
             {network === "internal" &&
             <>
               <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                Biệt danh người nhận
+                {t("Recipient nickname")}
               </Typography>
               <TextField
                 fullWidth
-                placeholder="Nhập biệt danh"
+                placeholder={t("Enter nickname")}
                 value={toAddress}
                 onChange={(e) => setToAddress(e.target.value)}
                 InputProps={{
@@ -221,7 +222,7 @@ export default function WithdrawDrawer(props) {
                       sx={{ color: "#28a745", cursor: "pointer" }}
                       onClick={() => handlePaste(setToAddress)}
                     >
-                      DÁN
+                      {t("PASTE")}
                     </Typography>
                   ),
                 }}
@@ -230,7 +231,7 @@ export default function WithdrawDrawer(props) {
             </>}
             {network === "bep20" && <>
               <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                Địa chỉ nhận
+                {t("Receiving address")}
               </Typography>
               <TextField
                 fullWidth
@@ -243,18 +244,18 @@ export default function WithdrawDrawer(props) {
                       sx={{ color: "#28a745", cursor: "pointer" }}
                       onClick={() => handlePaste(setToAddress)}
                     >
-                      DÁN
+                      {t("PASTE")}
                     </Typography>
                   ),
                 }}
               />
             </>}
             <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>
-              Mã 2FA
+              {t("2FA Code")}
             </Typography>
             <TextField
               fullWidth
-              placeholder="Nhập mã 2FA"
+              placeholder={t("Enter 2FA Code")}
               value={twoFACode}
               onChange={(e) => setTwoFACode(e.target.value)}
               InputProps={{
@@ -263,7 +264,7 @@ export default function WithdrawDrawer(props) {
                     sx={{ color: "#28a745", cursor: "pointer" }}
                     onClick={() => handlePaste(setTwoFACode)}
                   >
-                    DÁN
+                    {t("PASTE")}
                   </Typography>
                 ),
               }}
@@ -272,7 +273,7 @@ export default function WithdrawDrawer(props) {
         </Box>
         <Box className={classes.footer}>
           <Typography variant="body2" mb={1}>
-            Số tiền rút tối thiểu là 5 USDT.
+            {t("The minimum withdrawal amount is 5 USDT.")}
           </Typography>
           <Box display={"flex"} alignItems={"center"} gap={1}>
             <Button
@@ -283,7 +284,7 @@ export default function WithdrawDrawer(props) {
               startIcon={<ArrowBackIosNewIcon />}
               sx={{padding: "10px"}}
             >
-              Quay lại
+              {t("Back")}
             </Button>
             <Button
               fullWidth
@@ -294,7 +295,7 @@ export default function WithdrawDrawer(props) {
               disabled={isButtonDisabled}
               onClick={network=== "internal" ? handleTransfer : handleWithdraw}
             >
-              Chuyển USDT
+              {t("Send USDT")}
             </Button>
           </Box>
         </Box>

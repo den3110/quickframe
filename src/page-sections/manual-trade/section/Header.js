@@ -16,7 +16,7 @@ const Header = () => {
       mb={1}
     >
       <Typography variant="body1" fontWeight={600}>
-        {t("Active follower plans:")}: {dataStat?.total_followers}
+        {t("Active follower plans:")} {dataStat?.total_followers}
       </Typography>
     </Box>
   );
