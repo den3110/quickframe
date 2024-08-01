@@ -6,6 +6,7 @@ import {
   Divider,
   Drawer,
   IconButton,
+  TextField,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -23,21 +24,16 @@ import userApi from "api/user/userApi";
 const UserLinkAccountListDrawer = ({ open, handleClose }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [loading, setLoading] = useState();
-  const { ref, inView } = useInView({
-    /* Optional options */
-    threshold: 0,
-  });
+  const { ref, inView } = useInView({ threshold: 0 });
   const { t } = useTranslation();
   const {
-    // userLinkAccountList,
     selectedLinkAccount,
     setSelectedLinkAccount,
-    dataSelectedLinkAccount,
     setDataSelectedLinkAccount,
-    userLinkAccountList,
     logoutFromSystem,
   } = useContext(AuthContext);
   const [userLinkAccountListState, setUserLinkAccountListState] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   const handleAddNewLinkedAccount = () => {
@@ -54,7 +50,6 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
         localStorage.removeItem("linkAccount");
         setSelectedLinkAccount(undefined);
         showToast("Disconnect exchange account successfully", "success");
-        // window.location.href = window.location.origin + "/connect";
         navigate("/connect");
       } else if (response?.data?.ok === false) {
         showToast(response?.data?.m, "error");
@@ -69,11 +64,10 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
       localStorage.setItem("linkAccount", linkAccountId);
       setSelectedLinkAccount(linkAccountId);
       setDataSelectedLinkAccount(
-        userLinkAccountList?.find((item) => item?._id === linkAccountId)
+        userLinkAccountListState?.find((item) => item?._id === linkAccountId)
       );
       showToast("Chuyển tài khoản thành công", "success");
       handleClose();
-      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -100,6 +94,13 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
       })();
     }
   }, [inView, logoutFromSystem]);
+
+  const filteredUserLinkAccounts = userLinkAccountListState.filter(
+    (item) =>
+      item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.nickName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.clientId.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <Drawer
@@ -133,10 +134,19 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
           flexDirection: "column",
         }}
       >
+        <Box sx={{ width: "100%", mb: 2 }}>
+          <TextField
+            fullWidth
+            label={t("Search")}
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </Box>
         <Box sx={{ width: "100%", flex: 1, overflow: "auto" }}>
           {loading === false && (
             <>
-              {userLinkAccountListState?.map((item, key) => (
+              {filteredUserLinkAccounts.map((item, key) => (
                 <Box key={key} mb={2}>
                   <Box
                     key={key}
@@ -168,7 +178,6 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
                       style={{ borderColor: "rgba(255, 255, 255, 0.2)" }}
                     />
                     <Typography fontSize={14} align="left" mt={1} mb={1}>
-                      {/* ${spotBalance?.demoBalance?.toFixed(2)} */}
                       Nickname: {item?.nickName}
                     </Typography>
                     {item?._id === selectedLinkAccount && (

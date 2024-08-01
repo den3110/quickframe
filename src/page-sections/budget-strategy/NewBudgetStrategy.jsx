@@ -41,7 +41,8 @@ const NewBudgetStrategy = ({
   setData,
   data: dataProps,
   isFromCopyPlan,
-  isFromBudgetStrategy
+  isFromBudgetStrategy,
+  setChange
 }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { decodedData } = useContext(JwtContext);
@@ -203,8 +204,10 @@ const NewBudgetStrategy = ({
           const index = dataTemp?.findIndex(
             (item) => item?._id === selectedStrategy?._id
           );
+          // console.log("index", index)
           dataTemp[index] = { ...selectedStrategy, ...data };
           setData(dataTemp);
+          // setChange(prev=> !prev)
           onClose();
         }
       } else if (response?.data?.ok === false) {

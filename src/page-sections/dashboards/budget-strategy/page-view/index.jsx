@@ -78,6 +78,7 @@ const BudgetStrategyPage = () => {
 
   const [data, setData] = useState([]);
   const [dataState, setDataState] = useState([]);
+  // const [change, setChange]= useState(false)
   const [loading, setLoading] = useState();
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [page, setPage] = useState(1);
@@ -474,7 +475,8 @@ const BudgetStrategyPage = () => {
             setIsEditStrategy(false);
           }}
           selectedStrategy={selectedStrategy}
-          data={data}
+          data={dataState}
+          setChange={setChange}
         />
         <DeleteBudgetStrategy
           open={isDeleteStrategy}
