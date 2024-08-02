@@ -681,7 +681,7 @@ const TelegramChannelSignalStrategy = ({isFromTeleChannel}) => {
           <Box width={"100%"} sx={{ padding: downLg ? 1 : "24px" }}> 
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
-                <BubbleHistory />
+                <BubbleHistory isFromTelegramChannel={true} />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TableInvest selectedBot={{ ...selectedBot }} />

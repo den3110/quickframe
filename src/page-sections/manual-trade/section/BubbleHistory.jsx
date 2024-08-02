@@ -87,7 +87,7 @@ const GridBallButton = ({
   );
 };
 
-const BubbleHistory = () => {
+const BubbleHistory = ({isFromTelegramChannel}) => {
   const {t }= useTranslation()
   const theme = useTheme();
   const sliderRef = useRef(null);
@@ -113,89 +113,184 @@ const BubbleHistory = () => {
     <Card variant="outlined" sx={{ mb: 1 }}>
       <Box sx={{ padding: "16px 6px" }}>
         <Box position={"relative"} display={"flex"} gap={3}>
-          <Swiper
-            // ref={sliderRef}
-            spaceBetween={20}
-            pagination={{ clickable: true }}
-            modules={[Navigation, Pagination]}
-            style={{ paddingBottom: "20px", overflowY: "unset" }}
-            className="waa"
-            // navigation
-            initialSlide={2}
-            onBeforeInit={(swiper) => {
-              sliderRef.current = swiper;
-            }}
-            breakpoints={{
-              // when window width is >= 640px
-              300: {
-                slidesPerView: 3,
-                spaceBetween: 20,
-              },
-              // when window width is >= 768px
-              768: {
-                slidesPerView: 3,
-                spaceBetween: 20,
-              },
-              1400: {
-                slidesPerView: 5,
-                spaceBetween: 20,
-              },
-            }}
-          >
-            {[1, 2, 3, 4, 5].map((table, tableIndex) => (
-              <SwiperSlide key={tableIndex}>
-                <Box sx={{ mb: 2, padding: "10px" }}>
-                  <Typography
-                    variant="body2"
-                    mb={1.5}
-                    fontWeight={600}
-                    sx={{ fontSize: "0.7em" }}
-                  >
-                    {t("board")} {table}
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
+          {!isFromTelegramChannel && 
+            <Swiper
+              // ref={sliderRef}
+              spaceBetween={20}
+              pagination={{ clickable: true }}
+              modules={[Navigation, Pagination]}
+              style={{ paddingBottom: "20px", overflowY: "unset" }}
+              className="waa"
+              // navigation
+              initialSlide={2}
+              onBeforeInit={(swiper) => {
+                sliderRef.current = swiper;
+              }}
+              breakpoints={{
+                // when window width is >= 640px
+                300: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+                // when window width is >= 768px
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+                1400: {
+                  slidesPerView: 5,
+                  spaceBetween: 20,
+                },
+              }}
+            >
+              {[1, 2, 3, 4, 5].map((table, tableIndex) => (
+                <SwiperSlide key={tableIndex}>
+                  <Box sx={{ mb: 2, padding: "10px" }}>
+                    <Typography
+                      variant="body2"
+                      mb={1.5}
+                      fontWeight={600}
+                      sx={{ fontSize: "0.7em" }}
+                    >
+                      {t("board")} {table}
+                    </Typography>
                     <Box
                       sx={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(5, 18px)",
-                        gap: "5px",
-                        justifyItems: "center",
+                        display: "flex",
+                        justifyContent: "center",
                         alignItems: "center",
                       }}
                     >
-                      {gridBallStates?.[tableIndex].map((state, ballIndex) => (
-                        <GridBallButton
-                          key={ballIndex}
-                          state={state}
-                          number={
-                            ballIndex % 5 === 0
-                              ? ballIndex / 5 + 1 + tableIndex * 20
-                              : Math.floor(ballIndex / 5) +
-                                4 * ballIndex +
-                                1 -
-                                Math.floor(ballIndex / 5) * 5 * 4 +
-                                tableIndex * 20
-                          }
-                          resultIndex={dataSignalProps[0]}
-                          handleGridBallStates={setGridBallStates}
-                          tableIndex={tableIndex}
-                          index={ballIndex}
-                          dataSignal={dataSignalProps}
-                          gridBallStates={gridBallStates}
-                        />
-                      ))}
+                      <Box
+                        sx={{
+                          display: "grid",
+                          gridTemplateColumns: "repeat(5, 18px)",
+                          gap: "5px",
+                          justifyItems: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        {gridBallStates?.[tableIndex].map((state, ballIndex) => (
+                          <GridBallButton
+                            key={ballIndex}
+                            state={state}
+                            number={
+                              ballIndex % 5 === 0
+                                ? ballIndex / 5 + 1 + tableIndex * 20
+                                : Math.floor(ballIndex / 5) +
+                                  4 * ballIndex +
+                                  1 -
+                                  Math.floor(ballIndex / 5) * 5 * 4 +
+                                  tableIndex * 20
+                            }
+                            resultIndex={dataSignalProps[0]}
+                            handleGridBallStates={setGridBallStates}
+                            tableIndex={tableIndex}
+                            index={ballIndex}
+                            dataSignal={dataSignalProps}
+                            gridBallStates={gridBallStates}
+                          />
+                        ))}
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          }
+          {isFromTelegramChannel && 
+            <Swiper
+              // ref={sliderRef}
+              spaceBetween={20}
+              pagination={{ clickable: true }}
+              modules={[Navigation, Pagination]}
+              style={{ paddingBottom: "20px", overflowY: "unset" }}
+              className="waa"
+              // navigation
+              initialSlide={2}
+              onBeforeInit={(swiper) => {
+                sliderRef.current = swiper;
+              }}
+              breakpoints={{
+                // when window width is >= 640px
+                300: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                // when window width is >= 768px
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+                1400: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+                1800: {
+                  slidesPerView: 5,
+                  spaceBetween: 20,
+                },
+                2000: {
+                  slidesPerView: 5,
+                  spaceBetween: 20,
+                }
+              }}
+            >
+              {[1, 2, 3, 4, 5].map((table, tableIndex) => (
+                <SwiperSlide key={tableIndex}>
+                  <Box sx={{ mb: 2, padding: "10px" }}>
+                    <Typography
+                      variant="body2"
+                      mb={1.5}
+                      fontWeight={600}
+                      sx={{ fontSize: "0.7em" }}
+                    >
+                      {t("board")} {table}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "grid",
+                          gridTemplateColumns: "repeat(5, 18px)",
+                          gap: "5px",
+                          justifyItems: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        {gridBallStates?.[tableIndex].map((state, ballIndex) => (
+                          <GridBallButton
+                            key={ballIndex}
+                            state={state}
+                            number={
+                              ballIndex % 5 === 0
+                                ? ballIndex / 5 + 1 + tableIndex * 20
+                                : Math.floor(ballIndex / 5) +
+                                  4 * ballIndex +
+                                  1 -
+                                  Math.floor(ballIndex / 5) * 5 * 4 +
+                                  tableIndex * 20
+                            }
+                            resultIndex={dataSignalProps[0]}
+                            handleGridBallStates={setGridBallStates}
+                            tableIndex={tableIndex}
+                            index={ballIndex}
+                            dataSignal={dataSignalProps}
+                            gridBallStates={gridBallStates}
+                          />
+                        ))}
+                      </Box>
+                    </Box>
+                  </Box>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          }
           {
             sliderRef.current?.params?.slidesPerView < 5 &&
             <Box

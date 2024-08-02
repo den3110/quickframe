@@ -1555,7 +1555,7 @@ const NewPlanDrawer = ({
                 <>
                   <Box
                     className="asklawa"
-                    sx={{ display: "flex", gap: 1, alignItems: "start", flexDirection: "column" }}
+                    sx={{ display: "flex", gap: 1, alignItems: "start", flexDirection: downLg ? "column" : "row" }}
                     // mt={1}
                   >
                     {/* {console.log(budgetStrategy)} */}
@@ -3017,7 +3017,7 @@ const NewPlanDrawer = ({
                     {childTargetEnable && (
                       <>
                         <Grid container spacing={2}>
-                          <Grid item xs={12} sm={6}>
+                          <Grid item xs={6} sm={6}>
                             <TextField
                               fullWidth
                               label="Lãi con"
@@ -3029,7 +3029,7 @@ const NewPlanDrawer = ({
                               margin="normal"
                             />
                           </Grid>
-                          <Grid item xs={12} sm={6}>
+                          <Grid item xs={6} sm={6}>
                             <TextField
                               fullWidth
                               label="Lỗ con"

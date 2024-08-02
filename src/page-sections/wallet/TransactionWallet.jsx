@@ -32,6 +32,7 @@ import moment from "moment";
 // import TxId from "components/wallet/Txtd";
 // import Memo from "components/wallet/Memo";
 import Status from "components/wallet/Status";
+import { SettingsContext } from "contexts/settingsContext";
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -57,6 +58,8 @@ const TransactionWallet = (props) => {
   const [type, setType] = useState("usdt");
   const [dataTradingComission, setDataTradingComission] = useState([]);
   const [loading, setLoading] = useState(false); 
+  const [currencies, setCurrencies]= useState([])
+  const {walletMode }= useContext(SettingsContext)
 
   const handleChange = async (e) => {
     try {
@@ -138,14 +141,23 @@ const TransactionWallet = (props) => {
     }
   };
 
-  const CURRENCIES = [
-    { name: "usdt", value: "usdt", iconSrc: "/static/icons/usdt.svg" },
-    {
-      name: "trading_commission",
-      value: "TRADING_COMMISION",
-      iconSrc: "/static/icons/win_coms.svg",
-    },
-  ];
+  useEffect(()=> {
+    if(walletMode) {
+      setCurrencies([
+        { name: "usdt", value: "usdt", iconSrc: "/static/icons/usdt.svg" },
+        {
+          name: "trading_commission",
+          value: "TRADING_COMMISION",
+          iconSrc: "/static/icons/win_coms.svg",
+        },
+      ])
+    }
+    else {
+      setCurrencies([
+        { name: "usdt", value: "usdt", iconSrc: "/static/icons/usdt.svg" },
+      ])
+    }
+  }, [walletMode])
 
   useEffect(() => {
     (async () => {
@@ -187,7 +199,7 @@ const TransactionWallet = (props) => {
           value={type}
           onChange={handleChange}
         >
-          {CURRENCIES.map((option) => (
+          {currencies.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               <div style={{ display: "flex" }}>
                 <img
@@ -307,7 +319,7 @@ const TransactionWallet = (props) => {
                       {moment(item?.ts).format("DD/MM/YYYY hh:mm")}
                     </TableCell>
                     <TableCell>
-                      <Amount item={item} />
+                      <Amount row={{...item}} />
                     </TableCell>
                     {/* <TableCell>
                             <TxId item={item} />

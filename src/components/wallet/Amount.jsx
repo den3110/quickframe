@@ -8,7 +8,7 @@ const Amount = ({ row }) => {
       }
   
       return (
-        <Typography sx={{ color: current.color }}>
+        <Typography fontSize={14} sx={{ color: current.color }}>
           {row.type.indexOf('Withdraw') > -1 || row.type.indexOf('BUY') > -1
             ? `-${parseFloat(row.amount.toFixed(6))}`
             : `+${parseFloat(row.amount.toFixed(6))}`}
