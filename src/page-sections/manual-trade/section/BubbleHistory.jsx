@@ -110,7 +110,7 @@ const BubbleHistory = ({isFromTelegramChannel}) => {
   }, []);
 
   return (
-    <Card variant="outlined" sx={{ mb: 1 }}>
+    <Card variant="outlined" sx={{ mb: isFromTelegramChannel ? 0 : 1 }}>
       <Box sx={{ padding: "16px 6px" }}>
         <Box position={"relative"} display={"flex"} gap={3}>
           {!isFromTelegramChannel && 
