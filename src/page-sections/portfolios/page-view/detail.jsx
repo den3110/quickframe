@@ -84,7 +84,7 @@ const PortfolioDetail = (props) => {
       setLoading(false);
     }
   }, [loadingCount]);
-  console.log(loadingCount);
+  // console.log(loadingCount);
 
   const mergeAndSortData = (data) => {
     const { open, close } = data;

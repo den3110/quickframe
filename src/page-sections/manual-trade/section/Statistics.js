@@ -125,8 +125,8 @@ const Statistics = () => {
       }
     } 
     else {
-      console.log(dataStat)
-      console.log(walletMode)
+      // console.log(dataStat)
+      // console.log(walletMode)
       if(walletMode && parseInt(dataStat?.day_lose_live) + parseInt(dataStat?.day_win_live) === 0) {
         return 0
       }

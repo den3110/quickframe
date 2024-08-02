@@ -139,7 +139,7 @@ const FollowerPlanDialog = (props) => {
                 <StyledTableCell sx={{ width: "40%" }}>Tên gói</StyledTableCell>
                 <StyledTableCell>Thắng/Thua</StyledTableCell>
                 <StyledTableCell>{t("Profits")}</StyledTableCell>
-                <StyledTableCell>Trạng thái</StyledTableCell>
+                <StyledTableCell>{t("status")}</StyledTableCell>
               </TableRow>
             )}
           </TableHead>

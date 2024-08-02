@@ -158,8 +158,9 @@ const InvestmentOverview = (props) => {
               {formatCurrency(
                 dataStat?.isRunning
                   ? dataStat?.lastData.profit
-                  : dataStat?.lastData?.profit
+                  : dataStat?.lastData.profit
               )}
+              {/* : dataStat?.current_profit */}
               {props?.isSignalStrategy !== true && (
                 <Typography
                   onClick={() => handleChangeIsRunning(ActionBotType.RESET_PNL)}

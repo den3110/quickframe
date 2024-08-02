@@ -377,7 +377,7 @@ function JackpotPopover(props) {
                               )}
                               {downLg && 
                               <Typography fontSize={14} mt={2}>
-                                Trạng thái
+                                {t("status")}
                               </Typography>
                               }
                               {/* <Button

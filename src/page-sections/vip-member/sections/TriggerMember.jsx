@@ -185,11 +185,11 @@ const TriggerMember = (props) => {
                                 <TableHead>
                                   <TableRow>
                                     {/* <TableCell padding="checkbox" /> */}
-                                    <TableCell>{t("Created time")}</TableCell>
-                                    <TableCell>{t("nickname")}</TableCell>
-                                    {/* <TableCell>{t("txid/description")}</TableCell> */}
-                                    {/* <TableCell>{t("memo")}</TableCell> */}
-                                    <TableCell>{t("status")}</TableCell>
+                                    <TableCell sx={{padding: "20px"}}>{t("Created time")}</TableCell>
+                                    <TableCell sx={{padding: "20px"}}>{t("nickname")}</TableCell>
+                                    {/* <TableCell sx={{padding: "20px"}}>{t("txid/description")}</TableCell> */}
+                                    {/* <TableCell sx={{padding: "20px"}}>{t("memo")}</TableCell> */}
+                                    <TableCell sx={{padding: "20px"}}>{t("type")}</TableCell>
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -203,22 +203,26 @@ const TriggerMember = (props) => {
                                       }}
                                       key={row.ts}
                                     >
-                                      <TableCell>
+                                      <TableCell sx={{padding: "20px"}}>
                                         {moment(row?.createdAt).format(
                                           "HH:mm:ss DD/MM"
                                         )}
                                       </TableCell>
-                                      <TableCell>
+                                      <TableCell sx={{padding: "20px"}}>
                                         {/* <Amount row={row} /> */}
                                         {row?.nickName}
                                       </TableCell>
-                                      {/* <TableCell>
+                                      <TableCell sx={{padding: "20px"}}>
+                                        {/* <Amount row={row} /> */}
+                                        {row?.isMarketing ? "Marketing" : t("normal")}
+                                      </TableCell>
+                                      {/* <TableCell sx={{padding: "20px"}}>
                                         <TxId row={row} />
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{padding: "20px"}}>
                                         <Memo row={row} />
                                         </TableCell> */}
-                                      <TableCell>
+                                      <TableCell sx={{padding: "20px"}}>
                                         {/* <Status row={row} /> */}
                                       </TableCell>
                                     </TableRow>
@@ -275,11 +279,11 @@ const TriggerMember = (props) => {
                             <TableHead>
                               <TableRow>
                                 {/* <TableCell padding="checkbox" /> */}
-                                <TableCell>{t("Created time")}</TableCell>
-                                <TableCell>{t("nickname")}</TableCell>
-                                {/* <TableCell>{t("txid/description")}</TableCell> */}
-                                {/* <TableCell>{t("memo")}</TableCell> */}
-                                <TableCell>{t("status")}</TableCell>
+                                <TableCell sx={{padding: "20px"}}>{t("Created time")}</TableCell>
+                                <TableCell sx={{padding: "20px"}}>{t("nickname")}</TableCell>
+                                {/* <TableCell sx={{padding: "20px"}}>{t("txid/description")}</TableCell> */}
+                                {/* <TableCell sx={{padding: "20px"}}>{t("memo")}</TableCell> */}
+                                <TableCell sx={{padding: "20px"}}>{t("status")}</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -293,22 +297,22 @@ const TriggerMember = (props) => {
                                   }}
                                   key={row.ts}
                                 >
-                                  <TableCell>
+                                  <TableCell sx={{padding: "20px"}}>
                                     {moment(row?.createdAt).format(
                                       "HH:mm:ss DD/MM"
                                     )}
                                   </TableCell>
-                                  <TableCell>
+                                  <TableCell sx={{padding: "20px"}}>
                                     {/* <Amount row={row} /> */}
                                     {row?.nickName}
                                   </TableCell>
-                                  {/* <TableCell>
+                                  {/* <TableCell sx={{padding: "20px"}}>
                                         <TxId row={row} />
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell sx={{padding: "20px"}}>
                                         <Memo row={row} />
                                         </TableCell> */}
-                                  <TableCell>
+                                  <TableCell sx={{padding: "20px"}}>
                                     {/* <Status row={row} /> */}
                                   </TableCell>
                                 </TableRow>
