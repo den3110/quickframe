@@ -671,7 +671,7 @@ const TelegramChannelSignalStrategy = ({isFromTeleChannel}) => {
         </Card>
       </Box>
       <Box width={"100%"}>
-        <Card
+        <Box
           width={"100%"}
           sx={{
             display: "flex",
@@ -681,14 +681,18 @@ const TelegramChannelSignalStrategy = ({isFromTeleChannel}) => {
           <Box width={"100%"} sx={{ padding: downLg ? 1 : "24px" }}> 
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
-                <BubbleHistory isFromTelegramChannel={true} />
+                <Card>
+                  <BubbleHistory isFromTelegramChannel={true} />
+                </Card>
               </Grid>
               <Grid item xs={12} md={6}>
-                <TableInvest selectedBot={{ ...selectedBot }} />
+                <Card>
+                  <TableInvest selectedBot={{ ...selectedBot }} />
+                </Card>
               </Grid>
             </Grid>
           </Box>
-        </Card>
+        </Box>
       </Box>
     </Layout>
   );
