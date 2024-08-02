@@ -678,7 +678,7 @@ const TelegramChannelSignalStrategy = ({isFromTeleChannel}) => {
           }}
           mb={2}
         >
-          <Box width={"100%"} sx={{ padding: downLg ? 1 : "24px" }}> 
+          <Box width={"100%"} sx={{ padding: downLg ? 1 : 0 }}> 
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <Card>
