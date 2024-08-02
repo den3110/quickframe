@@ -25,7 +25,7 @@ function TabsComponent(props) {
         }
       </Tabs>
       <TabPanel value={value} index={0}>
-        <GeneralTab />
+        <GeneralTab {...props} />
       </TabPanel>
       <TabPanel className="asjkawjkawf" value={value} index={1}>
         <MemberListAccount />

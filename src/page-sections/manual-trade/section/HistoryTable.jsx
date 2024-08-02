@@ -30,7 +30,7 @@ import TableDetailTrade from "../component/TableDetailTrade";
 import { ManualTradeContext } from "contexts/ManualTradeContext";
 import { useTranslation } from "react-i18next";
 
-const HistoryTable = () => {
+const HistoryTable = ({isFromTeleChannel}) => {
   const {t }= useTranslation()
   const {
     data,
@@ -145,7 +145,7 @@ const HistoryTable = () => {
   }, [data])
 
   return (
-    <Box mt={2}>
+    <Box mt={isFromTeleChannel? 0 : 2}>
       {loading=== true && <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
         <CircularProgress />
       </Box>}

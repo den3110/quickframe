@@ -32,7 +32,7 @@ const Item = ({ icon, title, value }) => {
   );
 };
 
-const GeneralTab = () => {
+const GeneralTab = (props) => {
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const {t }= useTranslation()
 
@@ -55,28 +55,28 @@ const GeneralTab = () => {
           <Grid item md={3} xs={12}>
             <Item
               icon={<TotalReferrals />}
-              value={0}
+              value={props?.dataOverview?.referrals}
               title={t("Total referrals")}
             />
           </Grid>
           <Grid item md={3} xs={12}>
             <Item
               icon={<TotalAgencies />}
-              value={0}
+              value={props?.dataOverview?.agencies}
               title={t("Total agencies")}
             />
           </Grid>
           <Grid item md={3} xs={12}>
             <Item
               icon={<TradingComission />}
-              value={0}
+              value={props?.dataOverview?.trading_coms}
               title={t("Trading commission")}
             />
           </Grid>
           <Grid item md={3} xs={12}>
             <Item
               icon={<VipComission />}
-              value={0}
+              value={props?.dataOverview?.license_coms}
               title={t("Vip commission")}
             />
           </Grid>

@@ -158,7 +158,7 @@ const InvestmentOverview = (props) => {
               {formatCurrency(
                 dataStat?.isRunning
                   ? dataStat?.lastData.profit
-                  : dataStat?.current_profit
+                  : dataStat?.lastData?.profit
               )}
               {props?.isSignalStrategy !== true && (
                 <Typography
