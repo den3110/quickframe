@@ -10,6 +10,7 @@ import {
   TableRow,
   TextField,
   TableBody,
+  useMediaQuery,
 } from "@mui/material";
 import affiliateApi from "api/affiliate/affiliateApi";
 import { showToast } from "components/toast/toast";
@@ -21,6 +22,7 @@ import { JwtContext } from "contexts/jwtContext";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 
 const TriggerMember = (props) => {
+  const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { t } = useTranslation();
   const [type, setType] = useState("normal");
   const [nickName, setNickName] = useState("");
@@ -119,7 +121,7 @@ const TriggerMember = (props) => {
 
   return (
     <Box sx={{ width: "100%" }} mt={2}>
-      <Box p={2}>
+      <Box p={downLg ? 0 : 2} mb={7}>
         <Box mb={2}>
           <Card>
             <Box p={1.5}>
