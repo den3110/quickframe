@@ -3215,7 +3215,7 @@ const NewPlanDrawer = ({
                       {t("Allocated Budget")}
                     </Typography>
                     <Typography variant="subtitle1">
-                      ${investmentFund?.toFixed(2)}
+                      ${round2number(investmentFund)}
                     </Typography>
                   </Box>
                   <Box sx={{ width: "calc(100% / 3)" }}>
