@@ -125,7 +125,7 @@ const NewBotAI = ({
   //   handleMenuClose(index);
   // };
 
-  const handleCreateBot = async () => {
+  const handleCreateBot = async (isDuplicate) => {
     try {
       const data = {
         name,
@@ -140,7 +140,8 @@ const NewBotAI = ({
         type: "BUBBLE_METHOD",
       };
       let response;
-      if (initState === true && isFromCopyPlan === true) {
+
+      if ((initState === true && isFromCopyPlan === true) || isDuplicate=== true ) {
         response = await signalStrategyApi.userBudgetSignalCreate(data);
       } else if (initState === true) {
         response = await signalStrategyApi.userBudgetSignalUpdate(
@@ -151,13 +152,34 @@ const NewBotAI = ({
         response = await signalStrategyApi.userBudgetSignalCreate(data);
       }
       if (response?.data?.ok === true) {
-        showToast(
-          initState === true && isFromCopyPlan !== true
-            ? "Chỉnh sửa bot thành công"
-            : t("Create the bot successfully!"),
-          "success"
-        );
-        if (initState === true && isFromCopyPlan !== true) {
+        if(isDuplicate=== true) {
+          showToast("Tạo bản sao bot thành công", "success")
+        }
+        else if(initState === true && isFromCopyPlan === true) {
+          showToast("Chỉnh sửa bot thành công", "success")
+        }
+        else {
+          showToast(t("Create the bot successfully!"), "success")
+        }
+        // showToast(
+        //   if(initState === true && isFromCopyPlan !== true) {
+        //     return "Chỉnh sửa bot thành công"
+        //   }
+        //   initState === true && isFromCopyPlan !== true
+        //     ? "Chỉnh sửa bot thành công"
+        //     : t("Create the bot successfully!"),
+        //   "success"
+        // );
+        if(isDuplicate=== true) {
+          setData(response?.data?.d);
+          setName("");
+          setTargetConditions([]);
+          setGoals([
+            { type: "win_streak", count: 1 },
+            { type: "lose_streak", count: 1 },
+          ]);
+        }
+        else if (initState === true && isFromCopyPlan !== true) {
           // setData(response?.data?.d)
         } else {
           setData(response?.data?.d);
@@ -1101,6 +1123,21 @@ const NewBotAI = ({
           >
             {initState === true ? t("Save Bot") : t("Create Bot")}
           </Button>
+          {
+            initState === true && 
+          <Button
+            onClick={()=> handleCreateBot(true)}
+            disabled={
+              isDisableButton !== true && readOnly !== true ? false : true
+            }
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ padding: "10px" }}
+          >
+            {t("Tạo bản sao bot")}
+          </Button>
+          }
         </Box>
       </Box>
       {selectedBot?.is_copy !== true && (

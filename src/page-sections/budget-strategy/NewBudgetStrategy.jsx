@@ -42,7 +42,9 @@ const NewBudgetStrategy = ({
   data: dataProps,
   isFromCopyPlan,
   isFromBudgetStrategy,
-  setChange
+  setChange,
+  isFromPortfolios,
+  setIsEdit
 }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { decodedData } = useContext(JwtContext);
@@ -96,7 +98,7 @@ const NewBudgetStrategy = ({
   const isErrormethod2 = validateInput(method2 || "");
   const isErrormethod3 = validateInput(method3 || "");
   const isErrormethod4 = validateInput(method4 || "");
-  const handleSave = async () => {
+  const handleSave = async (isDuplicate) => {
     let data;
     let methodData;
     let response;
@@ -176,7 +178,13 @@ const NewBudgetStrategy = ({
     }
     try {
       setDisableButton(true)
-      if (is_edit === true && isFromCopyPlan!== true) {
+      if(isFromPortfolios) {
+        response = await budgetStrategyApi.userBudgetStrategyUpdate(
+          idBudegetStrategy,
+          data
+        );
+      }
+      else if (is_edit === true && isFromCopyPlan!== true && isDuplicate!== true) {
         response = await budgetStrategyApi.userBudgetStrategyUpdate(
           idBudegetStrategy,
           data
@@ -185,7 +193,21 @@ const NewBudgetStrategy = ({
         response = await budgetStrategyApi.userBudgetStrategyCreate(data);
       }
       if (response?.data?.ok === true) {
-        if (is_edit !== true || (is_edit=== true && isFromCopyPlan=== true)) {
+        if(isFromPortfolios) {
+          showToast(t("Update Strategy successfully!"), "success");
+          const dataTemp = dataProps;
+          const index = dataTemp?.findIndex(
+            (item) => item?._id === selectedStrategy?._id
+          );
+          // console.log(dataProps)
+          // console.log("index", index)
+          dataTemp[index] = { ...selectedStrategy, ...data };
+          setData(dataTemp);
+          // setChange(prev=> !prev)
+          setIsEdit(false)
+          onClose();
+        }
+        else if (is_edit !== true || (is_edit=== true && isFromCopyPlan=== true) || isDuplicate=== true) {
           setData(response?.data?.d);
           showToast(t("Create Strategy successfully!"), "success");
           setStrategyName("");
@@ -1179,6 +1201,18 @@ const NewBudgetStrategy = ({
           >
             {t("Save Strategy")}
           </Button>
+          {is_edit=== true && 
+            <Button
+              sx={{ padding: "10px 16px" }}
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={()=> handleSave(true)}
+              disabled={disableButton}
+            >
+              {t("Tạo chiến lược bản sao")}
+            </Button>
+          }
         </Box>
       </Box>
     </Drawer>

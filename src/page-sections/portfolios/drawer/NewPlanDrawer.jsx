@@ -58,8 +58,9 @@ import { useTranslation } from "react-i18next";
 import PortfoliosContext from "contexts/PortfoliosContext";
 import sortData from "util/sortData";
 import { sortDataAlphabet } from "util/sortDataAlphabet";
-import formatCurrency from "util/formatCurrency";
+// import formatCurrency from "util/formatCurrency";
 import round2number from "util/round2number";
+import NewBudgetStrategy from "page-sections/budget-strategy/NewBudgetStrategy";
 
 const NewPlanDrawer = ({
   open,
@@ -94,6 +95,8 @@ const NewPlanDrawer = ({
   const [childTargetEnable, setChildTargetEnable] = useState(false);
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const theme = useTheme();
+  const [openEditBudgetStrategy, setOpenEditBudgetStrategy]= useState(false)
+  const [isEditBudgetStrategy, setIsEditBudgetStrategy]= useState(false)
   // const [sending, setSending]= useState
   const [planName, setPlanName] = useState("");
   const [autoType, setAutoType] = useState(AutoTypes.BOT);
@@ -845,6 +848,7 @@ const NewPlanDrawer = ({
       setNoStopWhenUnauthorize(selectedPlan?.no_stop_when_unauthorize);
       setNoStopWhenNotEBalance(selectedPlan?.no_stop_when_not_e_balance);
       setAutoReloadDemoBalance(selectedPlan?.auto_reload_demo_balance);
+      
       if (isFromLeaderboard === true) {
         setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
         setLinkAccountId(initLinkAccountId);
@@ -879,7 +883,7 @@ const NewPlanDrawer = ({
       setDefaultPlan(false);
       setFeatureType(SignalFeatureTypes.SINGLE_METHOD);
       setBudgetStrategy(dataBudgetStrategy?.[0]?._id);
-      setLinkAccountId(userLinkAccountListState?.[0]?._id);
+      setLinkAccountId(selectedLinkAccount);
       setBaseAmount(1);
       setTakeProfit(false);
       setIsBrokerMode(false);
@@ -907,7 +911,7 @@ const NewPlanDrawer = ({
       setTelegramChatId("");
       setTelegramToken("");
       setTelegramUrl("");
-      setAccountType("DEMO");
+      setAccountType(walletMode ? "LIVE" : "DEMO");
       setTakeProfitTarget(0);
       setStopLossTarget(0);
       setWinStreakTarget(0);
@@ -971,6 +975,7 @@ const NewPlanDrawer = ({
     walletMode,
     isFromCopyPlan,
     initBotId,
+    selectedLinkAccount
     // inView
   ]);
 
@@ -1549,68 +1554,80 @@ const NewPlanDrawer = ({
                     {(selectedTab === "Bot AI" ||
                       selectedTab === "Telegram Signal") && (
                       <Box sx={{ width: "100%" }} fullWidth>
-                        <Typography variant="subtitle1">
-                          {t("budget_strategy")}
-                        </Typography>
-                        <FormControl
-                          variant="outlined"
-                          fullWidth
-                          margin="normal"
-                        >
-                          {loading === true && (
-                            <Skeleton animation="wave" sx={{ height: 56 }} />
-                          )}
-                          {loading === false && (
-                            <Autocomplete
-                              value={
-                                dataBudgetStrategy.find(
-                                  (item) => item._id === budgetStrategy
-                                ) || null
-                              }
-                              onChange={(event, newValue) => {
-                                setBudgetStrategy(newValue ? newValue._id : "");
-                              }}
-                              getOptionLabel={(option) =>
-                                option ? option.name : ""
-                              }
-                              options={sortDataAlphabet(
-                                dataBudgetStrategy,
-                                "name"
+                        <Box sx={{width: "100%", display: "flex", alignItems: "end", gap: 1}}>
+                          <Box sx={{flex: 1}}>
+                            <Typography variant="subtitle1">
+                              {t("budget_strategy")}
+                            </Typography>
+                            <FormControl
+                              variant="outlined"
+                              fullWidth
+                              margin="normal"
+                            >
+                              {loading === true && (
+                                <Skeleton animation="wave" sx={{ height: 56 }} />
                               )}
-                              loading={loading}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label={t("budget_strategy")}
-                                  variant="outlined"
-                                  size="medium"
-                                  InputProps={{
-                                    ...params.InputProps,
-                                    endAdornment: (
-                                      <>
-                                        {loading ? (
-                                          <CircularProgress
-                                            color="inherit"
-                                            size={20}
-                                          />
-                                        ) : null}
-                                        {params.InputProps.endAdornment}
-                                      </>
-                                    ),
+                              {loading === false && (
+                                <Autocomplete
+                                  value={
+                                    dataBudgetStrategy.find(
+                                      (item) => item._id === budgetStrategy
+                                    ) || null
+                                  }
+                                  onChange={(event, newValue) => {
+                                    setBudgetStrategy(newValue ? newValue._id : "");
                                   }}
+                                  getOptionLabel={(option) =>
+                                    option ? option.name : ""
+                                  }
+                                  options={sortDataAlphabet(
+                                    dataBudgetStrategy,
+                                    "name"
+                                  )}
+                                  loading={loading}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label={t("budget_strategy")}
+                                      variant="outlined"
+                                      size="medium"
+                                      InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: (
+                                          <>
+                                            {loading ? (
+                                              <CircularProgress
+                                                color="inherit"
+                                                size={20}
+                                              />
+                                            ) : null}
+                                            {params.InputProps.endAdornment}
+                                          </>
+                                        ),
+                                      }}
+                                    />
+                                  )}
+                                  renderOption={(props, option) => (
+                                    <MenuItem {...props} key={option._id}>
+                                      <ListItemText primary={option.name} />
+                                    </MenuItem>
+                                  )}
+                                  isOptionEqualToValue={(option, value) =>
+                                    option._id === value._id
+                                  }
                                 />
                               )}
-                              renderOption={(props, option) => (
-                                <MenuItem {...props} key={option._id}>
-                                  <ListItemText primary={option.name} />
-                                </MenuItem>
-                              )}
-                              isOptionEqualToValue={(option, value) =>
-                                option._id === value._id
-                              }
-                            />
-                          )}
-                        </FormControl>
+                            </FormControl>
+                          </Box>
+                          {budgetStrategy &&
+                            <Box mb={1}>
+                              <Button onClick={()=> {
+                                setOpenEditBudgetStrategy(true)
+                                setIsEditBudgetStrategy(true)
+                              }} sx={{height: 56}}>{t("Sửa chiến lược")}</Button>
+                            </Box>
+                          }
+                        </Box>
                       </Box>
                     )}
                     {featureType !== SignalFeatureTypes.RANDOM_METHOD && (
@@ -3289,6 +3306,25 @@ const NewPlanDrawer = ({
           </>
         )}
         {loading === true && <Backdrop />}
+        <NewBudgetStrategy
+          isFromPortfolios={true}
+          onClose={() => {
+            setOpenEditBudgetStrategy(false);
+          }}
+          open={openEditBudgetStrategy}
+          setOpen={setOpenEditBudgetStrategy}
+          selectedPlan={dataBudgetStrategy.find(
+                        (item) => item._id === budgetStrategy
+                      )}
+          dataProps={dataBudgetStrategy}
+          data={dataBudgetStrategy}
+          setData={setDataBudgetStrategy}
+          selectedStrategy={dataBudgetStrategy.find(
+                        (item) => item._id === budgetStrategy
+                      )}
+          is_edit={isEditBudgetStrategy}
+          setIsEdit={setIsEditBudgetStrategy}
+        />
       </Box>
     </Drawer>
   );

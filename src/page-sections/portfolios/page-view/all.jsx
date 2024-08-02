@@ -594,20 +594,20 @@ const PortfoliosList = () => {
       if(walletMode) {
         setDataState(
           sortData(data?.filter(item=> item?.accountType=== "LIVE"), "createdAt", "desc")?.filter(
-            (item) => item?.linkAccountId === selectedLinkAccount
+            (item) => (item?.linkAccountId === selectedLinkAccount || !userLinkAccountList?.includes(item?.linkAccountId) || userLinkAccountList?.includes(item?.linkAccountId)=== false)
           )
         );
       }
       else {
         setDataState(
           sortData(data?.filter(item=> item?.accountType=== "DEMO"), "createdAt", "desc")?.filter(
-            (item) => item?.linkAccountId === selectedLinkAccount
+            (item) => (item?.linkAccountId === selectedLinkAccount || !userLinkAccountList?.includes(item?.linkAccountId) || userLinkAccountList?.includes(item?.linkAccountId)=== false)
           )
         );
       }
       
     }
-  }, [data, showAllLinkAccountId, selectedLinkAccount, changeState, walletMode]);
+  }, [data, showAllLinkAccountId, selectedLinkAccount, changeState, walletMode, userLinkAccountList]);
 
   // useEffect(() => {
   //   if (showAllLinkAccountId === true) {

@@ -58,7 +58,7 @@ const NewBotAIStringMethod = ({
     onClose();
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (isDuplicate) => {
     try {
       setReadOnly(true);
       const data = {
@@ -71,7 +71,10 @@ const NewBotAIStringMethod = ({
         type: strategy,
       };
       let response;
-      if (is_edit === true && isFromCopyPlan !== true) {
+      if(isDuplicate) {
+        response = await signalStrategyApi.userBudgetSignalCreate(data);
+      }
+      else if (is_edit === true && isFromCopyPlan !== true) {
         response = await signalStrategyApi.userBudgetSignalUpdate(
           idBotAI,
           data
@@ -80,12 +83,21 @@ const NewBotAIStringMethod = ({
         response = await signalStrategyApi.userBudgetSignalCreate(data);
       }
       if (response?.data?.ok === true) {
-        showToast(
-          is_edit === true && isFromCopyPlan !== true
-            ? "Lưu phương pháp thành công"
-            : "Tạo phương pháp thành công",
-          "success"
-        );
+        if(isDuplicate=== true) {
+          showToast("Tạo bản sao bot thành công", "success")
+        }
+        else if(is_edit === true && isFromCopyPlan !== true) {
+          showToast("Lưu phương pháp thành công", "success")
+        }
+        else {
+          showToast("Tạo phương pháp thành công", "success")
+        }
+        // showToast(
+        //   is_edit === true && isFromCopyPlan !== true
+        //     ? "Lưu phương pháp thành công"
+        //     : "Tạo phương pháp thành công",
+        //   "success"
+        // );
         setName("");
         setChainSignal([]);
         setAllResults(false);
@@ -281,6 +293,21 @@ const NewBotAIStringMethod = ({
           >
             {is_edit === true ? t("Save Bot") : t("Create Bot")}
           </Button>
+          {
+            is_edit === true &&
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ padding: "10px" }}
+              disabled={
+                isDisableButton !== true && readOnly !== true ? false : true
+              }
+              onClick={()=> handleSubmit(true)}
+            >
+              {t("Tạo bản sao bot") }
+            </Button>
+          }
         </Box>
       </Box>
     </Drawer>
