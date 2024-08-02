@@ -61,7 +61,7 @@ const CopyBudgetStrategy = ({
       // const result= await i
       if (isFromBudgetStrategy) {
         response = await budgetStrategyApi.userBudgetStrategyCopy(
-          selectedData?._id
+          shareCode
         );
         if (response?.data?.ok === true) {
           setData(response?.data?.d);
@@ -75,7 +75,7 @@ const CopyBudgetStrategy = ({
       }
       if (isFromSignalStrategy) {
         response = await signalStrategyApi.userBudgetSignalCopy(
-          selectedData?._id
+          shareCode
         );
         if (response?.data?.ok === true) {
           setData(response?.data?.d);

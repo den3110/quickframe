@@ -1206,11 +1206,11 @@ const NewBudgetStrategy = ({
               sx={{ padding: "10px 16px" }}
               fullWidth
               variant="contained"
-              color="primary"
+              color="warning"
               onClick={()=> handleSave(true)}
               disabled={disableButton}
             >
-              {t("Tạo chiến lược bản sao")}
+              {t("Tạo bản mới")}
             </Button>
           }
         </Box>

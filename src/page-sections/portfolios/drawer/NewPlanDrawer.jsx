@@ -1555,14 +1555,14 @@ const NewPlanDrawer = ({
                 <>
                   <Box
                     className="asklawa"
-                    sx={{ display: "flex", gap: 1, alignItems: "start" }}
+                    sx={{ display: "flex", gap: 1, alignItems: "start", flexDirection: "column" }}
                     // mt={1}
                   >
                     {/* {console.log(budgetStrategy)} */}
                     {(selectedTab === "Bot AI" ||
                       selectedTab === "Telegram Signal") && (
                       <Box sx={{ width: "100%" }} fullWidth>
-                        <Box sx={{width: "100%", display: "flex", alignItems: "end", gap: 1}}>
+                        <Box sx={{width: "100%", display: "flex", alignItems: "end", gap: 1,}}>
                           <Box sx={{flex: 1}}>
                             <Typography variant="subtitle1">
                               {t("budget_strategy")}
@@ -2798,7 +2798,7 @@ const NewPlanDrawer = ({
                             <Chip label={t("condition_to_start")} />
                           </Divider>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="run_when_win_total"
@@ -2809,7 +2809,7 @@ const NewPlanDrawer = ({
                             onChange={(e) => setRunWhenWinTotal(e.target.value)}
                           />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="run_when_lose_total"
@@ -2823,7 +2823,7 @@ const NewPlanDrawer = ({
                           />
                         </Grid>
 
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="run_when_win_streak"
@@ -2836,7 +2836,7 @@ const NewPlanDrawer = ({
                             }
                           />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="run_when_lose_streak"
@@ -2849,7 +2849,7 @@ const NewPlanDrawer = ({
                             }
                           />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="run_when_profit"
@@ -2860,7 +2860,7 @@ const NewPlanDrawer = ({
                             onChange={(e) => setRunWhenProfit(e.target.value)}
                           />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="run_when_loss"
@@ -2877,7 +2877,7 @@ const NewPlanDrawer = ({
                             <Chip label={t("stop_condition_to_wait_signal")} />
                           </Divider>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="stop_when_win_total"
@@ -2890,7 +2890,7 @@ const NewPlanDrawer = ({
                             }
                           />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="stop_when_lose_total"
@@ -2903,7 +2903,7 @@ const NewPlanDrawer = ({
                             }
                           />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="stop_when_win_streak"
@@ -2916,7 +2916,7 @@ const NewPlanDrawer = ({
                             }
                           />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="stop_when_lose_streak"
@@ -2931,7 +2931,7 @@ const NewPlanDrawer = ({
                             }
                           />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="stop_when_profit"
@@ -2942,7 +2942,7 @@ const NewPlanDrawer = ({
                             onChange={(e) => setStopWhenProfit(e.target.value)}
                           />
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={6} md={6}>
                           <TextField
                             fullWidth
                             name="stop_when_loss"

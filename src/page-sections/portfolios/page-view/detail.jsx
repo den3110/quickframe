@@ -5,7 +5,16 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Grid, Box, Tabs, Tab, Typography, useMediaQuery, CircularProgress } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+  useMediaQuery,
+  CircularProgress,
+  Skeleton,
+} from "@mui/material";
 import InvestmentOverview from "../component/InvestmentOverview";
 import Timeline from "../component/Timeline";
 import Statistics from "../component/Statistics";
@@ -50,7 +59,7 @@ const a11yProps = (index) => {
 export const PortfolioDetailContext = createContext();
 
 const PortfolioDetail = (props) => {
-  const {t }= useTranslation()
+  const { t } = useTranslation();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [change, setChange] = useState(false);
   const { isConnected, socket } = useContext(SocketContext);
@@ -75,6 +84,7 @@ const PortfolioDetail = (props) => {
       setLoading(false);
     }
   }, [loadingCount]);
+  console.log(loadingCount);
 
   const mergeAndSortData = (data) => {
     const { open, close } = data;
@@ -186,14 +196,18 @@ const PortfolioDetail = (props) => {
           setChange,
         }}
       >
-        {loading=== false && dataStat && 
+        {loading === false && dataStat && (
           <Box padding={downLg ? 1 : 2}>
             <MenuComponent
               dataStat={dataStat}
               setDataStat={setDataStat}
               {...props}
             />
-            <Tabs value={value} onChange={handleChange} aria-label="tabs example">
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="tabs example"
+            >
               <Tab label={t("Plan Timeline")} {...a11yProps(0)} />
               {props?.isSignalStrategy !== true && (
                 <Tab label={t("statics")} {...a11yProps(1)} />
@@ -226,11 +240,43 @@ const PortfolioDetail = (props) => {
               </TabPanel>
             )}
           </Box>
-        }
-        {loading=== false && !dataStat && <ErrorPageView link={"/portfolios"} />}
-        {loading=== true && <Box sx={{width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
-          <CircularProgress />
-        </Box>}
+        )}
+        {loading === false && !dataStat && (
+          <ErrorPageView link={"/portfolios"} />
+        )}
+        {loading === true && (
+          <Box p={downLg ? 1 : 2} mt={4} sx={{ width: "100%" }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={12}>
+                <Box height={100}>
+                  <Skeleton variant="rectangular" width="100%" height="100%" />
+                </Box>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} mt={2}>
+              <Grid item xs={12} md={4}>
+                <Box height={400}>
+                  <Skeleton
+                    variant="rectangular"
+                    width="100%"
+                    height="100%"
+                    animation="wave"
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <Box height={400}>
+                  <Skeleton
+                    variant="rectangular"
+                    width="100%"
+                    height="100%"
+                    animation="wave"
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
       </PortfolioDetailContext.Provider>
     </RefreshProvider>
   );

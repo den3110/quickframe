@@ -297,7 +297,7 @@ const NewBotAIStringMethod = ({
             is_edit === true &&
             <Button
               variant="contained"
-              color="primary"
+              color="warning"
               fullWidth
               sx={{ padding: "10px" }}
               disabled={
@@ -305,7 +305,7 @@ const NewBotAIStringMethod = ({
               }
               onClick={()=> handleSubmit(true)}
             >
-              {t("Tạo bản sao bot") }
+              {t("Tạo bản mới") }
             </Button>
           }
         </Box>

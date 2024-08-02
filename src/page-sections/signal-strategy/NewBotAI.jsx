@@ -1132,10 +1132,10 @@ const NewBotAI = ({
             }
             fullWidth
             variant="contained"
-            color="primary"
+            color="warning"
             sx={{ padding: "10px" }}
           >
-            {t("Tạo bản sao bot")}
+            {t("Tạo bản mới")}
           </Button>
           }
         </Box>
