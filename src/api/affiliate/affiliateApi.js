@@ -18,7 +18,7 @@ const affiliateApi = {
         return axiosClient.post(url, data)
     },
     userExchangeLinkAccountActiveNormal(data, id) {
-        const url= `/users/exchange/link-accountactive-normal/` + id
+        const url= `/users/exchange/link-account/active-normal/` + id
         return axiosClient.post(url, data)
     },
     userExchangeLinkAccountActiveList(id, data) {
