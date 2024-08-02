@@ -1268,18 +1268,26 @@ const NewPlanDrawer = ({
                                 alignItems={"center"}
                                 gap={1}
                               >
-                                <img
-                                  style={{ width: 24, height: 24 }}
-                                  src={
-                                    constant.URL_ASSETS_LOGO +
-                                    "/" +
-                                    userLinkAccountListState?.find(
+                                {
+                                  userLinkAccountListState?.find(
                                       (item) => item?._id === value
-                                    )?.clientId +
-                                    ".ico"
-                                  }
-                                  alt="Can't open"
-                                />{" "}
+                                    ) &&
+                                    <img
+                                      style={{ width: 24, height: 24 }}
+                                      src={
+                                        constant.URL_ASSETS_LOGO +
+                                        "/" +
+                                        userLinkAccountListState?.find(
+                                          (item) => item?._id === value
+                                        )?.clientId +
+                                        ".ico"
+                                      }
+                                      alt="Can't open"
+                                    />
+                                }
+                                {!userLinkAccountListState?.find(
+                                      (item) => item?._id === value
+                                    ) && <>Chưa chọn tài khoản liên kết nào</>}
                                 <Typography
                                   fontSize={14}
                                   textOverflow={"ellipsis"}
@@ -2519,18 +2527,16 @@ const NewPlanDrawer = ({
                                 <TextField
                                   value={inXSessions}
                                   onChange={(e) => {
-                                    const value = parseInt(e.target.value, 10);
-                                    if (!isNaN(value) && value <= 80) {
-                                      setInXSessions(value);
-                                    } else if (isNaN(value)) {
-                                      setInXSessions(0);
-                                    }
+                                    setInXSessions(e.target.value)
                                   }}
                                   fullWidth
                                   name="fs_in_x_session"
                                   type={"number"}
                                   label={t("in_x_sessions")}
                                   size="small"
+                                  error={parseFloat(inXSessions > 80 )? true : false}
+                                  
+                                  helperText={parseFloat(inXSessions ) > 80 ? <Typography fontSize={12} color="error.main">Phiên phải nhỏ hơn 80</Typography> : ""}
                                 />
                               </Grid>
                               <Grid item xs={6} md={6}>

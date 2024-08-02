@@ -88,7 +88,7 @@ export default function DetailTransactionDrawer(props) {
           <Box mt={2} mb={4} display={"flex"} alignItems={"center"} gap={1}>
             <TransactionIcon />
             <Box>
-              <Typography fontSize={12}>TRANSFER_OUT USDT (Bep20)</Typography>
+              <Typography fontSize={12}>{t("TRANSFER_OUT USDT (Bep20)")}</Typography>
               <Typography>02/07/2024, 02:28:10</Typography>
             </Box>
           </Box>

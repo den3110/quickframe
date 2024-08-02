@@ -13,6 +13,7 @@ import {
   Typography,
   TableRow,
   TableBody,
+  CircularProgress, // Import CircularProgress for the loading indicator
 } from "@mui/material";
 import {
   ArrowForward,
@@ -28,8 +29,8 @@ import AuthContext from "contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import Amount from "components/wallet/Amount";
 import moment from "moment";
-import TxId from "components/wallet/Txtd";
-import Memo from "components/wallet/Memo";
+// import TxId from "components/wallet/Txtd";
+// import Memo from "components/wallet/Memo";
 import Status from "components/wallet/Status";
 
 const useStyles = makeStyles(() => ({
@@ -55,19 +56,29 @@ const TransactionWallet = (props) => {
   const [dataBalanceSpot, setDataBalanceSpot] = useState({ d: { c: [] } });
   const [type, setType] = useState("usdt");
   const [dataTradingComission, setDataTradingComission] = useState([]);
+  const [loading, setLoading] = useState(false); 
 
   const handleChange = async (e) => {
-    setPage(1);
-    setType(e.target.value);
-    if (e.target.value === "TRADING_COMMISION") {
-      const response = await userApi.userExchangeLinkAccountHistoryComission(
-        selectedLinkAccount
-      );
-      if (response?.data?.ok === true) {
-        setDataTradingComission(response?.data?.d?.c);
-      } else if (response?.data?.ok === false) {
-        showToast(response?.data?.m, "error");
+    try {
+      setPage(1);
+      setType(e.target.value);
+      if (e.target.value === "TRADING_COMMISION") {
+        setLoading(true)
+        const response = await userApi.userExchangeLinkAccountHistoryComission(
+          selectedLinkAccount
+        );
+        if (response?.data?.ok === true) {
+          setDataTradingComission(response?.data?.d?.c);
+        } else if (response?.data?.ok === false) {
+          showToast(response?.data?.m, "error");
+        }
       }
+      
+    } catch (error) {
+      
+    }
+    finally {
+      setLoading(false)
     }
   };
 
@@ -96,7 +107,19 @@ const TransactionWallet = (props) => {
   }));
 
   const mergedData = [...normalizeDataBalance, ...normalizeDataBalanceSpot];
-  const sortedData = mergedData.sort((a, b) => a.amount - b.amount);
+
+  // Sort data with loading state
+  useEffect(() => {
+    if (mergedData.length > 0) {
+
+      const sortedData = mergedData.sort(
+        (a, b) => a.transactionTime - b.transactionTime
+      );
+      setSortedData(sortedData);
+    }
+  }, [mergedData]);
+
+  const [sortedData, setSortedData] = useState([]);
 
   const getIconByType = (type) => {
     switch (type) {
@@ -107,9 +130,9 @@ const TransactionWallet = (props) => {
       case "InternalWithdraw":
         return <ArrowBack className={classes.icon} />;
       case "TRANSFER_IN":
-        return <ArrowForward className={classes.icon} />;
+        return <ArrowForward color="error" className={classes.icon} />;
       case "TRANSFER_OUT":
-        return <ArrowBack className={classes.icon} />;
+        return <ArrowBack color="success" className={classes.icon} />;
       default:
         return <AccountBalanceWallet className={classes.icon} />;
     }
@@ -127,6 +150,7 @@ const TransactionWallet = (props) => {
   useEffect(() => {
     (async () => {
       try {
+        setLoading(true)
         const response1 =
           await userApi.getUserExchangeLinkAccountTransactionsBalance(
             {
@@ -145,6 +169,9 @@ const TransactionWallet = (props) => {
         setDataBalanceSpot(response2?.data);
       } catch (error) {
         showToast(error?.response?.data?.m);
+      }
+      finally {
+        setLoading(false)
       }
     })();
   }, [page, size, selectedLinkAccount]);
@@ -182,7 +209,17 @@ const TransactionWallet = (props) => {
 
       {type === "usdt" && (
         <Box sx={{ width: "100%" }} mt={1}>
-          {sortedData?.length <= 0 && (
+          {loading ? ( // Show loading indicator when loading
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              mt={2}
+              mb={2}
+            >
+              <CircularProgress />
+            </Box>
+          ) : sortedData?.length <= 0 ? (
             <Box
               display="flex"
               flexDirection="column"
@@ -194,8 +231,7 @@ const TransactionWallet = (props) => {
               <NoTransactionIcon />
               <Typography>{t("no_transaction")}</Typography>
             </Box>
-          )}
-          {sortedData?.length > 0 && (
+          ) : (
             <List>
               {sortedData?.slice(0, 7)?.map((transaction, index) => (
                 <ListItem
@@ -223,7 +259,7 @@ const TransactionWallet = (props) => {
                           ${transaction.amount.toFixed(2)}
                         </Typography>
                         {" - "}
-                        {transaction.type}
+                        {t(transaction.type)}
                       </React.Fragment>
                     }
                   />
@@ -255,50 +291,37 @@ const TransactionWallet = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dataTradingComission.map((row, index) => (
+                {dataTradingComission?.map((item, index) => (
                   <TableRow
-                    hover
+                    key={index}
+                    className={classes.row}
                     sx={{
                       borderBottom: (theme) =>
-                        index !== dataTradingComission.length - 1 &&
-                        `solid 1px ${theme.palette.border}`,
+                        isDark(theme)
+                          ? "1px solid rgb(51, 50, 70)"
+                          : "1px solid rgb(239, 241, 245)",
+                      height: 57,
                     }}
-                    key={row.ts}
                   >
                     <TableCell>
-                      {moment(row?.ts).format("HH:mm:ss DD/MM")}
+                      {moment(item?.ts).format("DD/MM/YYYY hh:mm")}
                     </TableCell>
                     <TableCell>
-                      <Amount row={row} />
+                      <Amount item={item} />
                     </TableCell>
                     {/* <TableCell>
-                      <TxId row={row} />
-                    </TableCell>
+                            <TxId item={item} />
+                          </TableCell> */}
+                    {/* <TableCell>
+                            <Memo item={item} />
+                          </TableCell> */}
                     <TableCell>
-                      <Memo row={row} />
-                    </TableCell> */}
-                    <TableCell>
-                      <Status row={row} />
+                      <Status item={item} />
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          )}
-          {dataTradingComission?.length <= 0 && (
-            <>
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                mt={2}
-                mb={2}
-                color="grey.500"
-              >
-                <NoTransactionIcon />
-                <Typography>{t("no_transaction")}</Typography>
-              </Box>
-            </>
           )}
         </Box>
       )}
