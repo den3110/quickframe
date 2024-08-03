@@ -729,7 +729,7 @@ const CustomTimeline = ({isSignalStrategy}) => {
                       </Box>
                     </Card>
                     {/* signal strategy and is admin */}
-                    {(decodedData?.data?.isDebug && isSignalStrategy=== true) &&
+                    {(decodedData?.data?.levelStaff >= 3 && isSignalStrategy=== true) &&
                       <Menu
                         disableScrollLock
                         anchorEl={anchorEls[index]}
@@ -763,7 +763,7 @@ const CustomTimeline = ({isSignalStrategy}) => {
                       </Menu>
                     }
                     {/* portfolio and is admin */}
-                    {(decodedData?.data?.isDebug && isSignalStrategy!== true) &&
+                    {(decodedData?.data?.levelStaff >= 3 && isSignalStrategy!== true) &&
                       <Menu
                         disableScrollLock
                         anchorEl={anchorEls[index]}
