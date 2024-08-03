@@ -18,11 +18,11 @@ import {
   FormGroup,
   Switch,
 } from "@mui/material";
-import { Add, Remove, Edit, MoreVert, Close } from "@mui/icons-material";
+import { Add, Remove, Close } from "@mui/icons-material";
 import { isDark } from "util/constants";
 import CandleShadow from "./CandleShadow";
-import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
+// import CloseIcon from "@mui/icons-material/Close";
+// import EditIcon from "@mui/icons-material/Edit";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
 import DeleteIcon from "icons/DeleteIcon";
@@ -57,6 +57,7 @@ const NewBotAI = ({
     { type: "win_streak", count: 1 },
     { type: "lose_streak", count: 1 },
   ]);
+  const [isCopy, setIsCopy]= useState(false)
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { decodedData } = useContext(JwtContext);
   const theme = useTheme();
@@ -86,17 +87,17 @@ const NewBotAI = ({
     setOpenCandleShadow(false);
   };
 
-  const handleMenuOpen = (event, index) => {
-    const newAnchorEls = [...anchorEls];
-    newAnchorEls[index] = event.currentTarget;
-    setAnchorEls(newAnchorEls);
-  };
+  // const handleMenuOpen = (event, index) => {
+  //   const newAnchorEls = [...anchorEls];
+  //   newAnchorEls[index] = event.currentTarget;
+  //   setAnchorEls(newAnchorEls);
+  // };
 
-  const handleMenuClose = (index) => {
-    const newAnchorEls = [...anchorEls];
-    newAnchorEls[index] = null;
-    setAnchorEls(newAnchorEls);
-  };
+  // const handleMenuClose = (index) => {
+  //   const newAnchorEls = [...anchorEls];
+  //   newAnchorEls[index] = null;
+  //   setAnchorEls(newAnchorEls);
+  // };
 
   const handleGoalChange = (index, key, value) => {
     const newGoals = [...goals];
@@ -127,6 +128,7 @@ const NewBotAI = ({
 
   const handleCreateBot = async (isDuplicate) => {
     try {
+      setReadOnly(true)
       const data = {
         name,
         sources: {
@@ -197,6 +199,9 @@ const NewBotAI = ({
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }
+    finally {
+      setReadOnly(false)
+    }
   };
 
   // useEffect(() => {
@@ -243,6 +248,7 @@ const NewBotAI = ({
           index: key,
         }))
       );
+      setIsCopy(selectedBot?.is_copy)
       setIsDefault(selectedBot?.is_default);
     } else {
       setIdBotAI(undefined);
@@ -253,6 +259,8 @@ const NewBotAI = ({
       ]);
       setTargetConditions([]);
       setIsDefault(false);
+      setIsCopy(false)
+      
     }
   }, [initState, selectedBot]);
 
@@ -320,7 +328,7 @@ const NewBotAI = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {selectedBot?.is_copy !== true && (
+          {isCopy !== true && (
             <>
               <Box>
                 {goals.map((goal, index) => (
@@ -1114,7 +1122,7 @@ const NewBotAI = ({
           <Button
             onClick={handleCreateBot}
             disabled={
-              isDisableButton !== true && readOnly !== true ? false : true
+              (isDisableButton !== true && readOnly !== true ? false : true)
             }
             fullWidth
             variant="contained"
@@ -1140,7 +1148,7 @@ const NewBotAI = ({
           }
         </Box>
       </Box>
-      {selectedBot?.is_copy !== true && (
+      {isCopy !== true && (
         <CandleShadow
           open={openCandleShadow}
           onClose={handleCloseCandleShadow}

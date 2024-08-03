@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   Box,
@@ -25,11 +25,17 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#2e3645" : "#f7f7f7",
   },
 }));
+const colorsOther = [
+  (theme) => (isDark(theme) ? "#565d67" : "#d9d9d9"),
+  "#0caf60",
+  "#fd4f4f",
+  "#0047ff",
+];
+
 const colors = [
   (theme) => (isDark(theme) ? "#565d67" : "#d9d9d9"),
   "#0caf60",
   "#fd4f4f",
-  "#ff6e00",
 ];
 
 // const BallButton = ({
@@ -88,6 +94,7 @@ const GridBallButton = ({
   tableIndex,
   gridBallStates,
   is_edit,
+  longShort
 }) => {
   const disableBubble = (betIndex) => {
     // tinh nhu nay dung khong a
@@ -99,17 +106,17 @@ const GridBallButton = ({
     }
   };
 
-  const renderType= (state)=> {
+  const renderType = (state) => {
     if (state === 0) {
       return "UP";
     }
     if (state === 1) {
       return "DOWN";
     }
-    if (state === 2) {
-      return "RITY";
-    }
-  }
+    // if (state === 2) {
+    //   return "RITY";
+    // }
+  };
 
   useEffect(() => {
     if (selectedCandle) {
@@ -128,14 +135,14 @@ const GridBallButton = ({
             state = 2;
           }
           if (resultType=== "RITY") {
-            state= 3
+            state= 0
           }
-          newGridBallStates[tableIndex][index] = state;
+          newGridBallStates[tableIndex][index] = state || 0;
           handleGridBallStates(newGridBallStates);
         }
       });
     }
-  }, [selectedCandle, index, number, tableIndex]);
+  }, [selectedCandle, index, number, tableIndex, longShort]);
 
   return (
     <StyledIconButton
@@ -145,10 +152,12 @@ const GridBallButton = ({
       }
       onClick={() => {
         onClick();
-        console.log("state", state)
-        if (parseInt(state) === 3) {
+        console.log("state", state);
+        if (parseInt(state) === 2) {
           setSelectedGridBall(
-            selectedGridBall.filter((item) => parseInt(item.index) !== parseInt(number))
+            selectedGridBall.filter(
+              (item) => parseInt(item.index) !== parseInt(number)
+            )
           );
         } else {
           setSelectedGridBall((prev) => {
@@ -183,7 +192,126 @@ const GridBallButton = ({
         alignItems: "center",
       }}
     >
-      <Typography sx={{opacity: 1}} fontSize={10}>{number - (20 * tableIndex)}</Typography>
+      <Typography sx={{ opacity: 1 }} fontSize={10}>
+        {number - 20 * tableIndex}
+      </Typography>
+    </StyledIconButton>
+  );
+};
+
+const GridBallButtonOther = ({
+  state,
+  onClick,
+  number,
+  setSelectedGridBall,
+  selectedGridBall,
+  selectedCandle,
+  index,
+  handleGridBallStates,
+  tableIndex,
+  gridBallStates,
+  is_edit,
+  longShort
+}) => {
+  const disableBubble = (betIndex) => {
+    // tinh nhu nay dung khong a
+    switch (betIndex) {
+      case 81:
+        return 100;
+      default:
+        return selectedCandle?.betIndex - 22 - 80 + 100 + 1;
+    }
+  };
+
+  const renderType = (state) => {
+    if (state === 0) {
+      return "UP";
+    }
+    if (state === 1) {
+      return "DOWN";
+    }
+    if (state === 2) {
+      return "RITY";
+    }
+  };
+
+  useEffect(() => {
+    if (selectedCandle) {
+      selectedCandle?.conditions?.map((item, key) => {
+        if (
+          number === item.index &&
+          number <= disableBubble(selectedCandle?.betIndex)
+        ) {
+          const newGridBallStates = gridBallStates;
+          const resultType = item.resultType;
+          let state;
+          if (resultType === "UP") {
+            state = 1;
+          }
+          if (resultType === "DOWN") {
+            state = 2;
+          }
+          if (resultType === "RITY") {
+            state = 3;
+          }
+         
+          newGridBallStates[tableIndex][index] = state || 0;
+          handleGridBallStates(newGridBallStates);
+        }
+      });
+    }
+  }, [selectedCandle, index, number, tableIndex, longShort]);
+
+  return (
+    <StyledIconButton
+      disableRipple
+      disabled={
+        number <= disableBubble(selectedCandle?.betIndex) ? false : true
+      }
+      onClick={() => {
+        onClick();
+        if (parseInt(state) === 3) {
+          setSelectedGridBall(
+            selectedGridBall.filter(
+              (item) => parseInt(item.index) !== parseInt(number)
+            )
+          );
+        } else {
+          setSelectedGridBall((prev) => {
+            const existingIndex = prev.findIndex(
+              (item) => parseInt(item.index) === parseInt(number)
+            );
+            if (existingIndex !== -1) {
+              // exist
+              const updatedSelectedGridBall = [...prev];
+              updatedSelectedGridBall[existingIndex] = {
+                index: number,
+                resultType: renderType(parseInt(state)),
+              };
+              return updatedSelectedGridBall;
+            } else {
+              return [
+                ...prev,
+                { index: number, resultType: renderType(parseInt(state)) },
+              ];
+            }
+          });
+        }
+      }}
+      sx={{
+        width: 30,
+        height: 30,
+        backgroundColor: colorsOther[state],
+        borderRadius: "50%",
+        cursor: "pointer",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Typography sx={{ opacity: 1 }} fontSize={10}>
+        {number - 20 * tableIndex}
+      </Typography>
     </StyledIconButton>
   );
 };
@@ -201,7 +329,7 @@ const CandleShadow = ({
   selectedBallProps,
 }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const {t}= useTranslation()
+  const { t } = useTranslation();
   const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
@@ -215,41 +343,41 @@ const CandleShadow = ({
       .map(() => Array(20).fill(0))
   );
 
-  const [longShort, setLongShort] = useState("UP");
+  const [longShort, setLongShort] = useState("UP"); // e cho nos sang hawrn mau vang . mau cam nhieu dua mu mau no tuong mau do day vlin oke a
 
-  const renderLongShort= (type)=> {
+  const renderLongShort = (type) => {
     switch (type) {
       case "UP":
-        return "UP"
+        return "UP";
       case "DOWN":
-        return "DOWN"
+        return "DOWN";
       case "NONE":
-        return "NONE"
+        return "NONE";
       case "MAJORITY":
-        return "MAJORITY"
+        return "MAJORITY";
       case "MINORITY":
-        return "MINORITY"
+        return "MINORITY";
       default:
         break;
     }
-  }
+  };
 
-  const renderColorType= (type)=> {
+  const renderColorType = (type) => {
     switch (type) {
       case "UP":
-        return "#0caf60"
+        return "#0caf60";
       case "DOWN":
-        return "#fd4f4f"
+        return "#fd4f4f";
       case "NONE":
-        return "#ffff00"
+        return "#ffff00";
       case "MAJORITY":
-        return "#7300ff"
+        return "#7300ff";
       case "MINORITY":
-        return "#e80cce"
+        return "#e80cce";
       default:
-        return ""
+        return "";
     }
-  }
+  };
 
   // const handleBallClick = (index) => {
   //   const newStates = Array(20).fill(0);
@@ -261,8 +389,15 @@ const CandleShadow = ({
   const handleGridBallClick = (gridIndex, ballIndex) => {
     const newGridStates = [...gridBallStates];
     newGridStates[gridIndex][ballIndex] =
+      (newGridStates[gridIndex][ballIndex] + 1) % 3;
+    // console.log("newGridStates", newGridStates)
+    setGridBallStates(newGridStates);
+  };
+  const handleGridBallClickOther = (gridIndex, ballIndex) => {
+    const newGridStates = [...gridBallStates];
+    newGridStates[gridIndex][ballIndex] =
       (newGridStates[gridIndex][ballIndex] + 1) % 4;
-      // console.log("newGridStates", newGridStates)
+    // console.log("newGridStates", newGridStates)
     setGridBallStates(newGridStates);
   };
 
@@ -298,6 +433,8 @@ const CandleShadow = ({
     } else {
       setTargetConditions((prev) => [...prev, data]);
     }
+    setSelectedBall(1)
+    setSelectedGridBall([])
     setBallStates([1, ...Array(19).fill(0)]);
     setGridBallStates(
       Array(5)
@@ -331,6 +468,14 @@ const CandleShadow = ({
   const handleCloseCandleShadow = () => {
     setIsEdit(false);
     setIsNew(false);
+    setSelectedBall(1)
+    setSelectedGridBall([])
+    setBallStates([1, ...Array(19).fill(0)]);
+    setGridBallStates(
+      Array(5)
+        .fill()
+        .map(() => Array(20).fill(0))
+    );
     onClose();
   };
 
@@ -344,17 +489,11 @@ const CandleShadow = ({
       );
       setSelectedBall(1);
       setSelectedGridBall([]);
-      // setLongShort()
+      setLongShort("UP")
     }
   }, [is_edit]);
 
-  useEffect(() => {
-    if (selectedCandle && is_new === false) {
-      setSelectedBall(selectedCandle?.betIndex);
-      setSelectedGridBall(selectedCandle?.conditions);
-      setLongShort(renderLongShort(selectedCandle?.betType))
-    }
-  }, [selectedCandle, inView, is_new]);
+
 
   useEffect(() => {
     if (is_new === true) {
@@ -366,11 +505,46 @@ const CandleShadow = ({
           .fill()
           .map(() => Array(20).fill(0))
       );
+      setLongShort("UP")
     }
   }, [is_new, selectedCandle]);
+
+  useEffect(() => {
+    if (selectedCandle && is_new === false) {
+      setSelectedBall(selectedCandle?.betIndex);
+      setSelectedGridBall(selectedCandle?.conditions);
+      setLongShort(renderLongShort(selectedCandle?.betType));
+    }
+    // else {
+    //   setLongShort("UP")
+    // }
+  }, [selectedCandle, inView, is_new]);
   // useEffect(()=> {
   //   setSelectedBall(selectedBallProps)
   // }, [selectedBallProps, inView])
+
+  useEffect(()=> {
+    if (is_new === true) {
+      setLongShort("UP")
+    }
+    else {
+
+    }
+  }, [is_new])
+
+  useEffect(()=> {
+    if(!inView) {
+      setLongShort("UP")
+      setSelectedBall(1)
+      setSelectedGridBall([])
+      setBallStates([1, ...Array(19).fill(0)]);
+      setGridBallStates(
+        Array(5)
+          .fill()
+          .map(() => Array(20).fill(0))
+      );
+    }
+  }, [inView])
 
   return (
     <Drawer
@@ -410,18 +584,29 @@ const CandleShadow = ({
               <Select
                 size={"small"}
                 value={longShort}
-                onChange={(e) => setLongShort(e.target.value)}
+                // renderValue={(value) => t(value)}
+                onChange={(e) => {
+                  setLongShort(e.target.value);
+                  // setSelectedBall(1);
+                  // setSelectedGridBall([]);
+                  // setBallStates([1, ...Array(19).fill(0)]);
+                  // setGridBallStates(
+                  //   Array(5)
+                  //     .fill()
+                  //     .map(() => Array(20).fill(0))
+                  // );
+                }}
                 sx={{
                   "& .MuiSelect-select": {
                     color: renderColorType(longShort),
                   },
                 }}
               >
-                <MenuItem value="UP">Buy</MenuItem>
-                <MenuItem value="DOWN">Sell</MenuItem>
-                <MenuItem value="NONE">Skip</MenuItem>
-                <MenuItem value="MAJORITY">Majority</MenuItem>
-                <MenuItem value="MINORITY">Minority</MenuItem>
+                <MenuItem value="UP">{t("UP")}</MenuItem>
+                <MenuItem value="DOWN">{t("DOWN")}</MenuItem>
+                <MenuItem value="NONE">{t("NONE")}</MenuItem>
+                <MenuItem value="MAJORITY">{t("MAJORITY")}</MenuItem>
+                <MenuItem value="MINORITY">{t("MINORITY")}</MenuItem>
               </Select>
             </FormControl>
             {t("for the number")} {selectedBall - 80}
@@ -506,9 +691,109 @@ const CandleShadow = ({
                             alignItems: "center",
                           }}
                         >
+                          {(longShort === "UP" ||
+                            longShort === "DOWN" ||
+                            longShort === "NONE") && (
+                            <>
+                              {gridBallStates?.[tableIndex].map(
+                                (state, ballIndex) => (
+                                  <GridBallButton
+                                    longShort={longShort}
+                                    key={ballIndex}
+                                    state={state}
+                                    number={
+                                      ballIndex % 5 === 0
+                                        ? ballIndex / 5 + 1 + tableIndex * 20
+                                        : Math.floor(ballIndex / 5) +
+                                          4 * ballIndex +
+                                          1 -
+                                          Math.floor(ballIndex / 5) * 5 * 4 +
+                                          tableIndex * 20
+                                    }
+                                    onClick={() =>
+                                      handleGridBallClick(tableIndex, ballIndex)
+                                    }
+                                    setSelectedGridBall={setSelectedGridBall}
+                                    selectedGridBall={selectedGridBall}
+                                    handleGridBallStates={setGridBallStates}
+                                    selectedCandle={selectedCandle}
+                                    tableIndex={tableIndex}
+                                    index={ballIndex}
+                                    gridBallStates={gridBallStates}
+                                    is_edit={is_edit}
+                                  />
+                                )
+                              )}
+                            </>
+                          )}
+                          {(longShort === "MAJORITY" ||
+                            longShort === "MINORITY") && (
+                            <>
+                              {gridBallStates?.[tableIndex].map(
+                                (state, ballIndex) => (
+                                  <GridBallButtonOther
+                                    longShort={longShort}
+                                    key={ballIndex}
+                                    state={state}
+                                    number={
+                                      ballIndex % 5 === 0
+                                        ? ballIndex / 5 + 1 + tableIndex * 20
+                                        : Math.floor(ballIndex / 5) +
+                                          4 * ballIndex +
+                                          1 -
+                                          Math.floor(ballIndex / 5) * 5 * 4 +
+                                          tableIndex * 20
+                                    }
+                                    onClick={() =>
+                                      handleGridBallClickOther(
+                                        tableIndex,
+                                        ballIndex
+                                      )
+                                    }
+                                    setSelectedGridBall={setSelectedGridBall}
+                                    selectedGridBall={selectedGridBall}
+                                    handleGridBallStates={setGridBallStates}
+                                    selectedCandle={selectedCandle}
+                                    tableIndex={tableIndex}
+                                    index={ballIndex}
+                                    gridBallStates={gridBallStates}
+                                    is_edit={is_edit}
+                                  />
+                                )
+                              )}
+                            </>
+                          )}
+                        </Box>
+                      </Box>
+                    </Box>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
+            {!downLg && (
+              <>
+                {[1, 2, 3, 4, 5].map((table, tableIndex) => (
+                  <Box key={table} sx={{ mb: 2 }}>
+                    <Typography variant="body2" mb={1}>
+                      {t("board")} {table}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(5, 30px)",
+                        gap: "10px",
+                        justifyItems: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {(longShort === "UP" ||
+                        longShort === "DOWN" ||
+                        longShort === "NONE") && (
+                        <>
                           {gridBallStates?.[tableIndex].map(
                             (state, ballIndex) => (
                               <GridBallButton
+                                longShort={longShort}
                                 key={ballIndex}
                                 state={state}
                                 number={
@@ -534,55 +819,45 @@ const CandleShadow = ({
                               />
                             )
                           )}
-                        </Box>
-                      </Box>
-                    </Box>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            )}
-            {!downLg && (
-              <>
-                {[1, 2, 3, 4, 5].map((table, tableIndex) => (
-                  <Box key={table} sx={{ mb: 2 }}>
-                    <Typography variant="body2" mb={1}>
-                      {t("board")} {table}
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(5, 30px)",
-                        gap: "10px",
-                        justifyItems: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      {gridBallStates?.[tableIndex].map((state, ballIndex) => (
-                        <GridBallButton
-                          key={ballIndex}
-                          state={state}
-                          number={
-                            ballIndex % 5 === 0
-                              ? ballIndex / 5 + 1 + tableIndex * 20
-                              : Math.floor(ballIndex / 5) +
-                                4 * ballIndex +
-                                1 -
-                                Math.floor(ballIndex / 5) * 5 * 4 +
-                                tableIndex * 20
-                          }
-                          onClick={() =>
-                            handleGridBallClick(tableIndex, ballIndex)
-                          }
-                          setSelectedGridBall={setSelectedGridBall}
-                          selectedGridBall={selectedGridBall}
-                          handleGridBallStates={setGridBallStates}
-                          selectedCandle={selectedCandle}
-                          tableIndex={tableIndex}
-                          index={ballIndex}
-                          gridBallStates={gridBallStates}
-                          is_edit={is_edit}
-                        />
-                      ))}
+                        </>
+                      )}
+                      {(longShort === "MAJORITY" ||
+                        longShort === "MINORITY") && (
+                        <>
+                          {gridBallStates?.[tableIndex].map(
+                            (state, ballIndex) => (
+                              <GridBallButtonOther
+                                longShort={longShort}
+                                key={ballIndex}
+                                state={state}
+                                number={
+                                  ballIndex % 5 === 0
+                                    ? ballIndex / 5 + 1 + tableIndex * 20
+                                    : Math.floor(ballIndex / 5) +
+                                      4 * ballIndex +
+                                      1 -
+                                      Math.floor(ballIndex / 5) * 5 * 4 +
+                                      tableIndex * 20
+                                }
+                                onClick={() =>
+                                  handleGridBallClickOther(
+                                    tableIndex,
+                                    ballIndex
+                                  )
+                                }
+                                setSelectedGridBall={setSelectedGridBall}
+                                selectedGridBall={selectedGridBall}
+                                handleGridBallStates={setGridBallStates}
+                                selectedCandle={selectedCandle}
+                                tableIndex={tableIndex}
+                                index={ballIndex}
+                                gridBallStates={gridBallStates}
+                                is_edit={is_edit}
+                              />
+                            )
+                          )}
+                        </>
+                      )}
                     </Box>
                   </Box>
                 ))}
@@ -625,7 +900,7 @@ const CandleShadow = ({
               <Button
                 fullWidth
                 variant="contained"
-                color="primary"
+                color="error"
                 sx={{ padding: "10px" }}
                 onClick={() => handleDelete()}
               >
@@ -635,7 +910,7 @@ const CandleShadow = ({
             <Button
               fullWidth
               variant="contained"
-              color="primary"
+              color="warning"
               sx={{ padding: "10px" }}
               onClick={() => handleCopy()}
             >

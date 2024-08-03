@@ -1345,6 +1345,11 @@ export const resources = {
         "Entry value cannot be greater than 1,000,000. Check row 3.",
       "Entry value cannot be greater than 1,000,000. Check row 4.":
         "Entry value cannot be greater than 1,000,000. Check row 4.",
+        "UP": "Up",
+        "DOWN": "Down",
+        "NONE": "Skip",
+        "MAJORITY": "Majority",
+        "MINORITY": "Minority",
       "Error occurred": "Error occurred",
       "Error placing order": "Error placing order",
       "Exchange 2FA Code": "Exchange 2FA Code",
@@ -5796,6 +5801,11 @@ export const resources = {
       Restart: "Cập nhật gói (Khởi động lại)",
       "Restart Plan": "Khởi động lại",
       "Restart plan successfully!": "Khởi động lại thành công!",
+      "UP": "Mua",
+      "DOWN": "Bán",
+      "NONE": "Bỏ qua",
+      "MAJORITY": "Đa số",
+      "MINORITY": "Thiểu số",
       "Restart plan: {{planName}} successfully!":
         "Khởi động lại gói: {{planName}} thành công!",
       "Restart the plan: {{planName}} successfully!":
