@@ -515,7 +515,7 @@ const CustomTimeline = ({isSignalStrategy}) => {
                     </Box>
                     <Card onClick={(event) => {
                         handleMenuOpen(index, event)
-                        if(isSignalStrategy !== true && decodedData?.data?.levelStaff < 3) {
+                        if(isSignalStrategy !== true && decodedData?.data?.levelStaff < 0) {
                           setSelectedItem(item)
                           setOpenDetailTimelineDialog(true)
                         }
@@ -729,7 +729,7 @@ const CustomTimeline = ({isSignalStrategy}) => {
                       </Box>
                     </Card>
                     {/* signal strategy and is admin */}
-                    {(decodedData?.data?.levelStaff >= 3 && isSignalStrategy=== true) &&
+                    {(decodedData?.data?.levelStaff >= 0 && isSignalStrategy=== true) &&
                       <Menu
                         disableScrollLock
                         anchorEl={anchorEls[index]}
@@ -763,7 +763,7 @@ const CustomTimeline = ({isSignalStrategy}) => {
                       </Menu>
                     }
                     {/* portfolio and is admin */}
-                    {(decodedData?.data?.levelStaff >= 3 && isSignalStrategy!== true) &&
+                    {(decodedData?.data?.levelStaff >= 0 && isSignalStrategy!== true) &&
                       <Menu
                         disableScrollLock
                         anchorEl={anchorEls[index]}
