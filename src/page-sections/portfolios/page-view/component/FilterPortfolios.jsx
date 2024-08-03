@@ -22,7 +22,7 @@ import { JwtContext } from "contexts/jwtContext";
 import AuthContext from "contexts/AuthContext";
 import { constant } from "constant/constant";
 
-const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
+const FilterPortfolios = ({ open, onClose, setData, data, setPage, hasFilter, setHasFilter, setCountFilter, countFilter }) => {
   const { decodedData } = useContext(JwtContext);
   const { t } = useTranslation();
   const theme = useTheme();
@@ -52,6 +52,105 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
       setAccountLinkedFilter([selectedLinkAccount]);
     }
   }, [selectedLinkAccount]);
+
+  // Load filters from localStorage when component mounts
+  useEffect(() => {
+    const savedFilters = JSON.parse(localStorage.getItem("filterState"));
+    if (savedFilters) {
+      setSelectedFilterTypes(savedFilters.selectedFilterTypes || []);
+      setRunningFilters(savedFilters.runningFilters || {
+        running: true,
+        paused: true,
+        all: true,
+      });
+      setAutoTypeFilters(savedFilters.autoTypeFilters || {
+        botAI: true,
+        copyTrade: true,
+        telegramSignal: true,
+        telebot: true,
+      });
+      setAccountTypeFilters(savedFilters.accountTypeFilters || {
+        demo: true,
+        live: true,
+      });
+      setAccountLinkedFilter(savedFilters.accountLinkedFilter || []);
+      if(savedFilters.selectedFilterTypes) {
+        setCountFilter(savedFilters.selectedFilterTypes?.length)
+      }
+    }
+    // setHasFilter(prev=> prev)
+    
+  }, [setHasFilter, setCountFilter]);
+
+  useEffect(()=> {
+    if(JSON.parse(localStorage.getItem("filterState"))) {
+
+      const savedFilters = JSON.parse(localStorage.getItem("filterState"));
+      let filteredData = [...data];
+      const selectedFilterTypes= savedFilters.selectedFilterTypes || []
+      const runningFilters= (savedFilters.runningFilters || {
+        running: true,
+        paused: true,
+        all: true,
+      })
+      const autoTypeFilters= (savedFilters.autoTypeFilters || {
+        botAI: true,
+        copyTrade: true,
+        telegramSignal: true,
+        telebot: true,
+      })
+      const accountTypeFilters= (savedFilters.accountTypeFilters || {
+        demo: true,
+        live: true,
+      })
+      const accountLinkedFilter= (savedFilters.accountLinkedFilter || []);
+      // console.log(selectedFilterTypes)
+      selectedFilterTypes.forEach((filterType) => {
+        switch (filterType) {
+          case "isRunning":
+            const { running, paused, all } = runningFilters;
+            if (running || paused || all) {
+              filteredData = filteredData.filter(
+                (item) =>
+                  (running && item.isRunning) ||
+                  (paused && !item.isRunning) ||
+                  all
+              );
+            }
+            break;
+          case "autoType":
+            const { botAI, telegramSignal, copyTrade, telebot } = autoTypeFilters;
+            filteredData = filteredData.filter(
+              (item) =>
+                (botAI && item.autoType === 0) ||
+                (copyTrade && item.autoType === 1) ||
+                (telebot && item.autoType === 2) ||
+                (telegramSignal && item.autoType === 3)
+            );
+            break;
+          case "accountType":
+            const { demo, live } = accountTypeFilters;
+            filteredData = filteredData.filter(
+              (item) =>
+                (demo && item.accountType === "DEMO") ||
+                (live && item.accountType === "LIVE")
+            );
+            break;
+          case "accountLinked":
+            filteredData = filteredData.filter((item) =>
+              accountLinkedFilter.includes(item.linkAccountId)
+            );
+            break;
+          default:
+            break;
+        }
+      });
+      console.log(filteredData)
+      setPage(1);
+      setHasFilter(true)
+      setData(filteredData);
+    }
+  }, [data?.length, data, setData, setPage, setHasFilter])
 
   const handleFilterTypeChange = (event) => {
     setSelectedFilterTypes(event.target.value);
@@ -97,7 +196,8 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
 
   const applyFilters = () => {
     let filteredData = [...data];
-
+    console.log(selectedFilterTypes)
+    setCountFilter(selectedFilterTypes?.length)
     selectedFilterTypes.forEach((filterType) => {
       switch (filterType) {
         case "isRunning":
@@ -138,6 +238,17 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
           break;
       }
     });
+    
+    localStorage.setItem(
+      "filterState",
+      JSON.stringify({
+        selectedFilterTypes,
+        runningFilters,
+        autoTypeFilters,
+        accountTypeFilters,
+        accountLinkedFilter,
+      })
+    );
 
     setPage(1);
     setData(filteredData);
@@ -166,6 +277,8 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage }) => {
     setData(data);
     setPage(1);
     onClose();
+    localStorage.removeItem("filterState")
+    setHasFilter(false)
   };
 
   const renderFilterOptions = (filterType) => {

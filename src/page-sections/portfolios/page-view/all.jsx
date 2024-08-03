@@ -25,6 +25,7 @@ import {
   // Switch,
   Collapse,
   FormControlLabel,
+  Badge,
 } from "@mui/material";
 import Layout from "../Layout";
 import { isDark } from "util/constants";
@@ -76,6 +77,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   borderBottom: isDark(theme) ? "1px solid #323b49" : "1px solid #eeeff2",
   // width: theme.breakpoints.down("lg") ? "20%" : "auto",
 }));
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+  },
+}));
+
 
 // const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 //   display: "flex",
@@ -142,7 +151,10 @@ const PortfoliosList = () => {
   const [showAllLinkAccountId, setShowAllLinkAccountId] = useState(false);
   const [changeState, setChangeState] = useState(false);
   const [openCopyPlanPopup, setOpenCopyPlanPopup] = useState(false);
+  const [hasFilter, setHasFilter]= useState(false)
+  const [countFilter, setCountFilter]= useState(0)
   const location= useLocation()
+
   const handleDuplicateClose = () => {
     setDuplicateOpen(false);
   };
@@ -583,31 +595,43 @@ const PortfoliosList = () => {
   }, [walletMode, selectedLinkAccount]);
 
   useEffect(() => {
-    if (showAllLinkAccountId === true) {
-      if(walletMode) {
-        setDataState(sortData(data?.filter(item=> item?.accountType=== "LIVE"), "createdAt", "desc"));
-      }
-      else {
-        setDataState(sortData(data?.filter(item=> item?.accountType=== "DEMO"), "createdAt", "desc"));
-      }
-    } else {
-      if(walletMode) {
-        setDataState(
-          sortData(data?.filter(item=> item?.accountType=== "LIVE"), "createdAt", "desc")?.filter(
-            (item) => (item?.linkAccountId === selectedLinkAccount || !userLinkAccountList?.includes(item?.linkAccountId) || userLinkAccountList?.includes(item?.linkAccountId)=== false)
-          )
-        );
-      }
-      else {
-        setDataState(
-          sortData(data?.filter(item=> item?.accountType=== "DEMO"), "createdAt", "desc")?.filter(
-            (item) => (item?.linkAccountId === selectedLinkAccount || !userLinkAccountList?.includes(item?.linkAccountId) || userLinkAccountList?.includes(item?.linkAccountId)=== false)
-          )
-        );
-      }
-      
+    if(hasFilter) {
+
     }
-  }, [data, showAllLinkAccountId, selectedLinkAccount, changeState, walletMode, userLinkAccountList]);
+    else {
+      if (showAllLinkAccountId === true) {
+        if(walletMode) {
+          // console.log(1)
+          setDataState(sortData(data?.filter(item=> item?.accountType=== "LIVE"), "createdAt", "desc"));
+        }
+        else {
+          // console.log(2)
+  
+          setDataState(sortData(data?.filter(item=> item?.accountType=== "DEMO"), "createdAt", "desc"));
+        }
+      } else {
+        if(walletMode) {
+          // console.log(3)
+          
+          setDataState(
+            sortData(data?.filter(item=> item?.accountType=== "LIVE"), "createdAt", "desc")?.filter(
+              (item) => (item?.linkAccountId === selectedLinkAccount || !userLinkAccountList?.includes(item?.linkAccountId) || userLinkAccountList?.includes(item?.linkAccountId)=== false)
+            )
+          );
+        }
+        else {
+          // console.log(4)
+  
+          setDataState(
+            sortData(data?.filter(item=> item?.accountType=== "DEMO"), "createdAt", "desc")?.filter(
+              (item) => (item?.linkAccountId === selectedLinkAccount || !userLinkAccountList?.includes(item?.linkAccountId) || userLinkAccountList?.includes(item?.linkAccountId)=== false)
+            )
+          );
+        }
+        
+      }
+    }
+  }, [data, showAllLinkAccountId, selectedLinkAccount, changeState, walletMode, userLinkAccountList, hasFilter]);
 
   // useEffect(() => {
   //   if (showAllLinkAccountId === true) {
@@ -762,6 +786,7 @@ const PortfoliosList = () => {
                   )}
                   {!downLg && (
                     <Button
+                      
                       onClick={() => {
                         setOpenFilterDialog(true);
                       }}
@@ -774,7 +799,10 @@ const PortfoliosList = () => {
                       }}
                       size={downLg ? "large" : "medium"}
                       fullWidth={downLg ? true : false}
-                      endIcon={<FilterIcon />}
+                      endIcon={<StyledBadge badgeContent={countFilter} color="primary">
+                          <FilterIcon  />
+                        </StyledBadge>
+                        }
                       // onClick={handleDialogOpen}
                     >
                       {downLg ? "" : t("Filter")}
@@ -794,7 +822,11 @@ const PortfoliosList = () => {
                       }}
                       size={downLg ? "large" : "medium"}
                       fullWidth={downLg ? true : false}
-                      endIcon={<FilterIcon />}
+                      endIcon={
+                        <StyledBadge badgeContent={countFilter} color="primary">
+                          <FilterIcon />
+                        </StyledBadge>
+                      }
                       // onClick={handleDialogOpen}
                     >
                       {downLg ? "" : t("Filter")}
@@ -1471,6 +1503,12 @@ const PortfoliosList = () => {
           setData={setDataState}
           data={data}
           setPage={setPage}
+          changeState={changeState}
+          showAllLinkAccountId={showAllLinkAccountId}
+          hasFilter={hasFilter}
+          setHasFilter={setHasFilter}
+          countFilter={countFilter}
+          setCountFilter={setCountFilter}
         />
       </Box>
     </Layout>

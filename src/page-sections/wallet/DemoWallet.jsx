@@ -83,7 +83,7 @@ const DemoWallet = (props) => {
       <Button onClick={handleResetDemoBalance} variant="contained" color="primary" sx={{ mb: 2 }}>
         {t("recharge_balance")}
       </Button>
-      <TransactionWallet handleOpenDetailTransaction={props?.handleOpenDetailTransaction} />
+      <TransactionWallet {...props} handleOpenDetailTransaction={props?.handleOpenDetailTransaction} />
     </Box>
   );
 };

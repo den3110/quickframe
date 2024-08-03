@@ -648,7 +648,7 @@ export const resources = {
       "< $10": "< $10",
       "< Back": "< Back",
       "< Back to Old Version": "< Back to Old Version",
-      "< Back to wallet": "< Back to wallet",
+      "Back to wallet": "Back to wallet",
       "<= $10": "<= $10",
       "<b>Note:</b> Please go to Authenticator App and paste your code here.":
         "<b>Note:</b> Please go to Authenticator App and paste your code here.",
@@ -4229,7 +4229,7 @@ export const resources = {
       "9_WIN": "9 chuỗi thắng",
       "< Back": "< Quay lại",
       "< Back to Old Version": "< Quay lại phiên bản cũ",
-      "< Back to wallet": "<Quay lại ví",
+      "Back to wallet": "Quay lại ví",
       "<b>Note:</b> Please go to Authenticator App and paste your code here.":
         "<b>Lưu ý:</b> Vui lòng truy cập Ứng dụng Authenticator và dán mã vào đây.",
       "<b>{{browser}}</b><br />at <b>{{time}}</b>":

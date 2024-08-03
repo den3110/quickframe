@@ -1,4 +1,4 @@
-import { Fragment, memo, useEffect, useRef, useState } from "react";
+import { Fragment, memo, useContext, useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Badge,
@@ -21,16 +21,17 @@ import { showToast } from "components/toast/toast";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
+import { NotificationContext } from "contexts/NotificationsContext";
 
 const NotificationsPopover = (props) => {
+  const { data, setData, unReadNotification, setUnReadNotification}= useContext(NotificationContext)
   const { hiddenViewButton } = props;
   const { ref, inView } = useInView({
     /* Optional options */
     threshold: 0,
   });
   const anchorRef = useRef(null);
-  const [data, setData] = useState([]);
-  const [unReadNotification, setUnReadNotification] = useState();
+  
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState("1");
@@ -79,21 +80,6 @@ const NotificationsPopover = (props) => {
       showToast();
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await notificationApi.getUserNotification();
-        if (response?.data?.ok === true) {
-          setData(response?.data?.d);
-          setUnReadNotification(response?.data?.no_read_count);
-        } else if (response?.data?.ok === false) {
-        }
-      } catch (error) {
-        showToast(error?.response?.data?.m || t("unknown_error"), "error");
-      }
-    })();
-  }, [t]);
 
   useEffect(() => {
     if (!inView) {
@@ -209,7 +195,10 @@ function ListItem({ msg, onClose, onClick }) {
           ellipsis={true}
           color="text.secondary"
         >
-          {msg.content}
+          <Box dangerouslySetInnerHTML={{ __html: msg.content }}>
+            
+          </Box>
+          {/* {msg.content} */}
         </Small>
       </Box>
     </FlexBox>

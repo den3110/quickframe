@@ -6,7 +6,7 @@ import {
   Typography,
   Box,
   Divider,
-  useMediaQuery,
+  // useMediaQuery,
 } from "@mui/material";
 import { PortfolioDetailContext } from "../page-view/detail";
 import formatCurrency from "util/formatCurrency";
@@ -172,6 +172,39 @@ const InvestmentOverview = (props) => {
                   {t("Reset")}
                 </Typography>
               )}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              mt: 1,
+            }}
+          >
+            <Typography variant="body2">{t("volume")}</Typography>
+            <Typography
+              variant="body2"
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap={1}
+            >
+              {formatCurrency(
+                dataStat?.lastData.volume
+              )}
+              {/* : dataStat?.current_profit */}
+              {/* {props?.isSignalStrategy !== true && (
+                <Typography
+                  onClick={() => handleChangeIsRunning(ActionBotType.RESET_PNL)}
+                  color={"success.main"}
+                  fontSize={14}
+                  fontWeight={600}
+                  sx={{ cursor: "pointer" }}
+                >
+                  {t("Reset")}
+                </Typography>
+              )} */}
             </Typography>
           </Box>
         </CardContent>

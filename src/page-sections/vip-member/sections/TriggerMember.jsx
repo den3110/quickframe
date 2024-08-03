@@ -11,6 +11,11 @@ import {
   TextField,
   TableBody,
   useMediaQuery,
+  styled,
+  Typography,
+  FormControl,
+  Select,
+  Pagination,
 } from "@mui/material";
 import affiliateApi from "api/affiliate/affiliateApi";
 import { showToast } from "components/toast/toast";
@@ -21,16 +26,28 @@ import moment from "moment";
 import { JwtContext } from "contexts/jwtContext";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 
+const PaginationContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: theme.spacing(2),
+  paddingBottom: theme.spacing(2),
+}));
+
 const TriggerMember = (props) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { t } = useTranslation();
   const [type, setType] = useState("normal");
   const [nickName, setNickName] = useState("");
+  const [initActiveList, setInitActiveList]= useState([])
   const [activeList, setActiveList] = useState([]);
   const [loading, setLoading] = useState();
   const [change, setChange] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
   const { selectedLinkAccount } = useContext(AuthContext);
   const { decodedData } = useContext(JwtContext);
+  const [page, setPage] = useState(1);
+  // const [loading, setLoading]= useState()
   //   const {use}
 
   const CURRENCIES = [
@@ -40,6 +57,15 @@ const TriggerMember = (props) => {
       value: "mkt",
     },
   ];
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(event.target.value);
+    setPage(1);
+  };
+
+  const handleChangePage = (event, value) => {
+    setPage(value);
+  };
 
   const handleChange = async (e) => {
     setType(e.target.value);
@@ -110,6 +136,7 @@ const TriggerMember = (props) => {
         );
         if (response?.data?.ok === true) {
           setActiveList(response?.data?.d);
+          setInitActiveList(response?.data?.d)
         } else if (response?.data?.ok === false) {
         }
       } catch (error) {
@@ -118,6 +145,16 @@ const TriggerMember = (props) => {
       }
     })();
   }, [selectedLinkAccount, change]);
+
+  useEffect(()=> {
+    if(type=== "normal") {
+      setActiveList(initActiveList?.filter(item=> item?.isMarketing!== true))
+    }
+    else {
+      setActiveList(initActiveList?.filter(item=> item?.isMarketing=== true))
+
+    }
+  }, [type, initActiveList])
 
   return (
     <Box sx={{ width: "100%" }} mt={2}>
@@ -185,11 +222,17 @@ const TriggerMember = (props) => {
                                 <TableHead>
                                   <TableRow>
                                     {/* <TableCell padding="checkbox" /> */}
-                                    <TableCell sx={{padding: "20px"}}>{t("Created time")}</TableCell>
-                                    <TableCell sx={{padding: "20px"}}>{t("nickname")}</TableCell>
+                                    <TableCell sx={{ padding: "20px" }}>
+                                      {t("Created time")}
+                                    </TableCell>
+                                    <TableCell sx={{ padding: "20px" }}>
+                                      {t("nickname")}
+                                    </TableCell>
                                     {/* <TableCell sx={{padding: "20px"}}>{t("txid/description")}</TableCell> */}
                                     {/* <TableCell sx={{padding: "20px"}}>{t("memo")}</TableCell> */}
-                                    <TableCell sx={{padding: "20px"}}>{t("type")}</TableCell>
+                                    <TableCell sx={{ padding: "20px" }}>
+                                      {t("type")}
+                                    </TableCell>
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -203,18 +246,20 @@ const TriggerMember = (props) => {
                                       }}
                                       key={row.ts}
                                     >
-                                      <TableCell sx={{padding: "20px"}}>
+                                      <TableCell sx={{ padding: "20px" }}>
                                         {moment(row?.createdAt).format(
                                           "HH:mm:ss DD/MM"
                                         )}
                                       </TableCell>
-                                      <TableCell sx={{padding: "20px"}}>
+                                      <TableCell sx={{ padding: "20px" }}>
                                         {/* <Amount row={row} /> */}
                                         {row?.nickName}
                                       </TableCell>
-                                      <TableCell sx={{padding: "20px"}}>
+                                      <TableCell sx={{ padding: "20px" }}>
                                         {/* <Amount row={row} /> */}
-                                        {row?.isMarketing ? "Marketing" : t("normal")}
+                                        {row?.isMarketing
+                                          ? "Marketing"
+                                          : t("normal")}
                                       </TableCell>
                                       {/* <TableCell sx={{padding: "20px"}}>
                                         <TxId row={row} />
@@ -222,7 +267,7 @@ const TriggerMember = (props) => {
                                         <TableCell sx={{padding: "20px"}}>
                                         <Memo row={row} />
                                         </TableCell> */}
-                                      <TableCell sx={{padding: "20px"}}>
+                                      <TableCell sx={{ padding: "20px" }}>
                                         {/* <Status row={row} /> */}
                                       </TableCell>
                                     </TableRow>
@@ -236,6 +281,38 @@ const TriggerMember = (props) => {
                                 disableButton={true}
                               />
                             )}
+                            <PaginationContainer>
+                              <Box
+                                display={"flex"}
+                                justifyContent={"center"}
+                                alignItems={"center"}
+                                gap={1}
+                              >
+                                <Typography>{t("Show result:")}:</Typography>
+                                <FormControl
+                                  variant="outlined"
+                                  sx={{ minWidth: 60 }}
+                                >
+                                  <Select
+                                    value={rowsPerPage}
+                                    onChange={handleChangeRowsPerPage}
+                                  >
+                                    <MenuItem value={6}>6</MenuItem>
+                                    <MenuItem value={12}>12</MenuItem>
+                                    <MenuItem value={24}>24</MenuItem>
+                                    <MenuItem value={activeList?.length}>
+                                      {t("All")}
+                                    </MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </Box>
+                              <Pagination
+                                count={Math.ceil(activeList?.length / rowsPerPage)}
+                                page={page}
+                                onChange={handleChangePage}
+                                shape="rounded"
+                              />
+                            </PaginationContainer>
                           </Box>
                         </Card>
                       </Box>
@@ -264,7 +341,9 @@ const TriggerMember = (props) => {
                           onChange={(e) => setNickName(e.target.value)}
                         />
                         <Box mt={2}>
-                            <Button onClick={handleActivateMkt}>{t("active")}</Button>
+                          <Button onClick={handleActivateMkt}>
+                            {t("active")}
+                          </Button>
                         </Box>
                       </Box>
                     </Card>
@@ -279,11 +358,17 @@ const TriggerMember = (props) => {
                             <TableHead>
                               <TableRow>
                                 {/* <TableCell padding="checkbox" /> */}
-                                <TableCell sx={{padding: "20px"}}>{t("Created time")}</TableCell>
-                                <TableCell sx={{padding: "20px"}}>{t("nickname")}</TableCell>
+                                <TableCell sx={{ padding: "20px" }}>
+                                  {t("Created time")}
+                                </TableCell>
+                                <TableCell sx={{ padding: "20px" }}>
+                                  {t("nickname")}
+                                </TableCell>
                                 {/* <TableCell sx={{padding: "20px"}}>{t("txid/description")}</TableCell> */}
                                 {/* <TableCell sx={{padding: "20px"}}>{t("memo")}</TableCell> */}
-                                <TableCell sx={{padding: "20px"}}>{t("status")}</TableCell>
+                                <TableCell sx={{ padding: "20px" }}>
+                                  {t("status")}
+                                </TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -297,12 +382,12 @@ const TriggerMember = (props) => {
                                   }}
                                   key={row.ts}
                                 >
-                                  <TableCell sx={{padding: "20px"}}>
+                                  <TableCell sx={{ padding: "20px" }}>
                                     {moment(row?.createdAt).format(
                                       "HH:mm:ss DD/MM"
                                     )}
                                   </TableCell>
-                                  <TableCell sx={{padding: "20px"}}>
+                                  <TableCell sx={{ padding: "20px" }}>
                                     {/* <Amount row={row} /> */}
                                     {row?.nickName}
                                   </TableCell>
@@ -312,8 +397,9 @@ const TriggerMember = (props) => {
                                         <TableCell sx={{padding: "20px"}}>
                                         <Memo row={row} />
                                         </TableCell> */}
-                                  <TableCell sx={{padding: "20px"}}>
+                                  <TableCell sx={{ padding: "20px" }}>
                                     {/* <Status row={row} /> */}
+                                    {row?.sponsorName}
                                   </TableCell>
                                 </TableRow>
                               ))}
@@ -326,6 +412,39 @@ const TriggerMember = (props) => {
                             disableButton={true}
                           />
                         )}
+                        <PaginationContainer>
+                          <Box
+                            display={"flex"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            gap={1}
+                          >
+                            <Typography>{t("Show result:")}:</Typography>
+                            <FormControl
+                              variant="outlined"
+                              sx={{ minWidth: 60 }}
+                            >
+                              <Select
+                                value={rowsPerPage}
+                                onChange={handleChangeRowsPerPage}
+                              >
+                                <MenuItem value={6}>6</MenuItem>
+                                <MenuItem value={12}>12</MenuItem>
+                                <MenuItem value={24}>24</MenuItem>
+                                <MenuItem value={activeList?.length}>
+                                  {t("All")}
+                                </MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                          {console.log("(activeList / rowsPerPage)", (activeList?.length / rowsPerPage))}
+                          <Pagination
+                            count={Math.ceil(activeList?.length / rowsPerPage)}
+                            page={page}
+                            onChange={handleChangePage}
+                            shape="rounded"
+                          />
+                        </PaginationContainer>
                       </Box>
                     </Card>
                   </Box>

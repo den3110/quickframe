@@ -10,7 +10,7 @@ import LoopIcon from "@mui/icons-material/Loop";
 import TollIcon from "@mui/icons-material/Toll";
 import TransactionIcon from "icons/wallet/Transaction";
 import { useTranslation } from "react-i18next";
-
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
@@ -88,8 +88,8 @@ export default function DetailTransactionDrawer(props) {
           <Box mt={2} mb={4} display={"flex"} alignItems={"center"} gap={1}>
             <TransactionIcon />
             <Box>
-              <Typography fontSize={12}>{t("TRANSFER_OUT USDT (Bep20)")}</Typography>
-              <Typography>02/07/2024, 02:28:10</Typography>
+              <Typography fontSize={12}>{t(props?.dataDetailTransaction?.type)}</Typography>
+              <Typography>{moment(props?.dataDetailTransaction?.ts).format("DD/MM/YYYY HH:mm:ss")}</Typography>
             </Box>
           </Box>
           <Typography
@@ -99,21 +99,21 @@ export default function DetailTransactionDrawer(props) {
             gutterBottom
             mb={3}
           >
-            0.1 USDT
+            {props?.dataDetailTransaction?.amount} USDT
           </Typography>
           <Divider />
           <Box mt={2} mb={4} display={"flex"} alignItems={"center"} gap={1}>
             <LoopIcon />
             <Box>
-              <Typography fontSize={12}>Trạng thái</Typography>
-              <Typography>Thành công</Typography>
+              <Typography fontSize={12}>{t("status")}</Typography>
+              <Typography>{t(props?.dataDetailTransaction?.status)}</Typography>
             </Box>
           </Box>
           <Box mt={2} mb={4} display={"flex"} alignItems={"center"} gap={1}>
             <TollIcon />
             <Box>
-              <Typography fontSize={12}>Số lượng</Typography>
-              <Typography>0.1 USDT</Typography>
+              <Typography fontSize={12}>{t("amount")}</Typography>
+              <Typography>{props?.dataDetailTransaction?.amount} USDT</Typography>
             </Box>
           </Box>
         </Box>
@@ -128,7 +128,7 @@ export default function DetailTransactionDrawer(props) {
               onClick={onClose}
               startIcon={<ArrowBackIosNewIcon />}
             >
-              Quay lại ví
+              {t("Back to wallet")}
             </Button>
           </Box>
         </Box>

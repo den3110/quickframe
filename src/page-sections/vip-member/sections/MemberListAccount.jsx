@@ -1,5 +1,6 @@
 import {
   Box,
+  Card,
   CircularProgress,
   FormControl,
   IconButton,
@@ -90,7 +91,7 @@ const MemberListAccount = () => {
       >
         <Box mt={downLg ? 1 : 0} mb={downLg ? 1 : 0}>
           <Typography fontSize={downLg ? 18 : 24} fontWeight={600}>
-            Manage Your Affiliate
+            {t("Manage Your Affiliate")}
           </Typography>
         </Box>
         <Box
@@ -103,161 +104,166 @@ const MemberListAccount = () => {
           <LevelSelect />
         </Box>
       </Box>
-      <TableContainer component={Paper} sx={{background: theme.palette.background.default}}>
-        <Table>
-          {!downLg && (
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>User name</StyledTableCell>
-                <StyledTableCell>Vip Level</StyledTableCell>
-                <StyledTableCell>Total Vol</StyledTableCell>
-                <StyledTableCell>Com.Earned</StyledTableCell>
-              </TableRow>
-            </TableHead>
+      <Card>
+        <Box p={1}>
+
+          <TableContainer component={Paper} sx={{background: theme.palette.background.default}}>
+            <Table>
+              {!downLg && (
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>User name</StyledTableCell>
+                    <StyledTableCell>Vip Level</StyledTableCell>
+                    <StyledTableCell>Total Vol</StyledTableCell>
+                    <StyledTableCell>Com.Earned</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+              )}
+              <TableBody>
+                {loading === true && (
+                  <TableRow>
+                    <TableCell
+                      rowSpan={10}
+                      colSpan={3}
+                      align="center"
+                      sx={{ height: 200 }}
+                    >
+                      <CircularProgress />
+                    </TableCell>
+                  </TableRow>
+                )}
+                {loading === false &&
+                  dataState?.c.map((row, index) => (
+                    <StyledTableRow
+                      sx={{
+                        display: downLg ? "flex" : "",
+                        flexWrap: "wrap",
+                        borderBottom: downLg ? "" : "none",
+                        marginBottom: "12px",
+                        background: theme.palette.background.t2,
+                        borderRadius: downLg ? "10px" : 0
+                      }}
+                      key={index}
+                    >
+                      <StyledTableCell
+                        sx={{
+                          width: downLg ? "50%" : "aaa",
+                          borderBottom: downLg ? "none" : "",
+                        }}
+                      >
+                        <Typography variant="body1" fontWeight={"600"}>
+                          {row.nick}
+                        </Typography>
+                        {downLg && (
+                          <Typography
+                            variant="body1"
+                            fontSize={12}
+                            color={"secondary"}
+                          >
+                            User name
+                          </Typography>
+                        )}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        sx={{
+                          width: downLg ? "50%" : "aaa",
+                          borderBottom: downLg ? "none" : "",
+                        }}
+                      >
+                        <Typography variant="body1" fontWeight={"600"}>
+                          {row?.rank}
+                        </Typography>
+                        {downLg && (
+                          <Typography
+                            variant="body1"
+                            fontSize={12}
+                            color={"secondary"}
+                          >
+                            Vip Level
+                          </Typography>
+                        )}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        sx={{
+                          width: downLg ? "50%" : "aaa",
+                          borderBottom: downLg ? "none" : "",
+                        }}
+                      >
+                        <Typography fontSize={14} sx={{ whiteSpace: "nowrap" }}  fontWeight={"600"}>
+                          ${numberWithCommas(round2number(row?.tradevol))}
+                        </Typography>
+                        {downLg && (
+                          <Typography
+                            variant="body1"
+                            fontSize={12}
+                            color={"secondary"}
+                          >
+                            Total Vol
+                          </Typography>
+                        )}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        sx={{
+                          width: downLg ? "50%" : "aaa",
+                          borderBottom: downLg ? "none" : "",
+                        }}
+                      >
+                        <Typography variant="body1" fontWeight={"600"}>
+                          ${numberWithCommas(round2number(row?.coms))}
+                        </Typography>
+                        {downLg && (
+                          <Typography
+                            variant="body1"
+                            fontSize={12}
+                            color={"secondary"}
+                          >
+                            Com. Earned
+                          </Typography>
+                        )}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          {loading === false && dataState?.c?.length <= 0 && (
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <EmptyPage title={t("no_data_to_display")} disableButton={true} />
+            </Box>
           )}
-          <TableBody>
-            {loading === true && (
-              <TableRow>
-                <TableCell
-                  rowSpan={10}
-                  colSpan={3}
-                  align="center"
-                  sx={{ height: 200 }}
-                >
-                  <CircularProgress />
-                </TableCell>
-              </TableRow>
-            )}
-            {loading === false &&
-              dataState?.c.map((row, index) => (
-                <StyledTableRow
-                  sx={{
-                    display: downLg ? "flex" : "",
-                    flexWrap: "wrap",
-                    borderBottom: downLg ? "" : "none",
-                    marginBottom: "12px",
-                    background: theme.palette.background.t2,
-                    borderRadius: downLg ? "10px" : 0
-                  }}
-                  key={index}
-                >
-                  <StyledTableCell
-                    sx={{
-                      width: downLg ? "50%" : "aaa",
-                      borderBottom: downLg ? "none" : "",
-                    }}
-                  >
-                    <Typography variant="body1" fontWeight={"600"}>
-                      {row.nick}
-                    </Typography>
-                    {downLg && (
-                      <Typography
-                        variant="body1"
-                        fontSize={12}
-                        color={"secondary"}
-                      >
-                        User name
-                      </Typography>
-                    )}
-                  </StyledTableCell>
-                  <StyledTableCell
-                    sx={{
-                      width: downLg ? "50%" : "aaa",
-                      borderBottom: downLg ? "none" : "",
-                    }}
-                  >
-                    <Typography variant="body1" fontWeight={"600"}>
-                      {row?.rank}
-                    </Typography>
-                    {downLg && (
-                      <Typography
-                        variant="body1"
-                        fontSize={12}
-                        color={"secondary"}
-                      >
-                        Vip Level
-                      </Typography>
-                    )}
-                  </StyledTableCell>
-                  <StyledTableCell
-                    sx={{
-                      width: downLg ? "50%" : "aaa",
-                      borderBottom: downLg ? "none" : "",
-                    }}
-                  >
-                    <Typography fontSize={14} sx={{ whiteSpace: "nowrap" }}  fontWeight={"600"}>
-                      ${numberWithCommas(round2number(row?.tradevol))}
-                    </Typography>
-                    {downLg && (
-                      <Typography
-                        variant="body1"
-                        fontSize={12}
-                        color={"secondary"}
-                      >
-                        Total Vol
-                      </Typography>
-                    )}
-                  </StyledTableCell>
-                  <StyledTableCell
-                    sx={{
-                      width: downLg ? "50%" : "aaa",
-                      borderBottom: downLg ? "none" : "",
-                    }}
-                  >
-                    <Typography variant="body1" fontWeight={"600"}>
-                      ${numberWithCommas(round2number(row?.coms))}
-                    </Typography>
-                    {downLg && (
-                      <Typography
-                        variant="body1"
-                        fontSize={12}
-                        color={"secondary"}
-                      >
-                        Com. Earned
-                      </Typography>
-                    )}
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {loading === false && dataState?.c?.length <= 0 && (
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <EmptyPage title={t("no_data_to_display")} disableButton={true} />
+          <PaginationContainer>
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap={1}
+            >
+              <Typography>{t("Show result:")}:</Typography>
+              <FormControl variant="outlined" sx={{ minWidth: 60 }}>
+                <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
+                  <MenuItem value={6}>6</MenuItem>
+                  <MenuItem value={12}>12</MenuItem>
+                  <MenuItem value={24}>24</MenuItem>
+                  <MenuItem value={dataState?.t?.length}>{t("All")}</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Pagination
+              count={Math.ceil(dataState?.t / rowsPerPage)}
+              page={page}
+              onChange={handleChangePage}
+              shape="rounded"
+            />
+          </PaginationContainer>
         </Box>
-      )}
-      <PaginationContainer>
-        <Box
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          gap={1}
-        >
-          <Typography>{t("Show result:")}:</Typography>
-          <FormControl variant="outlined" sx={{ minWidth: 60 }}>
-            <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
-              <MenuItem value={6}>6</MenuItem>
-              <MenuItem value={12}>12</MenuItem>
-              <MenuItem value={24}>24</MenuItem>
-                    <MenuItem value={dataState?.t?.length}>{t("All")}</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <Pagination
-          count={Math.ceil(dataState?.t / rowsPerPage)}
-          page={page}
-          onChange={handleChangePage}
-          shape="rounded"
-        />
-      </PaginationContainer>
+      </Card>
     </Box>
   );
 };

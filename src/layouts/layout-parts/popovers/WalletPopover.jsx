@@ -37,6 +37,8 @@ const WalletPopover = () => {
   const [mode, setMode] = useState(walletMode);
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [dataDetailTransaction, setDataDetailTransaction]= useState()
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -163,6 +165,8 @@ const WalletPopover = () => {
           {mode === false && (
             <DemoWallet
               handleOpenDetailTransaction={handleOpenDetailTransactionDrawer}
+              dataDetailTransaction={dataDetailTransaction}
+              setDataDetailTransaction={setDataDetailTransaction}
             />
           )}
           {mode === true && (
@@ -175,6 +179,8 @@ const WalletPopover = () => {
               handleOpenWithdrawDrawer={handleOpenWithdrawDrawer}
               handleOpenMoveBalanceDrawer={handleOpenMoveBalanceDrawer}
               handleOpenDetailTransaction={handleOpenDetailTransactionDrawer}
+              dataDetailTransaction={dataDetailTransaction}
+              setDataDetailTransaction={setDataDetailTransaction}
             />
           )}
         </Box>
@@ -195,6 +201,8 @@ const WalletPopover = () => {
         openWalletPopup={handleOpen}
       />
       <DetailTransactionDrawer
+        dataDetailTransaction={dataDetailTransaction}
+        setDataDetailTransaction={setDataDetailTransaction}
         open={openDetailTransactionDrawer}
         setOpen={setOpenDetailTransactionDrawer}
         openWalletPopup={handleOpen}

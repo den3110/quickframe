@@ -37,7 +37,9 @@ import { useTranslation } from "react-i18next";
 import NewPlanDrawer from "page-sections/portfolios/drawer/NewPlanDrawer";
 import round2number from "util/round2number";
 import numberWithCommas from "util/numberSeparatorThousand";
-import CopyPlanDrawer from "../component/drawer/CopyPlanDrawer";
+import CopyPlanDrawer from "../component/drawer/CopyPlanDrawer";  
+import SwiperCore, { Mousewheel } from 'swiper/core';
+SwiperCore.use([Mousewheel]);
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   display: "flex",
@@ -149,6 +151,7 @@ const LeaderBoard = () => {
         </Box>
         <Box>
           <Swiper
+            mousewheel={true}
             spaceBetween={20}
             pagination={{ clickable: true }}
             style={{ paddingBottom: "20px", overflowY: "unset" }}

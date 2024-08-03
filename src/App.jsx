@@ -27,13 +27,14 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { authApi } from "api";
 import { PortfoliosProvider } from "contexts/PortfoliosContext";
+import NotificationsProvider from "contexts/NotificationsContext";
 
 const App = () => {
   const { settings } = useSettings();
   const theme = createCustomTheme(settings);
   // ROUTER CREATE
   const router = createBrowserRouter(routes());
-  const {accessToken, setAccessToken} = useContext(AuthContext);
+  const { accessToken, setAccessToken } = useContext(AuthContext);
 
   const refreshToken = useCallback(async () => {
     try {
@@ -71,8 +72,6 @@ const App = () => {
     }
   }, [accessToken, refreshToken]);
 
- 
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <StyledEngineProvider injectFirst>
@@ -81,13 +80,15 @@ const App = () => {
             <SpotBalanceProvider>
               <GlobalProvider>
                 <SocketProvider>
-                <PortfoliosProvider>
-                  <RTL>
-                    <Toast />
-                    <CssBaseline />
-                    <RouterProvider router={router} />
-                  </RTL>
-                </PortfoliosProvider>
+                  <PortfoliosProvider>
+                    <NotificationsProvider>
+                      <RTL>
+                        <Toast />
+                        <CssBaseline />
+                        <RouterProvider router={router} />
+                      </RTL>
+                    </NotificationsProvider>
+                  </PortfoliosProvider>
                 </SocketProvider>
               </GlobalProvider>
             </SpotBalanceProvider>

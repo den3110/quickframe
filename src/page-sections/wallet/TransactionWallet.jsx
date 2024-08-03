@@ -85,8 +85,9 @@ const TransactionWallet = (props) => {
     }
   };
 
-  const handleOpenTransaction = () => {
+  const handleOpenTransaction = (transaction) => {
     props?.handleOpenDetailTransaction();
+    props?.setDataDetailTransaction(transaction)
   };
 
   const normalizeDataBalance = dataBalance?.d?.c?.map((item) => ({
@@ -247,7 +248,7 @@ const TransactionWallet = (props) => {
             <List>
               {sortedData?.slice(0, 7)?.map((transaction, index) => (
                 <ListItem
-                  onClick={handleOpenTransaction}
+                  onClick={()=> handleOpenTransaction(transaction)}
                   key={index}
                   className={classes.listItem}
                   sx={{

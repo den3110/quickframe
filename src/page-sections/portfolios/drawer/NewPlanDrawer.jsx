@@ -51,7 +51,7 @@ import { showToast } from "components/toast/toast";
 import { useInView } from "react-intersection-observer";
 import { GlobalContext } from "contexts/GlobalContext";
 import AuthContext from "contexts/AuthContext";
-import userApi from "api/user/userApi";
+// import userApi from "api/user/userApi";
 import { constant } from "constant/constant";
 import Backdrop from "components/backdrop/Backdrop";
 import { useTranslation } from "react-i18next";

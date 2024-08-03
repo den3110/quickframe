@@ -8,16 +8,16 @@ import React, {
   useRef,
 } from "react";
 import { io } from "socket.io-client";
+import AuthContext from "./AuthContext";
 
 export const SocketContext = createContext();
 
 export const useSocket = () => useContext(SocketContext);
 
-
-
 const SocketProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const socketRef = useRef();
+  const {selectedLinkAccount }= useContext(AuthContext)
 
   const getWebSocketUrl = () =>{
     return window.location.hostname.indexOf("localhost") > -1
@@ -34,6 +34,7 @@ const SocketProvider = ({ children }) => {
       socketRef.current.on("connect", () => {
         setIsConnected(true);
         // socketRef.current.emit("CURRENT_SESSION_SUBCRIBE", {});
+        socketRef.current.emit("LINK_ACCOUNT_SUBCRIBE", selectedLinkAccount);
       });
 
       socketRef.current.on("disconnect", () => {

@@ -273,7 +273,7 @@ const StatPortfolio = (props) => {
                   <Grid item xs={12} sm={6} md={4}>
                     <Paper sx={{ height: "100%" }}>
                       <Box
-                        p={downLg? 0 : 2}
+                        p={downLg? 2 : 2}
                         display={"flex"}
                         justifyContent={"space-between"}
                         alignItems={"center"}

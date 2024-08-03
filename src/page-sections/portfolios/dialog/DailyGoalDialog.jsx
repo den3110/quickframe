@@ -137,7 +137,7 @@ const handleLossTargetChange = (e) => {
               fullWidth
               variant="outlined"
               margin="normal"
-              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              // inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             />
           </Box>
           <Box sx={{ width: "50%" }}>
@@ -150,7 +150,7 @@ const handleLossTargetChange = (e) => {
               fullWidth
               variant="outlined"
               margin="normal"
-              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              // inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             />
           </Box>
         </Box>

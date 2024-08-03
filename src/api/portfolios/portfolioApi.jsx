@@ -5,7 +5,7 @@ const portfolioApi = {
     const url= "/users/bot/create"
     return axiosClient.post(url, data)
   },
-  userBotList(data) { // e cứ cho nó gọi nguyên từ đây tí bên kia mìn xài filter thôi đừng nhét querry vào link nhé oke a
+  userBotList(data) { 
     const url= "/users/bot/list"
     return axiosClient.get(url, data)
   },

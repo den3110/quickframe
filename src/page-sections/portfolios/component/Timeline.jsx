@@ -287,6 +287,7 @@ const CustomTimeline = ({isSignalStrategy}) => {
               longestVictorStreak: data?.runningData?.longestVictorStreak,
               winTotal: data?.runningData?.winTotal,
               loseTotal: data?.runningData?.loseTotal,
+              volume:  data?.runningData?.volume,
               budgetStrategy: {
                 ...dataStatTemp.lastData.budgetStrategy,
                 bs: {
@@ -346,6 +347,7 @@ const CustomTimeline = ({isSignalStrategy}) => {
               longestLoseStreak: data?.runningData?.longestLoseStreak,
               winStreak: data?.runningData?.winStreak,
               loseStreak: data?.runningData?.loseStreak,
+              volume:  data?.runningData?.volume,
               budgetStrategy: {
                 ...dataStatTemp.lastData.budgetStrategy,
                 bs: {

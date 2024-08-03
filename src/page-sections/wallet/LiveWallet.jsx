@@ -109,6 +109,7 @@ const LiveWallet = (props) => {
         </Button>
       </Box>
       <TransactionWallet
+        {...props}
         handleOpenDetailTransaction={props?.handleOpenDetailTransaction}
       />
     </Box>

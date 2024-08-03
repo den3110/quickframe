@@ -29,6 +29,7 @@ const colors = [
   (theme) => (isDark(theme) ? "#565d67" : "#d9d9d9"),
   "#0caf60",
   "#fd4f4f",
+  "#ff6e00",
 ];
 
 // const BallButton = ({
@@ -97,6 +98,19 @@ const GridBallButton = ({
         return selectedCandle?.betIndex - 22 - 80 + 100 + 1;
     }
   };
+
+  const renderType= (state)=> {
+    if (state === 0) {
+      return "UP";
+    }
+    if (state === 1) {
+      return "DOWN";
+    }
+    if (state === 2) {
+      return "RITY";
+    }
+  }
+
   useEffect(() => {
     if (selectedCandle) {
       selectedCandle?.conditions?.map((item, key) => {
@@ -113,6 +127,9 @@ const GridBallButton = ({
           if (resultType === "DOWN") {
             state = 2;
           }
+          if (resultType=== "RITY") {
+            state= 3
+          }
           newGridBallStates[tableIndex][index] = state;
           handleGridBallStates(newGridBallStates);
         }
@@ -128,27 +145,28 @@ const GridBallButton = ({
       }
       onClick={() => {
         onClick();
-        if (state === 2) {
+        console.log("state", state)
+        if (parseInt(state) === 3) {
           setSelectedGridBall(
-            selectedGridBall.filter((item) => item.index !== number)
+            selectedGridBall.filter((item) => parseInt(item.index) !== parseInt(number))
           );
         } else {
           setSelectedGridBall((prev) => {
             const existingIndex = prev.findIndex(
-              (item) => item.index === number
+              (item) => parseInt(item.index) === parseInt(number)
             );
             if (existingIndex !== -1) {
               // exist
               const updatedSelectedGridBall = [...prev];
               updatedSelectedGridBall[existingIndex] = {
                 index: number,
-                resultType: state === 1 ? "DOWN" : "UP",
+                resultType: renderType(parseInt(state)),
               };
               return updatedSelectedGridBall;
             } else {
               return [
                 ...prev,
-                { index: number, resultType: state === 1 ? "DOWN" : "UP" },
+                { index: number, resultType: renderType(parseInt(state)) },
               ];
             }
           });
@@ -199,17 +217,52 @@ const CandleShadow = ({
 
   const [longShort, setLongShort] = useState("UP");
 
-  const handleBallClick = (index) => {
-    const newStates = Array(20).fill(0);
-    newStates[index] = 1;
+  const renderLongShort= (type)=> {
+    switch (type) {
+      case "UP":
+        return "UP"
+      case "DOWN":
+        return "DOWN"
+      case "NONE":
+        return "NONE"
+      case "MAJORITY":
+        return "MAJORITY"
+      case "MINORITY":
+        return "MINORITY"
+      default:
+        break;
+    }
+  }
 
-    setBallStates(newStates);
-  };
+  const renderColorType= (type)=> {
+    switch (type) {
+      case "UP":
+        return "#0caf60"
+      case "DOWN":
+        return "#fd4f4f"
+      case "NONE":
+        return "#ffff00"
+      case "MAJORITY":
+        return "#7300ff"
+      case "MINORITY":
+        return "#e80cce"
+      default:
+        return ""
+    }
+  }
+
+  // const handleBallClick = (index) => {
+  //   const newStates = Array(20).fill(0);
+  //   newStates[index] = 1;
+
+  //   setBallStates(newStates);
+  // };
 
   const handleGridBallClick = (gridIndex, ballIndex) => {
     const newGridStates = [...gridBallStates];
     newGridStates[gridIndex][ballIndex] =
-      (newGridStates[gridIndex][ballIndex] + 1) % 3;
+      (newGridStates[gridIndex][ballIndex] + 1) % 4;
+      // console.log("newGridStates", newGridStates)
     setGridBallStates(newGridStates);
   };
 
@@ -299,7 +352,7 @@ const CandleShadow = ({
     if (selectedCandle && is_new === false) {
       setSelectedBall(selectedCandle?.betIndex);
       setSelectedGridBall(selectedCandle?.conditions);
-      setLongShort(selectedCandle?.betType=== "UP" ? "UP" : (selectedCandle?.betType=== "DOWN" ? "DOWN" : "NONE"))
+      setLongShort(renderLongShort(selectedCandle?.betType))
     }
   }, [selectedCandle, inView, is_new]);
 
@@ -360,13 +413,15 @@ const CandleShadow = ({
                 onChange={(e) => setLongShort(e.target.value)}
                 sx={{
                   "& .MuiSelect-select": {
-                    color: longShort=== "UP" ? "#0caf60" : (longShort=== "DOWN" ? "#fd4f4f" : ""),
+                    color: renderColorType(longShort),
                   },
                 }}
               >
                 <MenuItem value="UP">Buy</MenuItem>
                 <MenuItem value="DOWN">Sell</MenuItem>
                 <MenuItem value="NONE">Skip</MenuItem>
+                <MenuItem value="MAJORITY">Majority</MenuItem>
+                <MenuItem value="MINORITY">Minority</MenuItem>
               </Select>
             </FormControl>
             {t("for the number")} {selectedBall - 80}
@@ -584,7 +639,7 @@ const CandleShadow = ({
               sx={{ padding: "10px" }}
               onClick={() => handleCopy()}
             >
-              {t("Duplicate Plan")}
+              {t("Duplicate")}
             </Button>
           </Box>
         </Box>
