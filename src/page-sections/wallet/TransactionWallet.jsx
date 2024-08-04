@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   Box,
   List,
@@ -34,6 +34,7 @@ import moment from "moment";
 import Status from "components/wallet/Status";
 import { SettingsContext } from "contexts/settingsContext";
 import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
+import sortData from "util/sortData";
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -111,7 +112,7 @@ const TransactionWallet = (props) => {
     memo: "",
   }));
 
-  const mergedData = [...normalizeDataBalance, ...normalizeDataBalanceSpot];
+  const mergedData = useMemo(()=> [...normalizeDataBalance, ...normalizeDataBalanceSpot], [normalizeDataBalance, normalizeDataBalanceSpot]);
 
   // Sort data with loading state
   useEffect(() => {
@@ -247,7 +248,7 @@ const TransactionWallet = (props) => {
             </Box>
           ) : (
             <List>
-              {sortedData?.slice(0, 7)?.map((transaction, index) => (
+              {sortData(sortedData, "ts", "desc")?.slice(0, 7)?.map((transaction, index) => (
                 <ListItem
                   onClick={()=> handleOpenTransaction(transaction)}
                   key={index}

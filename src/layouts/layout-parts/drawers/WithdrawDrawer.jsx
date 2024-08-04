@@ -51,8 +51,9 @@ export default function WithdrawDrawer(props) {
   // const [nickName, setNickName]= React.useState("")
   const [network, setNetwork] = React.useState("internal");
   const classes = useStyles();
-  const isButtonDisabled = !amount || !toAddress || !twoFACode || parseFloat(amount) < 5;
   const [loadingSubmit, setLoadingSubmit]= React.useState(false)
+  const [memo, setMemo]= React.useState("")
+  const isButtonDisabled = !amount || !toAddress || !twoFACode || memo?.length <= 0 || parseFloat(amount) < 5;
   const isErrorInputAmount= parseFloat(amount) < 5
   const {selectedLinkAccount }= React.useContext(AuthContext)
   
@@ -78,7 +79,7 @@ export default function WithdrawDrawer(props) {
         toAddress,
         verifyCode: twoFACode,
         netword: "bsc",
-        memo: "true"
+        memo: memo
       }
       setLoadingSubmit(true)
       const response= await userApi.userExchangeLinkAccountWithdraw(data, selectedLinkAccount)
@@ -102,7 +103,7 @@ export default function WithdrawDrawer(props) {
         nickName: toAddress,
         verifyCode: twoFACode,
         typeWallet: "usdt",
-        memo: "true"
+        memo: memo
       }
       setLoadingSubmit(true)
       const response= await userApi.userExchangeLinkAccountTransfer(data, selectedLinkAccount)
@@ -216,6 +217,8 @@ export default function WithdrawDrawer(props) {
               p: 2,
             }}
           >
+          
+
             {network === "internal" &&
             <>
               <Typography variant="subtitle1" sx={{ mb: 1 }}>
@@ -260,6 +263,18 @@ export default function WithdrawDrawer(props) {
                 }}
               />
             </>}
+
+            <Typography variant="subtitle1" sx={{ mb: 1, mt  : 1 }}>
+              {t("memo")}
+            </Typography>
+            <TextField
+              fullWidth
+              placeholder={t("Nhập ghi chú")}
+              value={memo}
+              onChange={(e) => setMemo(e.target.value)}
+            />
+
+
             <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>
               {t("2FA Code")}
             </Typography>

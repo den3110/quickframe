@@ -11,6 +11,8 @@ import TollIcon from "@mui/icons-material/Toll";
 import TransactionIcon from "icons/wallet/Transaction";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
+import DescriptionIcon from "@mui/icons-material/Description";
+import NoteIcon from '@mui/icons-material/Note';
 
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
@@ -59,7 +61,7 @@ export default function DetailTransactionDrawer(props) {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { open, setOpen } = props;
   const classes = useStyles();
-  const {t }= useTranslation()
+  const { t } = useTranslation();
   const onClose = () => {
     setOpen(false);
     props?.openWalletPopup();
@@ -88,8 +90,14 @@ export default function DetailTransactionDrawer(props) {
           <Box mt={2} mb={4} display={"flex"} alignItems={"center"} gap={1}>
             <TransactionIcon />
             <Box>
-              <Typography fontSize={12}>{t(props?.dataDetailTransaction?.type)}</Typography>
-              <Typography>{moment(props?.dataDetailTransaction?.ts).format("DD/MM/YYYY HH:mm:ss")}</Typography>
+              <Typography fontSize={12}>
+                {t(props?.dataDetailTransaction?.type)}
+              </Typography>
+              <Typography>
+                {moment(props?.dataDetailTransaction?.ts).format(
+                  "DD/MM/YYYY HH:mm:ss"
+                )}
+              </Typography>
             </Box>
           </Box>
           <Typography
@@ -113,9 +121,25 @@ export default function DetailTransactionDrawer(props) {
             <TollIcon />
             <Box>
               <Typography fontSize={12}>{t("amount")}</Typography>
-              <Typography>{props?.dataDetailTransaction?.amount} USDT</Typography>
+              <Typography>
+                {props?.dataDetailTransaction?.amount} USDT
+              </Typography>
             </Box>
           </Box>
+          {props?.dataDetailTransaction?.txid && (
+            <TxId row={props?.dataDetailTransaction} />
+          )}
+          {props?.dataDetailTransaction?.memo &&
+            <Box mt={2} mb={4} display={"flex"} alignItems={"center"} gap={1}>
+              <NoteIcon />
+              <Box>
+                <Typography fontSize={12}>{t("memo")}</Typography>
+                <Typography>
+                  {props?.dataDetailTransaction?.memo}
+                </Typography>
+              </Box>
+            </Box>
+          }
         </Box>
 
         <Box className={classes.footer}>
@@ -142,10 +166,82 @@ export default function DetailTransactionDrawer(props) {
         open={open}
         onClose={onClose}
         anchor={downLg ? "bottom" : "right"}
-        sx={{zIndex: ""}}
+        sx={{ zIndex: "" }}
       >
         {DrawerList}
       </Drawer>
     </div>
   );
 }
+
+const TxId = ({ row }) => {
+  // thêm 1 dòng là TxId/Mô tả oke a
+  const { t } = useTranslation();
+  try {
+    const openInNewTab = (url) => {
+      window.open(url, "_blank", "noopener,noreferrer");
+    };
+
+    if (row.type === "InternalWithdraw") {
+      const obj = JSON.parse(row.txid);
+      // nos laf cai doan Txid , e thêm dòng là Txid
+      return (
+        <Box mt={2} mb={4} display={"flex"} alignItems={"center"} gap={1}>
+          <Box display={"flex"} alignItems={"center"} gap={1}>
+            <DescriptionIcon />
+          </Box>
+          <Box>
+            <Typography fontSize={12}>{t("Recipient nickname")}</Typography>
+            <Box display="flex" alignItems={"center"} gap={1}>
+              <Typography sx={{ color: "warning.main" }}>
+                {" "}
+                {obj?.ReceiverNickName}{" "}
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      );
+    }
+
+    if (row.type === "InternalDeposit") {
+      const obj = JSON.parse(row.txid);
+      // nos laf cai doan Txid , e thêm dòng là Txid
+      return (
+        <Box mt={2} mb={4} display={"flex"} alignItems={"center"} gap={1}>
+          <Box display={"flex"} alignItems={"center"} gap={1}>
+            <DescriptionIcon />
+          </Box>
+          <Box>
+            <Typography fontSize={12}>{t("Sender nickname")}</Typography>
+            <Box display="flex" alignItems={"center"} gap={1}>
+              <Typography sx={{ color: "warning.main" }}>
+                {" "}
+                {obj?.SenderNickName}{" "}
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      );
+    }
+
+    if (row.txid === "") return <></>;
+    const data = JSON.parse(row.txid);
+
+    if (!data.TransactionId) return <></>;
+    return (
+      <Typography
+        sx={{ color: "primary.main", cursor: "pointer" }}
+        onClick={() =>
+          data.TransactionId.indexOf("0x") > -1 &&
+          openInNewTab(`https://bscscan.com/tx/${data.TransactionId}`)
+        }
+      >
+        {data.TransactionId.indexOf("0x") > -1
+          ? `${data.TransactionId.substring(0, 8)}...`
+          : data.TransactionId}
+      </Typography>
+    );
+  } catch (e) {
+    return <></>;
+  }
+};
