@@ -7,15 +7,15 @@ import {
   FormControlLabel,
   Button,
   IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Menu,
+  // List,
+  // ListItem,
+  // ListItemText,
+  // ListItemSecondaryAction,
+  // MenuItem,
+  // Select,
+  // InputLabel,
+  // FormControl,
+  // Menu,
   useMediaQuery,
   CardContent,
   Grid,
@@ -25,15 +25,15 @@ import {
   Stack,
   useTheme,
 } from "@mui/material";
-import { Add, Remove, Edit, MoreVert, Close } from "@mui/icons-material";
+import { Add, Remove, Close } from "@mui/icons-material";
 import { isDark } from "util/constants";
 import CandleShadow from "./CandleShadow";
-import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
+// import CloseIcon from "@mui/icons-material/Close";
+// import EditIcon from "@mui/icons-material/Edit";
 import signalStrategyApi from "api/singal-strategy/signalStrategyApi";
 import { showToast } from "components/toast/toast";
 import DeleteIcon from "icons/DeleteIcon";
-import SignalStrategyContext from "contexts/SignalStrategyContext";
+// import SignalStrategyContext from "contexts/SignalStrategyContext";
 import PortfoliosContext from "contexts/PortfoliosContext";
 import { useTranslation } from "react-i18next";
 
@@ -80,6 +80,7 @@ const NewBotAI = ({
     setTargetConditions([]);
   };
   const isDisableButton = name?.length <= 0 || targetConditions?.length <= 0;
+  const [submitting, setSubmitting]= useState(false)
   const handleOpenCandleShadow = (is_edit) => {
     if (is_edit === false) {
       setIsEdit(false);
@@ -143,6 +144,7 @@ const NewBotAI = ({
         type: "BUBBLE_METHOD",
       };
       let response;
+      setSubmitting(true)
       if (initState === true) {
         response = await signalStrategyApi.userBudgetSignalUpdate(
           idBotAI,
@@ -175,6 +177,9 @@ const NewBotAI = ({
       }
     } catch (error) {
       showToast(error?.response?.data?.m);
+    }
+    finally {
+      setSubmitting(false)
     }
   };
 
@@ -844,7 +849,7 @@ const NewBotAI = ({
           </Button>
           <Button
             onClick={handleCreateBot}
-            disabled={isDisableButton}
+            disabled={(isDisableButton=== false && submitting=== false) ? false : true}
             fullWidth
             variant="contained"
             color="primary"

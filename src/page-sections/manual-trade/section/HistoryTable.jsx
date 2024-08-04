@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -18,6 +18,7 @@ import {
   FormControlLabel,
   Radio,
   CircularProgress,
+  Skeleton,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -147,7 +148,7 @@ const HistoryTable = ({isFromTeleChannel}) => {
   return (
     <Box mt={isFromTeleChannel? 0 : 2}>
       {loading=== true && <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-        <CircularProgress />
+        <Skeleton variant="rectangular" width={"100%"} height={500} />
       </Box>}
       {loading=== false && 
         <Card variant="outlined">
@@ -358,4 +359,4 @@ const HistoryTable = ({isFromTeleChannel}) => {
   );
 };
 
-export default HistoryTable;
+export default memo(HistoryTable);

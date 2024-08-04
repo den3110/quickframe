@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const SelectDirectLinkAccount = ({plan, userLinkAccountList, setData, data}) => {
+  const [submitting, setSubmitting]= useState(false)
   const [linkAccountIdSelected, setLinkAccountIdSelected]= useState(plan?.linkAccountId) 
   const {t }= useTranslation()
   
@@ -20,6 +21,7 @@ const SelectDirectLinkAccount = ({plan, userLinkAccountList, setData, data}) => 
         const payload= {
             linkAccountId: e.target.value
         }
+        setSubmitting(true)
         const response= await portfolioApi.postUserBotLinkAccount(plan?._id, payload)
         if(response?.data?.ok=== true) {
             showToast(t("update_successful"), "success")
@@ -39,6 +41,9 @@ const SelectDirectLinkAccount = ({plan, userLinkAccountList, setData, data}) => 
     } catch (error) {
         showToast(error?.response?.data?.m)
     }
+    finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -46,6 +51,7 @@ const SelectDirectLinkAccount = ({plan, userLinkAccountList, setData, data}) => 
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select">{plan?.accountType}</InputLabel>
         <Select
+          disabled={submitting}
           label={plan?.accountType}// botinfo.accountType
           size="small"
           id="demo-simple-select"

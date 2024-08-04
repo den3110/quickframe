@@ -1,5 +1,5 @@
 // Header.js
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { Box, Typography } from "@mui/material";
 import { ManualTradeContext } from "contexts/ManualTradeContext";
 import { useTranslation } from "react-i18next";
@@ -22,4 +22,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default memo(Header);

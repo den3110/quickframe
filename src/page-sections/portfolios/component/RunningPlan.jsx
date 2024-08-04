@@ -2,12 +2,13 @@ import { Button, Switch, useMediaQuery } from "@mui/material";
 import portfolioApi from "api/portfolios/portfolioApi";
 import { showToast } from "components/toast/toast";
 import AuthContext from "contexts/AuthContext";
-import React, { useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActionBotType } from "type/ActionBotType";
 
 const RunningPlan = (props) => {
   const {t }= useTranslation()
+  const [submitting, setSubmitting]= useState(false)
   const {setData, data, plan, dataState, changeState }= props
   const [isRunning, setIsRunning] = useState();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
@@ -24,6 +25,7 @@ const RunningPlan = (props) => {
         action: e.target.checked === true ? ActionBotType.START : ActionBotType.STOP,
         linkAccountId: selectedLinkAccount
       };
+      setSubmitting(true)
       await portfolioApi.userBotAction(plan?._id, payload);
         let dataLocal= data
         const index= data?.findIndex(item=> item?._id=== plan?._id)
@@ -36,6 +38,9 @@ const RunningPlan = (props) => {
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }
+    finally {
+      setSubmitting(false)
+    }
   };
 
   return (
@@ -47,9 +52,9 @@ const RunningPlan = (props) => {
       >
         {isRunning=== true ? t("On going") : t("COOL_DOWN")}
       </Button>
-      <Switch onChange={handleChangeIsRunning} checked={isRunning === true ? true : false} />
+      <Switch disabled={submitting} onChange={handleChangeIsRunning} checked={isRunning === true ? true : false} />
     </>
   );
 };
 
-export default RunningPlan;
+export default memo(RunningPlan);

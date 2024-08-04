@@ -29,6 +29,7 @@ const DailyGoalDialog = ({
   const [profitTarget, setProfitTarget] = useState("");
   const [lossTarget, setLossTarget] = useState("");
   const isDisableButton = profitTarget?.length <= 0 || lossTarget?.length <= 0;
+  const [submitting, setSubmitting]= useState(false)
   const { selectedLinkAccount, user, dataSelectedLinkAccount } =
     useContext(AuthContext);
   const { t } = useTranslation();
@@ -71,6 +72,7 @@ const handleLossTargetChange = (e) => {
         stop_loss_target: lossTarget?.replaceAll("$", ""),
         linkAccountId: selectedLinkAccount,
       };
+      setSubmitting(true)
       const response = await userApi.postUserExchangeLinkAccountDailyTarget(
         data,
         selectedLinkAccount
@@ -88,6 +90,9 @@ const handleLossTargetChange = (e) => {
       }
     } catch (error) {
       showToast(error?.response?.data?.m);
+    }
+    finally {
+      setSubmitting(false)
     }
   };
 
@@ -158,7 +163,7 @@ const handleLossTargetChange = (e) => {
       <DialogActions>
         <Box width="100%" display="flex" justifyContent="center">
           <Button
-            disabled={isDisableButton}
+            disabled={(isDisableButton=== false && submitting=== false) ? false : true}
             variant="contained"
             color="success"
             onClick={handleSubmit}

@@ -980,18 +980,7 @@ const PortfoliosList = () => {
                     </TableHead>
                   )}
                   <TableBody>
-                    {loading === true && (
-                      <TableRow>
-                        <TableCell
-                          rowSpan={10}
-                          colSpan={3}
-                          align="center"
-                          sx={{ height: 200 }}
-                        >
-                          <CircularProgress />
-                        </TableCell>
-                      </TableRow>
-                    )}
+                    
 
                     {loading === false &&
                       dataState
@@ -1221,7 +1210,6 @@ const PortfoliosList = () => {
                                   </MenuItem> */}
                                 </Menu>
                               </StyledTableCell>
-
                               <StyledTableCell
                                 sx={{ width: downLg ? "100%" : "aaa" }}
                               >
@@ -1388,6 +1376,11 @@ const PortfoliosList = () => {
                   </TableBody>
                 </Table>
               </TableContainer>
+              {loading === true && (
+                <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}} mt={2}> 
+                  <CircularProgress />
+                </Box>
+              )}
               {loading === false && dataState?.length <= 0 && (
                 <Box
                   sx={{
@@ -1404,6 +1397,9 @@ const PortfoliosList = () => {
                     )}
                     titleButton={t("Create Your Strategy")}
                     actionClick={handleOpenPlanDrawer}
+                    actionClick2={()=> {
+                      setOpenCopyPlanPopup(true)
+                    }}
                   />
                 </Box>
               )}

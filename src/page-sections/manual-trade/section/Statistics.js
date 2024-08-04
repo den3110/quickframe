@@ -1,5 +1,5 @@
 // Statistics.js
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Typography,
@@ -8,6 +8,7 @@ import {
   // Paper,
   Card,
   CardContent,
+  Skeleton,
 } from "@mui/material";
 import { isDark } from "util/constants";
 import { SettingsContext } from "contexts/settingsContext";
@@ -20,7 +21,7 @@ import { useTranslation } from "react-i18next";
 const Statistics = () => {
   const {t }= useTranslation()
   const { walletMode } = useContext(SettingsContext);
-  const { dataStat } = useContext(ManualTradeContext);
+  const { dataStat, loading } = useContext(ManualTradeContext);
   const dayWinLiveRef = useRef(0);
   const dayLoseLiveRef = useRef(0);
   const dayWinDemoRef = useRef(0);
@@ -236,42 +237,49 @@ const Statistics = () => {
 
   return (
     <Box mt={2}>
-      <Card variant="outlined">
-        <CardContent>
-          <Box>
-            <Typography variant="h6">{t("statics")}</Typography>
-            <Grid container spacing={2}>
-              <StatisticCard
-                title={t("Today win/lose")}
-                value={renderWinLoseRate(true)}
-                percentage={`${renderWinLoseRate()}% ${t("Win rate")}`}
-              />
-              <StatisticCard
-                title={t("Today Profit")}
-                value={renderDayProfit()}
-                percentage={t("Today Profit")}
-                hidden={true}
-                color={renderColorDayProfit()}
-              />
-              <StatisticCard
-                title={t("7-days volume")}
-                value={renderWeekVolume()}
-                color={renderColorWeekProfitVolume()}
-              />
-              <StatisticCard
-                title={t("7-days profit")}
-                value={renderWeekProfit()}
-                color={renderColorWeekProfit()}
-              />
-              {/* <StatisticCard
-                title="Chuỗi Victor / tối đa"
-                value={`${dataStat?.victorStreak }/${dataStat?.longestVictorStreak}`}
-                color="error.main"
-              /> */}
-            </Grid>
-          </Box>
-        </CardContent>
-      </Card>
+      {loading=== false && 
+        <Card variant="outlined">
+          <CardContent>
+            <Box>
+              <Typography variant="h6">{t("statics")}</Typography>
+              <Grid container spacing={2}>
+                <StatisticCard
+                  title={t("Today win/lose")}
+                  value={renderWinLoseRate(true)}
+                  percentage={`${renderWinLoseRate()}% ${t("Win rate")}`}
+                />
+                <StatisticCard
+                  title={t("Today Profit")}
+                  value={renderDayProfit()}
+                  percentage={t("Today Profit")}
+                  hidden={true}
+                  color={renderColorDayProfit()}
+                />
+                <StatisticCard
+                  title={t("7-days volume")}
+                  value={renderWeekVolume()}
+                  color={renderColorWeekProfitVolume()}
+                />
+                <StatisticCard
+                  title={t("7-days profit")}
+                  value={renderWeekProfit()}
+                  color={renderColorWeekProfit()}
+                />
+                {/* <StatisticCard
+                  title="Chuỗi Victor / tối đa"
+                  value={`${dataStat?.victorStreak }/${dataStat?.longestVictorStreak}`}
+                  color="error.main"
+                /> */}
+              </Grid>
+            </Box>
+          </CardContent>
+        </Card>
+      }
+      {loading === true && (
+        <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+          <Skeleton variant="rectangular" width={"100%"} height={400} />
+        </Box>
+      )}
     </Box>
   );
 };
@@ -303,4 +311,4 @@ const StatisticCard = ({ title, value, percentage, hidden, color }) => {
   );
 };
 
-export default Statistics;
+export default memo(Statistics);

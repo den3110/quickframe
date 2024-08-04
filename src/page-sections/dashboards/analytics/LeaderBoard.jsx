@@ -19,6 +19,7 @@ import {
   useTheme,
   CircularProgress,
   IconButton,
+  Skeleton,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import exchangeApi from "api/exchange/exchangeApi";
@@ -37,8 +38,8 @@ import { useTranslation } from "react-i18next";
 import NewPlanDrawer from "page-sections/portfolios/drawer/NewPlanDrawer";
 import round2number from "util/round2number";
 import numberWithCommas from "util/numberSeparatorThousand";
-import CopyPlanDrawer from "../component/drawer/CopyPlanDrawer";  
-import SwiperCore, { Mousewheel } from 'swiper/core';
+import CopyPlanDrawer from "../component/drawer/CopyPlanDrawer";
+import SwiperCore, { Mousewheel } from "swiper/core";
 SwiperCore.use([Mousewheel]);
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
@@ -67,17 +68,28 @@ const LeaderBoard = () => {
   const [selectedPlan, setSelectedPlan] = useState();
   const [openCopyPlan, setOpenCopyPlan] = useState(false);
   // const { logoutFromSystem, logoutToConnect } = useContext(AuthContext);
-  const fetchDataUser = useCallback(async () => {
+  const fetchData = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
+      const [userResponse, botResponse] = await Promise.all([
+        exchangeApi.userExchangeLinkAccountLeaderboard(),
+        exchangeApi.userBotLeaderboard(),
+      ]);
 
-      const response = await exchangeApi.userExchangeLinkAccountLeaderboard();
-      setDataUser(response?.data?.d);
+      if (userResponse?.data?.d) {
+        setDataUser(userResponse.data.d);
+      }
+
+      if (botResponse?.data?.d) {
+        setDataBot(botResponse.data.d);
+      }
     } catch (error) {
       if (error?.response?.status === 401) {
+        // Handle unauthorized error
         // logoutFromSystem();
         // navigate("/login");
       } else if (error?.response?.status === 402) {
+        // Handle payment required error
         // logoutToConnect();
         // navigate("/connect");
       }
@@ -85,22 +97,10 @@ const LeaderBoard = () => {
       setLoading(false);
     }
   }, []);
-  const fetchDataBot = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await exchangeApi.userBotLeaderboard();
-      setDataBot(response?.data?.d);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+
   useEffect(() => {
-    fetchDataUser();
-  }, [fetchDataUser]);
-  useEffect(() => {
-    fetchDataBot();
-  }, [fetchDataBot]);
+    fetchData();
+  }, [fetchData]);
 
   const renderBackgroundLeaderBoardBot = (rank) => {
     switch (rank) {
@@ -116,12 +116,7 @@ const LeaderBoard = () => {
   };
 
   return (
-    <RefreshProvider
-      functionProps={async () => {
-        await fetchDataBot();
-        await fetchDataUser();
-      }}
-    >
+    <>
       <Box sx={{ width: "100%", padding: "2px 10px 50px 10px" }}>
         <Box
           display={"flex"}
@@ -150,227 +145,274 @@ const LeaderBoard = () => {
           </Fragment>
         </Box>
         <Box>
-          <Swiper
-            mousewheel={true}
-            spaceBetween={20}
-            pagination={{ clickable: true }}
-            style={{ paddingBottom: "20px", overflowY: "unset" }}
-            className="waa"
-            breakpoints={{
-              // when window width is >= 640px
-              300: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              // when window width is >= 768px
-              768: {
-                slidesPerView: 4,
-                spaceBetween: 20,
-              },
-              1200: {
-                slidesPerView: 5,
-                spaceBetween: 20,
-              },
+          {loading=== false && 
+            <Swiper
+              mousewheel={true}
+              spaceBetween={20}
+              pagination={{ clickable: true }}
+              style={{ paddingBottom: "20px", overflowY: "unset" }}
+              className="waa"
+              breakpoints={{
+                // when window width is >= 640px
+                300: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                // when window width is >= 768px
+                768: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+                1200: {
+                  slidesPerView: 5,
+                  spaceBetween: 20,
+                },
 
-              2000: {
-                slidesPerView: 10,
-                spaceBetween: 20,
-              },
-            }}
-          >
-            {sortData(
-              dataBot,
-              function (e) {
-                return parseFloat(e.profitRate);
-              },
-              "desc"
-            ).map((item, index) => (
-              <SwiperSlide key={index}>
-                <Box
-                  style={{
-                    padding: "20px 0",
-                    // height: "100%",
-                    maxWidth: 300,
-                    height: 300,
-                  }}
-                >
+                2000: {
+                  slidesPerView: 10,
+                  spaceBetween: 20,
+                },
+              }}
+            >
+              {sortData(
+                dataBot,
+                function (e) {
+                  return parseFloat(e.profitRate);
+                },
+                "desc"
+              ).map((item, index) => (
+                <SwiperSlide key={index}>
                   <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{
-                      width: "100%",
-                      background: (theme) =>
-                        isDark(theme) ? "rgb(31, 41, 55)" : "white",
-                    }}
                     style={{
-                      borderRadius: "8px",
                       padding: "20px 0",
-                      textAlign: "center",
-                      height: "100%",
-                      boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                      // height: "100%",
+                      maxWidth: 300,
+                      height: 300,
                     }}
-                    position={"relative"}
                   >
                     <Box
-                      position={"absolute"}
-                      style={{
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      justifyContent="center"
+                      sx={{
                         width: "100%",
-                        height: "50%",
-                        background: renderBackgroundLeaderBoardBot(
-                          parseInt(index) + 1
-                        ),
-                        top: 0,
-                        left: 0,
-                        borderRadius: 8,
+                        background: (theme) =>
+                          isDark(theme) ? "rgb(31, 41, 55)" : "white",
                       }}
-                    ></Box>
-                    <Box
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
+                      style={{
+                        borderRadius: "8px",
+                        padding: "20px 0",
+                        textAlign: "center",
+                        height: "100%",
+                        boxShadow: " rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                      }}
+                      position={"relative"}
                     >
-                      {parseInt(index) + 1 === 1 && (
-                        <img
-                          style={{
-                            position: "relative",
-                            top: -40,
-                            zIndex: 10,
-                            width: 45,
-                          }}
-                          src="/static/icons/rank-1.png"
-                          alt="Can't open"
-                        />
-                      )}
-                      {parseInt(index) + 1 === 2 && (
-                        <img
-                          style={{
-                            position: "relative",
-                            top: -40,
-                            zIndex: 10,
-                            width: 45,
-                          }}
-                          src="/static/icons/rank-2.png"
-                          alt="Can't open"
-                        />
-                      )}
-                      {parseInt(index) + 1 === 3 && (
-                        <img
-                          style={{
-                            position: "relative",
-                            top: -40,
-                            zIndex: 10,
-                            width: 45,
-                          }}
-                          src="/static/icons/rank-3.png"
-                          alt="Can't open"
-                        />
-                      )}
-                      {parseInt(index) + 1 !== 1 &&
-                        parseInt(index) + 1 !== 2 &&
-                        parseInt(index) + 1 !== 3 && (
-                          <>
-                            <Box
-                              style={{
-                                position: "relative",
-                                top: -40,
-                                zIndex: 10,
-                              }}
-                            >
+                      <Box
+                        position={"absolute"}
+                        style={{
+                          width: "100%",
+                          height: "50%",
+                          background: renderBackgroundLeaderBoardBot(
+                            parseInt(index) + 1
+                          ),
+                          top: 0,
+                          left: 0,
+                          borderRadius: 8,
+                        }}
+                      ></Box>
+                      <Box
+                        display={"flex"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                      >
+                        {parseInt(index) + 1 === 1 && (
+                          <img
+                            style={{
+                              position: "relative",
+                              top: -40,
+                              zIndex: 10,
+                              width: 45,
+                            }}
+                            src="/static/icons/rank-1.png"
+                            alt="Can't open"
+                          />
+                        )}
+                        {parseInt(index) + 1 === 2 && (
+                          <img
+                            style={{
+                              position: "relative",
+                              top: -40,
+                              zIndex: 10,
+                              width: 45,
+                            }}
+                            src="/static/icons/rank-2.png"
+                            alt="Can't open"
+                          />
+                        )}
+                        {parseInt(index) + 1 === 3 && (
+                          <img
+                            style={{
+                              position: "relative",
+                              top: -40,
+                              zIndex: 10,
+                              width: 45,
+                            }}
+                            src="/static/icons/rank-3.png"
+                            alt="Can't open"
+                          />
+                        )}
+                        {parseInt(index) + 1 !== 1 &&
+                          parseInt(index) + 1 !== 2 &&
+                          parseInt(index) + 1 !== 3 && (
+                            <>
                               <Box
-                                display={"flex"}
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                sx={{ width: 40, height: 50 }}
+                                style={{
+                                  position: "relative",
+                                  top: -40,
+                                  zIndex: 10,
+                                }}
                               >
                                 <Box
-                                  display="flex"
+                                  display={"flex"}
                                   justifyContent={"center"}
                                   alignItems={"center"}
-                                  sx={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: "50%",
-                                    background: "rgb(160, 174, 192)",
-                                  }}
+                                  sx={{ width: 40, height: 50 }}
                                 >
-                                  {parseInt(index) + 1}
+                                  <Box
+                                    display="flex"
+                                    justifyContent={"center"}
+                                    alignItems={"center"}
+                                    sx={{
+                                      width: 40,
+                                      height: 40,
+                                      borderRadius: "50%",
+                                      background: "rgb(160, 174, 192)",
+                                    }}
+                                  >
+                                    {parseInt(index) + 1}
+                                  </Box>
                                 </Box>
                               </Box>
-                            </Box>
-                          </>
-                        )}
-                    </Box>
-                    <Typography
-                      mb={1}
-                      fontSize={14}
-                      fontWeight={600}
-                      color="text.main"
-                      style={{
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        WebkitLineClamp: 2, 
-                        lineHeight: "1.2em",
-                        maxHeight: "2.4em", 
-                      }}
-                    >
-                      {item.name}
-                    </Typography>
-                    <Box
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                    >
-                      <Typography fontSize={12} color="textSecondary">
-                        PnL 24h {item.pnl}&nbsp;
-                      </Typography>
+                            </>
+                          )}
+                      </Box>
                       <Typography
+                        mb={1}
+                        fontSize={14}
                         fontWeight={600}
-                        fontSize={12}
-                        color={
-                          parseFloat(item?.profitRate) > 0
-                            ? "success.main"
-                            : "error.main"
-                        }
-                      >
-                        ({formatCurrency(item?.profitRate)?.replace("$", "")}%)
-                      </Typography>
-                    </Box>
-                    <Typography
-                      fontWeight={600}
-                      color="textPrimary"
-                      style={{ margin: "10px 0" }}
-                    >
-                      ${numberWithCommas(round2number(item.profit))}
-                    </Typography>
-                    {item?.isPrivate === true && (
-                      <Button
-                        sx={{ cursor: "context-menu" }}
-                        disableRipple
-                        variant="outlined"
-                      >
-                        {t("Private plan")}
-                      </Button>
-                    )}
-                    {item?.isPrivate === false && (
-                      <Button
-                        variant={"contained"}
-                        onClick={() => {
-                          setSelectedPlan(item);
-                          setOpenCopyPlan(true);
+                        color="text.main"
+                        style={{
+                          display: "-webkit-box",
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          WebkitLineClamp: 2,
+                          lineHeight: "1.2em",
+                          maxHeight: "2.4em",
                         }}
                       >
-                        {t("Copy plan")}
-                      </Button>
-                    )}
+                        {item.name}
+                      </Typography>
+                      <Box
+                        display={"flex"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                      >
+                        <Typography fontSize={12} color="textSecondary">
+                          PnL 24h {item.pnl}&nbsp;
+                        </Typography>
+                        <Typography
+                          fontWeight={600}
+                          fontSize={12}
+                          color={
+                            parseFloat(item?.profitRate) > 0
+                              ? "success.main"
+                              : "error.main"
+                          }
+                        >
+                          ({formatCurrency(item?.profitRate)?.replace("$", "")}%)
+                        </Typography>
+                      </Box>
+                      <Typography
+                        fontWeight={600}
+                        color="textPrimary"
+                        style={{ margin: "10px 0" }}
+                      >
+                        ${numberWithCommas(round2number(item.profit))}
+                      </Typography>
+                      {item?.isPrivate === true && (
+                        <Button
+                          sx={{ cursor: "context-menu" }}
+                          disableRipple
+                          variant="outlined"
+                        >
+                          {t("Private plan")}
+                        </Button>
+                      )}
+                      {item?.isPrivate === false && (
+                        <Button
+                          variant={"contained"}
+                          onClick={() => {
+                            setSelectedPlan(item);
+                            setOpenCopyPlan(true);
+                          }}
+                        >
+                          {t("Copy plan")}
+                        </Button>
+                      )}
+                    </Box>
                   </Box>
-                </Box>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          }
+          {loading=== true && <>
+            <Swiper
+              mousewheel={true}
+              spaceBetween={20}
+              pagination={{ clickable: true }}
+              style={{ paddingBottom: "20px", overflowY: "unset" }}
+              className="waa"
+              breakpoints={{
+                // when window width is >= 640px
+                300: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                // when window width is >= 768px
+                768: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+                1200: {
+                  slidesPerView: 5,
+                  spaceBetween: 20,
+                },
+
+                2000: {
+                  slidesPerView: 10,
+                  spaceBetween: 20,
+                },
+              }}
+            >
+              {Array.from(Array(5).keys()).map((item, index) => (
+                <SwiperSlide key={index}>
+                  <Box
+                    style={{
+                      padding: "20px 0",
+                      // height: "100%",
+                      maxWidth: 300,
+                      height: 300,
+                    }}
+                  >
+                    <Skeleton animation={"wave"} width={"100%"} height={300} variant={"rounded"} />
+                  </Box>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </>}
         </Box>
         <Typography
           variant="h4"
@@ -716,11 +758,51 @@ const LeaderBoard = () => {
             </List>
           </Box>
         )}
-        {loading === true && (
-          <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-            <CircularProgress />
-          </Box>
-        )}
+        {loading=== true && <>
+            <Swiper
+              mousewheel={true}
+              spaceBetween={20}
+              pagination={{ clickable: true }}
+              style={{ paddingBottom: "20px", overflowY: "unset" }}
+              className="waa"
+              breakpoints={{
+                // when window width is >= 640px
+                300: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                // when window width is >= 768px
+                768: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+                1200: {
+                  slidesPerView: 5,
+                  spaceBetween: 20,
+                },
+
+                2000: {
+                  slidesPerView: 10,
+                  spaceBetween: 20,
+                },
+              }}
+            >
+              {Array.from(Array(5).keys()).map((item, index) => (
+                <SwiperSlide key={index}>
+                  <Box
+                    style={{
+                      padding: "20px 0",
+                      // height: "100%",
+                      maxWidth: 300,
+                      height: 300,
+                    }}
+                  >
+                    <Skeleton animation={"wave"} width={"100%"} height={300} variant={"rounded"} />
+                  </Box>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </>}
       </Box>
       <NewPlanDrawer
         open={openDrawer}
@@ -739,7 +821,7 @@ const LeaderBoard = () => {
         selectedPlan={selectedPlan}
         isFromCopyPlan={true}
       />
-    </RefreshProvider>
+    </>
   );
 };
 

@@ -72,7 +72,7 @@ const PopupTrade = ({selectedBot}) => {
           };
           const response = await copytradeApi.postUserCopytrade(data);
           if (response?.data?.ok === true) {
-            showToast("Đặt lệnh thành công", "success");
+            showToast(t("Order successfully!"), "success");
           } else if (response?.data?.ok === false) {
             showToast(t(response?.data?.d?.err_code) || t("unknow_err"), "error");
           }

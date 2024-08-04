@@ -33,6 +33,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
   const [allResults, setAllResults] = useState(false);
   const [isDefault, setIsDefault]= useState(false)
   const isDisableButton = name?.length <= 0 || chainSignal?.length <= 0;
+  const [submitting, setSubmitting]= useState(false)
   const {t }= useTranslation()
   const handleChangeChainSignal = (value) => {
     setChainSignal(value);
@@ -58,6 +59,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
         type: strategy,
       };
       let response
+      setSubmitting(true)
       if(is_edit=== true) {
         response = await signalStrategyApi.userBudgetSignalUpdate(idBotAI, data);
       }
@@ -75,6 +77,9 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
       }
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
+    }
+    finally {
+      setSubmitting(false)
     }
   };
 
@@ -205,7 +210,7 @@ const NewBotAIStringMethod = ({ open, onClose, is_edit, setIsEdit, selectedBot }
             color="primary"
             fullWidth
             sx={{ padding: "10px" }}
-            disabled={isDisableButton}
+            disabled={(isDisableButton=== false && submitting=== false) ? false : true}
             onClick={handleSubmit}
           >
             {is_edit=== true ? t("Save Bot") : t("Create Bot")}

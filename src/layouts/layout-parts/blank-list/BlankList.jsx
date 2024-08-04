@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EmptyPage = ({ title, subTitle, titleButton, actionClick, disableButton }) => {
+const EmptyPage = ({ title, subTitle, titleButton, actionClick, disableButton, actionClick2 = () => {}}) => {
   const classes = useStyles();
   const {t} =useTranslation()
 
@@ -65,7 +65,10 @@ const EmptyPage = ({ title, subTitle, titleButton, actionClick, disableButton })
           >
             {titleButton}
           </Button>
-          <Link href="#" className={classes.link}>
+          <Link onClick={(e)=> {
+            e.preventDefault()
+            actionClick2()
+          }} href="#" className={classes.link}>
             <Typography variant="body2" mt={2}>
               <Box component="span" className={classes.linkIcon}>
                 +
