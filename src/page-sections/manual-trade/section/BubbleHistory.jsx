@@ -19,6 +19,8 @@ import { useTranslation } from "react-i18next";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { isDark } from "util/constants";
+import SwiperCore, { Mousewheel } from 'swiper/core';
+SwiperCore.use([Mousewheel]);
 
 const colors = [
   (theme) => (isDark(theme) ? "#565d67" : "#d9d9d9"),
@@ -115,6 +117,7 @@ const BubbleHistory = ({isFromTelegramChannel}) => {
         <Box position={"relative"} display={"flex"} gap={3}>
           {!isFromTelegramChannel && 
             <Swiper
+              mousewheel={true}
               // ref={sliderRef}
               spaceBetween={20}
               pagination={{ clickable: true }}

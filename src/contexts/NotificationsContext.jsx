@@ -24,7 +24,7 @@ const NotificationsProvider = ({ children }) => {
         } else if (response?.data?.ok === false) {
         }
       } catch (error) {
-        showToast(error?.response?.data?.m || t("unknown_error"), "error");
+        // showToast(error?.response?.data?.m || t("unknown_error"), "error");
       }
     })();
   }, [t]);

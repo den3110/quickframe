@@ -33,6 +33,7 @@ import moment from "moment";
 // import Memo from "components/wallet/Memo";
 import Status from "components/wallet/Status";
 import { SettingsContext } from "contexts/settingsContext";
+import EmptyPage from "layouts/layout-parts/blank-list/BlankList";
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -336,6 +337,12 @@ const TransactionWallet = (props) => {
               </TableBody>
             </Table>
           )}
+          {loading=== true && <>
+            <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+              <CircularProgress />
+            </Box>
+          </>}
+          {dataTradingComission?.length <= 0 && loading=== false && <EmptyPage title={t("no_data_to_display")} disableButton={true} />}
         </Box>
       )}
     </>

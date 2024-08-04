@@ -13,6 +13,8 @@ import { PortfolioDetailContext } from "../page-view/detail";
 import { ref } from "yup";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import SwiperCore, { Mousewheel } from 'swiper/core';
+SwiperCore.use([Mousewheel]);
 
 const colors = [
   (theme) => (isDark(theme) ? "#565d67" : "#d9d9d9"),
@@ -128,6 +130,7 @@ const SignalBubble = () => {
     <Box position={"relative"}>
       <Swiper
         // ref={sliderRef}
+        mousewheel={true}
         spaceBetween={20}
         pagination={{ clickable: true }}
         modules={[Navigation, Pagination]}

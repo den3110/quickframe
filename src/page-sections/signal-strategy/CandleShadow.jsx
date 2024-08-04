@@ -19,6 +19,8 @@ import { isDark } from "util/constants";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import { useTranslation } from "react-i18next";
+import SwiperCore, { Mousewheel } from 'swiper/core';
+SwiperCore.use([Mousewheel]);
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   "&:disabled": {
@@ -649,6 +651,7 @@ const CandleShadow = ({
           <Box sx={{ display: "flex", flexWrap: "wrap", mt: 2, gap: 6 }}>
             {downLg && (
               <Swiper
+                mousewheel={true}
                 spaceBetween={20}
                 pagination={{ clickable: true }}
                 modules={[Navigation, Pagination]}

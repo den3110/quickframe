@@ -278,6 +278,7 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage, hasFilter, se
     setPage(1);
     onClose();
     localStorage.removeItem("filterState")
+    setCountFilter(0)
     setHasFilter(false)
   };
 

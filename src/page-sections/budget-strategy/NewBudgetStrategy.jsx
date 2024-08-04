@@ -32,6 +32,7 @@ import budgetStrategyApi from "api/budget-strategy/budgetStrategyApi";
 import { showToast } from "components/toast/toast";
 import { JwtContext } from "contexts/jwtContext";
 import { useTranslation } from "react-i18next";
+import { useInView } from "react-intersection-observer";
 
 const NewBudgetStrategy = ({
   open,
@@ -46,6 +47,10 @@ const NewBudgetStrategy = ({
   isFromPortfolios,
   setIsEdit
 }) => {
+  const { ref, inView } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { decodedData } = useContext(JwtContext);
   const [idBudegetStrategy, setIdBudgetStrategy] = useState();
@@ -370,6 +375,23 @@ const NewBudgetStrategy = ({
     }
   }, [is_edit, selectedStrategy]);
 
+  useEffect(() => {
+    if (isFromPortfolios === true) {
+      setIdBudgetStrategy(selectedStrategy?._id);
+      setStrategyName(selectedStrategy?.name);
+      setType(selectedStrategy?.type);
+      setAmount(selectedStrategy?.method_data?.[0]);
+      setMethod1(selectedStrategy?.method_data?.[0]);
+      setMethod2(selectedStrategy?.method_data?.[1]);
+      setMethod3(selectedStrategy?.method_data?.[2]);
+      setMethod4(selectedStrategy?.method_data?.[3]);
+      setCount(selectedStrategy?.method_data?.[1]);
+      setCount2(selectedStrategy?.method_data?.[2]);
+      setIsDefaultStrategy(selectedStrategy?.is_default);
+      setIncreaseValueType(selectedStrategy?.increaseValueType);
+    }
+  }, [isFromPortfolios, inView, selectedStrategy]);
+
   const handleClose = () => {
     onClose();
     setStrategyName("");
@@ -458,7 +480,7 @@ const NewBudgetStrategy = ({
           setCount2(0);
           break;
         case BudgetStrategyType.MARTINGALE:
-          console.log(2222);
+          // console.log(2222);
           setMethod1("1-2-4-8-17-35");
           setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
           break;
@@ -505,6 +527,7 @@ const NewBudgetStrategy = ({
       sx={{ zIndex: "" }}
     >
       <Box
+        ref={ref}
         className="mawkwr"
         p={2}
         width={downLg ? "100%" : 850}

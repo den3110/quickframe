@@ -11,7 +11,22 @@ import StopIcon from '@mui/icons-material/Stop';
 
 const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestart, onClickReset, onClickPause }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const downXss = useMediaQuery((theme) => theme.breakpoints.down("xss"));
+  const isDownXss= (downXss=== true && downLg === true) ? true : false
+  console.log(isDownXss)
   const {t }= useTranslation()
+
+  const renderMenu= ()=> {
+      if(downLg === true && downXss=== true) {
+
+      }
+      else if(downLg === false && downXss=== false ) {
+
+      }
+      else {
+
+      }
+  }
 
   return (
     <Box
@@ -29,8 +44,9 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
         borderRadius: !downLg && "8px",
       }}
     >
-      <Box sx={{ display: "flex", gap: 1, alignItems: "center", justifyContent: downLg ? "center" : "", padding: 1 }}>
+      <Box sx={{ display: "flex", gap: isDownXss ? .5 : 1, alignItems: "center", justifyContent: downLg ? "center" : "", padding: isDownXss ? .5 : 1 }}>
         <Button
+          
           onClick={onClickPause}
           startIcon={<PauseIcon />}
           color="warning"
@@ -42,10 +58,13 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
             },
           }}
         >
-          {t("COOL_DOWN")}
+          {!isDownXss && <>
+            {t("COOL_DOWN")}
+          </>}
         </Button>
         {/*  */}
         <Button
+          
           onClick={onClickStop}
           startIcon={<StopIcon />}
           color="secondary"
@@ -57,10 +76,14 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
             },
           }}
         >
+          {!isDownXss &&<>
           {t("Stop")}
+
+          </>}
         </Button>
         {/*  */}
         <Button
+          
           onClick={onClickStart}
           startIcon={<PlayArrowIcon />}
           sx={{
@@ -71,9 +94,12 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
             },
           }}
         >
-          {t("continue")}
+          {!isDownXss && <>
+            {t("continue")}
+          </>}
         </Button>
         <Button
+          
           onClick={onClickRestart}
           startIcon={<CachedIcon />}
           color="success"
@@ -85,9 +111,12 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
             },
           }}
         >
-          {t("Restart Plan")}
+          {!isDownXss && <>
+            {t("Restart Plan")}
+          </>}
         </Button>
         <Button
+          
           onClick={onClickReset}
           startIcon={<ReplayIcon />}
           color={"info"}
@@ -99,9 +128,14 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
             },
           }}
         >
-          {t("Reset")}
+          {
+            !isDownXss && <>
+              {t("Reset")}
+            </>
+          }
         </Button>
         <Button
+          
           onClick={onClickDelete}
           startIcon={<DeleteIcon />}
           color="error"
@@ -112,8 +146,10 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
               margin: downLg ? 0 : "",
             },
           }}
-        >
-          {t("delete")}
+        > 
+          {!isDownXss && <>
+            {t("delete")}
+          </>}
         </Button>
       </Box>
       {downLg && <Divider />}

@@ -52,6 +52,7 @@ export default function WithdrawDrawer(props) {
   const [network, setNetwork] = React.useState("internal");
   const classes = useStyles();
   const isButtonDisabled = !amount || !toAddress || !twoFACode || parseFloat(amount) < 5;
+  const [loadingSubmit, setLoadingSubmit]= React.useState(false)
   const isErrorInputAmount= parseFloat(amount) < 5
   const {selectedLinkAccount }= React.useContext(AuthContext)
   
@@ -70,6 +71,7 @@ export default function WithdrawDrawer(props) {
     });
   };
   const handleWithdraw= async ()=> {
+    console.log(1)
     try {
       const data= {
         amount,
@@ -78,15 +80,19 @@ export default function WithdrawDrawer(props) {
         netword: "bsc",
         memo: "true"
       }
+      setLoadingSubmit(true)
       const response= await userApi.userExchangeLinkAccountWithdraw(data, selectedLinkAccount)
       if(response?.data?.ok=== true) {
 
       }
       else if(response?.data?.ok=== false ) {
-        showToast(response?.data?.m, "error")
+        showToast(t(response?.data?.d?.err_code), "error")
       }
     } catch (error) {
-      showToast(error?.response?.data?.message)      
+      showToast(t(error?.response?.data?.message))      
+    }
+    finally {
+      setLoadingSubmit(false)
     }
   }
   const handleTransfer= async ()=> {
@@ -98,16 +104,20 @@ export default function WithdrawDrawer(props) {
         typeWallet: "usdt",
         memo: "true"
       }
+      setLoadingSubmit(true)
       const response= await userApi.userExchangeLinkAccountTransfer(data, selectedLinkAccount)
       if(response?.data?.ok=== true) {
         showToast("Rút USDT thành công", "success")
         setChange(prev=> !prev)
       }
       else if(response?.data?.ok=== false ) {
-        showToast(response?.data?.m, "error")
+        showToast(t(response?.data?.d?.err_code), "error")
       }
     } catch (error) {
-      showToast(error?.response?.data?.message)      
+      showToast(t(error?.response?.data?.message))      
+    }
+    finally {
+      setLoadingSubmit(false)
     }
   }
 
@@ -292,7 +302,7 @@ export default function WithdrawDrawer(props) {
               color="primary"
               className={classes.copyButton}
               sx={{padding: "10px 14px"}}
-              disabled={isButtonDisabled}
+              disabled={(isButtonDisabled === false && loadingSubmit=== false ) ? false : true}
               onClick={network=== "internal" ? handleTransfer : handleWithdraw}
             >
               {t("Send USDT")}

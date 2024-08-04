@@ -23,6 +23,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import isNumber from "util/isNumber";
 import round2number from "util/round2number";
 import { useTranslation } from "react-i18next";
+import SwiperCore, { Mousewheel } from 'swiper/core';
+SwiperCore.use([Mousewheel]);
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -166,6 +168,7 @@ const CustomAutowinTable = () => {
       <Box>
         <Box>
           <Swiper
+            mousewheel={true}
             breakpoints={{
               300: {
                 slidesPerView: 1,

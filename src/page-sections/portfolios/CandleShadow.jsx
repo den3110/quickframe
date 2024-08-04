@@ -402,6 +402,7 @@ const CandleShadow = ({
           <Box sx={{ display: "flex", flexWrap: "wrap", mt: 2, gap: 6 }}>
             {downLg && (
               <Swiper
+                mousewheel={true}
                 spaceBetween={20}
                 pagination={{ clickable: true }}
                 modules={[Navigation, Pagination]}
