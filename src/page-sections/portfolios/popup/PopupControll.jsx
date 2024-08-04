@@ -9,24 +9,24 @@ import { isDark } from "util/constants";
 import { useTranslation } from "react-i18next";
 import StopIcon from '@mui/icons-material/Stop';
 
-const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestart, onClickReset, onClickPause }) => {
+const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestart, onClickReset, onClickPause, submitting }) => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const downXss = useMediaQuery((theme) => theme.breakpoints.down("xss"));
   const isDownXss= (downXss=== true && downLg === true) ? true : false
   console.log(isDownXss)
   const {t }= useTranslation()
 
-  const renderMenu= ()=> {
-      if(downLg === true && downXss=== true) {
+  // const renderMenu= ()=> {
+  //     if(downLg === true && downXss=== true) {
 
-      }
-      else if(downLg === false && downXss=== false ) {
+  //     }
+  //     else if(downLg === false && downXss=== false ) {
 
-      }
-      else {
+  //     }
+  //     else {
 
-      }
-  }
+  //     }
+  // }
 
   return (
     <Box
@@ -46,7 +46,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
     >
       <Box sx={{ display: "flex", gap: isDownXss ? .5 : 1, alignItems: "center", justifyContent: downLg ? "center" : "", padding: isDownXss ? .5 : 1 }}>
         <Button
-          
+          disabled={submitting}
           onClick={onClickPause}
           startIcon={<PauseIcon />}
           color="warning"
@@ -64,7 +64,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
         </Button>
         {/*  */}
         <Button
-          
+          disabled={submitting}
           onClick={onClickStop}
           startIcon={<StopIcon />}
           color="secondary"
@@ -83,7 +83,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
         </Button>
         {/*  */}
         <Button
-          
+          disabled={submitting}
           onClick={onClickStart}
           startIcon={<PlayArrowIcon />}
           sx={{
@@ -99,7 +99,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
           </>}
         </Button>
         <Button
-          
+          disabled={submitting}
           onClick={onClickRestart}
           startIcon={<CachedIcon />}
           color="success"
@@ -116,7 +116,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
           </>}
         </Button>
         <Button
-          
+          disabled={submitting}
           onClick={onClickReset}
           startIcon={<ReplayIcon />}
           color={"info"}
@@ -135,7 +135,7 @@ const PopupControll = ({ onClickStop, onClickStart, onClickDelete, onClickRestar
           }
         </Button>
         <Button
-          
+          disabled={submitting}
           onClick={onClickDelete}
           startIcon={<DeleteIcon />}
           color="error"

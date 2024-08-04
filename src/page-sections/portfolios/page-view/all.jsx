@@ -122,6 +122,7 @@ const PortfoliosList = () => {
     stop_loss_target: 0,
   });
   const canvasRef = useRef();
+  const [submitting, setSubmitting]= useState()
   const { setChange } = useContext(GlobalContext);
   const { selectedLinkAccount, userLinkAccountList } = useContext(AuthContext);
   const [initState, setInitState] = useState(false);
@@ -293,7 +294,9 @@ const PortfoliosList = () => {
         ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.PAUSE,
       };
+      setSubmitting(true)
       const responses = await portfolioApi.userBotActionList(payload);
+      setShowPopup(false)
       if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.PAUSE], "success");
         setChangeData((prev) => !prev);
@@ -327,6 +330,7 @@ const PortfoliosList = () => {
       console.error("Error sending requests:", error);
     } finally {
       // setLoading(false);
+      setSubmitting(false)
     }
   };
 
@@ -366,7 +370,9 @@ const PortfoliosList = () => {
         ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.STOP,
       };
+      setSubmitting(true)
       const responses = await portfolioApi.userBotActionList(payload);
+      setShowPopup(false)
       if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.STOP], "success");
         setChangeData((prev) => !prev);
@@ -375,6 +381,7 @@ const PortfoliosList = () => {
       console.error("Error sending requests:", error);
     } finally {
       // setLoading(false);
+      setSubmitting(false)
     }
   };
   // ok
@@ -394,7 +401,9 @@ const PortfoliosList = () => {
         ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.RESUME,
       };
+      setSubmitting(true)
       const responses = await portfolioApi.userBotActionList(payload);
+      setShowPopup(false)
       if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.RESUME], "success");
         setChangeData((prev) => !prev);
@@ -417,6 +426,7 @@ const PortfoliosList = () => {
     } catch (error) {
       console.error("Error sending requests:", error);
     } finally {
+      setSubmitting(false)
       // setLoading(false);
     }
   };
@@ -432,7 +442,9 @@ const PortfoliosList = () => {
         ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.RESTART,
       };
+      setSubmitting(true)
       const responses = await portfolioApi.userBotActionList(payload);
+      setShowPopup(false)
       if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.RESTART], "success");
         setChangeData((prev) => !prev);
@@ -462,6 +474,7 @@ const PortfoliosList = () => {
     } catch (error) {
       console.error("Error sending requests:", error);
     } finally {
+      setSubmitting(false)
       // setLoading(false);
     }
   };
@@ -481,7 +494,9 @@ const PortfoliosList = () => {
         ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.RESET,
       };
+      setSubmitting(true)
       const responses = await portfolioApi.userBotActionList(payload);
+      setShowPopup(false)
       if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.RESET], "success");
         setChangeData((prev) => !prev);
@@ -512,6 +527,7 @@ const PortfoliosList = () => {
       console.error("Error sending requests:", error);
     } finally {
       // setLoading(false);
+      setSubmitting(false)
     }
   };
 
@@ -529,7 +545,9 @@ const PortfoliosList = () => {
         ids: selectedPlans?.map((item) => item?._id),
         action: ActionBotType.REMOVE,
       };
+      setSubmitting(true)
       const responses = await portfolioApi.userBotActionList(payload);
+      setShowPopup(false)
       if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.REMOVE], "success");
         setChangeData((prev) => !prev);
@@ -554,6 +572,7 @@ const PortfoliosList = () => {
       console.error("Error sending requests:", error);
     } finally {
       // setLoading(false);
+      setSubmitting(false)
     }
   };
 
@@ -1390,6 +1409,7 @@ const PortfoliosList = () => {
               )}
               {showPopup === true && (
                 <PopupControll
+                  submitting={submitting}
                   onClickPause={handlePausePlan}
                   onClickStart={handleResumePlan}
                   onClickDelete={handleRemovePlan}

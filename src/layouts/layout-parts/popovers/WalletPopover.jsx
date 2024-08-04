@@ -1,11 +1,11 @@
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import {
-  Avatar,
+  // Avatar,
   Badge,
   Box,
-  Button,
-  Dialog,
-  DialogContent,
+  // Button,
+  // Dialog,
+  // DialogContent,
   DialogTitle,
   Divider,
   Drawer,
@@ -32,14 +32,16 @@ import { useTranslation } from "react-i18next";
 const WalletPopover = () => {
   const {t }= useTranslation()
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const { spotBalance } = useContext(SpotBalanceContext);
+  const { spotBalance, setChange } = useContext(SpotBalanceContext);
   const {walletMode, setWalletMode }= useContext(SettingsContext)
   const [mode, setMode] = useState(walletMode);
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [dataDetailTransaction, setDataDetailTransaction]= useState()
 
+
   const handleOpen = () => {
+    setChange(prev=> !prev)
     setOpen(true);
   };
   const handleClose = () => {
