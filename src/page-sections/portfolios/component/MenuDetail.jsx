@@ -44,9 +44,10 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
   const [isShareArchievement, setIsShareArchievement] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting]= useState(false)
   const [data, setData] = useState([]);
   const {t }= useTranslation()
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
   const menuOpen = Boolean(menuAnchorEl);
 
   const handleClick = (event) => {
@@ -77,6 +78,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
         linkAccountId: selectedLinkAccount,
       };
       // const { data, error, loading, refetch }= useQuery()
+      setSubmitting(true)
       const response= await portfolioApi.userBotAction(id, payload);
       // setData()
       // setIsRunning(ActionBotTypeStatus[action]);
@@ -95,6 +97,9 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }
+    finally {
+      setSubmitting(false)
+    }
   };
 
   const handleStopBot = async (action) => {
@@ -104,6 +109,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
         linkAccountId: selectedLinkAccount,
       };
       // const { data, error, loading, refetch }= useQuery()
+      setSubmitting(true)
       const response= await portfolioApi.userBotAction(id, payload);
       // setData()
       // setIsRunning(ActionBotTypeStatus[action]);
@@ -122,6 +128,9 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }
+    finally {
+      setSubmitting(false)
+    }
   };
 
 
@@ -131,6 +140,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
       const payload = {
         action: ActionBotType.RESET_PNL,
       };
+      setSubmitting(true)
       const response = await portfolioApi.userBotAction(id, payload);
       if (response?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces.RESET_PNL, "success");
@@ -140,6 +150,9 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
     } catch (error) {
       showToast(error?.response?.data?.m, "error");
     }
+    finally {
+      setSubmitting(false)
+    }
   };
 
   const handleRemovePlan = async () => {
@@ -148,6 +161,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
         ids: [id],
         action: ActionBotType.REMOVE,
       };
+      setSubmitting(true)
       const responses = await portfolioApi.userBotActionList(payload);
       if (responses?.data?.ok === true) {
         showToast(ActionBotTypeMessageSucces[ActionBotType.REMOVE], "success");
@@ -174,6 +188,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
     } catch (error) {
       console.error("Error sending requests:", error);
     } finally {
+      setSubmitting(false)
       // setLoading(false);
     }
   };
@@ -218,6 +233,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
                       margin: downLg ? 0 : "",
                     },
                   }}
+                  disabled={submitting}
                   startIcon={<StopIcon />}
                   variant="contained"
                   color="warning"
@@ -235,6 +251,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
                       margin: downLg ? 0 : "",
                     },
                   }}
+                  disabled={submitting}
                   startIcon={<PlayArrowIcon />}
                   variant="contained"
                   color="success"
@@ -252,6 +269,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
                       margin: downLg ? 0 : "",
                     },
                   }}
+                  disabled={submitting}
                   startIcon={<PauseIcon />}
                   variant="contained"
                   color="success"
@@ -269,6 +287,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
                       margin: downLg ? 0 : "",
                     },
                   }}
+                  disabled={submitting}
                   startIcon={<PlayArrowIcon />}
                   variant="contained"
                   color="primary"
@@ -290,6 +309,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
                 color="secondary"
                 size={"large"}
                 style={{ marginRight: "8px" }}
+                disabled={submitting}
                 onClick={() => handleChangeIsRunning(ActionBotType.RESTART)}
               >
                 {downLg ? "" : t("Restart Plan")}
@@ -310,6 +330,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
               variant="contained"
               color="primary"
               size={"large"}
+              disabled={submitting}
               style={{ marginRight: "8px" }}
               onClick={() => handleNewPlan()}
             >
@@ -355,6 +376,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
             {t("Share Media")}
           </MenuItem>
           <MenuItem
+            disabled={submitting}
             onClick={async (e) => {
               handleSubMenuClick(e);
               await resetPnlToday();
@@ -362,7 +384,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
           >
             {t("Reset today P/L")}
           </MenuItem>
-          <MenuItem onClick={async (e)=> {
+          <MenuItem disabled={submitting} onClick={async (e)=> {
             handleSubMenuClick(e)
             await handleRemovePlan()
 
