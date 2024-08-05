@@ -53,7 +53,7 @@ export default function WithdrawDrawer(props) {
   const classes = useStyles();
   const [loadingSubmit, setLoadingSubmit]= React.useState(false)
   const [memo, setMemo]= React.useState("")
-  const isButtonDisabled = !amount || !toAddress || !twoFACode || memo?.length <= 0 || parseFloat(amount) < 5;
+  const isButtonDisabled = !amount || !toAddress || !twoFACode || parseFloat(amount) < 5;
   const isErrorInputAmount= parseFloat(amount) < 5
   const {selectedLinkAccount }= React.useContext(AuthContext)
   

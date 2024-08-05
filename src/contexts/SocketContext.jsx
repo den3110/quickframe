@@ -45,6 +45,7 @@ const SocketProvider = ({ children }) => {
     }
 
     return () => {
+      socketRef.current.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount);
       socketRef.current.disconnect();
     };
   }, []);

@@ -117,14 +117,14 @@ const TelegramChannelSignalStrategy = ({isFromTeleChannel}) => {
     }
   }, [isConnected, socket, selectedBot]);
 
-  useEffect(() => {
-    if (isConnected && socket && selectedLinkAccount) {
-      socket.emit("LINK_ACCOUNT_SUBCRIBE", selectedLinkAccount);
-      return () => {
-        socket.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount);
-      };
-    }
-  }, [isConnected, socket, selectedLinkAccount]);
+  // useEffect(() => {
+  //   if (isConnected && socket && selectedLinkAccount) {
+  //     socket.emit("LINK_ACCOUNT_SUBCRIBE", selectedLinkAccount);
+  //     return () => {
+  //       socket.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount);
+  //     };
+  //   }
+  // }, [isConnected, socket, selectedLinkAccount]);
 
   useEffect(() => {
     if (isConnected && socket) {

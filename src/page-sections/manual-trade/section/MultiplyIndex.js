@@ -73,14 +73,14 @@ const MultiplyIndex = () => {
     }
   }, [isConnected, socket]);
 
-  useEffect(()=> {
-    if(isConnected && selectedLinkAccount) {
-      socket.emit("LINK_ACCOUNT_SUBCRIBE", selectedLinkAccount)
-      return ()=> {
-        socket.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount)
-      }
-    }
-  }, [isConnected, socket, selectedLinkAccount])
+  // useEffect(()=> {
+  //   if(isConnected && selectedLinkAccount) {
+  //     socket.emit("LINK_ACCOUNT_SUBCRIBE", selectedLinkAccount)
+  //     return ()=> {
+  //       socket.emit("LINK_ACCOUNT_UNSUBCRIBE", selectedLinkAccount)
+  //     }
+  //   }
+  // }, [isConnected, socket, selectedLinkAccount])
 
   const handleSubmit = async (betType) => {
     try {

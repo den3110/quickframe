@@ -39,7 +39,7 @@ const TriggerMember = (props) => {
   const { t } = useTranslation();
   const [type, setType] = useState("normal");
   const [nickName, setNickName] = useState("");
-  const [initActiveList, setInitActiveList]= useState([])
+  const [initActiveList, setInitActiveList] = useState([]);
   const [activeList, setActiveList] = useState([]);
   const [loading, setLoading] = useState();
   const [change, setChange] = useState(false);
@@ -136,7 +136,7 @@ const TriggerMember = (props) => {
         );
         if (response?.data?.ok === true) {
           setActiveList(response?.data?.d);
-          setInitActiveList(response?.data?.d)
+          setInitActiveList(response?.data?.d);
         } else if (response?.data?.ok === false) {
         }
       } catch (error) {
@@ -146,15 +146,17 @@ const TriggerMember = (props) => {
     })();
   }, [selectedLinkAccount, change]);
 
-  useEffect(()=> {
-    if(type=== "normal") {
-      setActiveList(initActiveList?.filter(item=> item?.isMarketing!== true))
+  useEffect(() => {
+    if (type === "normal") {
+      setActiveList(
+        initActiveList?.filter((item) => item?.isMarketing !== true)
+      );
+    } else {
+      setActiveList(
+        initActiveList?.filter((item) => item?.isMarketing === true)
+      );
     }
-    else {
-      setActiveList(initActiveList?.filter(item=> item?.isMarketing=== true))
-
-    }
-  }, [type, initActiveList])
+  }, [type, initActiveList]);
 
   return (
     <Box sx={{ width: "100%" }} mt={2}>
@@ -236,42 +238,47 @@ const TriggerMember = (props) => {
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                  {activeList?.map((row, index) => (
-                                    <TableRow
-                                      hover
-                                      sx={{
-                                        borderBottom: (theme) =>
-                                          index !== activeList.length - 1 &&
-                                          `solid 1px ${theme.palette.border}`,
-                                      }}
-                                      key={row.ts}
-                                    >
-                                      <TableCell sx={{ padding: "20px" }}>
-                                        {moment(row?.createdAt).format(
-                                          "HH:mm:ss DD/MM"
-                                        )}
-                                      </TableCell>
-                                      <TableCell sx={{ padding: "20px" }}>
-                                        {/* <Amount row={row} /> */}
-                                        {row?.nickName}
-                                      </TableCell>
-                                      <TableCell sx={{ padding: "20px" }}>
-                                        {/* <Amount row={row} /> */}
-                                        {row?.isMarketing
-                                          ? "Marketing"
-                                          : t("normal")}
-                                      </TableCell>
-                                      {/* <TableCell sx={{padding: "20px"}}>
+                                  {activeList
+                                    ?.slice(
+                                      rowsPerPage * (page - 1),
+                                      rowsPerPage * (page - 1) + rowsPerPage
+                                    )
+                                    ?.map((row, index) => (
+                                      <TableRow
+                                        hover
+                                        sx={{
+                                          borderBottom: (theme) =>
+                                            index !== activeList.length - 1 &&
+                                            `solid 1px ${theme.palette.border}`,
+                                        }}
+                                        key={row.ts}
+                                      >
+                                        <TableCell sx={{ padding: "20px" }}>
+                                          {moment(row?.createdAt).format(
+                                            "HH:mm:ss DD/MM"
+                                          )}
+                                        </TableCell>
+                                        <TableCell sx={{ padding: "20px" }}>
+                                          {/* <Amount row={row} /> */}
+                                          {row?.nickName}
+                                        </TableCell>
+                                        <TableCell sx={{ padding: "20px" }}>
+                                          {/* <Amount row={row} /> */}
+                                          {row?.isMarketing
+                                            ? "Marketing"
+                                            : t("normal")}
+                                        </TableCell>
+                                        {/* <TableCell sx={{padding: "20px"}}>
                                         <TxId row={row} />
                                         </TableCell>
                                         <TableCell sx={{padding: "20px"}}>
                                         <Memo row={row} />
                                         </TableCell> */}
-                                      <TableCell sx={{ padding: "20px" }}>
-                                        {/* <Status row={row} /> */}
-                                      </TableCell>
-                                    </TableRow>
-                                  ))}
+                                        <TableCell sx={{ padding: "20px" }}>
+                                          {/* <Status row={row} /> */}
+                                        </TableCell>
+                                      </TableRow>
+                                    ))}
                                 </TableBody>
                               </Table>
                             )}
@@ -307,7 +314,9 @@ const TriggerMember = (props) => {
                                 </FormControl>
                               </Box>
                               <Pagination
-                                count={Math.ceil(activeList?.length / rowsPerPage)}
+                                count={Math.ceil(
+                                  activeList?.length / rowsPerPage
+                                )}
                                 page={page}
                                 onChange={handleChangePage}
                                 shape="rounded"
@@ -437,7 +446,10 @@ const TriggerMember = (props) => {
                               </Select>
                             </FormControl>
                           </Box>
-                          {console.log("(activeList / rowsPerPage)", (activeList?.length / rowsPerPage))}
+                          {console.log(
+                            "(activeList / rowsPerPage)",
+                            activeList?.length / rowsPerPage
+                          )}
                           <Pagination
                             count={Math.ceil(activeList?.length / rowsPerPage)}
                             page={page}
