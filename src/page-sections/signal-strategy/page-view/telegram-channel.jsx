@@ -126,13 +126,13 @@ const TelegramChannelSignalStrategy = ({isFromTeleChannel}) => {
   //   }
   // }, [isConnected, socket, selectedLinkAccount]);
 
-  useEffect(() => {
-    if (isConnected && socket) {
-      socket.on("RELOAD_SPOT_BALANCE", (data) => {
-        setChange((prev) => !prev);
-      });
-    }
-  }, [isConnected, socket, setChange]);
+  // useEffect(() => {
+  //   if (isConnected && socket) {
+  //     socket.on("RELOAD_SPOT_BALANCE", (data) => {
+  //       setChange((prev) => !prev);
+  //     });
+  //   }
+  // }, [isConnected, socket, setChange]);
 
   return (
     <Layout>

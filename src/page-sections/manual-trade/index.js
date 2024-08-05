@@ -5,21 +5,21 @@ import MultiplyIndex from "./section/MultiplyIndex";
 import HistoryTable from "./section/HistoryTable";
 import Statistics from "./section/Statistics";
 import BubbleHistory from "./section/BubbleHistory";
-import { SocketContext } from "contexts/SocketContext";
-import SpotBalanceContext from "contexts/SpotBalanceContext";
+// import { SocketContext } from "contexts/SocketContext";
+// import SpotBalanceContext from "contexts/SpotBalanceContext";
 
 const ManualTradePage = () => {
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-  const { isConnected, socket } = useContext(SocketContext);
-  const { setChange } = useContext(SpotBalanceContext);
+  // const { isConnected, socket } = useContext(SocketContext);
+  // const { setChange } = useContext(SpotBalanceContext);
 
-  useEffect(() => {
-    if (isConnected && socket) {
-      socket.on("RELOAD_SPOT_BALANCE", (data) => {
-        setChange(prev=> !prev)
-      });
-    }
-  }, [isConnected, socket, setChange]);
+  // useEffect(() => {
+  //   if (isConnected && socket) {
+  //     socket.on("RELOAD_SPOT_BALANCE", (data) => {
+  //       setChange(prev=> !prev)
+  //     });
+  //   }
+  // }, [isConnected, socket, setChange]);
 
   return (
     <Box padding={downLg ? 1 : 2}>
