@@ -15,14 +15,13 @@ import CustomAutowinTable from "./TableCustomAutowin";
 import SignalBubble from "./SignalBubble";
 import { isDark } from "util/constants";
 import { useTranslation } from "react-i18next";
+import DialogAskBeforeAction from "components/dialog/DialogAskBeforeAction";
 
 const Statistics = () => {
-  const {t }= useTranslation()
+  const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState(0);
-  const { dataStat, loading } = useContext(
-    PortfolioDetailContext
-  );
- 
+  const { dataStat, loading } = useContext(PortfolioDetailContext);
+
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
@@ -31,7 +30,10 @@ const Statistics = () => {
     <Box>
       <Box
         mt={2}
-        sx={{ background: theme=> isDark(theme) ? "" : "#eeeff2", borderRadius: "5px" }}
+        sx={{
+          background: (theme) => (isDark(theme) ? "" : "#eeeff2"),
+          borderRadius: "5px",
+        }}
         padding={1}
       >
         <Tabs value={selectedTab} onChange={handleChange} aria-label="tabs">
@@ -46,13 +48,12 @@ const Statistics = () => {
         sx={{
           width: "100%",
           typography: "body1",
-          background: theme=> isDark(theme) ? "" : "#eeeff2",
+          background: (theme) => (isDark(theme) ? "" : "#eeeff2"),
           borderRadius: "20px",
         }}
         mt={2}
       >
-        {
-          loading=== false &&
+        {loading === false && (
           <>
             {selectedTab === 0 && (
               <TabPanel>
@@ -62,32 +63,53 @@ const Statistics = () => {
                       <Typography variant="h6">{t("statics")}</Typography>
                       <Grid container spacing={2}>
                         <StatisticCard
+                          action={()=> {}}
                           title={t("Today win/lose")}
                           value={`${dataStat?.win_day}/${dataStat?.lose_day}`}
-                          percentage={`${formatCurrency(dataStat?.win_day / (dataStat?.lose_day  + dataStat?.win_day) * 100)?.replaceAll("$", "")}% ${t("Win rate")}`}
+                          percentage={`${formatCurrency(
+                            (dataStat?.win_day /
+                              (dataStat?.lose_day + dataStat?.win_day)) *
+                              100
+                          )?.replaceAll("$", "")}% ${t("Win rate")}`}
                         />
                         <StatisticCard
+                          action={()=> {}}
                           title={t("Win/Lose")}
-                          value={`${dataStat?.lastData?.winTotal }/${dataStat?.lastData?.loseTotal }`}
-                          percentage={`${dataStat?.lastData?.winTotal }/${dataStat?.lastData?.loseTotal }`}
+                          value={`${dataStat?.lastData?.winTotal}/${dataStat?.lastData?.loseTotal}`}
+                          percentage={`${dataStat?.lastData?.winTotal}/${dataStat?.lastData?.loseTotal}`}
                           hidden={true}
                         />
                         <StatisticCard
+                          action={()=> {}}
                           title={t("day_profit")}
                           value={formatCurrency(dataStat?.day_profit)}
                           percentage={t("day_profit")}
-                          color={dataStat?.day_profit > 0 ? "success.main" : "error.main"}
+                          color={
+                            dataStat?.day_profit > 0
+                              ? "success.main"
+                              : "error.main"
+                          }
                           hidden={true}
                         />
                         <StatisticCard
+                          action={()=> {}}
                           title="KLGD 7N"
                           value={`${formatCurrency(dataStat?.week_volume)}`}
-                          color={dataStat?.week_volume > 0 ? "success.main" : "error.main"}
+                          color={
+                            dataStat?.week_volume > 0
+                              ? "success.main"
+                              : "error.main"
+                          }
                         />
                         <StatisticCard
+                          action={()=> {}}
                           title={t("7-days profit")}
                           value={formatCurrency(dataStat?.week_profit)}
-                          color={dataStat?.week_profit > 0 ? "success.main" : "error.main"}
+                          color={
+                            dataStat?.week_profit > 0
+                              ? "success.main"
+                              : "error.main"
+                          }
                         />
                         <StatisticCard
                           title="Chuỗi thắng / tối đa"
@@ -99,9 +121,9 @@ const Statistics = () => {
                           value={`${dataStat?.lastData?.loseStreak}/${dataStat?.lastData?.longestLoseStreak}`}
                           color="error.main"
                         />
-                         <StatisticCard
+                        <StatisticCard
                           title="Chuỗi Victor / tối đa"
-                          value={`${dataStat?.lastData?.victorStreak }/${dataStat?.lastData?.longestVictorStreak}`}
+                          value={`${dataStat?.lastData?.victorStreak}/${dataStat?.lastData?.longestVictorStreak}`}
                           // color="error.main"
                         />
                       </Grid>
@@ -121,7 +143,7 @@ const Statistics = () => {
               </TabPanel>
             )}
           </>
-        }
+        )}
       </Box>
     </Box>
   );
@@ -131,25 +153,50 @@ const TabPanel = ({ children }) => {
   return <Box sx={{ p: 1.5 }}>{children}</Box>;
 };
 
-const StatisticCard = ({ title, value, percentage, hidden, color }) => {
+const StatisticCard = ({ title, value, percentage, hidden, color, action }) => {
+  const [openDialog, setOpenDialog]= useState(false)
+
+  const handleOpenDialog= ()=> {
+    setOpenDialog(true)
+  }
+
+  const handleCloseDialog= ()=> {
+    setOpenDialog(false)
+  }
   // const theme= useTheme()
   return (
     <Grid item xs={6} variant="outlined">
-      <CardContent
-        sx={{ border: theme=> isDark(theme) ? `1px solid ${theme.palette.border}` : `1px solid ${theme.palette.border}`, borderRadius: "10px" }}
-      >
-        <Typography fontSize={10}>{title}</Typography>
-        <Typography color={color} fontSize={14} fontWeight={600}>
-          {value}
-        </Typography>
-        {percentage && (
-          <Typography sx={{ opacity: hidden === true ? 0 : 1 }} fontSize={10}>
-            {percentage}
+      <Box position={"relative"}>
+        {action &&
+          <Box position={"absolute"} sx={{top: 0, right: 0, padding: 2}}>
+            <Typography onClick={handleOpenDialog} sx={{fontSize: 10, fontWeight: 600, cursor: "pointer"}} color={"success.main"}>Cài lại</Typography>
+          </Box> 
+        }
+        <CardContent
+          sx={{
+            border: (theme) =>
+              isDark(theme)
+                ? `1px solid ${theme.palette.border}`
+                : `1px solid ${theme.palette.border}`,
+            borderRadius: "10px",
+          }}
+        >
+          <Typography fontSize={10}>{title}</Typography>
+          <Typography color={color} fontSize={14} fontWeight={600}>
+            {value}
           </Typography>
-        )}
-      </CardContent>
+          {percentage && (
+            <Typography sx={{ opacity: hidden === true ? 0 : 1 }} fontSize={10}>
+              {percentage}
+            </Typography>
+          )}
+        </CardContent>
+      </Box>
+      {action &&
+        <DialogAskBeforeAction open={openDialog} title={"Bạn có muốn đặt lại ?"} title2={"Sau khi reset dữ liệu không thể khôi phục, bạn muốn tiếp tục ?"} titleAction={"Xác nhận & Đặt lại"} onClose={handleCloseDialog} action={()=> {}} />
+      }
     </Grid>
-  )
+  );
 };
 
 export default Statistics;
