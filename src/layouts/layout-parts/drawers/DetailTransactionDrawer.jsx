@@ -216,7 +216,7 @@ const TxId = ({ row }) => {
             <Box display="flex" alignItems={"center"} gap={1}>
               <Typography sx={{ color: "warning.main" }}>
                 {" "}
-                {obj?.SenderNickName}{" "}
+                {obj?.TransactionId}{" "}
               </Typography>
             </Box>
           </Box>
