@@ -1111,12 +1111,12 @@ const PortfoliosList = () => {
                                   fontWeight={600}
                                   variant="body2"
                                   color={
-                                    plan?.total_profit >= 0
+                                    plan?.day_profit >= 0
                                       ? "success.main"
                                       : "error.main"
                                   }
                                 >
-                                  {formatCurrency(plan?.total_profit)}
+                                  {formatCurrency(plan?.day_profit)}
                                 </Typography>
                               </StyledTableCell>
                               <StyledTableCell

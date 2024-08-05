@@ -13,10 +13,11 @@ import DownloadIcon from "icons/DownloadIcon";
 import formatCurrency from "util/formatCurrency";
 import { useTranslation } from "react-i18next";
 
-const ShareArchievement = forwardRef(({ open, handleClose, selectedPlan }, canvasRef) => {
+const ShareArchievement = forwardRef(
+  ({ open, handleClose, selectedPlan }, canvasRef) => {
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const [count, setCount] = useState(1);
-    const {t }= useTranslation()
+    const { t } = useTranslation();
     const handleDownload = () => {
       if (canvasRef.current) {
         const canvas = canvasRef.current;
@@ -46,14 +47,14 @@ const ShareArchievement = forwardRef(({ open, handleClose, selectedPlan }, canva
         img4.src = logo_dark;
 
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height - 80);
-        if (selectedPlan?.total_profit >= 0) {
+        if (selectedPlan?.day_profit >= 0) {
           ctx.fillStyle = "#41ae60";
         } else {
           ctx.fillStyle = "#ef4770";
         }
         ctx.font = "bold 64px Manrope";
         ctx.fillText(
-          formatCurrency(selectedPlan?.total_profit)?.replace("$", "") + "%",
+          formatCurrency(selectedPlan?.day_profit)?.replace("$", "") + "%",
           40,
           140
         );
@@ -120,21 +121,21 @@ const ShareArchievement = forwardRef(({ open, handleClose, selectedPlan }, canva
         img4.src = logo_dark;
 
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height - 40);
-        if (selectedPlan?.total_profit >= 0) {
+        if (selectedPlan?.day_profit >= 0) {
           ctx.fillStyle = "#41ae60";
         } else {
           ctx.fillStyle = "#ef4770";
         }
         ctx.font = "bold 40px Manrope";
         ctx.fillText(
-          formatCurrency(selectedPlan?.total_profit)?.replace("$", "") + "%",
+          formatCurrency(selectedPlan?.day_profit)?.replace("$", "") + "%",
           20,
           90
         );
 
         ctx.fillStyle = "#ffffff";
         ctx.font = "14px Manrope";
-        ctx.fillText(`${selectedPlan?.name} | Bot AI | Custom Autowin`, 20, 40);
+        ctx.fillText(`${selectedPlan?.name} | Bot AI`, 20, 40);
         ctx.fillStyle = "#9fabbc";
         ctx.font = "12px Manrope";
         ctx.fillText(
