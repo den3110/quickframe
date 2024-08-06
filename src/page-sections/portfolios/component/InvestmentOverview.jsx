@@ -21,7 +21,7 @@ import round2number from "util/round2number";
 
 const InvestmentOverview = (props) => {
   const {t }= useTranslation()
-  const { dataStat } = useContext(PortfolioDetailContext);
+  const { dataStat , setChange} = useContext(PortfolioDetailContext);
   const { selectedLinkAccount } = useContext(AuthContext);
   // const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const { id } = useParams();
@@ -33,12 +33,18 @@ const InvestmentOverview = (props) => {
         linkAccountId: selectedLinkAccount,
       };
       // const { data, error, loading, refetch }= useQuery()
-      await portfolioApi.userBotAction(id, payload);
+      const response= await portfolioApi.userBotAction(id, payload);
       // setData()
       // setIsRunning(ActionBotTypeStatus[action]);
-      showToast(t(ActionBotTypeMessageSucces[action]), "success");
+      if(response?.data?.ok=== true) {
+        showToast(t(ActionBotTypeMessageSucces[action]), "success");
+        setChange(prev=> !prev)
+      }
+      else if(response?.data?.ok=== false) {
+        showToast(t(response?.data?.err_code), "error")
+      }
     } catch (error) {
-      showToast(error?.response?.data?.m, "error");
+      showToast(t(error?.response?.data?.m), "error");
     }
   };
 
@@ -161,9 +167,9 @@ const InvestmentOverview = (props) => {
                   : dataStat?.lastData.profit
               )}
               {/* : dataStat?.current_profit */}
-              {props?.isSignalStrategy !== true && (
+              {props?.isPortfolio && (
                 <Typography
-                  onClick={() => handleChangeIsRunning(ActionBotType.RESET_PNL)}
+                  onClick={() => handleChangeIsRunning(ActionBotType.RESET_PROFIT)}
                   color={"success.main"}
                   fontSize={14}
                   fontWeight={600}
@@ -194,6 +200,17 @@ const InvestmentOverview = (props) => {
                 dataStat?.lastData.volume
               )}
               {/* : dataStat?.current_profit */}
+              {props?.isPortfolio && (
+                <Typography
+                  onClick={() => handleChangeIsRunning(ActionBotType.RESET_VOL)}
+                  color={"success.main"}
+                  fontSize={14}
+                  fontWeight={600}
+                  sx={{ cursor: "pointer" }}
+                >
+                  {t("Reset")}
+                </Typography>
+              )}
               {/* {props?.isSignalStrategy !== true && (
                 <Typography
                   onClick={() => handleChangeIsRunning(ActionBotType.RESET_PNL)}

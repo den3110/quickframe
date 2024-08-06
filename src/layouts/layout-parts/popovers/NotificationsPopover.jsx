@@ -195,7 +195,7 @@ function ListItem({ msg, onClose, onClick }) {
           ellipsis={true}
           color="text.secondary"
         >
-          <Box dangerouslySetInnerHTML={{ __html: msg.content }}>
+          <Box sx={{whiteSpace: "normal"}} dangerouslySetInnerHTML={{ __html: msg.content }}>
             
           </Box>
           {/* {msg.content} */}
