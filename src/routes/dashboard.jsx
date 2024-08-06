@@ -95,7 +95,7 @@ export const DashboardRoutes = [
           },
           {
             path: ":id",
-            element: <PortfolioDetail />,
+            element: <PortfolioDetail isPortfolio={true} />,
           },
           {
             path: "schedule",

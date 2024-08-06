@@ -12,7 +12,7 @@ import {
   Tab,
   Typography,
   useMediaQuery,
-  CircularProgress,
+  // CircularProgress,
   Skeleton,
 } from "@mui/material";
 import InvestmentOverview from "../component/InvestmentOverview";

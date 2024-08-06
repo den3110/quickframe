@@ -58,12 +58,12 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 }));
 
 const TopSignalPageView = () => {
-  const {t }= useTranslation()
+  const { t } = useTranslation();
   const theme = useTheme();
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [data, setData] = useState([]);
-  const [dataState, setDataState]= useState([])
+  const [dataState, setDataState] = useState([]);
   const [loading, setLoading] = useState();
   const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [rowsPerPage, setRowsPerPage] = useState(6);
@@ -79,11 +79,11 @@ const TopSignalPageView = () => {
 
   const handleChange = (event) => {
     setSelection(event.target.value);
-    handleFilter(parseInt(event.target.value))
-  }
+    handleFilter(parseInt(event.target.value));
+  };
 
   const handleSearch = (e) => {
-    const filtered = data.filter(item =>
+    const filtered = data.filter((item) =>
       item.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setDataState(filtered);
@@ -150,31 +150,70 @@ const TopSignalPageView = () => {
     setShowPopup(isChecked);
   }, [checkedRows]);
 
-  useEffect(()=> {
-    setDataState(_.orderBy(data, function(e) { return (e.win_day /
-      (e.win_day + e.lose_day)) *
-      100}, "desc"))
-  }, [data])
+  useEffect(() => {
+    setDataState(
+      _.orderBy(
+        data,
+        function (e) {
+          if (parseFloat(e.win_day) === 0) return 0;
+          return (
+            (parseFloat(e.win_day) /
+              (parseFloat(e.win_day) + parseFloat(e.lose_day))) *
+            100
+          );
+        },
+        "desc"
+      )
+    );
+  }, [data]);
 
   const handleFilter = (value) => {
     switch (value) {
       case 1:
-        setDataState(_.orderBy(data, function(e) { return (e.win_day /
-          (e.win_day + e.lose_day)) *
-          100}, "desc"))
+        setDataState(
+          _.orderBy(
+            data,
+            function (e) {
+              if (parseFloat(e.win_day) === 0) return 0;
+              return (
+                (parseFloat(e.win_day) /
+                  (parseFloat(e.win_day) + parseFloat(e.lose_day))) *
+                100
+              );
+            },
+            "desc"
+          )
+        );
         break;
       case 2:
-        setDataState(_.orderBy(data, function(e) { return e?.longest_win_streak}, "desc"))
+        setDataState(
+          _.orderBy(
+            data,
+            function (e) {
+              return e?.longest_win_streak;
+            },
+            "desc"
+          )
+        );
         break;
       case 3:
-        setDataState(_.orderBy(data, function(e) { return e?.volume}, "desc"))
-        break
+        setDataState(
+          _.orderBy(
+            data,
+            function (e) {
+              return e?.volume;
+            },
+            "desc"
+          )
+        );
+        break;
       default:
         break;
     }
     // Here you can add the logic to filter data based on selected amount
     // setData(filteredData);
   };
+  console.log(data);
 
   return (
     <Layout>
@@ -188,10 +227,14 @@ const TopSignalPageView = () => {
               flexDirection: downLg ? "column" : "row",
             }}
           >
-            <Box sx={{ width: "100%"}} p={1} display={"flex"} justifyContent={"space-between"} flexWrap={downLg ? "wrap" : "nowrap"}>
-              <Box
-                sx={{ width: "100%", paddingRight: downLg ? 0 : "10px" }}
-              >
+            <Box
+              sx={{ width: "100%" }}
+              p={1}
+              display={"flex"}
+              justifyContent={"space-between"}
+              flexWrap={downLg ? "wrap" : "nowrap"}
+            >
+              <Box sx={{ width: "100%", paddingRight: downLg ? 0 : "10px" }}>
                 <TextField
                   fullWidth
                   variant="outlined"
@@ -204,16 +247,16 @@ const TopSignalPageView = () => {
                       <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
                     ),
                     style: {
-                      height: "100%"
+                      height: "100%",
                     },
                     inputProps: {
                       height: downLg ? "100%" : "24px",
                     },
-                  }}  
+                  }}
                 />
               </Box>
-              <Box mt={downLg ? 2 : 0} sx={{width: downLg ? "100%" : 300}}>
-                <Box sx={{width: "100%"}}>
+              <Box mt={downLg ? 2 : 0} sx={{ width: downLg ? "100%" : 300 }}>
+                <Box sx={{ width: "100%" }}>
                   <FormControl fullWidth variant="outlined">
                     <InputLabel id="demo-simple-select-outlined-label">
                       {t("Filters")}
@@ -225,12 +268,8 @@ const TopSignalPageView = () => {
                       onChange={handleChange}
                       label={t("Filters")}
                     >
-                      <MenuItem value={1}>
-                        {t("Highest win rate")}
-                      </MenuItem>
-                      <MenuItem value={2}>
-                        {t("Most win streak")}
-                      </MenuItem>
+                      <MenuItem value={1}>{t("Highest win rate")}</MenuItem>
+                      <MenuItem value={2}>{t("Most win streak")}</MenuItem>
                       <MenuItem value={3}>{t("Top Volume")}</MenuItem>
                     </Select>
                   </FormControl>
@@ -337,7 +376,9 @@ const TopSignalPageView = () => {
                                   onChange={() => handleToggleRow(key)}
                                 />
                               )}
-                              {downLg && <Typography>{t("Bot Name")}</Typography>}
+                              {downLg && (
+                                <Typography>{t("Bot Name")}</Typography>
+                              )}
                               {/* {downLg && (
                           <Typography
                             fontSize={14}
@@ -353,9 +394,7 @@ const TopSignalPageView = () => {
                             <Box
                               sx={{ cursor: "pointer" }}
                               onClick={() => {
-                                navigate(
-                                  "/signal-strategies/" + item?._id
-                                );
+                                navigate("/signal-strategies/" + item?._id);
                               }}
                             >
                               <Typography>{item?.name}</Typography>
@@ -380,7 +419,9 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography>{t("Win/Lose")}:</Typography>}
+                            {downLg && (
+                              <Typography>{t("Win/Lose")}:</Typography>
+                            )}
                             <Typography fontWeight={600} fontSize={14}>
                               {item.win_day}/{item.lose_day}
                             </Typography>
@@ -422,7 +463,9 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography>{t("Win streak")}:</Typography>}
+                            {downLg && (
+                              <Typography>{t("Win streak")}:</Typography>
+                            )}
                             <Typography
                               fontWeight={600}
                               fontSize={14}
@@ -444,7 +487,9 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography>{t("Lose streak")}:</Typography>}
+                            {downLg && (
+                              <Typography>{t("Lose streak")}:</Typography>
+                            )}
                             <Typography
                               fontWeight={600}
                               fontSize={14}
@@ -482,8 +527,12 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography >{t("Volume")}:</Typography>}
-                            <Typography fontWeight={600} fontSize={14} color="warning.main">
+                            {downLg && <Typography>{t("Volume")}:</Typography>}
+                            <Typography
+                              fontWeight={600}
+                              fontSize={14}
+                              color="warning.main"
+                            >
                               ${round2number(item?.volume)}
                             </Typography>
                           </StyledTableCell>
@@ -495,8 +544,16 @@ const TopSignalPageView = () => {
                               alignItems: "center",
                             }}
                           >
-                            {downLg && <Typography >{t("PnL")}:</Typography>}
-                            <Typography fontWeight={600} fontSize={14} color={item?.profit >= 0 ?"success.main" : "error.main"}>
+                            {downLg && <Typography>{t("PnL")}:</Typography>}
+                            <Typography
+                              fontWeight={600}
+                              fontSize={14}
+                              color={
+                                item?.profit >= 0
+                                  ? "success.main"
+                                  : "error.main"
+                              }
+                            >
                               {formatCurrency(item?.profit)}
                             </Typography>
                           </StyledTableCell>
@@ -557,9 +614,9 @@ const TopSignalPageView = () => {
               >
                 <EmptyPage
                   title={t("Pattern is empty")}
-                  subTitle={
-                    t("Start exploring investment opportunities and earn profits by start an investment plan today")
-                  }
+                  subTitle={t(
+                    "Start exploring investment opportunities and earn profits by start an investment plan today"
+                  )}
                   titleButton={t("Create Your Strategy")}
                   disableButton={true}
                   // actionClick={handleMenuClick}

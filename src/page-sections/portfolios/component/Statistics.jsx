@@ -16,11 +16,12 @@ import SignalBubble from "./SignalBubble";
 import { isDark } from "util/constants";
 import { useTranslation } from "react-i18next";
 import DialogAskBeforeAction from "components/dialog/DialogAskBeforeAction";
+import { ActionBotType } from "type/ActionBotType";
 
-const Statistics = () => {
+const Statistics = ({isPortfolio}) => {
   const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState(0);
-  const { dataStat, loading } = useContext(PortfolioDetailContext);
+  const { dataStat, loading, setChange } = useContext(PortfolioDetailContext);
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -63,7 +64,7 @@ const Statistics = () => {
                       <Typography variant="h6">{t("statics")}</Typography>
                       <Grid container spacing={2}>
                         <StatisticCard
-                          action={()=> {}}
+                          action={isPortfolio && ActionBotType.RESET_WIN_LOSE_DAY}
                           title={t("Today win/lose")}
                           value={`${dataStat?.win_day}/${dataStat?.lose_day}`}
                           percentage={`${formatCurrency(
@@ -73,14 +74,14 @@ const Statistics = () => {
                           )?.replaceAll("$", "")}% ${t("Win rate")}`}
                         />
                         <StatisticCard
-                          action={()=> {}}
+                          action={isPortfolio && ActionBotType.RESET_WIN_LOSE}
                           title={t("Win/Lose")}
                           value={`${dataStat?.lastData?.winTotal}/${dataStat?.lastData?.loseTotal}`}
                           percentage={`${dataStat?.lastData?.winTotal}/${dataStat?.lastData?.loseTotal}`}
                           hidden={true}
                         />
                         <StatisticCard
-                          action={()=> {}}
+                          action={isPortfolio && ActionBotType.RESET_PROFIT_DAY}
                           title={t("day_profit")}
                           value={formatCurrency(dataStat?.day_profit)}
                           percentage={t("day_profit")}
@@ -92,7 +93,7 @@ const Statistics = () => {
                           hidden={true}
                         />
                         <StatisticCard
-                          action={()=> {}}
+                          action={isPortfolio && ActionBotType.RESET_VOL_7D}
                           title="KLGD 7N"
                           value={`${formatCurrency(dataStat?.week_volume)}`}
                           color={
@@ -102,7 +103,7 @@ const Statistics = () => {
                           }
                         />
                         <StatisticCard
-                          action={()=> {}}
+                          action={isPortfolio && ActionBotType.RESET_PROFIT_7D}
                           title={t("7-days profit")}
                           value={formatCurrency(dataStat?.week_profit)}
                           color={
@@ -112,16 +113,19 @@ const Statistics = () => {
                           }
                         />
                         <StatisticCard
+                          action={isPortfolio && ActionBotType.RESET_WIN_STREAK}
                           title="Chuỗi thắng / tối đa"
                           value={`${dataStat?.lastData?.winStreak}/${dataStat?.lastData?.longestWinStreak}`}
                           color="success.main"
                         />
                         <StatisticCard
+                          action={isPortfolio && ActionBotType.RESET_LOSE_STREAK}
                           title="Chuỗi thua / tối đa"
                           value={`${dataStat?.lastData?.loseStreak}/${dataStat?.lastData?.longestLoseStreak}`}
                           color="error.main"
                         />
                         <StatisticCard
+                          action={isPortfolio && ActionBotType.RESET_VICTOR_STREAK}
                           title="Chuỗi Victor / tối đa"
                           value={`${dataStat?.lastData?.victorStreak}/${dataStat?.lastData?.longestVictorStreak}`}
                           // color="error.main"
@@ -155,6 +159,7 @@ const TabPanel = ({ children }) => {
 
 const StatisticCard = ({ title, value, percentage, hidden, color, action }) => {
   const [openDialog, setOpenDialog]= useState(false)
+
 
   const handleOpenDialog= ()=> {
     setOpenDialog(true)
@@ -193,7 +198,7 @@ const StatisticCard = ({ title, value, percentage, hidden, color, action }) => {
         </CardContent>
       </Box>
       {action &&
-        <DialogAskBeforeAction open={openDialog} title={"Bạn có muốn đặt lại ?"} title2={"Sau khi reset dữ liệu không thể khôi phục, bạn muốn tiếp tục ?"} titleAction={"Xác nhận & Đặt lại"} onClose={handleCloseDialog} action={()=> {}} />
+        <DialogAskBeforeAction open={openDialog} title={"Bạn có muốn đặt lại ?"} title2={"Sau khi reset dữ liệu không thể khôi phục, bạn muốn tiếp tục ?"} titleAction={"Xác nhận & Đặt lại"} onClose={handleCloseDialog} action={action} />
       }
     </Grid>
   );

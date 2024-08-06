@@ -7,7 +7,19 @@ export const ActionBotType = {
   START: "START",
   STOP: "STOP",
   RESET_PNL: "RESET_PNL",
-  GENERATE_SHARE_CODE: "GENERATE_SHARE_CODE"
+  GENERATE_SHARE_CODE: "GENERATE_SHARE_CODE",
+  // GENERATE_SHARE_CODE: "GENERATE_SHARE_CODE",
+  RESET_WIN_LOSE_DAY: "RESET_WIN_LOSE_DAY",
+  RESET_WIN_LOSE: "RESET_WIN_LOSE",
+  RESET_PROFIT: "RESET_PROFIT",
+  RESET_PROFIT_DAY: "RESET_PROFIT_DAY",
+  RESET_VOL_7D: "RESET_VOL_7D",
+  RESET_PROFIT_7D: "RESET_PROFIT_7D",
+  RESET_VOL: "RESET_VOL",
+  RESET_VOL_DAY: "RESET_VOL_DAY",
+  RESET_VICTOR_STREAK: "RESET_VICTOR_STREAK",
+  RESET_WIN_STREAK: "RESET_WIN_STREAK",
+  RESET_LOSE_STREAK: "RESET_LOSE_STREAK",
 };
 
 export const ActionBotTypeMessageSucces = {
@@ -18,7 +30,20 @@ export const ActionBotTypeMessageSucces = {
   REMOVE: "Xoá gói thành công",
   START: "Khởi động gói thành công",
   STOP: "Ngừng gói thành công",
-  RESET_PNL: "Đặt lại Pnl thành công"
+  RESET_PNL: "Đặt lại Pnl thành công",
+  GENERATE_SHARE_CODE: "GENERATE_SHARE_CODE",
+  // GENERATE_SHARE_CODE: "GENERATE_SHARE_CODE",
+  RESET_WIN_LOSE_DAY: "Đặt lại thắng thua hôm nay thành công",
+  RESET_WIN_LOSE: "Đặt lại thắng thua thành công",
+  RESET_PROFIT: "Đặt lại lợi nhuận thành công",
+  RESET_PROFIT_DAY: "Đặt lại lợi nhuận ngày thành công",
+  RESET_VOL_7D: "Đặt lại KLGD 7 ngày thành công",
+  RESET_PROFIT_7D: "Đặt lại lợi nhuận 7 ngày thành công",
+  RESET_VOL: "Đặt lại KLGD thành công",
+  RESET_VOL_DAY: "Đặt lại KLGD ngày thành công",
+  RESET_VICTOR_STREAK: "Đặt lại chuỗi victor thành công",
+  RESET_WIN_STREAK: "Đặt lại chuỗi thắng thành công",
+  RESET_LOSE_STREAK: "Đặt lại chuỗi thua thành công",
 };
 
 export const ActionBotTypeStatus = {

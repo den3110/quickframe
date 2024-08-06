@@ -13,6 +13,11 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
 import { showToast } from "components/toast/toast";
+import portfolioApi from "api/portfolios/portfolioApi";
+import { useParams } from "react-router-dom";
+import { ActionBotTypeMessageSucces } from "type/ActionBotType";
+import AuthContext from "contexts/AuthContext";
+import { PortfolioDetailContext } from "page-sections/portfolios/page-view/detail";
 
 const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   display: "flex",
@@ -20,13 +25,32 @@ const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
   alignItems: "center",
 }));
 
-export default function DialogAskBeforeAction({ open, onClose, title, title2, titleAction, setChange, action }) {
+export default function DialogAskBeforeAction({ open, onClose, title, title2, titleAction, action }) {
   const {t }= useTranslation()
+  const {id }= useParams()
+  const {selectedLinkAccount }= React.useContext(AuthContext)
+  const {setChange }= React.useContext(PortfolioDetailContext)
 
   const handleAction= async ()=> {
     // action() ? action() : ()=> {}
-    onClose()
-    showToast("Đặt lại thành công", "success")
+      try {
+        const payload= {
+          action: action,
+          linkAccountId: selectedLinkAccount,
+        }
+        const response= await portfolioApi.userBotAction(id, payload);
+        if(response?.data?.ok=== true) {
+          showToast(t(ActionBotTypeMessageSucces[action]), "success")
+          setChange(prev=> !prev)
+          onClose()
+        }
+        else if(response?.data?.ok=== false) {
+          showToast(t(response?.data?.m), "error")
+        }
+      } catch (error) {
+        showToast(t(error?.response?.data?.m), "error")
+      }
+    // showToast("Đặt lại thành công", "success")
   }
   return (
     <React.Fragment>

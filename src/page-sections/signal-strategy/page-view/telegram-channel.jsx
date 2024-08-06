@@ -537,7 +537,7 @@ const TelegramChannelSignalStrategy = ({isFromTeleChannel}) => {
                               <Box
                                 sx={{
                                   overflow: "auto",
-                                  maxHeight: "200px",
+                                  maxHeight: "500px",
                                 }}
                               >
                                 {/* <Typography variant="body1" sx={{ display: "flex" }}>
