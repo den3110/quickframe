@@ -239,13 +239,13 @@ const Statistics = () => {
               <Typography variant="h6">{t("statics")}</Typography>
               <Grid container spacing={2}>
                 <StatisticCard
-                  action={()=> {}}
+                  action={undefined}
                   title={t("Today win/lose")}
                   value={renderWinLoseRate(true)}
                   percentage={`${renderWinLoseRate()}% ${t("Win rate")}`}
                 />
                 <StatisticCard
-                  action={()=> {}}
+                  action={undefined}
                   title={t("Today Profit")}
                   value={renderDayProfit()}
                   percentage={t("Today Profit")}
@@ -253,13 +253,13 @@ const Statistics = () => {
                   color={renderColorDayProfit()}
                 />
                 <StatisticCard
-                  action={()=> {}}
+                  action={undefined}
                   title={t("7-days volume")}
                   value={renderWeekVolume()}
                   color={renderColorWeekProfitVolume()}
                 />
                 <StatisticCard
-                  action={()=> {}}
+                  action={undefined}
                   title={t("7-days profit")}
                   value={renderWeekProfit()}
                   color={renderColorWeekProfit()}

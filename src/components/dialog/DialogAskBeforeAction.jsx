@@ -30,10 +30,12 @@ export default function DialogAskBeforeAction({ open, onClose, title, title2, ti
   const {id }= useParams()
   const {selectedLinkAccount }= React.useContext(AuthContext)
   const {setChange }= React.useContext(PortfolioDetailContext)
+  const [submitting, setSubmitting]= React.useState()
 
   const handleAction= async ()=> {
     // action() ? action() : ()=> {}
       try {
+        setSubmitting(true)
         const payload= {
           action: action,
           linkAccountId: selectedLinkAccount,
@@ -49,6 +51,9 @@ export default function DialogAskBeforeAction({ open, onClose, title, title2, ti
         }
       } catch (error) {
         showToast(t(error?.response?.data?.m), "error")
+      }
+      finally {
+        setSubmitting(false)
       }
     // showToast("Đặt lại thành công", "success")
   }
@@ -95,6 +100,7 @@ export default function DialogAskBeforeAction({ open, onClose, title, title2, ti
         </DialogContent>
         <DialogActions>
           <Button
+            disabled={submitting}
             onClick={handleAction}
             fullWidth
             variant="contained"
