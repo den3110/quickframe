@@ -427,7 +427,6 @@ const NewBudgetStrategy = ({
           setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
           break;
         case BudgetStrategyType.MARTINGALE:
-          console.log(2222);
           setMethod1("1-2-4-8-17-35");
           setIncreaseValueType(IncreaseValueType.AFTER_LOSS);
           break;
@@ -699,7 +698,7 @@ const NewBudgetStrategy = ({
                               ? t("Value is invalid!")
                               : ""
                           }
-                          label={t("3. Set order value")}
+                          label={t("Set order value")}
                           fullWidth
                           type="text"
                           value={method1}
@@ -800,7 +799,8 @@ const NewBudgetStrategy = ({
                 {/* {console.log("method 1", method1)} */}
                 {type === BudgetStrategyType.MARTINGALE && (
                   <>
-                    <Box display={"flex"}>
+                    <Box  display={"flex"}
+                      flexDirection={downLg ? "column" : "row"}>
                       <ListItem>
                         <TextField
                           inputProps={{ readOnly: readOnly }}
@@ -810,7 +810,7 @@ const NewBudgetStrategy = ({
                               ? "Vui lòng chỉ nhập giá trị số, ký tự đặc biệt hoặc chữ cái sẽ không hợp lệ."
                               : ""
                           }
-                          label={t("3. Set order value")}
+                          label={t("Set order value")}
                           fullWidth
                           type="text"
                           value={method1}

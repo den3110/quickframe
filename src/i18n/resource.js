@@ -836,7 +836,8 @@ export const resources = {
       "Bot AI Builder": "Bot AI Builder",
       "Bot AI Code": "Bot AI Code",
       "Bot AI code is required": "Bot AI code is required",
-      "No risk, no obligations, no credit-card required.": "No risk, no obligations, no credit-card required.",
+      "No risk, no obligations, no credit-card required.":
+        "No risk, no obligations, no credit-card required.",
 
       "Bot Management": "Bot Management",
       "Bot Name": "Bot Name",
@@ -891,7 +892,7 @@ export const resources = {
       "C. Information from Other Sources - text 1":
         "We may obtain information about you from other sources, including through third-party services and organizations. For example, if you access our Platform or Services through a third-party application, such as a social networking site or a third-party login service (Facebook or Google), the third-party platform will share information such as your email address, and public profile. ",
       COOL_DOWN: "Cool down",
-      "unknow_error": "Unknown error",
+      unknow_error: "Unknown error",
       "Calculating...": "Calculating...",
       Calendar: "Calendar",
       "Can I get a profit on the demo account - answer":
@@ -943,7 +944,8 @@ export const resources = {
       "Check your email for a verification email to activate your account.":
         "Check your email for a verification email to activate your account.",
       "Checking...": "Checking...",
-      "Please enter the email address associated with your account and We will email you a link to reset your password.": "Please enter the email address associated with your account and We will email you a link to reset your password.",
+      "Please enter the email address associated with your account and We will email you a link to reset your password.":
+        "Please enter the email address associated with your account and We will email you a link to reset your password.",
       "Chiến lược Custom Autowin": "Chiến lược Custom Autowin",
       "Chiến lược Martingale": "Chiến lược Martingale",
       "Choose Bot AI": "Choose Bot AI",
@@ -1345,11 +1347,11 @@ export const resources = {
         "Entry value cannot be greater than 1,000,000. Check row 3.",
       "Entry value cannot be greater than 1,000,000. Check row 4.":
         "Entry value cannot be greater than 1,000,000. Check row 4.",
-        "UP": "Up",
-        "DOWN": "Down",
-        "NONE": "Skip",
-        "MAJORITY": "Majority",
-        "MINORITY": "Minority",
+      UP: "Up",
+      DOWN: "Down",
+      NONE: "Skip",
+      MAJORITY: "Majority",
+      MINORITY: "Minority",
       "Error occurred": "Error occurred",
       "Error placing order": "Error placing order",
       "Exchange 2FA Code": "Exchange 2FA Code",
@@ -4205,6 +4207,7 @@ export const resources = {
       "2_LOSE": "2 chuỗi thua",
       "2_WIN": "2 chuỗi thắng",
       "3. Set order value": "3. Đặt giá trị lệnh",
+      "Set order value": "Đặt giá trị lệnh",
       "3. Set trade amount": "3. Thiết lập số tiền vào lệnh",
       "3_LOSE": "3 chuỗi thua",
       "3_WIN": "3 chuỗi thắng",
@@ -5801,11 +5804,11 @@ export const resources = {
       Restart: "Cập nhật gói (Khởi động lại)",
       "Restart Plan": "Khởi động lại",
       "Restart plan successfully!": "Khởi động lại thành công!",
-      "UP": "Mua",
-      "DOWN": "Bán",
-      "NONE": "Bỏ qua",
-      "MAJORITY": "Đa số",
-      "MINORITY": "Thiểu số",
+      UP: "Mua",
+      DOWN: "Bán",
+      NONE: "Bỏ qua",
+      MAJORITY: "Đa số",
+      MINORITY: "Thiểu số",
       "Restart plan: {{planName}} successfully!":
         "Khởi động lại gói: {{planName}} thành công!",
       "Restart the plan: {{planName}} successfully!":
@@ -6127,10 +6130,10 @@ export const resources = {
         "Hệ thống sẽ gửi tín hiệu đến kênh telegram khi\n                             lệnh được tạo",
       "TAKE PROFIT": "CHỐT LỜI",
       THIS_MONTH: "Tháng này",
-      	
-APPROVED: "Đã nhận",
-REJECTED: "Từ chối",
-PENDING: "Chờ duyệt",
+
+      APPROVED: "Đã nhận",
+      REJECTED: "Từ chối",
+      PENDING: "Chờ duyệt",
       "Usage Strategy": "Chiến lược sử dụng",
       THIS_MONTH_statistic: "Tháng này",
       THIS_WEEK: "Tuần này",
@@ -6271,7 +6274,7 @@ PENDING: "Chờ duyệt",
         "Có một hoặc nhiều leader đang chặn bạn.",
       "There are {{amount}} rows above and below":
         "Có {{amount}} hàng bên trên và bên dưới",
-      "unknow_error": "Lỗi không xác định",
+      unknow_error: "Lỗi không xác định",
       "There are {{amount}} shadows with incorrect conditions.":
         "Có {{amount}} bóng điều kiện bị sai.",
       "There is another account connected already.":
@@ -6838,10 +6841,12 @@ PENDING: "Chờ duyệt",
       "Remember me": "Nhớ tôi",
       "Forget Password": "Quên mật khẩu",
       "Forgot your password": "Quên mật khẩu của bạn",
-      "Please enter the email address associated with your account and We will email you a link to reset your password.": "Vui lòng nhập địa chỉ email được liên kết với tài khoản của bạn và chúng tôi sẽ gửi cho bạn một liên kết qua email để đặt lại mật khẩu của bạn.",
+      "Please enter the email address associated with your account and We will email you a link to reset your password.":
+        "Vui lòng nhập địa chỉ email được liên kết với tài khoản của bạn và chúng tôi sẽ gửi cho bạn một liên kết qua email để đặt lại mật khẩu của bạn.",
       "Send Link": "Gửi liên kết",
       "Sending...": "Đang gửi...",
-      "No risk, no obligations, no credit-card required.": "Không có rủi ro, không có nghĩa vụ, không cần thẻ tín dụng.",
+      "No risk, no obligations, no credit-card required.":
+        "Không có rủi ro, không có nghĩa vụ, không cần thẻ tín dụng.",
       "Register with your email id": "Đăng ký bằng email hoặc username",
       "Enter your work email": "Nhập email hoặc username của bạn",
       "Enter your password": "Nhập mật khẩu của bạn",
@@ -6850,8 +6855,7 @@ PENDING: "Chờ duyệt",
       "Terms of Service": "Điều khoản dịch vụ",
       jackpot: "Jackpot",
       "Win Streak 9x": "Chuỗi thắng 9x",
-      "Lose Streak 9x": "Lose Streak 9x"
-
+      "Lose Streak 9x": "Lose Streak 9x",
     },
   },
 };
