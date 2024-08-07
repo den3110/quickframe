@@ -598,7 +598,6 @@ const PortfoliosList = () => {
   }, [checkedRows]);
 
   useEffect(() => {
-    console.log("1234", selectedLinkAccount, walletMode)
     if (selectedLinkAccount) {
       (async () => {
         const response = await userApi.getUsersExchangeLinkAccountDailyTarget(

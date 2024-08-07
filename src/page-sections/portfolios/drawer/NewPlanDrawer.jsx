@@ -151,10 +151,10 @@ const NewPlanDrawer = ({
   const [whenLosing, setWhenLosing] = useState(0);
   const [waitTelegramSessionEnable, setWaitTelegramSessionEnable] =
     useState(false);
-  const [fireXSessions, setFireXSessions] = useState(0);
-  const [inXSessions, setInXSessions] = useState(0);
+  const [fireXSessions, setFireXSessions] = useState(1);
+  const [inXSessions, setInXSessions] = useState(1);
   const [skipXSessions, setSkipXSessions] = useState(0);
-  const [betXSessions, setBetXSessions] = useState(0);
+  const [betXSessions, setBetXSessions] = useState(1);
   const [noStopWhenUnauthorize, setNoStopWhenUnauthorize] = useState(false);
   const [noStopWhenNotEBalance, setNoStopWhenNotEBalance] = useState(false);
   const [autoReloadDemoBalance, setAutoReloadDemoBalance] = useState(false);
@@ -953,10 +953,10 @@ const NewPlanDrawer = ({
       setChildProfitTarget(0);
       setChildLossTarget(0);
       setWaitTelegramSessionEnable(false);
-      setFireXSessions(0);
-      setInXSessions(0);
+      setFireXSessions(1);
+      setInXSessions(1);
       setSkipXSessions(0);
-      setBetXSessions(0);
+      setBetXSessions(1);
       setNoStopWhenUnauthorize(false);
       setNoStopWhenNotEBalance(false);
       setAutoReloadDemoBalance(false);
