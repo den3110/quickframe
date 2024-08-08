@@ -22,6 +22,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { NotificationContext } from "contexts/NotificationsContext";
+import moment from "moment"
 
 const NotificationsPopover = (props) => {
   const { data, setData, unReadNotification, setUnReadNotification}= useContext(NotificationContext)
@@ -198,6 +199,7 @@ function ListItem({ msg, onClose, onClick }) {
           <Box sx={{whiteSpace: "normal"}} dangerouslySetInnerHTML={{ __html: msg.content }}>
             
           </Box>
+          <Box>{moment(msg?.createdAt).format("DD/MM/YYYY HH:mm:ss")}</Box>
           {/* {msg.content} */}
         </Small>
       </Box>
