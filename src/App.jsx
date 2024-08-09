@@ -38,7 +38,8 @@ const App = () => {
 
   const refreshToken = useCallback(async () => {
     try {
-      const response = await authApi.refreshToken();
+      const refreshToken = localStorage.getItem("refreshToken");
+      const response = await authApi.refreshToken({refresh_token : refreshToken});
       if (response?.data?.ok === true) {
         const result = response.data;
         setAccessToken(result?.access_token);
