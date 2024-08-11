@@ -183,7 +183,13 @@ const NewBudgetStrategy = ({
     }
     try {
       setDisableButton(true)
-      if(isFromPortfolios) {
+      if(isFromBudgetStrategy) {
+        response = await budgetStrategyApi.userBudgetStrategyUpdate(
+          idBudegetStrategy,
+          data
+        );
+      }
+      else if(isFromPortfolios) {
         response = await budgetStrategyApi.userBudgetStrategyUpdate(
           idBudegetStrategy,
           data
@@ -198,7 +204,14 @@ const NewBudgetStrategy = ({
         response = await budgetStrategyApi.userBudgetStrategyCreate(data);
       }
       if (response?.data?.ok === true) {
-        if(isFromPortfolios) {
+        if(isFromBudgetStrategy) {
+          // showToast
+          showToast(t("Update Strategy successfully!"), "success");
+          const dataTemp = dataProps;
+          setData(prev=> ([response?.data?.d, ...prev]));
+          onClose()
+        }
+        else if(isFromPortfolios) {
           showToast(t("Update Strategy successfully!"), "success");
           const dataTemp = dataProps;
           const index = dataTemp?.findIndex(

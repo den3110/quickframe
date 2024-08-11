@@ -30,6 +30,7 @@ const NewBotAIStringMethod = ({
   selectedBot,
   setChange,
   isFromCopyPlan,
+  isFromSignalStrategy
 }) => {
   const { decodedData } = useContext(JwtContext);
   const theme = useTheme();
@@ -71,7 +72,10 @@ const NewBotAIStringMethod = ({
         type: strategy,
       };
       let response;
-      if(isDuplicate) {
+      if(isFromSignalStrategy) {
+        response = await signalStrategyApi.userBudgetSignalCreate(data);
+      }
+      else if(isDuplicate) {
         response = await signalStrategyApi.userBudgetSignalCreate(data);
       }
       else if (is_edit === true && isFromCopyPlan !== true) {
@@ -83,7 +87,10 @@ const NewBotAIStringMethod = ({
         response = await signalStrategyApi.userBudgetSignalCreate(data);
       }
       if (response?.data?.ok === true) {
-        if(isDuplicate=== true) {
+        if(isFromSignalStrategy) {
+          showToast("Lưu phương pháp thành công", "success")
+        }
+        else if(isDuplicate=== true) {
           showToast("Tạo bản sao bot thành công", "success")
         }
         else if(is_edit === true && isFromCopyPlan !== true) {

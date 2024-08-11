@@ -9,7 +9,7 @@ import {
   Tab,
   Tooltip,
 } from "@mui/material";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { TabContext, TabPanel } from "@mui/lab";
 // CUSTOM COMPONENTS
 import PopoverLayout from "./PopoverLayout";
 import { FlexBox } from "components/flexbox";

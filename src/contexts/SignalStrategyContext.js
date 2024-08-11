@@ -10,7 +10,7 @@ export const SignalStrategyProvider = ({ children }) => {
   const [loading, setLoading] = useState();
   const [change, setChange] = useState(false);
   // Load user profile from localStorage and check if the user is authenticated
-  const getSpotBalanceUser = async () => {
+  const getListBudgetSignal = async () => {
     try {
       setLoading(true);
       const response = await signalStrategyApi.userBudgetSignalList();
@@ -25,17 +25,15 @@ export const SignalStrategyProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getSpotBalanceUser();
+    getListBudgetSignal();
   }, [change]);
 
   return (
-    <RefreshProvider functionProps={async ()=> await getSpotBalanceUser()}>
-      <SignalStrategyContext.Provider
-        value={{ data, change, setChange, setData, loading }}
-      >
-        {children}
-      </SignalStrategyContext.Provider>
-    </RefreshProvider>
+    <SignalStrategyContext.Provider
+      value={{ data, change, setChange, setData, loading }}
+    >
+      {children}
+    </SignalStrategyContext.Provider>
   );
 };
 

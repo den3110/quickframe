@@ -197,6 +197,7 @@ const CopyBudgetStrategy = ({
               selectedBot={data}
               isFromCopyPlan={true}
               setChange={setChange}
+              isFromSignalStrategy={isFromSignalStrategy}
               // setChange={setChange}
             />
           )}
@@ -212,6 +213,7 @@ const CopyBudgetStrategy = ({
               is_edit={isEdit}
               setIsEdit={setIsEdit}
               isFromCopyPlan={true}
+              isFromSignalStrategy={isFromSignalStrategy}
             />
           )}
         </>

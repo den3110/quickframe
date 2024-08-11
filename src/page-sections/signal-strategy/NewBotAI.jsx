@@ -50,6 +50,7 @@ const NewBotAI = ({
   setIsEdit,
   initState,
   isFromCopyPlan,
+  isFromSignalStrategy
 }) => {
   const { setData } = useContext(SignalStrategyContext);
   const { t } = useTranslation();
@@ -142,8 +143,13 @@ const NewBotAI = ({
         type: "BUBBLE_METHOD",
       };
       let response;
-
-      if ((initState === true && isFromCopyPlan === true) || isDuplicate=== true ) {
+      if (isFromSignalStrategy) {
+        response = await signalStrategyApi.userBudgetSignalUpdate(
+          idBotAI,
+          data
+        );
+      }
+      else if ((initState === true && isFromCopyPlan === true) || isDuplicate=== true ) {
         response = await signalStrategyApi.userBudgetSignalCreate(data);
       } else if (initState === true) {
         response = await signalStrategyApi.userBudgetSignalUpdate(
@@ -154,7 +160,10 @@ const NewBotAI = ({
         response = await signalStrategyApi.userBudgetSignalCreate(data);
       }
       if (response?.data?.ok === true) {
-        if(isDuplicate=== true) {
+        if(isFromSignalStrategy ) {
+          showToast("Chỉnh sửa bot thành công", "success")
+        }
+        else if(isDuplicate=== true) {
           showToast("Tạo bản sao bot thành công", "success")
         }
         else if(initState === true && isFromCopyPlan === true) {
@@ -172,7 +181,10 @@ const NewBotAI = ({
         //     : t("Create the bot successfully!"),
         //   "success"
         // );
-        if(isDuplicate=== true) {
+        if(isFromSignalStrategy) {
+          setData(prev=> ([response?.data?.d, ...prev]));
+        }
+        else if(isDuplicate=== true) {
           setData(response?.data?.d);
           setName("");
           setTargetConditions([]);
