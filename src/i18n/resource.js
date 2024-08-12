@@ -3617,6 +3617,7 @@ export const resources = {
       "“{{botName}}” use method: {{methodName}}":
         "“{{botName}}” use method: {{methodName}}",
       "🌟 Go to New Version": "🌟 Go to New Version",
+      having_pending_orders: "Having pending orders",
     },
   },
   vi: {
@@ -6856,6 +6857,7 @@ export const resources = {
       jackpot: "Jackpot",
       "Win Streak 9x": "Chuỗi thắng 9x",
       "Lose Streak 9x": "Lose Streak 9x",
+      having_pending_orders: "Gói đang có lệnh chưa xử lý",
     },
   },
 };
