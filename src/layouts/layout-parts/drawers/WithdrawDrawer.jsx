@@ -84,7 +84,7 @@ export default function WithdrawDrawer(props) {
       setLoadingSubmit(true)
       const response= await userApi.userExchangeLinkAccountWithdraw(data, selectedLinkAccount)
       if(response?.data?.ok=== true) {
-
+        showToast("Rút USDT thành công")
       }
       else if(response?.data?.ok=== false ) {
         showToast(t(response?.data?.d?.err_code), "error")
