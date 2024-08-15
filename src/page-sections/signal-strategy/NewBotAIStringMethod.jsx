@@ -73,7 +73,10 @@ const NewBotAIStringMethod = ({
       };
       let response;
       if(isFromSignalStrategy) {
-        response = await signalStrategyApi.userBudgetSignalCreate(data);
+        response = await signalStrategyApi.userBudgetSignalUpdate(
+          idBotAI,
+          data
+        );
       }
       else if(isDuplicate) {
         response = await signalStrategyApi.userBudgetSignalCreate(data);
@@ -114,7 +117,7 @@ const NewBotAIStringMethod = ({
         showToast(response?.data?.m, "error");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       showToast(error?.response?.data?.m, "error");
     } finally {
       setReadOnly(false);

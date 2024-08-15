@@ -50,6 +50,7 @@ const CopyBudgetStrategy = ({
   const [data, setData] = useState();
   const [isEdit, setIsEdit] = useState(false);
   const [initState, setInitState]= useState(false)
+  const [isSubmitting, setIsSubmitting]= useState(false)
 
   const handleCodeChange = (event) => {
     setShareCode(event.target.value);
@@ -57,6 +58,7 @@ const CopyBudgetStrategy = ({
 
   const handleCopy = async () => {
     try {
+      setIsSubmitting(true)
       let response;
       // const result= await i
       if (isFromBudgetStrategy) {
@@ -91,6 +93,7 @@ const CopyBudgetStrategy = ({
       
       showToast(error?.response?.data?.m, "error");
     } finally {
+      setIsSubmitting(false)
     }
   };
 
@@ -158,7 +161,7 @@ const CopyBudgetStrategy = ({
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button onClick={handleCopy} color="primary" variant="contained">
+          <Button disabled={isSubmitting} onClick={handleCopy} color="primary" variant="contained">
             {t("Import Now")}
           </Button>
         </DialogActions>
