@@ -57,6 +57,7 @@ export default function NewSchedule({
       0
     );
   });
+  // const [initPackages, setPackages]
   const [packages, setPackages] = useState([]);
   const [scheduleName, setScheduleName] = useState("");
   const [disableEndTime, setDisableEndTime] = useState(false);
@@ -126,14 +127,16 @@ export default function NewSchedule({
   };
 
   useEffect(() => {
-    if(inView) {
+    
       (async () => {
         try {
           const response = await portfolioApi.userBotList();
           if (response?.data?.ok === true) {
             setDataBotList(response?.data?.d);
             setFirstBot(response?.data?.d?.[0]?._id);
-            setPackages([response?.data?.d?.[0]?._id]);
+            if(inView && isEdit !== true) {
+              setPackages([response?.data?.d?.[0]?._id]);
+            }
           } else if (response?.data?.ok === false) {
             showToast(response?.data?.m);
           }
@@ -141,8 +144,7 @@ export default function NewSchedule({
           showToast(error?.response?.data?.m, "error");
         }
       })();
-    }
-  }, [inView]);
+  }, [inView, isEdit]);
 
   useEffect(() => {
     const now = new Date();
@@ -208,7 +210,7 @@ export default function NewSchedule({
       setPackages([firstBot]);
       setDisableEndTime(false);
     }
-  }, [isEdit, selectedSchedule, firstBot]);
+  }, [isEdit, selectedSchedule, firstBot, inView]);
 
   return (
     <Drawer
@@ -306,6 +308,7 @@ export default function NewSchedule({
                       gap: 0.5,
                     }}
                   >
+                    {/* {console.log(selected)} */}
                     {selected.map((value) => (
                       <Chip
                         key={value}

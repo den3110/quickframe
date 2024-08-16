@@ -112,12 +112,15 @@ const PortfolioSchedule = () => {
         }
         return {
           id: event._id,
+          _id: event._id,
           start: startDate,
           end: endDate,
-          resource: newResources.find((r) => r.name === event.name)?.id || 1, // Match resource id based on name
+          resource: newResources.find((r) => r.name === event.name)?.id || 1, 
           text: event.name,
           botIds: event.botIds,
-          name: event.name
+          name: event.name,
+          start_time: event.start_time,
+          stop_time: event.stop_time,
         };
       } else {
         const [hours, minutes] = event.start_time.split(":").map(Number);
@@ -135,12 +138,15 @@ const PortfolioSchedule = () => {
         );
         return {
           id: event._id,
+          _id: event._id,
           start: startDate,
           end: endDate,
           resource: newResources.find((r) => r.name === event.name)?.id || 1, // Match resource id based on name
           text: event.name,
           botIds: event.botIds,
-          name: event.name
+          name: event.name,
+          start_time: event.start_time,
+          stop_time: event.stop_time,
 
         };
       }
