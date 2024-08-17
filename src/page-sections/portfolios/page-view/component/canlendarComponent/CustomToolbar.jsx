@@ -176,7 +176,6 @@ const CustomToolbar = ({
             </IconButton>
             <Typography variant="h5" fontWeight={600} color={"success.main"}>
               {label}
-              {console.log(label)}
             </Typography>
             <IconButton onClick={() => onNavigate("NEXT")}>
               <ChevronRight />
@@ -196,7 +195,6 @@ const CustomToolbar = ({
               <Box
                 onClick={() => {
                   setMode(true);
-                  
                 }}
                 sx={{
                   backgroundColor: mode === true && "success.main",

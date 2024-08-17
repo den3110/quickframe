@@ -38,8 +38,8 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
   };
-
-  const events = data.flatMap((item, index) => {
+  // console.log("data", data)
+  const events = data?.filter(item=> item?.type=== "DAY").flatMap((item, index) => {
     
     if (isGlobal === true) {
       const start = new Date(item.createdAt);
@@ -126,6 +126,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
     }
   });
 
+
   const groupedData = _.groupBy(events, item => `${item.title}-${moment(item.start).format("DD/MM/YYYY")}-${moment(item.end).format("DD/MM/YYYY")}-${item.color}`);
   // Create new array with combined desc
   const result = _.map(groupedData, group => ({
@@ -181,7 +182,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         stat={stat}
         setStat={setStat}
         isGlobal={isGlobal}
-        data={data}
+        data={data?.filter(item=> item?.type=== "DAY")}
         isHiddenProfit={isHiddenProfit}
         setIsHiddenProfit={setIsHiddenProfit}
         isHiddenVolume={isHiddenVolume}
@@ -232,7 +233,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
               <Typography fontWeight={600} ml={2} fontSize={18}>Pnl</Typography>
             </Box>
             <Box>
-              <GrandPnLChart  data={result} />
+              <GrandPnLChart data={result} />
             </Box>
           </Box>
         </Box>
