@@ -204,7 +204,6 @@ const StatPortfolio = (props) => {
       }
     }
   }, [dataStatGlobal, walletMode, selectedTime])
-  console.log(dataStatGlobal)
 
   return (
     <Box pb={4}>

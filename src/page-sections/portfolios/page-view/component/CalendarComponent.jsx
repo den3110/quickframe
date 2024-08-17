@@ -40,36 +40,31 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
   };
 
   const events = data.flatMap((item, index) => {
+    
     if (isGlobal === true) {
+      const start = new Date(item.createdAt);
+      start.setDate(start.getDate());
       if (walletMode === true) {
         // live wallet
         const profitEvent = {
           title: `Profit`,
-          start: new Date(item.createdAt).setHours(
-            new Date(item.createdAt).getHours() - 1
-          ),
-          end: new Date(item.createdAt).setHours(
-            new Date(item.createdAt).getHours() - 1
-          ),
-          desc: (item.live_profit),
+          start: start,
+          end: start,
+          desc: item.live_profit,
           color:
             item.live_profit >= 0
               ? theme.palette.success.main
               : theme.palette.error.main,
         };
-
+  
         const volumeEvent = {
           title: `Volume`,
-          start: new Date(item.createdAt).setHours(
-            new Date(item.createdAt).getHours() - 1
-          ),
-          end: new Date(item.createdAt).setHours(
-            new Date(item.createdAt).getHours() - 1
-          ),
-          desc: (item.live_volume),
+          start: start,
+          end: start,
+          desc: item.live_volume,
           color: "#8c62ff",
         };
-
+  
         return [
           isHiddenProfit === false && profitEvent,
           isHiddenVolume === false && volumeEvent,
@@ -78,64 +73,52 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         // demo wallet
         const profitEvent = {
           title: `Profit`,
-          start: new Date(item.createdAt).setHours(
-            new Date(item.createdAt).getHours() - 1
-          ),
-          end: new Date(item.createdAt).setHours(
-            new Date(item.createdAt).getHours() - 1
-          ),
-          desc: (item.demo_profit),
+          start: start,
+          end: start,
+          desc: item.demo_profit,
           color:
             item.demo_profit >= 0
               ? theme.palette.success.main
               : theme.palette.error.main,
         };
-
+  
         const volumeEvent = {
           title: `Volume`,
-          start: new Date(item.createdAt).setHours(
-            new Date(item.createdAt).getHours() - 1
-          ),
-          end: new Date(item.createdAt).setHours(
-            new Date(item.createdAt).getHours() - 1
-          ),
-          desc: (item.demo_volume),
+          start: start,
+          end: start,
+          desc: item.demo_volume,
           color: "#8c62ff",
         };
-
+  
         return [
           isHiddenProfit === false && profitEvent,
           isHiddenVolume === false && volumeEvent,
         ];
       }
-    } else {
+    } 
+    // in portfolio
+    else {
+      const start = new Date(item.createdAt);
+      start.setDate(start.getDate() - 1);
       const profitEvent = {
         title: `Profit`,
-        start: new Date(item.createdAt).setHours(
-          new Date(item.createdAt).getHours() - 1
-        ),
-        end: new Date(item.createdAt).setHours(
-          new Date(item.createdAt).getHours() - 1
-        ),
-        desc: (item.profit),
+        start: start,
+        end: start,
+        desc: item.profit,
         color:
           item.profit >= 0
             ? theme.palette.success.main
             : theme.palette.error.main,
       };
-
+  
       const volumeEvent = {
         title: `Volume`,
-        start: new Date(item.createdAt).setHours(
-          new Date(item.createdAt).getHours() - 1
-        ),
-        end: new Date(item.createdAt).setHours(
-          new Date(item.createdAt).getHours() - 1
-        ),
-        desc: (item.volume),
+        start: start,
+        end: start,
+        desc: item.volume,
         color: "#8c62ff",
       };
-
+  
       return [
         isHiddenProfit === false && profitEvent,
         isHiddenVolume === false && volumeEvent,
@@ -153,7 +136,6 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
     color: group[0].color
   }))?.filter(item=> item.title !== undefined);
 
-  
   const handleNavigate = (action) => {
     if (action === "PREV") {
       setCurrentDate(moment(currentDate).subtract(1, "month").toDate());
