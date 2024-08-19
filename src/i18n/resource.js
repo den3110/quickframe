@@ -6858,6 +6858,9 @@ export const resources = {
       "Win Streak 9x": "Chuỗi thắng 9x",
       "Lose Streak 9x": "Lose Streak 9x",
       having_pending_orders: "Gói đang có lệnh chưa xử lý",
+      "Reached the limit of the number of investment packages":
+        "Đạt giới hạn số lượng gói không thể chạy thêm",
+      maintance: "Bảo trì",
     },
   },
 };
