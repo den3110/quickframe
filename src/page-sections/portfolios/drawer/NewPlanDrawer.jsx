@@ -3112,7 +3112,7 @@ const NewPlanDrawer = ({
                       />
                     </Box>
                     {/* {console.log("autoType", autoType)} */}
-                    {(isCopyPlan!== true && autoType!== AutoTypes.COPYTRADE) && 
+                    {(autoType!== AutoTypes.COPYTRADE) && 
                       <Box
                         mt={2}
                         display={"flex"}
