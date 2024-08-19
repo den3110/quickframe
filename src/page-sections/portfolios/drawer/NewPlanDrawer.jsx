@@ -3111,49 +3111,52 @@ const NewPlanDrawer = ({
                         }
                       />
                     </Box>
-                
-                   
-                    <Box
-                      mt={2}
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      gap={1}
-                    >
-                      <Typography variant="h6">{t("Expert Mode")}</Typography>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={isBrokerMode}
-                            onChange={() => setIsBrokerMode(!isBrokerMode)}
-                          />
-                        }
-                      />
-                    </Box>
-                    <Box
-                      mt={2}
-                      display={"flex"}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      gap={1}
-                    >
-                      <Box>
-                        <Typography variant="h6">
-                          {t("FormCreatePlan_advanced_privateMode_label")}
-                        </Typography>
-                        <Typography variant="body2">
-                          {t("FormCreatePlan_advanced_privateMode_desc")}
-                        </Typography>
+                    {/* {console.log("autoType", autoType)} */}
+                    {(isCopyPlan!== true && autoType!== AutoTypes.COPYTRADE) && 
+                      <Box
+                        mt={2}
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                        alignItems={"center"}
+                        gap={1}
+                      >
+                        <Typography variant="h6">{t("Expert Mode")}</Typography>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={isBrokerMode}
+                              onChange={() => setIsBrokerMode(!isBrokerMode)}
+                            />
+                          }
+                        />
                       </Box>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={privateMode}
-                            onChange={() => setPrivateMode(!privateMode)}
-                          />
-                        }
-                      />
-                    </Box>
+                    }    
+                    {(isCopyPlan!== true && autoType!== AutoTypes.COPYTRADE) &&
+                      <Box
+                        mt={2}
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                        alignItems={"center"}
+                        gap={1}
+                      >
+                        <Box>
+                          <Typography variant="h6">
+                            {t("FormCreatePlan_advanced_privateMode_label")}
+                          </Typography>
+                          <Typography variant="body2">
+                            {t("FormCreatePlan_advanced_privateMode_desc")}
+                          </Typography>
+                        </Box>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={privateMode}
+                              onChange={() => setPrivateMode(!privateMode)}
+                            />
+                          }
+                        />
+                      </Box>
+                    }
                     <Box
                       mt={2}
                       display={"flex"}
