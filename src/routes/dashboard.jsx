@@ -22,6 +22,7 @@ import StatPortfolio from "page-sections/portfolios/page-view/stat";
 import PortfolioSchedule from "page-sections/portfolios/page-view/schedule";
 import VipPage from "page-sections/vip-member";
 import ErrorBoundary from "ErrorBoundary";
+import CheckMaintenance from "hoc/CheckMaintainance";
 // ALL DASHBOARD PAGES
 const BudgetStrategy = Loadable(
   lazy(() => import("pages/dashboard/budget-strategy"))
@@ -37,15 +38,17 @@ export const DashboardRoutes = [
   {
     path: "dashboard",
     element: (
-      <ErrorBoundary>
-        <ProtectedRoute>
-          <CheckConnectExchange>
-            <DashboardLayout>
-              <Outlet />
-            </DashboardLayout>
-          </CheckConnectExchange>
-        </ProtectedRoute>
-      </ErrorBoundary>
+      <CheckMaintenance>
+        <ErrorBoundary>
+          <ProtectedRoute>
+            <CheckConnectExchange>
+              <DashboardLayout>
+                <Outlet />
+              </DashboardLayout>
+            </CheckConnectExchange>
+          </ProtectedRoute>
+        </ErrorBoundary>
+      </CheckMaintenance>
     ),
     children: [
       {
@@ -69,13 +72,15 @@ export const DashboardRoutes = [
   {
     path: "portfolios",
     element: (
-      <ProtectedRoute>
-        <CheckConnectExchange>
-          <DashboardLayout>
-            <Outlet />
-          </DashboardLayout>
-        </CheckConnectExchange>
-      </ProtectedRoute>
+      <CheckMaintenance>
+        <ProtectedRoute>
+          <CheckConnectExchange>
+            <DashboardLayout>
+              <Outlet />
+            </DashboardLayout>
+          </CheckConnectExchange>
+        </ProtectedRoute>
+      </CheckMaintenance>
     ),
     children: [
       {
@@ -108,13 +113,15 @@ export const DashboardRoutes = [
   {
     path: "budget-strategies",
     element: (
-      <ProtectedRoute>
-        <CheckConnectExchange>
-          <DashboardLayout>
-            <Outlet />
-          </DashboardLayout>
-        </CheckConnectExchange>
-      </ProtectedRoute>
+      <CheckMaintenance>
+        <ProtectedRoute>
+          <CheckConnectExchange>
+            <DashboardLayout>
+              <Outlet />
+            </DashboardLayout>
+          </CheckConnectExchange>
+        </ProtectedRoute>
+      </CheckMaintenance>
     ),
     children: [
       {
@@ -126,13 +133,15 @@ export const DashboardRoutes = [
   {
     path: "signal-strategies",
     element: (
-      <ProtectedRoute>
-        <CheckConnectExchange>
-          <DashboardLayout>
-            <Outlet />
-          </DashboardLayout>
-        </CheckConnectExchange>
-      </ProtectedRoute>
+      <CheckMaintenance>
+        <ProtectedRoute>
+          <CheckConnectExchange>
+            <DashboardLayout>
+              <Outlet />
+            </DashboardLayout>
+          </CheckConnectExchange>
+        </ProtectedRoute>
+      </CheckMaintenance>
     ),
     children: [
       {
@@ -167,13 +176,15 @@ export const DashboardRoutes = [
   {
     path: "manual-trade",
     element: (
-      <ProtectedRoute>
-        <CheckConnectExchange>
-          <DashboardLayout>
-            <Outlet />
-          </DashboardLayout>
-        </CheckConnectExchange>
-      </ProtectedRoute>
+      <CheckMaintenance>
+        <ProtectedRoute>
+          <CheckConnectExchange>
+            <DashboardLayout>
+              <Outlet />
+            </DashboardLayout>
+          </CheckConnectExchange>
+        </ProtectedRoute>
+      </CheckMaintenance>
     ),
     children: [
       {
@@ -194,26 +205,30 @@ export const DashboardRoutes = [
   {
     path: "vip-member",
     element: (
-      <ProtectedRoute>
-        <CheckConnectExchange>
-          <DashboardLayout>
-            <Outlet />
-          </DashboardLayout>
-        </CheckConnectExchange>
-      </ProtectedRoute>
+      <CheckMaintenance>
+        <ProtectedRoute>
+          <CheckConnectExchange>
+            <DashboardLayout>
+              <Outlet />
+            </DashboardLayout>
+          </CheckConnectExchange>
+        </ProtectedRoute>
+      </CheckMaintenance>
     ),
     children: [{path: "",  element: <VipPage /> }, {index: true, element: <VipPage />}],
   },
   {
     path: "manage-follower",
     element: (
-      <ProtectedRoute>
-        <CheckConnectExchange>
-          <DashboardLayout>
-            <Outlet />
-          </DashboardLayout>
-        </CheckConnectExchange>
-      </ProtectedRoute>
+      <CheckMaintenance>
+        <ProtectedRoute>
+          <CheckConnectExchange>
+            <DashboardLayout>
+              <Outlet />
+            </DashboardLayout>
+          </CheckConnectExchange>
+        </ProtectedRoute>
+      </CheckMaintenance>
     ),
     children: [
       {

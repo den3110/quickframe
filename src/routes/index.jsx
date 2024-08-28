@@ -9,6 +9,7 @@ import { Navigate } from "react-router-dom";
 import CheckConnectExchangeConnect from "hoc/CheckConnectExchangeConnect";
 import ProtectedRouteConnect from "hoc/ProtectedRouteConnect";
 import ErrorBoundary from "ErrorBoundary";
+import CheckMaintenance from "hoc/CheckMaintainance";
 
 const ErrorPage = Loadable(lazy(() => import("pages/404")));
 // const Landing = Loadable(lazy(() => import("pages/landing")));
@@ -18,12 +19,14 @@ export const routes = () => {
       path: "/",
       element: (
         <ErrorBoundary>
-          <ProtectedRoute>
-            <CheckConnectExchange>
-              {/* <Landing /> */}
-              <Navigate to="/dashboard" />
-            </CheckConnectExchange>
-          </ProtectedRoute>
+          <CheckMaintenance>
+            <ProtectedRoute>
+              <CheckConnectExchange>
+                {/* <Landing /> */}
+                <Navigate to="/dashboard" />
+              </CheckConnectExchange>
+            </ProtectedRoute>
+          </CheckMaintenance>
         </ErrorBoundary>
       ),
     },
@@ -34,11 +37,13 @@ export const routes = () => {
     {
       path: "/connect",
       element: (
-        <ProtectedRouteConnect>
-          <CheckConnectExchangeConnect>
-            <ConnectAccountPage />
-          </CheckConnectExchangeConnect>
-        </ProtectedRouteConnect>
+        <CheckMaintenance>
+          <ProtectedRouteConnect>
+            <CheckConnectExchangeConnect>
+              <ConnectAccountPage />
+            </CheckConnectExchangeConnect>
+          </ProtectedRouteConnect>
+        </CheckMaintenance>
       ),
     },
     ...AuthRoutes,

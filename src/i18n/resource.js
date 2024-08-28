@@ -703,11 +703,15 @@ export const resources = {
       "Activate Manual Trade": "Activate Manual Trade",
       Active: "Active",
       "Active Plans (L/D)": "Active Plans (L/D)",
+      "Maintenance underway": "Maintenance underway",
+      "is Undergoing maintenance for future growth.": "is Undergoing maintenance for future growth.",
       "Active Plans (Live/Demo)": "Active Plans (Live/Demo)",
       "Active Plans (Live/Demo) tooltip":
         "The number of active plans on Live/Demo account",
       "Active {{name}} plan successfully!":
         "Active {{name}} plan successfully!",
+      "Please come back later": "Please come back later",
+
       Add: "Add",
       "Add Bubble": "Add Candle Shadow",
       "Add Condition": "Add Condition",
@@ -5996,6 +6000,9 @@ export const resources = {
         "Thiết lập mục tiêu hằng ngày ({{accountType}})",
       "Setup your candle pattern": "Thiết lập mô hình nến của bạn",
       "Setup your trade amount": "Thiết lập số tiền vào lệnh",
+      "Maintenance underway": "Đang bảo trì",
+      "Please come back later": "Bạn hãy quay trở lại sau",
+      "is undergoing maintenance for future growth.": "đang được bảo trì để phát triển trong tương lai.",
       Share: "Chia sẻ",
       "New user": "Người dùng mới",
       "Share Bot AI": "Chia sẻ Bot AI",
