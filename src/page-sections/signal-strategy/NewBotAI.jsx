@@ -1021,6 +1021,7 @@ const NewBotAI = ({
                   }
                 />
                 <Grid container spacing={1}>
+                  {console.log("target conditions", targetConditions)}
                   {targetConditions?.map((value, index) => {
                     const current = { color: "info.main", textcolor: "black" };
 

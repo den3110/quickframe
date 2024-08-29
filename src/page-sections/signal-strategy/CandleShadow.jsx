@@ -20,6 +20,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import { useTranslation } from "react-i18next";
 import SwiperCore, { Mousewheel } from 'swiper/core';
+import { v4 } from "uuid";
 SwiperCore.use([Mousewheel]);
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -336,6 +337,7 @@ const CandleShadow = ({
     /* Optional options */
     threshold: 0,
   });
+  
   const [selectedBall, setSelectedBall] = useState(1);
   const [selectedGridBall, setSelectedGridBall] = useState([]);
   const [ballStates, setBallStates] = useState([1, ...Array(19).fill(0)]);
@@ -405,6 +407,7 @@ const CandleShadow = ({
 
   const handleSave = () => {
     const data = {
+      key: v4(),
       betIndex: selectedBall,
       conditions: selectedGridBall.map((item) => ({
         ...item,
@@ -422,7 +425,7 @@ const CandleShadow = ({
         const existingIndex = targetConditions?.findIndex(
           (item) => item.index === selectedCandle?.index
         );
-        console.log("existing", existingIndex);
+        // console.log("existing", existingIndex);
         if (existingIndex !== -1) {
           const updatedConditions = targetConditions;
           updatedConditions[existingIndex] = data;
@@ -448,7 +451,7 @@ const CandleShadow = ({
 
   const handleDelete = () => {
     setTargetConditions(
-      targetConditions.filter((item) => item.betIndex !== selectedBall)
+      targetConditions.filter((item) => item.index != selectedCandle?.index)
     );
     handleCloseCandleShadow();
   };
