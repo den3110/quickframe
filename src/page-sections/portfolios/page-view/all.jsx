@@ -71,6 +71,7 @@ import { useTranslation } from "react-i18next";
 import OpenCopyPlanDialog from "../dialog/OpenCopyPlanDialog";
 import portfolioApi from "api/portfolios/portfolioApi";
 import FilterPortfolios from "./component/FilterPortfolios";
+import round2number from "util/round2number";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   padding: "20px",
@@ -958,7 +959,7 @@ const PortfoliosList = () => {
                           />
                         </StyledTableCell>
                         <StyledTableCell>{t("Plan Name")}</StyledTableCell>
-                        <StyledTableCell>{t("7-days profit")}</StyledTableCell>
+                        <StyledTableCell>{t("Total Volume")}</StyledTableCell>
                         <StyledTableCell>
                           <Typography>{t("profit")}</Typography>
                           <Typography
@@ -1063,19 +1064,19 @@ const PortfoliosList = () => {
                                     variant="body2"
                                     color="textSecondary"
                                   >
-                                    {t("7-days profit")}
+                                    {t("Total Volume")}
                                   </Typography>
                                 )}
                                 <Typography
                                   fontWeight={600}
                                   variant="body2"
                                   color={
-                                    plan?.week_profit >= 0
+                                    plan?.total_volume >= 0
                                       ? "success.main"
                                       : "error.main"
                                   }
                                 >
-                                  {formatCurrency(plan?.week_profit)}
+                                  {"$" + round2number(plan?.total_volume)}
                                 </Typography>
                               </StyledTableCell>
                               <StyledTableCell
