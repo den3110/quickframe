@@ -78,24 +78,29 @@ const CopytradeHistory = () => {
   }, []);
 
   useEffect(() => {
-    if (isConnected && socket && data) {
-      socket.on("COPY_TRADE_HISTORY", (dataSocket) => {
-        console.log(dataSocket)
-        const dataTemp = data;
-        const findIndex = dataTemp?.findIndex(
-          (item) =>
-            item?.userId === dataSocket?.userId &&
-            item?._id === dataSocket?._id &&
-            item?.sessionId === dataSocket?.sessionId
-        );
-        console.log(findIndex)
-        if (findIndex !== -1) {
-          dataTemp[findIndex] = dataSocket;
-          setData(dataTemp);
-        } else {
-          setData([dataSocket, ...dataTemp]);
-        }
-      });
+    try {
+      
+      if (isConnected && socket && data) {
+        socket.on("COPY_TRADE_HISTORY", (dataSocket) => {
+          console.log(dataSocket)
+          const dataTemp = data;
+          const findIndex = dataTemp?.findIndex(
+            (item) =>
+              item?.userId === dataSocket?.userId &&
+              item?._id === dataSocket?._id &&
+              item?.sessionId === dataSocket?.sessionId
+          );
+          console.log(findIndex)
+          if (findIndex !== -1) {
+            dataTemp[findIndex] = dataSocket;
+            setData(dataTemp);
+          } else {
+            setData([dataSocket, ...dataTemp ?? []]);
+          }
+        });
+      }
+    } catch (error) {
+      console.log("error", error)
     }
   }, [isConnected, socket, data]);
 

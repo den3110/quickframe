@@ -500,7 +500,7 @@ const NewPlanDrawer = ({
         }
       }
       data = {
-        ...data,
+        ...data ?? [],
         is_waiting: true,
         wait_signal_other_plan_enabled: waitSignalOtherPlanEnabled,
         child_target_enabled: childTargetEnable,
@@ -528,7 +528,7 @@ const NewPlanDrawer = ({
         auto_reload_demo_balance: autoReloadDemoBalance,
       };
       if (decodedData?.data?.levelStaff >= 3) {
-        data = { ...data, is_default: defaultPlan };
+        data = { ...data ?? [], is_default: defaultPlan };
       }
       if (isEdit === true) {
         if (isFromLeaderboard) {

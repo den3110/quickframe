@@ -86,9 +86,9 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
         setIsPause(!isPause);
         showToast(ActionBotTypeMessageSucces[action], "success");
         setDataStat({
-          ...dataStat,
+          ...dataStat ?? [],
           isRunning: true,
-          lastData: { ...dataStat.lastData, isPause: false },
+          lastData: { ...dataStat.lastData ?? [], isPause: false },
         });
       }
       else if(response?.data?.ok=== false ){
@@ -117,9 +117,9 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
         setIsPause(!isPause);
         showToast(ActionBotTypeMessageSucces[action], "success");
         setDataStat({
-          ...dataStat,
+          ...dataStat ?? [],
           isRunning: false,
-          lastData: { ...dataStat.lastData },
+          lastData: { ...dataStat.lastData ?? [] },
         });
       }
       else if(response?.data?.ok=== false ){
@@ -410,7 +410,7 @@ const MenuComponent = ({ dataStat, setDataStat, isSignalStrategy = false }) => {
         isEdit={isEdit}
         allowSelectedTab={true}
         selectedPlan={{
-          ...dataStat,
+          ...dataStat ?? [],
           autoType: 3,
           signal_feature:
             data?.map((item) => item?._id)?.length > 1

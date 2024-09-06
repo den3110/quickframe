@@ -68,7 +68,7 @@ const CopyPlanDrawer = ({
       if (response?.data?.ok === true) {
         showToast("Copy gói thành công", "success");
         if (isAddNewCopyplan === true) {
-          setDataProps([response?.data?.d, ...dataProps]);
+          setDataProps([response?.data?.d, ...dataProps ?? []]);
           setChangeState((prev) => !prev);
         }
         setOpenPopupScreen(true);
@@ -123,7 +123,7 @@ const CopyPlanDrawer = ({
                 alignItems={"center"}
               >
                 <Typography variant="h6" gutterBottom>
-                  Review plan
+                  {t("Review plan")}
                 </Typography>
                 <Box
                   display={"flex"}

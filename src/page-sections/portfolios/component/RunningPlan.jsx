@@ -29,7 +29,7 @@ const RunningPlan = (props) => {
       await portfolioApi.userBotAction(plan?._id, payload);
         let dataLocal= data
         const index= data?.findIndex(item=> item?._id=== plan?._id)
-        dataLocal[index]= {...plan, isRunning: !e.target.checked}
+        dataLocal[index]= {...plan ?? [], isRunning: !e.target.checked}
         setIsRunning(!e.target.checked);
         setData(dataLocal)
         console.log(e.target.checked)

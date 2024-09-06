@@ -72,7 +72,7 @@ const headCells = [{
   label: "Phone"
 }];
 const UserList2PageView = () => {
-  const [users] = useState([...USER_LIST]);
+  const [users] = useState([...USER_LIST ?? []]);
   const [searchFilter, setSearchFilter] = useState("");
   const [selectedUser, setSelectedUser] = useState();
   const {

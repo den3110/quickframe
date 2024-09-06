@@ -214,114 +214,119 @@ const TimelineTele = () => {
   };
 
   useEffect(() => {
-    if (isConnected && dataProps && dataStatProps) {
-      let dataTemp = dataProps;
-      let dataStatTemp = dataStatProps;
-      socket.on("ADD_CLOSE_ORDER", (data) => {
-        const index = dataTemp?.findIndex(
-          (item) =>
-            item.betTime === data.betTime &&
-            item.botId === data.botId &&
-            item.botId === id
-        );
-        if (index !== -1) {
-          dataTemp[index] = data;
-          const newObjData = {
-            ...dataStatTemp,
-            win_day: data?.runningData?.win_day,
-            lose_day: data?.runningData?.lose_day,
-            day_profit: data?.runningData?.day_profit,
-            week_profit: data?.runningData?.week_profit,
-            week_volume: data?.runningData?.week_volume,
-            longestWinStreak: data?.runningData?.longestWinStreak,
-            longestLoseStreak: data?.runningData?.longestLoseStreak,
-            // take_profit_target: data?.runningData?.take_profit_target,
-            // stop_loss_target: data?.runningData?.stop_loss_target,
-            lastData: {
-              ...dataStatTemp.lastData,
-              profit: data?.runningData?.profit,
-              budgetStrategy: {
-                ...dataStatTemp.lastData.budgetStrategy,
-                bs: {
-                  ...dataStatTemp.lastData.budgetStrategy?.bs, // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
-                  method_data: data?.runningData?.budgetStrategy?.method_data,
-                  row: data?.runningData?.budgetStrategy?.row,
-                  index: data?.runningData?.budgetStrategy?.index,
-                },
-              },
-            },
-          };
-          setDataStat(newObjData);
-        } else {
-          const index = dataTemp?.find(
+    try {
+      if (isConnected && dataProps && dataStatProps) {
+        let dataTemp = dataProps;
+        let dataStatTemp = dataStatProps;
+        socket.on("ADD_CLOSE_ORDER", (data) => {
+          const index = dataTemp?.findIndex(
             (item) =>
-              item.betTime !== data.betTime &&
+              item.betTime === data.betTime &&
               item.botId === data.botId &&
               item.botId === id
           );
-          if (index) {
-            dataTemp = [data, ...dataTemp];
-          }
-        }
-        if (data?.result === "ACTION_BOT") {
-          setChange((prev) => !prev);
-        }
-        setData(dataTemp);
-      });
-
-      socket.on("ADD_OPEN_ORDER", (data) => {
-        const index = dataTemp?.findIndex(
-          (item) =>
-            item.betTime === data.betTime &&
-            item.botId === data.botId &&
-            item.botId === id
-        );
-        if (index !== -1) {
-          dataTemp[index] = data;
-          const newObjData = {
-            ...dataStatTemp,
-            win_day: data?.runningData?.win_day,
-            lose_day: data?.runningData?.lose_day,
-            day_profit: data?.runningData?.day_profit,
-            week_profit: data?.runningData?.week_profit,
-            week_volume: data?.runningData?.week_volume,
-            longestWinStreak: data?.runningData?.longestWinStreak,
-            longestLoseStreak: data?.runningData?.longestLoseStreak,
-            // take_profit_target: data?.runningData?.take_profit_target,
-            // stop_loss_target: data?.runningData?.stop_loss_target,
-            lastData: {
-              ...dataStatTemp.lastData,
-              profit: data?.runningData?.profit,
-
-              budgetStrategy: {
-                ...dataStatTemp.lastData.budgetStrategy,
-                bs: {
-                  ...dataStatTemp.lastData.budgetStrategy.bs,
-                  method_data: data?.runningData?.budgetStrategy?.method_data,
-                  row: data?.runningData?.budgetStrategy?.row,
-                  index: data?.runningData?.budgetStrategy?.index,
+          if (index !== -1) {
+            dataTemp[index] = data;
+            const newObjData = {
+              ...dataStatTemp ?? [],
+              win_day: data?.runningData?.win_day,
+              lose_day: data?.runningData?.lose_day,
+              day_profit: data?.runningData?.day_profit,
+              week_profit: data?.runningData?.week_profit,
+              week_volume: data?.runningData?.week_volume,
+              longestWinStreak: data?.runningData?.longestWinStreak,
+              longestLoseStreak: data?.runningData?.longestLoseStreak,
+              // take_profit_target: data?.runningData?.take_profit_target,
+              // stop_loss_target: data?.runningData?.stop_loss_target,
+              lastData: {
+                ...dataStatTemp.lastData ?? [],
+                profit: data?.runningData?.profit,
+                budgetStrategy: {
+                  ...dataStatTemp.lastData.budgetStrategy ?? [],
+                  bs: {
+                    ...dataStatTemp.lastData.budgetStrategy?.bs ?? [], // chac  no la cai nay a cái anyf thì sao mà báo lỗi dc thi cai budgetstrategfy no null do a. em ? rồi thì sao nó lỗi dc the no moi vl a, hinh nhu no van tinh la undefined a
+                    method_data: data?.runningData?.budgetStrategy?.method_data,
+                    row: data?.runningData?.budgetStrategy?.row,
+                    index: data?.runningData?.budgetStrategy?.index,
+                  },
                 },
               },
-            },
-          };
-          setDataStat(newObjData);
-        } else {
-          const index = dataTemp?.find(
+            };
+            setDataStat(newObjData);
+          } else {
+            const index = dataTemp?.find(
+              (item) =>
+                item.betTime !== data.betTime &&
+                item.botId === data.botId &&
+                item.botId === id
+            );
+            if (index) {
+              dataTemp = [data, ...dataTemp];
+            }
+          }
+          if (data?.result === "ACTION_BOT") {
+            setChange((prev) => !prev);
+          }
+          setData(dataTemp);
+        });
+  
+        socket.on("ADD_OPEN_ORDER", (data) => {
+          const index = dataTemp?.findIndex(
             (item) =>
-              item.betTime !== data.betTime &&
+              item.betTime === data.betTime &&
               item.botId === data.botId &&
               item.botId === id
           );
-          if (index) {
-            dataTemp = [data, ...dataTemp];
+          if (index !== -1) {
+            dataTemp[index] = data;
+            const newObjData = {
+              ...dataStatTemp ?? [],
+              win_day: data?.runningData?.win_day,
+              lose_day: data?.runningData?.lose_day,
+              day_profit: data?.runningData?.day_profit,
+              week_profit: data?.runningData?.week_profit,
+              week_volume: data?.runningData?.week_volume,
+              longestWinStreak: data?.runningData?.longestWinStreak,
+              longestLoseStreak: data?.runningData?.longestLoseStreak,
+              // take_profit_target: data?.runningData?.take_profit_target,
+              // stop_loss_target: data?.runningData?.stop_loss_target,
+              lastData: {
+                ...dataStatTemp.lastData ?? [],
+                profit: data?.runningData?.profit,
+  
+                budgetStrategy: {
+                  ...dataStatTemp?.lastData?.budgetStrategy ?? [],
+                  bs: {
+                    ...dataStatTemp?.lastData?.budgetStrategy?.bs ?? [],
+                    method_data: data?.runningData?.budgetStrategy?.method_data,
+                    row: data?.runningData?.budgetStrategy?.row,
+                    index: data?.runningData?.budgetStrategy?.index,
+                  },
+                },
+              },
+            };
+            setDataStat(newObjData);
+          } else {
+            const index = dataTemp?.find(
+              (item) =>
+                item.betTime !== data.betTime &&
+                item.botId === data.botId &&
+                item.botId === id
+            );
+            if (index) {
+              dataTemp = [data, ...dataTemp ?? []];
+            }
           }
-        }
-        if (data?.result === "ACTION_BOT") {
-          setChange((prev) => !prev);
-        }
-
-        setData(dataTemp);
-      });
+          if (data?.result === "ACTION_BOT") {
+            setChange((prev) => !prev);
+          }
+  
+          setData(dataTemp);
+        });
+      }
+      
+    } catch (error) {
+      console.log("error", error)
     }
   }, [
     isConnected,

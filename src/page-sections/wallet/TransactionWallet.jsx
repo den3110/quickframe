@@ -112,7 +112,7 @@ const TransactionWallet = (props) => {
     memo: "",
   }));
 
-  const mergedData = useMemo(()=> [...normalizeDataBalance, ...normalizeDataBalanceSpot], [normalizeDataBalance, normalizeDataBalanceSpot]);
+  const mergedData = useMemo(()=> [...normalizeDataBalance ?? [], ...normalizeDataBalanceSpot] ?? [], [normalizeDataBalance, normalizeDataBalanceSpot]);
 
   // Sort data with loading state
   useEffect(() => {

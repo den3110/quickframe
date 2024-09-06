@@ -124,11 +124,19 @@ const SignalStrategyList = () => {
   };
 
   const handleClick = (event, index) => {
-    setAnchorEls((prev) => ({ ...prev, [index]: event.currentTarget }));
+    try {
+      setAnchorEls((prev) => ({ ...prev ?? [], [index]: event.currentTarget }));
+    } catch (error) {
+      console.log("error", error)
+    }
   };
 
   const handleClose = (index) => {
-    setAnchorEls((prev) => ({ ...prev, [index]: null }));
+    try {
+      setAnchorEls((prev) => ({ ...prev ?? [], [index]: null }));
+    } catch (error) {
+      console.log("error",error)
+    }
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -157,10 +165,14 @@ const SignalStrategyList = () => {
   };
 
   const handleSearch = (e) => {
-    const filtered = data.filter((item) =>
-      item.name.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setDataState(filtered);
+    try {
+      const filtered = data.filter((item) =>
+        item.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setDataState(filtered);
+    } catch (error) {
+      console.log("error", error)
+    }
   };
 
   useEffect(() => {

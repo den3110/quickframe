@@ -107,18 +107,28 @@ const TopSignalPageView = () => {
   };
 
   const handleToggleRow = (index) => {
-    const newCheckedRows = [...checkedRows];
-    newCheckedRows[index] = !newCheckedRows[index];
-    setCheckedRows(newCheckedRows);
+    try {
+      const newCheckedRows = [...checkedRows ?? []];
+      newCheckedRows[index] = !newCheckedRows[index];
+      setCheckedRows(newCheckedRows);
+      
+    } catch (error) {
+      console.log("error", error)
+    }
   };
 
   const handleNewPlan = () => {
-    const selectedPlans = data.filter(
-      (_, index) => checkedRows[index] === true
-    );
-    setSelectedSignal(selectedPlans?.map((item) => item._id));
-    setIsEdit(true);
-    setOpenDrawer(true);
+    try {
+      const selectedPlans = data.filter(
+        (_, index) => checkedRows[index] === true
+      );
+      setSelectedSignal(selectedPlans?.map((item) => item._id));
+      setIsEdit(true);
+      setOpenDrawer(true);
+      
+    } catch (error) {
+      console.log("error", error)
+    }
   };
 
   useEffect(() => {
@@ -137,11 +147,15 @@ const TopSignalPageView = () => {
   }, []);
 
   useEffect(() => {
-    setCheckedRows(
-      data
-        .slice(rowsPerPage * (page - 1), rowsPerPage * (page - 1) + rowsPerPage)
-        ?.map((item) => false)
-    );
+    try {
+      setCheckedRows(
+        data
+          .slice(rowsPerPage * (page - 1), rowsPerPage * (page - 1) + rowsPerPage)
+          ?.map((item) => false)
+      );
+    } catch (error) {
+      console.log("error", error)
+    }
   }, [data, page, rowsPerPage]);
 
   useEffect(() => {
@@ -151,69 +165,78 @@ const TopSignalPageView = () => {
   }, [checkedRows]);
 
   useEffect(() => {
-    setDataState(
-      _.orderBy(
-        data,
-        function (e) {
-          if (parseFloat(e.win_day) === 0) return 0;
-          return (
-            (parseFloat(e.win_day) /
-              (parseFloat(e.win_day) + parseFloat(e.lose_day))) *
-            100
-          );
-        },
-        "desc"
-      )
-    );
+    try {
+      setDataState(
+        _.orderBy(
+          data,
+          function (e) {
+            if (parseFloat(e.win_day) === 0) return 0;
+            return (
+              (parseFloat(e.win_day) /
+                (parseFloat(e.win_day) + parseFloat(e.lose_day))) *
+              100
+            );
+          },
+          "desc"
+        )
+      );
+    } catch (error) {
+      console.log("error", error)
+    }
   }, [data]);
 
   const handleFilter = (value) => {
-    switch (value) {
-      case 1:
-        setDataState(
-          _.orderBy(
-            data,
-            function (e) {
-              if (parseFloat(e.win_day) === 0) return 0;
-              return (
-                (parseFloat(e.win_day) /
-                  (parseFloat(e.win_day) + parseFloat(e.lose_day))) *
-                100
-              );
-            },
-            "desc"
-          )
-        );
-        break;
-      case 2:
-        setDataState(
-          _.orderBy(
-            data,
-            function (e) {
-              return e?.longest_win_streak;
-            },
-            "desc"
-          )
-        );
-        break;
-      case 3:
-        setDataState(
-          _.orderBy(
-            data,
-            function (e) {
-              return e?.volume;
-            },
-            "desc"
-          )
-        );
-        break;
-      default:
-        break;
+    try {
+      switch (value) {
+        case 1:
+          setDataState(
+            _.orderBy(
+              data,
+              function (e) {
+                if (parseFloat(e.win_day) === 0) return 0;
+                return (
+                  (parseFloat(e.win_day) /
+                    (parseFloat(e.win_day) + parseFloat(e.lose_day))) *
+                  100
+                );
+              },
+              "desc"
+            )
+          );
+          break;
+        case 2:
+          setDataState(
+            _.orderBy(
+              data,
+              function (e) {
+                return e?.longest_win_streak;
+              },
+              "desc"
+            )
+          );
+          break;
+        case 3:
+          setDataState(
+            _.orderBy(
+              data,
+              function (e) {
+                return e?.volume;
+              },
+              "desc"
+            )
+          );
+          break;
+        default:
+          break;
+      }
+      
+    } catch (error) {
+      console.log("error", error)
     }
     // Here you can add the logic to filter data based on selected amount
     // setData(filteredData);
   };
-  console.log(data);
+  // console.log(data);
 
   return (
     <Layout>

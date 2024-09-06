@@ -13,7 +13,7 @@ import useMuiTable, { getComparator, stableSort } from "hooks/useMuiTable";
 // CUSTOM DUMMY DATA
 import { USER_LIST } from "__fakeData__/users";
 const UserList1PageView = () => {
-  const [users, setUsers] = useState([...USER_LIST]);
+  const [users, setUsers] = useState([...USER_LIST ?? []]);
   const [userFilter, setUserFilter] = useState({
     role: "",
     search: ""

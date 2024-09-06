@@ -27,7 +27,7 @@ const AvatarBadge = ({
   children,
   width = 25,
   height = 25,
-  ...props
+  ...props 
 }) => {
   return <StyledBadge width={width} height={height} overlap="circular" anchorOrigin={{
     vertical: "bottom",

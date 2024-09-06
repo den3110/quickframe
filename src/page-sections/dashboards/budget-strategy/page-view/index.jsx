@@ -118,11 +118,11 @@ const BudgetStrategyPage = () => {
   };
 
   const handleClick = (event, index) => {
-    setAnchorEls((prev) => ({ ...prev, [index]: event.currentTarget }));
+    setAnchorEls((prev) => ({ ...prev ?? [], [index]: event.currentTarget }));
   };
 
   const handleClose = (index) => {
-    setAnchorEls((prev) => ({ ...prev, [index]: null }));
+    setAnchorEls((prev) => ({ ...prev ?? [], [index]: null }));
   };
 
   const handleChangeRowsPerPage = (event) => {

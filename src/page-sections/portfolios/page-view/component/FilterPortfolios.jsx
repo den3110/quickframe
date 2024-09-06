@@ -83,72 +83,77 @@ const FilterPortfolios = ({ open, onClose, setData, data, setPage, hasFilter, se
   }, [setHasFilter, setCountFilter]);
 
   useEffect(()=> {
-    if(JSON.parse(localStorage.getItem("filterState"))) {
-
-      const savedFilters = JSON.parse(localStorage.getItem("filterState"));
-      let filteredData = [...data];
-      const selectedFilterTypes= savedFilters.selectedFilterTypes || []
-      const runningFilters= (savedFilters.runningFilters || {
-        running: true,
-        paused: true,
-        all: true,
-      })
-      const autoTypeFilters= (savedFilters.autoTypeFilters || {
-        botAI: true,
-        copyTrade: true,
-        telegramSignal: true,
-        telebot: true,
-      })
-      const accountTypeFilters= (savedFilters.accountTypeFilters || {
-        demo: true,
-        live: true,
-      })
-      const accountLinkedFilter= (savedFilters.accountLinkedFilter || []);
-      // console.log(selectedFilterTypes)
-      selectedFilterTypes.forEach((filterType) => {
-        switch (filterType) {
-          case "isRunning":
-            const { running, paused, all } = runningFilters;
-            if (running || paused || all) {
+    try {
+      if(JSON.parse(localStorage.getItem("filterState"))) {
+  
+        const savedFilters = JSON.parse(localStorage.getItem("filterState"));
+        let filteredData = [...data ?? []];
+        const selectedFilterTypes= savedFilters.selectedFilterTypes || []
+        const runningFilters= (savedFilters.runningFilters || {
+          running: true,
+          paused: true,
+          all: true,
+        })
+        const autoTypeFilters= (savedFilters.autoTypeFilters || {
+          botAI: true,
+          copyTrade: true,
+          telegramSignal: true,
+          telebot: true,
+        })
+        const accountTypeFilters= (savedFilters.accountTypeFilters || {
+          demo: true,
+          live: true,
+        })
+        const accountLinkedFilter= (savedFilters.accountLinkedFilter || []);
+        // console.log(selectedFilterTypes)
+        selectedFilterTypes.forEach((filterType) => {
+          switch (filterType) {
+            case "isRunning":
+              const { running, paused, all } = runningFilters;
+              if (running || paused || all) {
+                filteredData = filteredData.filter(
+                  (item) =>
+                    (running && item.isRunning) ||
+                    (paused && !item.isRunning) ||
+                    all
+                );
+              }
+              break;
+            case "autoType":
+              const { botAI, telegramSignal, copyTrade, telebot } = autoTypeFilters;
               filteredData = filteredData.filter(
                 (item) =>
-                  (running && item.isRunning) ||
-                  (paused && !item.isRunning) ||
-                  all
+                  (botAI && item.autoType === 0) ||
+                  (copyTrade && item.autoType === 1) ||
+                  (telebot && item.autoType === 2) ||
+                  (telegramSignal && item.autoType === 3)
               );
-            }
-            break;
-          case "autoType":
-            const { botAI, telegramSignal, copyTrade, telebot } = autoTypeFilters;
-            filteredData = filteredData.filter(
-              (item) =>
-                (botAI && item.autoType === 0) ||
-                (copyTrade && item.autoType === 1) ||
-                (telebot && item.autoType === 2) ||
-                (telegramSignal && item.autoType === 3)
-            );
-            break;
-          case "accountType":
-            const { demo, live } = accountTypeFilters;
-            filteredData = filteredData.filter(
-              (item) =>
-                (demo && item.accountType === "DEMO") ||
-                (live && item.accountType === "LIVE")
-            );
-            break;
-          case "accountLinked":
-            filteredData = filteredData.filter((item) =>
-              accountLinkedFilter.includes(item.linkAccountId)
-            );
-            break;
-          default:
-            break;
-        }
-      });
-      console.log(filteredData)
-      setPage(1);
-      setHasFilter(true)
-      setData(filteredData);
+              break;
+            case "accountType":
+              const { demo, live } = accountTypeFilters;
+              filteredData = filteredData.filter(
+                (item) =>
+                  (demo && item.accountType === "DEMO") ||
+                  (live && item.accountType === "LIVE")
+              );
+              break;
+            case "accountLinked":
+              filteredData = filteredData.filter((item) =>
+                accountLinkedFilter.includes(item.linkAccountId)
+              );
+              break;
+            default:
+              break;
+          }
+        });
+        console.log(filteredData)
+        setPage(1);
+        setHasFilter(true)
+        setData(filteredData);
+      }
+      
+    } catch (error) {
+      console.log("error", error)
     }
   }, [data?.length, data, setData, setPage, setHasFilter])
 

@@ -102,14 +102,14 @@ function ManageFollowerPage() {
       const filtered = data?.followList?.filter(item =>
         item.nickName.toLowerCase().includes(e.target.value.toLowerCase())
       );
-      setDataState({...dataState, followList: filtered});
+      setDataState({...dataState ?? [], followList: filtered});
     }
     else {
       const filtered = data?.blockList?.filter(item =>
         item.nickName.toLowerCase().includes(e.target.value.toLowerCase())
       );
       console.log(filtered)
-      setDataState({...dataState, blockList: filtered});
+      setDataState({...dataState ?? [], blockList: filtered});
     }
   };
 
