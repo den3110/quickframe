@@ -28,7 +28,7 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
   const { t } = useTranslation();
   const {
     selectedLinkAccount,
-    setSelectedLinkAccount,
+  setSelectedLinkAccount,
     setDataSelectedLinkAccount,
     logoutFromSystem,
   } = useContext(AuthContext);
@@ -64,7 +64,7 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
       localStorage.setItem("linkAccount", linkAccountId);
       setSelectedLinkAccount(linkAccountId);
       setDataSelectedLinkAccount(
-        userLinkAccountListState?.find((item) => item?._id === linkAccountId)
+        userLinkAccountListState?.find((item) => item?._id === linkAccountId && item?.isLogin === true)
       );
       showToast("Chuyển tài khoản thành công", "success");
       handleClose();
