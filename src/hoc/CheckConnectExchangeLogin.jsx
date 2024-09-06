@@ -24,6 +24,7 @@ const CheckConnectExchangeLogin = ({ children }) => {
   }, [setIsLogout])
   useEffect(() => {
     const checkUserLink = async () => {
+
       try {
         const response = await axios.get(process.env.REACT_APP_BASE_API_URL + "/users/exchange/link-account/profile/" + selectedLinkAccount, {headers: {"Authorization": "Bearer " + accessToken}})
         console.log(response?.data)
@@ -46,7 +47,7 @@ const CheckConnectExchangeLogin = ({ children }) => {
       }
     };
 
-    if (user) {
+    if (user && selectedLinkAccount && accessToken) {
       checkUserLink();
     } else {
       setLoading(false);
@@ -55,7 +56,6 @@ const CheckConnectExchangeLogin = ({ children }) => {
 
   
   if (authLoading || loading) {
-    console.log(1)
     return <LoadingScreen />;
   }
   else if (parseInt(statusCode) === 402) {

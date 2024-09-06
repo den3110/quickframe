@@ -42,7 +42,7 @@ const LoginPageView = () => {
     localStorage.getItem("lang") || "vi"
   );
   const navigate = useNavigate();
-  const {t }= useTranslation()
+  const { t } = useTranslation();
 
   useEffect(() => {
     const loadConfig = async () => {
@@ -106,13 +106,7 @@ const LoginPageView = () => {
             setAccessToken(response?.data?.d?.access_token);
             const response1 = await userApi.getUserLinkAccountList();
             const response2 = userApi.getUserProfile();
-            if (response2?.data?.ok === true) {
-              setUser({
-                ...response.data?.d,
-                avatar:
-                  constant.URL_AVATAR_URER + response?.data?.d?.photo_token,
-              });
-            }
+
             if (response1?.data?.ok === true) {
               if (response1?.data?.d?.length <= 0) {
                 navigate("/connect");
@@ -128,6 +122,13 @@ const LoginPageView = () => {
                   response1?.data?.d?.find((item) => item?.isLogin === true)
                     ?._id
                 );
+                if (response2?.data?.ok === true) {
+                  setUser({
+                    ...response.data?.d,
+                    avatar:
+                      constant.URL_AVATAR_URER + response?.data?.d?.photo_token,
+                  });
+                }
                 navigate("/dashboard");
               } else {
                 navigate("/connect");

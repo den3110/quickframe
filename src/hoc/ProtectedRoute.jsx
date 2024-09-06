@@ -19,12 +19,12 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/connect" />;
   }
 
-  if(!selectedLinkAccount && location.pathname.startsWith("/connect")) {
-    return children
-  }
-  if(selectedLinkAccount && location.pathname.startsWith("/connect")) {
-    return <Navigate to="/" />
-  }
+  // if(!selectedLinkAccount && location.pathname.startsWith("/connect")) {
+  //   return children
+  // }
+  // if(selectedLinkAccount && location.pathname.startsWith("/connect")) {
+  //   return <Navigate to="/" />
+  // }
   else {
     return children;
   }
