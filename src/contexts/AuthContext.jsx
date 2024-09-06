@@ -12,13 +12,43 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [accessToken, setAccessToken]= useState(localStorage.getItem("accessToken") ? localStorage.getItem("accessToken") : undefined)
   const [isLogout, setIsLogout]= useState(false)
+  // const [loading, setLoading]
   const loadUserProfile = useCallback(async () => {
     if (accessToken) {
       try {
+        setLoading(true)
         const response = await userApi.getUserProfile(accessToken);
         if(response?.data?.ok=== true) {
           try {
-            setUser({...response.data?.d, avatar: constant.URL_AVATAR_URER + response?.data?.d?.photo_token});          
+            setUser({...response.data?.d, avatar: constant.URL_AVATAR_URER + response?.data?.d?.photo_token});  
+            // if find user , check user linked account        
+            try {
+              const response= await userApi.getUserLinkAccountList()
+              if(response?.data?.ok=== true) {
+                  setUserLinkAccountList(response?.data?.d?.filter(item=> item?.isLogin=== true))
+                  if(selectedLinkAccount) {
+                    // setSelectedLinkAccount(respo)
+                    if(response?.data?.d?.find(item=> item?._id === selectedLinkAccount && item?.isLogin=== true)) {
+                      setSelectedLinkAccount(selectedLinkAccount)
+                      setDataSelectedLinkAccount(response?.data?.d?.find(item=> item?._id === selectedLinkAccount))
+                    }
+                    else {
+                      setSelectedLinkAccount(undefined)
+                      setDataSelectedLinkAccount(undefined)
+                    }
+                  } 
+                  else if(isLogout=== true) {
+                    setSelectedLinkAccount(undefined)
+                  }
+                  else if(response?.data?.d?.find(item=> item?.isLogin=== true)) {
+                    // localStorage.setItem("linkAccount", response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
+                    // setSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
+                    // setDataSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0])
+                  }
+              }
+            } catch (error) {
+              
+            } 
           } catch (error) {
             setUser({...response.data?.d, avatar: null});          
           }
@@ -36,9 +66,14 @@ export const AuthProvider = ({ children }) => {
           window.location.href= window.location.origin + "/login"
         }
       }
+      finally {
+        setLoading(false);
+      }
     }
-    setLoading(false);
-  }, [accessToken]);
+    else {
+      setLoading(false)
+    }
+  }, [accessToken, selectedLinkAccount, isLogout]);
 
   const logoutFromSystem= ()=> {
     localStorage.removeItem("accessToken")
@@ -61,38 +96,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     loadUserProfile();
   }, [loadUserProfile, accessToken]);
-
+  // 
   useEffect(()=> {
     (async ()=> {
-      try {
-        const response= await userApi.getUserLinkAccountList()
-        if(response?.data?.ok=== true) {
-            setUserLinkAccountList(response?.data?.d?.filter(item=> item?.isLogin=== true))
-            if(selectedLinkAccount) {
-              // setSelectedLinkAccount(respo)
-              if(response?.data?.d?.find(item=> item?._id === selectedLinkAccount && item?.isLogin=== true)) {
-                setSelectedLinkAccount(selectedLinkAccount)
-                setDataSelectedLinkAccount(response?.data?.d?.find(item=> item?._id === selectedLinkAccount))
-              }
-              else {
-                setSelectedLinkAccount(undefined)
-                setDataSelectedLinkAccount(undefined)
-              }
-            } 
-            else if(isLogout=== true) {
-              setSelectedLinkAccount(undefined)
-            }
-            else if(response?.data?.d?.find(item=> item?.isLogin=== true)) {
-              // localStorage.setItem("linkAccount", response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
-              // setSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0]?._id)
-              // setDataSelectedLinkAccount(response?.data?.d?.filter(item=> item?.isLogin=== true)[0])
-            }
-        }
-      } catch (error) {
-      } 
+      
     })()
   }, [selectedLinkAccount, isLogout])
-
   // useEffect(()=> {
 
   // }, [])

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import {
   Drawer,
   AppBar,
@@ -1202,9 +1202,9 @@ const NewPlanDrawer = ({
                 {
                   <Box display="flex" mt={2}>
                     {["Bot AI", "Follow Leader", "", "Telegram Signal"].map(
-                      (tab) => {
+                      (key, tab) => {
                         if (tab === "") {
-                          return <></>;
+                          return <Fragment key={key}></Fragment>;
                         }
                         return (
                           <Button
@@ -1213,7 +1213,7 @@ const NewPlanDrawer = ({
                                 ? true
                                 : false
                             }
-                            key={tab}
+                            key={key}
                             variant={
                               selectedTab === tab ? "contained" : "outlined"
                             }

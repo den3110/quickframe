@@ -26,7 +26,7 @@ import { constant } from "constant/constant";
 import { useTranslation } from "react-i18next";
 import LanguagePopover from "layouts/layout-parts/popovers/LanguagePopover";
 import { SettingsContext } from "contexts/settingsContext";
-import MenuLeft from "icons/MenuLeft";
+// import MenuLeft from "icons/MenuLeft";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import ThemeIcon from "icons/ThemeIcon";
 const LoginPageView = () => {

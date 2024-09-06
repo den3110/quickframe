@@ -23,35 +23,54 @@ const CheckConnectExchangeLogin = ({ children }) => {
     setIsLogout(false)
   }, [setIsLogout])
   useEffect(() => {
-    const checkUserLink = async () => {
-
-      try {
-        const response = await axios.get(process.env.REACT_APP_BASE_API_URL + "/users/exchange/link-account/profile/" + selectedLinkAccount, {headers: {"Authorization": "Bearer " + accessToken}})
-        console.log(response?.data)
-        if (response?.data?.ok === true) {
-          setLinked(response.data);
-          setStatusCode(response?.data?.status);
-        } else if (response?.data?.ok === false) {
-          setLinked(response.data);
-          setStatusCode(response?.data?.status);
-
+    (async ()=> {
+      const checkUserLogin = async () => {
+        try {
+          const response = await axios.get(process.env.REACT_APP_BASE_API_URL + "/users/exchange/link-account/profile/" + selectedLinkAccount, {headers: {"Authorization": "Bearer " + accessToken}})
+          console.log(response?.data)
+          if (response?.data?.ok === true) {
+            setLinked(response.data);
+            // setStatusCode(response?.data?.status);
+          } else if (response?.data?.ok === false) {
+            setLinked(response.data);
+            // setStatusCode(response?.data?.status);
+  
+          }
+        } catch (error) {
+          
+          setLinked(error?.response?.data);
+          console.error("Error checking user link:", error);
+          // setStatusCode(error?.response?.status);
+          
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        
-        setLinked(error?.response?.data);
-        console.error("Error checking user link:", error);
-        setStatusCode(error?.response?.status);
-        
-      } finally {
+      };
+      const checkUserLinkAccount= async ()=> {
+        try {
+          const response = await axios.get(process.env.REACT_APP_BASE_API_URL + "/users/exchange/link-account/list/", {headers: {"Authorization": "Bearer " + accessToken}})
+          if (response?.data?.ok === true) {
+            setStatusCode(response?.data?.status);
+          } else if (response?.data?.ok === false) {
+            setStatusCode(response?.data?.status);
+  
+          }
+        } catch (error) {
+          console.error("Error checking user link:", error);
+          setStatusCode(error?.response?.status);
+          
+        } finally {
+          setLoading(false);
+        }
+      }
+  
+      if (user && accessToken) {
+        await checkUserLogin()
+        await checkUserLinkAccount()
+      } else {
         setLoading(false);
       }
-    };
-
-    if (user && selectedLinkAccount && accessToken) {
-      checkUserLink();
-    } else {
-      setLoading(false);
-    }
+    })()
   }, [user, selectedLinkAccount, accessToken]);
 
   

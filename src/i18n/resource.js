@@ -3593,6 +3593,7 @@ export const resources = {
         "- If you win in sequence 3, continue to move down to sequence 4 with the same position, if you lose, go back to the next position in sequence 1.",
       victor4_des_4:
         "- If you win in sequence 4, return to position (1,1), if you lose, return to the next position in sequence 1.",
+        "Disconnect exchange account successfully": "Disconnect exchange account successfully",
       "wait lose streak": "Lose Streak(s)",
       "when ultil finish budget": "Until completion of budget strategy.",
       "win rate": "Win rate",
@@ -3687,6 +3688,7 @@ export const resources = {
       exchange_login_email: "Email đăng nhập Sàn",
       exchange_name: "Sàn giao dịch",
       login: "Đăng nhập",
+      "Disconnect exchange account successfully": "Ngắt kết nối tài khoản sàn thành công",
       account_register: "Đăng kí tài khoản",
       login_success: "Đăng nhập thành công",
       click_continue_to_complete: "Bấm Tiếp tục để hoàn tất liên kết tài khoản",
