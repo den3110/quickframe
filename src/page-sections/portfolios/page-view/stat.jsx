@@ -639,7 +639,7 @@ const StatPortfolio = (props) => {
                       <Card>
                         <Paper>
                           <Box p={downLg ? 0 : 2}>
-                            <CalendarComponent isGlobal={true} data={data} />
+                            <CalendarComponent isGlobal={true} data={data} statGlobal={statGlobal} />
                           </Box>
                         </Paper>
                       </Card>
