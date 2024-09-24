@@ -15,7 +15,7 @@ const MaintenancePageView = () => {
         xs: 42
       }}>{t("Maintenance underway")}</H1>
         <Paragraph mt={0.5} fontSize={18} color="text.secondary">
-          Luxcoin {t("is undergoing maintenance for future growth.")}
+          Wacbot {t("is undergoing maintenance for future growth.")}
         </Paragraph>
         <Paragraph mt={0.5} fontSize={18} color="text.secondary">
           {t("Please come back later")}

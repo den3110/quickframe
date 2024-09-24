@@ -22,7 +22,7 @@ const InfoExchange = () => {
       }} style={{backgroundColor: "rgb(50, 59, 73)"}} fullWidth>
         <Box sx={{width: "100%"}}>
           <Typography align="left" color={"rgb(238, 239, 242)"} fontSize={12} fontWeight={600} mb={1}>{t("Exchange Linked")}</Typography>
-          <img src={constant.API_URL + "/assets/exchange/" + dataSelectedLinkAccount?.clientId + ".svg"} alt="Can't open" />
+          <img height={30} src={constant.API_URL + "/assets/exchange/" + dataSelectedLinkAccount?.clientId + ".png"} alt="Can't open" />
         </Box>
       </Button>
     </FlexRowAlign>;

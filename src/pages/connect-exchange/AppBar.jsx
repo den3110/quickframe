@@ -34,7 +34,7 @@ const AppBarSection = () => {
             component="div"
             sx={{ fontWeight: "bold" }}
           >
-            Luxcoin
+            Wacbot
           </Typography>
         </Box>
         <Box display={"flex"} alignItems={"center"}>

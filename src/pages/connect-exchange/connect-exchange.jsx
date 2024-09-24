@@ -141,12 +141,13 @@ const ConnectAccountPage = () => {
                       borderRadius={80}
                     >
                       <img
+                        height={30}
                         draggable={false}
                         src={
                           constant.API_URL +
                           "/assets/exchange/" +
                           dataExchangeUrl?.clientId +
-                          ".svg"
+                          ".png"
                         }
                         alt="Can't open"
                       />
@@ -249,12 +250,13 @@ const ConnectAccountPage = () => {
                     borderRadius={80}
                   >
                     <img
+                    height={30}
                       draggable={false}
                       src={
                         constant.API_URL +
                         "/assets/exchange/" +
                         dataExchangeUrl?.clientId +
-                        ".svg"
+                        ".png"
                       }
                       alt="Can't open"
                     />

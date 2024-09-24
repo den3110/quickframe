@@ -61,7 +61,7 @@ const DemoWallet = (props) => {
       >
         <img
           src={
-            constant.URL_ASSETS_LOGO + "/" + linked?.exchange?.clientId + ".svg"
+            constant.URL_ASSETS_LOGO + "/" + linked?.exchange?.clientId + ".png"
           }
           style={{ height: 46 }}
           alt="Can't open"

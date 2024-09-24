@@ -166,7 +166,7 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
                   >
                     <img
                       src={
-                        constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".svg"
+                        constant.URL_ASSETS_LOGO + "/" + item?.clientId + ".png"
                       }
                       style={{ height: 28 }}
                       alt="Can't open"

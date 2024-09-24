@@ -72,7 +72,7 @@ const RootStyle = styled(Box)(({
 }));
 const LoaderWithLogo = () => <RootStyle id="loading-wrapper">
     <div className="logo">
-      <img src="/static/logo/luxcoin.png" alt="quickframe" />
+      <img src="/static/logo/wacbot.png" alt="quickframe" />
     </div>
     <div id="loading-content"></div>
   </RootStyle>;

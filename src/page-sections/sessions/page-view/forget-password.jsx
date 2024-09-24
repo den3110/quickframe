@@ -24,7 +24,7 @@ const ForgetPasswordPageView = () => {
     try {
       const data = {
         email,
-        siteId: "luxcoin.app",
+        siteId: "Wacbot.app",
       };
       const response = await authApi.requestOtpCode(data);
       console.log(response);

@@ -57,7 +57,7 @@ const DashboardHeader = () => {
           <Link href="/">
             <Box
               component="img"
-              src="/static/logo/luxcoin.png"
+              src="/static/logo/wacbot.png"
               alt="logo"
               width={50}
             />

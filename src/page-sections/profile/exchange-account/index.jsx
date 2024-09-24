@@ -187,7 +187,7 @@ const ExchangeAccount = () => {
                                 constant.URL_ASSETS_LOGO +
                                 "/" +
                                 item?.clientId +
-                                ".svg"
+                                ".png"
                               }
                               style={{ height: 28 }}
                               alt="Can't open"
