@@ -15,7 +15,7 @@ import { USER_LIST } from "__fakeData__/users";
 const UserGrid2PageView = () => {
   const [userPerPage] = useState(21);
   const [page, setPage] = useState(1);
-  const [users] = useState([...USER_LIST]);
+  const [users] = useState([...USER_LIST ?? []]);
   const [searchValue, setSearchValue] = useState("");
   const [selectedItem, setSelectedItem] = useState(USER_LIST[1]);
 

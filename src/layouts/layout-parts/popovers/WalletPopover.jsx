@@ -10,6 +10,7 @@ import {
   Divider,
   Drawer,
   IconButton,
+  Skeleton,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -28,6 +29,7 @@ import SpotBalanceContext from "contexts/SpotBalanceContext";
 import WithdrawDrawer from "../drawers/WithdrawDrawer";
 import { SettingsContext } from "contexts/settingsContext";
 import { useTranslation } from "react-i18next";
+import AuthContext from "contexts/AuthContext";
 
 const WalletPopover = () => {
   const {t }= useTranslation()
@@ -38,7 +40,7 @@ const WalletPopover = () => {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [dataDetailTransaction, setDataDetailTransaction]= useState()
-
+  const {loading }= useContext(AuthContext)
 
   const handleOpen = () => {
     setChange(prev=> !prev)
@@ -101,16 +103,21 @@ const WalletPopover = () => {
             />
           </Badge>
         </IconButton>
-        <Box>
-          <Typography fontSize={downLg ? 14  : 16}>
-            $
-            {mode === true
-              ? spotBalance?.availableBalance?.toFixed(2)
-              : spotBalance?.demoBalance?.toFixed(2)}
-          </Typography>
-          {mode === true && <Typography fontSize={12}>{t("Live Wallet")}</Typography>}
-          {mode === false && <Typography fontSize={12}>{t("Demo Wallet")}</Typography>}
-        </Box>
+        {
+          loading && <Skeleton variant={"rouned"} height={24}></Skeleton>
+        }
+        {loading=== false && 
+          <Box>
+            <Typography fontSize={downLg ? 14  : 16}>
+              $
+              {mode === true
+                ? spotBalance?.availableBalance?.toFixed(2)
+                : spotBalance?.demoBalance?.toFixed(2)}
+            </Typography>
+            {mode === true && <Typography fontSize={12}>{t("Live Wallet")}</Typography>}
+            {mode === false && <Typography fontSize={12}>{t("Demo Wallet")}</Typography>}
+          </Box>
+        }
         <IconButton>
           <Badge color="error" badgeContent={0}>
             <KeyboardArrowDownIcon

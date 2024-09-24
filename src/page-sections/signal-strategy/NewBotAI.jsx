@@ -256,7 +256,7 @@ const NewBotAI = ({
       ]);
       setTargetConditions(
         selectedBot?.sources?.targetConditions?.map((item, key) => ({
-          ...item,
+          ...item ?? [],
           index: key,
         }))
       );
@@ -350,16 +350,16 @@ const NewBotAI = ({
                   >
                     <FormControlLabel
                       onChange={() => {
-                        const updateGoals = [...goals];
+                        const updateGoals = [...goals ?? []];
                         const index = updateGoals.findIndex(
                           (item) => item.type === goal.type
                         );
 
                         if (index !== -1) {
                           if (updateGoals[index].count <= 0) {
-                            updateGoals[index] = { ...goal, count: 1 };
+                            updateGoals[index] = { ...goal ?? [], count: 1 };
                           } else {
-                            updateGoals[index] = { ...goal, count: 0 };
+                            updateGoals[index] = { ...goal ?? [], count: 0 };
                           }
 
                           setGoals(updateGoals);
@@ -1040,7 +1040,7 @@ const NewBotAI = ({
                           disabled={readOnly}
                           aria-label="cart"
                           onClick={() => {
-                            setSelectedCandle({ ...value, key: index });
+                            setSelectedCandle({ ...value ?? [], key: index });
                             handleOpenCandleShadow();
                             setIsEdit(true);
                             // setTargetConditions(initTargetConditions)

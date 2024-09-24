@@ -43,7 +43,7 @@ const DuplicatePlan = ({ open, onClose, selectedPlan, setData }) => {
         }
         const response= await portfolioApi.usersBotCreate(data);
         if(response?.data?.ok=== true) {
-            setData(prev=> ([data, ...prev]))
+            setData(prev=> ([data, ...prev ?? []]))
             showToast(t("Clone the plan successfully!"), "success")
             onClose()
         }

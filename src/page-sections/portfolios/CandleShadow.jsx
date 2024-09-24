@@ -214,44 +214,49 @@ const CandleShadow = ({
   };
 
   const handleSave = () => {
-    const data = {
-      betIndex: selectedBall,
-      conditions: selectedGridBall.map((item) => ({
-        ...item,
-        // betIndex: item
-      })),
-      betType: longShort,
-    };
-    if (selectedCandle?.index && is_edit === true) {
-      data.index = selectedCandle?.index;
-    } else {
-      data.index = random(10000000);
+    try {
+      const data = {
+        betIndex: selectedBall,
+        conditions: selectedGridBall.map((item) => ({
+          ...item,
+          // betIndex: item
+        })),
+        betType: longShort,
+      };
+      if (selectedCandle?.index && is_edit === true) {
+        data.index = selectedCandle?.index;
+      } else {
+        data.index = random(10000000);
+      }
+      if (is_edit === true) {
+        setTargetConditions((prev) => {
+          const existingIndex = targetConditions?.findIndex(
+            (item) => item.index === selectedCandle?.index
+          );
+          console.log("existing", existingIndex);
+          if (existingIndex !== -1) {
+            const updatedConditions = targetConditions;
+            updatedConditions[existingIndex] = data;
+            return updatedConditions;
+          } else {
+            const updatedConditions = targetConditions;
+            return updatedConditions;
+          }
+        });
+      } else {
+        setTargetConditions((prev) => [...prev, data]);
+      }
+      setBallStates([1, ...Array(19).fill(0)]);
+      setGridBallStates(
+        Array(5)
+          .fill()
+          .map(() => Array(20).fill(0))
+      );
+      handleCloseCandleShadow();
+      
+    } catch (error) {
+      console.log("error", error)
     }
-    if (is_edit === true) {
-      setTargetConditions((prev) => {
-        const existingIndex = targetConditions?.findIndex(
-          (item) => item.index === selectedCandle?.index
-        );
-        console.log("existing", existingIndex);
-        if (existingIndex !== -1) {
-          const updatedConditions = targetConditions;
-          updatedConditions[existingIndex] = data;
-          return updatedConditions;
-        } else {
-          const updatedConditions = targetConditions;
-          return updatedConditions;
-        }
-      });
-    } else {
-      setTargetConditions((prev) => [...prev, data]);
-    }
-    setBallStates([1, ...Array(19).fill(0)]);
-    setGridBallStates(
-      Array(5)
-        .fill()
-        .map(() => Array(20).fill(0))
-    );
-    handleCloseCandleShadow();
   };
 
   const handleDelete = () => {

@@ -28,9 +28,11 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
   const { t } = useTranslation();
   const {
     selectedLinkAccount,
-    setSelectedLinkAccount,
+  setSelectedLinkAccount,
     setDataSelectedLinkAccount,
     logoutFromSystem,
+    userLinkAccountList,
+    loading: loadingAuth
   } = useContext(AuthContext);
   const [userLinkAccountListState, setUserLinkAccountListState] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,10 +49,16 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
         selectedLinkAccount
       );
       if (response?.data?.ok === true) {
-        localStorage.removeItem("linkAccount");
-        setSelectedLinkAccount(undefined);
-        showToast("Disconnect exchange account successfully", "success");
-        navigate("/connect");
+        if(userLinkAccountListState?.find(item=> item?.isLogin=== true && item?._id != selectedLinkAccount)) {
+          localStorage.setItem("linkAccount", userLinkAccountListState?.find(item=> item?.isLogin=== true && item?._id != selectedLinkAccount)?._id);
+          setSelectedLinkAccount(userLinkAccountListState?.find(item=> item?.isLogin=== true && item?._id != selectedLinkAccount)?._id)
+        }
+        else {
+          localStorage.removeItem("linkAccount");
+          setSelectedLinkAccount(undefined);
+          showToast("Disconnect exchange account successfully", "success");
+          navigate("/connect");
+        }
       } else if (response?.data?.ok === false) {
         showToast(response?.data?.m, "error");
       }
@@ -64,7 +72,7 @@ const UserLinkAccountListDrawer = ({ open, handleClose }) => {
       localStorage.setItem("linkAccount", linkAccountId);
       setSelectedLinkAccount(linkAccountId);
       setDataSelectedLinkAccount(
-        userLinkAccountListState?.find((item) => item?._id === linkAccountId)
+        userLinkAccountListState?.find((item) => item?._id === linkAccountId && item?.isLogin === true)
       );
       showToast("Chuyển tài khoản thành công", "success");
       handleClose();

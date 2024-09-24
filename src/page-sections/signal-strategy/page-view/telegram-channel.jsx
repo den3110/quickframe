@@ -687,7 +687,7 @@ const TelegramChannelSignalStrategy = ({isFromTeleChannel}) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Card>
-                  <TableInvest selectedBot={{ ...selectedBot }} />
+                  <TableInvest selectedBot={{ ...selectedBot ?? [] }} />
                 </Card>
               </Grid>
             </Grid>

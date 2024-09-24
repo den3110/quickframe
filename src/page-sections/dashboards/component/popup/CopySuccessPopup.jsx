@@ -54,7 +54,7 @@ export default function CopySuccessPopup({
               const dataTemp= data
               const findIndex= data?.findIndex(item=> item?._id === selectedBot?._id)
               console.log("find index", findIndex)
-            dataTemp[findIndex]= {...selectedBot, isRunning: true}
+            dataTemp[findIndex]= {...selectedBot ?? [], isRunning: true}
             setData(dataTemp)
             setChangeState(prev=> !prev)
           }

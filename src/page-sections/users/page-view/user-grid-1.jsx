@@ -18,7 +18,7 @@ import { USER_LIST } from "__fakeData__/users";
 const UserGrid1PageView = () => {
   const [userPerPage] = useState(8);
   const [page, setPage] = useState(1);
-  const [users] = useState([...USER_LIST]);
+  const [users] = useState([...USER_LIST ?? []]);
   const [userFilter, setUserFilter] = useState({
     role: "",
     search: ""

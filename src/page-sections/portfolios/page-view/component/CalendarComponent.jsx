@@ -178,6 +178,7 @@ const CalendarComponent = ({ data = [], dataStat = {}, isGlobal = false }) => {
         setMode={setMode}
         mode={mode}
         label={moment(currentDate).format("MMMM YYYY")}
+        currentDate={currentDate}
         onNavigate={handleNavigate}
         stat={stat}
         setStat={setStat}

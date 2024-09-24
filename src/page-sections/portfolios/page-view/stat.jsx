@@ -76,7 +76,7 @@ const StatPortfolio = (props) => {
       if (id) {
         try {
           const today = new Date();   
-          const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+          const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth() - 2, 1);
           const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
           const payload = {
             // id:sele
@@ -99,7 +99,7 @@ const StatPortfolio = (props) => {
       } else {
         try {
           const today = new Date();
-          const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+          const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth() - 2, 1);
           const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
           const payload = {
             // id:sele

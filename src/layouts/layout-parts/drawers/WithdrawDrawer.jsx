@@ -72,7 +72,7 @@ export default function WithdrawDrawer(props) {
     });
   };
   const handleWithdraw= async ()=> {
-    console.log(1)
+    // console.log(1)
     try {
       const data= {
         amount,
